@@ -26,4 +26,13 @@ Bundle 'vim-coffee-script'
 Bundle 'dbext.vim'
 Bundle 'SQLComplete.vim'
 
+set smartindent
+set tabstop=2
+set shiftwidth=2
+set expandtab
+
+set number
+
+"Make Shift-Tab work
+
 filetype plugin indent on
