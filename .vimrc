@@ -33,6 +33,4 @@ set expandtab
 
 set number
 
-"Make Shift-Tab work
-
 filetype plugin indent on
