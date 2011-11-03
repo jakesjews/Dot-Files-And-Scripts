@@ -33,6 +33,9 @@ set expandtab
 
 set number
 
-"Make Shift-Tab work
+" Make the mouse work
+set mouse=a
+
+colorscheme molokai
 
 filetype plugin indent on
