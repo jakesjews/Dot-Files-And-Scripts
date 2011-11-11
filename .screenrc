@@ -1,0 +1,20 @@
+vbell off
+startup_message off
+hardstatus alwayslastline
+hardstatus string '%{= kG}[%{G}%H%{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B}%d/%m %{G}%C%A]'
+termcapinfo xterm|xterms|xs|rxvt ti@:te@
+
+screen -t dev 0
+split
+resize 40
+focus down
+screen -t misc 5
+split -v
+focus down
+screen -t console 2 rails c --sandbox
+focus top
+screen -t server 3 thin start 
+screen -t tail 4 tail -f log/development.log
+screen -t test 1 autotest -f 
+select 0
+

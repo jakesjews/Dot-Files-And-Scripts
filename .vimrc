@@ -36,6 +36,7 @@ set number
 " Make the mouse work
 set mouse=a
 
-colorscheme molokai
+" Turn on auto indenting for pasted code
+set pastetoggle=<F2>
 
 filetype plugin indent on
