@@ -13,6 +13,7 @@ Bundle 'project.tar.gz'
 Bundle 'AutoComplPop' 
 Bundle 'The-NERD-Commenter'
 Bundle 'surround.vim'
+Bundle 'scrooloose/syntastic'
 
 "Language autocompletion
 Bundle 'JSON.vim'

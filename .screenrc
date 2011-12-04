@@ -15,6 +15,6 @@ screen -t console 2 rails c --sandbox
 focus top
 screen -t server 3 thin start 
 screen -t tail 4 tail -f log/development.log
-screen -t test 1 autotest -f 
+screen -t other 1 
 select 0
 
