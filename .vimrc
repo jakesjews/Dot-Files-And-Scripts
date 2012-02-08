@@ -42,3 +42,8 @@ set mouse=a
 set pastetoggle=<F2>
 
 filetype plugin indent on
+
+if has("gui_running")
+  set guifont=Consolas:h11:cANSI
+  colorscheme molokai
+endif
