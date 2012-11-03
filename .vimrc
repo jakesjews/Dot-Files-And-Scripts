@@ -26,6 +26,11 @@ Bundle 'checksyntax-B'
 Bundle 'vim-coffee-script'
 Bundle 'dbext.vim'
 Bundle 'SQLComplete.vim'
+Bundle 'digitaltoad/vim-jade'
+Bundle 'wavded/vim-stylus'
+Bundle 'myhere/vim-nodejs-complete'
+Bundle 'go.vim'
+Bundle 'adimit/prolog.vim'
 
 set showcmd
 set smartindent
@@ -37,6 +42,9 @@ set smartcase
 set number
 set incsearch
 set autowrite
+syntax on
+
+colorscheme molokai
 
 " Make the mouse work
 set mouse=a
@@ -47,6 +55,6 @@ set pastetoggle=<F2>
 filetype plugin indent on
 
 if has("gui_running")
-  set guifont=Consolas
-  colorscheme molokai
+  set guifont=Inconsolata-dz:h12
 endif
+
