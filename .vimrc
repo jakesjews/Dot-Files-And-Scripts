@@ -44,8 +44,6 @@ set incsearch
 set autowrite
 syntax on
 
-colorscheme molokai
-
 " Make the mouse work
 set mouse=a
 
@@ -55,6 +53,7 @@ set pastetoggle=<F2>
 filetype plugin indent on
 
 if has("gui_running")
+  colorscheme molokai
   set guifont=Inconsolata-dz:h12
 endif
 
