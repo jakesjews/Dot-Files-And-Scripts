@@ -1,0 +1,8 @@
+#! /bin/bash
+
+apt-get update
+apt-get upgrade
+apt-get dist-upgrade
+gem update
+npm -g update
+cabal update
