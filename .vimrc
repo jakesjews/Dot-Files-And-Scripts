@@ -31,6 +31,7 @@ Bundle 'wavded/vim-stylus'
 Bundle 'myhere/vim-nodejs-complete'
 Bundle 'go.vim'
 Bundle 'adimit/prolog.vim'
+Bundle 'leafgarland/typescript-vim'
 
 set showcmd
 set smartindent
