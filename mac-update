@@ -4,6 +4,21 @@ brew update
 brew upgrade
 brew cleanup
 gem update
+
+expect -c "
+    spawn gem cleanup
+    set done 0
+
+    while {\$done == 0} {
+        expect {
+            \"Continue with Uninstall\\\\\\? \\\\\\[Yn\\\\\\]\" { send \"n\r\" }
+            \"Clean Up Complete\" { set done 1 }
+        }
+    }
+    wait
+    close $spawn_id
+"
+
 npm -g update
 cabal update
 rvm get latest
