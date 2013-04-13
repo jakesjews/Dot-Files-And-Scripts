@@ -10,10 +10,12 @@ Bundle 'taglist.vim'
 Bundle 'The-NERD-tree'
 Bundle 'vcscommand.vim'
 Bundle 'project.tar.gz'
-Bundle 'AutoComplPop' 
+Bundle 'AutoComplPop'
 Bundle 'The-NERD-Commenter'
 Bundle 'surround.vim'
 Bundle 'scrooloose/syntastic'
+Bundle 'rizzatti/funcoo.vim'
+Bundle 'rizzatti/dash.vim'
 
 "Language autocompletion
 Bundle 'JSON.vim'
@@ -32,6 +34,12 @@ Bundle 'myhere/vim-nodejs-complete'
 Bundle 'go.vim'
 Bundle 'adimit/prolog.vim'
 Bundle 'leafgarland/typescript-vim'
+Bundle 'nono/vim-handlebars'
+Bundle 'darthdeus/vim-emblem'
+Bundle 'applescript.vim'
+Bundle 'kongo2002/fsharp-vim'
+Bundle 'elixir-lang/vim-elixir'
+Bundle 'tpope/vim-cucumber'
 
 set showcmd
 set smartindent
@@ -57,4 +65,3 @@ if has("gui_running")
   colorscheme molokai
   set guifont=Inconsolata-dz:h12
 endif
-
