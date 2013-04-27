@@ -1,0 +1,4 @@
+#! /bin/bash
+absoluteDir=$1
+relativeDir=${absoluteDir##*/}
+tar -c $relativeDir | snzip > $relativeDir.tar.snz

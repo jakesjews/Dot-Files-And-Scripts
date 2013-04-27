@@ -1,0 +1,2 @@
+#! /bin/bash
+snzip -dc $1 | tar xf -
