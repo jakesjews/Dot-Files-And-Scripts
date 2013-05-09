@@ -7,7 +7,7 @@ sudo apt-get install -y build-essential llvm clang \
 
 sudo apt-get install -y tmux vim p7zip cmake curl wget exuberant-ctags htop zsh
 
-sudo apt-get install -y postgresql zookeeper zookeeper-bin rabbitmq-server
+sudo apt-get install -y postgresql
 
 sudo apt-get install -y subversion mercurial git cvs
 
@@ -20,6 +20,18 @@ sudo apt-get install -y oracle-java7-installer
 sudo add-apt-repository -y ppa:nginx/stable
 sudo apt-get update
 sudo apt-get install -y nginx
+
+# zookeeper
+sudo add-apt-repository -y ppa:hadoop-ubuntu/stable
+sudo apt-get update
+sudo apt-get install hadoop-zookeeper-server
+
+# rabbit-mq
+sudo ` echo "deb http://www.rabbitmq.com/debian/ testing main" > /etc/apt/sources.list `
+wget http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
+sudo apt-key add rabbitmq-signing-key-public.asc
+rm rabbitmq-signing-key-public.asc
+sudo apt-get install rabbitmq-server
 
 # sublime text 2
 sudo add-apt-repository -y ppa:webupd8team/sublime-text-2
