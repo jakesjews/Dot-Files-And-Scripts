@@ -63,5 +63,5 @@ filetype plugin indent on
 
 if has("gui_running")
   colorscheme molokai
-  set guifont=Inconsolata-dz:h12
+  set guifont=Consolas:h12
 endif
