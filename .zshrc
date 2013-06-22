@@ -6,8 +6,17 @@ ZSH_THEME="robbyrussell"
 
 alias space="du -d 1 -h | sort -n"
 alias ipconfig=ifconfig
+alias tracegl="node /usr/local/bin/tracegl.js"
+alias l="ls"
+alias immersiveapps='ssh immersiveapplications.com'
+alias df='df -h'
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias bc='bc -l'
+alias diff='colordiff'
 
-plugins=(git brew bundler cake cap gem lein mvn node osx perl redis-cli ruby rvm textmate github heroku mercurial npm pip python rake sublime vagrant cap coffee fabric git-extras pow screen svn golang bower scala rebar rails3 colorize go)
+plugins=(git brew bundler cake cap gem lein mvn node osx perl redis-cli ruby rvm textmate github heroku mercurial npm pip python rake sublime vagrant cap coffee fabric git-extras pow screen svn golang bower scala rebar rails3 colorize go web-search)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -23,21 +32,24 @@ export NODE_PATH=/usr/local/share/npm/lib/node_modules
 export GOROOT=/usr/local/Cellar/go/1.1
 export GOPATH=/usr/local/share/go
 export VAGRANT_DEFAULT_PROVIDER='vmware_fusion'
+export HOMEBREW_GITHUB_API_TOKEN='c2cb29a67cee76e48d933eae6b36b9c51e79609b'
+export HOMEBREW_MAKE_JOBS=6
 
+export ANDROID_SDK_ROOT=/usr/local/opt/android-sdk
 export POSTGRES_ROOT=/Applications/Postgres.app/Contents/MacOS/bin
 export J_ROOT=/Applications/j64-701/bin
-export CUDA_ROOT=/usr/local/cuda/bin
 export SERVER_ROOT=/Applications/Server.app/Contents/ServerRoot/usr
 export CLOJURE_ROOT=/Users/jacob/.cljr/bin
 export CABAL_ROOT=/Users/jacob/.cabal/bin
 export NPM_ROOT=/usr/local/share/npm/bin
 export DEPOT_TOOLS_ROOT=/usr/local/depot_tools
-export TEX_ROOT=/usr/tex/bin
 export PYTHON_ROOT=/usr/local/share/python
 export PYTHON3_ROOT=/usr/local/share/python3
 export PYPY_ROOT=/usr/local/share/pypy
+export RACKET_ROOT=/Applications/racket/bin
+export LATEX_ROOT=/usr/local/texlive/2012/bin/x86_64-darwin
 
-export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:$J_ROOT:$POSTGRES_ROOT:$CUDA_ROOT:$PYTHON_ROOT:$PYTHON3_ROOT:$PYPY_ROOT:$SERVER_ROOT/bin:$SERVER_ROOT/sbin:$TEX_ROOT:$CLOJURE_ROOT:$PLAN9/bin:$CABAL_ROOT:$NPM_ROOT:$DEPOT_TOOLS_ROOT:$GOPATH/bin:$PATH
+export PATH=$J_ROOT:/usr/local/bin:/usr/local/sbin:$POSTGRES_ROOT:/usr/bin:/usr/sbin:/bin:/sbin:$PYTHON_ROOT:$PYTHON3_ROOT:$PYPY_ROOT:$SERVER_ROOT/bin:$SERVER_ROOT/sbin:$CLOJURE_ROOT:$PLAN9/bin:$CABAL_ROOT:$NPM_ROOT:$DEPOT_TOOLS_ROOT:$GOPATH/bin:$RACKET_ROOT:$LATEX_ROOT:$PATH
 
 PATH=$PATH:$HOME/.rvm/bin
 
