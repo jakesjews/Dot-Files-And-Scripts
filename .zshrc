@@ -15,8 +15,9 @@ alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias bc='bc -l'
 alias diff='colordiff'
+alias ed='ed -p:'
 
-plugins=(git brew bundler cake gem lein mvn node osx perl redis-cli ruby rvm textmate github heroku mercurial npm pip python rake sublime vagrant coffee git-extras pow svn golang bower scala rebar rails3 colorize go web-search zsh-syntax-highlighting cabal vi-mode cpanm jira sbt)
+plugins=(gitfast brew bundler cake gem lein mvn node osx perl redis-cli ruby rvm textmate github heroku mercurial npm pip python rake sublime vagrant coffee git-extras pow svn golang bower scala rebar rails3 colorize go web-search zsh-syntax-highlighting cabal vi-mode cpanm jira sbt mix)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -35,7 +36,7 @@ export VAGRANT_DEFAULT_PROVIDER='vmware_fusion'
 export HOMEBREW_GITHUB_API_TOKEN='c2cb29a67cee76e48d933eae6b36b9c51e79609b'
 export TRELLO_DEVELOPER_PUBLIC_KEY='71a6e74bca14a27bed68987d533f8402'
 export TRELLO_MEMBER_TOKEN='2b9bc77897f731d6400b3a3ead90d0eb60670855120dc148f93819f08851aadc'
-export HOMEBREW_MAKE_JOBS=6
+export HOMEBREW_MAKE_JOBS=4
 export VOLDEMORT_HOME='/usr/local/Cellar/voldemort/0.90.1/libexec'
 
 export ANDROID_SDK_ROOT=/usr/local/opt/android-sdk
@@ -46,15 +47,12 @@ export CLOJURE_ROOT=/Users/jacob/.cljr/bin
 export CABAL_ROOT=/Users/jacob/.cabal/bin
 export NPM_ROOT=/usr/local/share/npm/bin
 export DEPOT_TOOLS_ROOT=/usr/local/depot_tools
-export PYTHON_ROOT=/usr/local/share/python
-export PYTHON3_ROOT=/usr/local/share/python3
-export PYPY_ROOT=/usr/local/share/pypy
 export RACKET_ROOT=/Applications/racket.5/bin
 export LATEX_ROOT=/usr/local/texlive/2013/bin/x86_64-darwin
 export CUDA_ROOT=/Developer/NVIDIA/CUDA-5.0/bin
 export VMWARE_ROOT="/Applications/VMware Fusion.app/Contents/Library"
 
-export PATH=$J_ROOT:/usr/local/bin:/usr/local/sbin:$POSTGRES_ROOT:/usr/bin:/usr/sbin:/bin:/sbin:$PYTHON_ROOT:$PYTHON3_ROOT:$PYPY_ROOT:$SERVER_ROOT/bin:$SERVER_ROOT/sbin:$CLOJURE_ROOT:$PLAN9/bin:$CABAL_ROOT:$NPM_ROOT:$DEPOT_TOOLS_ROOT:$GOPATH/bin:$RACKET_ROOT:$LATEX_ROOT:$CUDA_ROOT:$VMWARE_ROOT:$PATH
+export PATH=$J_ROOT:/usr/local/bin:/usr/local/sbin::$POSTGRES_ROOT:/usr/bin:/usr/sbin:/bin:/sbin:$SERVER_ROOT/bin:$SERVER_ROOT/sbin:$CLOJURE_ROOT:$PLAN9/bin:$CABAL_ROOT:$NPM_ROOT:$DEPOT_TOOLS_ROOT:$GOPATH/bin:$RACKET_ROOT:$LATEX_ROOT:$CUDA_ROOT:$VMWARE_ROOT:$PATH
 
 PATH=$PATH:$HOME/.rvm/bin
 
@@ -80,6 +78,14 @@ zmodload zsh/net/tcp
 # ZSH Higher Order Functions
 . $HOME/.zsh/functional/load
 
-#bindkey -v
+bindkey -v
 
 alias 9=/usr/local/plan9/bin/9
+
+function npmls() {
+    npm ls "$@" | grep "^[└├]" | sed "s/─┬/──/g"
+}
+
+go_libs="-lm"
+go_flags="-g -Wall -include /usr/local/include/allheads.h -O3"
+alias go_c="clang -xc '-' $go_libs $go_flags"
