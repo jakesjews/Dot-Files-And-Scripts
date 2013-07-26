@@ -17,7 +17,7 @@ alias bc='bc -l'
 alias diff='colordiff'
 alias ed='ed -p:'
 
-plugins=(gitfast brew bundler cake gem lein mvn node osx perl redis-cli ruby rvm textmate github heroku mercurial npm pip python rake sublime vagrant coffee git-extras pow svn golang bower scala rebar rails3 colorize go web-search zsh-syntax-highlighting cabal vi-mode cpanm jira sbt mix)
+plugins=(gitfast brew bundler cake gem lein mvn node osx perl redis-cli ruby textmate github heroku mercurial npm pip python rake sublime vagrant coffee git-extras pow svn golang bower scala rebar rails3 colorize go web-search zsh-syntax-highlighting cabal vi-mode cpanm jira sbt mix rvm)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -42,19 +42,15 @@ export VOLDEMORT_HOME='/usr/local/Cellar/voldemort/0.90.1/libexec'
 export ANDROID_SDK_ROOT=/usr/local/opt/android-sdk
 export POSTGRES_ROOT=/Applications/Postgres.app/Contents/MacOS/bin
 export J_ROOT=/Applications/j64-701/bin
-export SERVER_ROOT=/Applications/Server.app/Contents/ServerRoot/usr
 export CLOJURE_ROOT=/Users/jacob/.cljr/bin
 export CABAL_ROOT=/Users/jacob/.cabal/bin
-export NPM_ROOT=/usr/local/share/npm/bin
 export DEPOT_TOOLS_ROOT=/usr/local/depot_tools
 export RACKET_ROOT=/Applications/racket.5/bin
 export LATEX_ROOT=/usr/local/texlive/2013/bin/x86_64-darwin
 export CUDA_ROOT=/Developer/NVIDIA/CUDA-5.0/bin
 export VMWARE_ROOT="/Applications/VMware Fusion.app/Contents/Library"
 
-export PATH=$J_ROOT:/usr/local/bin:/usr/local/sbin::$POSTGRES_ROOT:/usr/bin:/usr/sbin:/bin:/sbin:$SERVER_ROOT/bin:$SERVER_ROOT/sbin:$CLOJURE_ROOT:$PLAN9/bin:$CABAL_ROOT:$NPM_ROOT:$DEPOT_TOOLS_ROOT:$GOPATH/bin:$RACKET_ROOT:$LATEX_ROOT:$CUDA_ROOT:$VMWARE_ROOT:$PATH
-
-PATH=$PATH:$HOME/.rvm/bin
+export PATH=$J_ROOT:/usr/local/bin:/usr/local/sbin:$POSTGRES_ROOT:$CLOJURE_ROOT:$CABAL_ROOT:$DEPOT_TOOLS_ROOT:$GOPATH/bin:$RACKET_ROOT:$LATEX_ROOT:$CUDA_ROOT:$VMWARE_ROOT:$PATH:$PLAN9/bin
 
 if [ -f `brew --prefix`/etc/autojump ]; then
       . `brew --prefix`/etc/autojump
