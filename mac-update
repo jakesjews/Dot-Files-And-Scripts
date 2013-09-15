@@ -1,5 +1,4 @@
-#! /bin/bash
-
+#!/usr/local/bin/zsh --login
 brew update
 brew upgrade
 brew cleanup -s
@@ -8,6 +7,7 @@ gem update
 gem update --system
 
 expect -c "
+    set timeout -1
     spawn gem cleanup
     set done 0
 
@@ -24,9 +24,13 @@ expect -c "
 npm -g update
 npm cache clean
 
-#pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip install -U
-
-cabal update
+#pip list --outdated | grep -Ev 'You are|Could not' | cut -d ' ' -f 1 | xargs -0 pip install --upgrade
 
 rvm get latest
 rvm cleanup all
+
+heroku update
+
+meteor update
+
+vagrant plugin update vagrant-vmware-fusion
