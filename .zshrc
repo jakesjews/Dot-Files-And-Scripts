@@ -16,8 +16,10 @@ alias fgrep='fgrep --color=auto'
 alias bc='bc -l'
 alias diff='colordiff'
 alias ed='ed -p:'
+alias mmv="noglob zmv -W"
+alias xsp="xsp4"
 
-plugins=(gitfast brew bundler cake gem lein mvn node osx perl redis-cli ruby textmate github heroku mercurial npm pip python rake sublime vagrant coffee git-extras pow svn golang bower scala rebar rails3 colorize go web-search zsh-syntax-highlighting cabal vi-mode cpanm jira sbt mix rvm)
+plugins=(gitfast brew bundler cake gem lein mvn node osx perl redis-cli ruby textmate github heroku mercurial npm pip python rake sublime vagrant coffee git-extras pow svn golang bower scala rebar rails3 colorize go web-search zsh-syntax-highlighting cabal vi-mode cpanm jira sbt mix tmux rvm) 
 
 source $ZSH/oh-my-zsh.sh
 
@@ -47,10 +49,14 @@ export CABAL_ROOT=/Users/jacob/.cabal/bin
 export DEPOT_TOOLS_ROOT=/usr/local/depot_tools
 export RACKET_ROOT=/Applications/racket.5/bin
 export LATEX_ROOT=/usr/local/texlive/2013/bin/x86_64-darwin
-export CUDA_ROOT=/Developer/NVIDIA/CUDA-5.0/bin
+export CUDA_ROOT=/Developer/NVIDIA/CUDA-5.5/bin
 export VMWARE_ROOT="/Applications/VMware Fusion.app/Contents/Library"
+export SHOES_ROOT=/Applications/Shoes.app/Contents/MacOS
+export NGINX_ROOT=/usr/local/nginx/sbin
+export QT_ROOT=/Applications/Qt5.1.1/5.1.1/clang_64/bin
+export HEROKU_ROOT=/usr/local/heroku/bin
 
-export PATH=$J_ROOT:/usr/local/bin:/usr/local/sbin:$POSTGRES_ROOT:$CLOJURE_ROOT:$CABAL_ROOT:$DEPOT_TOOLS_ROOT:$GOPATH/bin:$RACKET_ROOT:$LATEX_ROOT:$CUDA_ROOT:$VMWARE_ROOT:$PATH:$PLAN9/bin
+export PATH=$J_ROOT:/usr/local/bin:/usr/local/sbin:$POSTGRES_ROOT:$CLOJURE_ROOT:$CABAL_ROOT:$DEPOT_TOOLS_ROOT:$GOPATH/bin:$RACKET_ROOT:$LATEX_ROOT:$VMWARE_ROOT:$SHOES_ROOT:$NGINX_ROOT:$QT_ROOT:$HEROKU_ROOT:$PATH:$PLAN9/bin
 
 if [ -f `brew --prefix`/etc/autojump ]; then
       . `brew --prefix`/etc/autojump
@@ -85,3 +91,5 @@ function npmls() {
 go_libs="-lm"
 go_flags="-g -Wall -include /usr/local/include/allheads.h -O3"
 alias go_c="clang -xc '-' $go_libs $go_flags"
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
