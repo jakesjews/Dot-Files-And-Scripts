@@ -2,60 +2,48 @@ sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get dist-upgrade -y
 
-sudo apt-get install -y build-essential llvm clang \
-  mono-runtime python2.7 python3.3 python-software-properties \
-  perl ghc cabal-install golang-go golang-go \
-  golang-tools erlang gprolog quickly quickly-ubuntu-template
-
-sudo apt-get install -y tmux vim p7zip cmake curl wget exuberant-ctags htop zsh
-
-sudo apt-get install -y subversion mercurial git cvs
-
-# java 7
+# add ppas
+sudo add-apt-repository -y ppa:chris-lea/redis-server
 sudo add-apt-repository -y ppa:webupd8team/java
-sudo apt-get update
-sudo apt-get install -y oracle-java7-installer
-
-# nginx
 sudo add-apt-repository -y ppa:nginx/stable
-sudo apt-get update
-sudo apt-get install -y nginx
-
-# zookeeper
 sudo add-apt-repository -y ppa:hadoop-ubuntu/stable
-sudo apt-get update
-sudo apt-get install hadoop-zookeeper-server
+sudo add-apt-repository -y ppa:webupd8team/sublime-text-2
+sudo add-apt-repository -y ppa:juju/devel
+sudo add-apt-repository -y ppa:chris-lea/node.js
+sudo add-apt-repository -y ppa:rquillo/ansible
 
-# rabbit-mq
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10 -y
+sudo sh -c 'echo "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen" > /etc/apt/sources.list.d/10gen.list'
+
 sudo ` echo "deb http://www.rabbitmq.com/debian/ testing main" > /etc/apt/sources.list `
 wget http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
 sudo apt-key add rabbitmq-signing-key-public.asc
 rm rabbitmq-signing-key-public.asc
-sudo apt-get install rabbitmq-server
 
-# sublime text 2
-sudo add-apt-repository -y ppa:webupd8team/sublime-text-2
 sudo apt-get update
-sudo apt-get install -y sublime-text
+
+sudo apt-get install -y build-essential llvm clang \
+  mono-runtime python2.7 python3.3 ansible \
+  perl ghc cabal-install golang-go golang-go \
+  golang-tools erlang gprolog quickly quickly-ubuntu-template \
+  redis-server oracle-java7-installer nginx \
+  hadoop-zookeeper-server sublime-text juju-core \
+  nodejs mongodb-10gen rabbitmq-server tmux vim p7zip \
+  cmake wget curl exuberant-ctags htop zsh subversion \
+  mercurial git cvs unzip automake pv dtrx rsync \
+  parallel ack cifs-utils smbclient winbind vsftpd \
+  gawk ack-grep ufw libnss-mdns sshpass apt-offline \
+  python-httplib2 linux-firmware-nonfree python-keyczar
 
 # beyond compare
 wget http://www.scootersoftware.com/bcompare-3.3.8.16340_amd64.deb
 sudo dpkg -i bcompare-3.3.8.16340_amd64.deb
 sudo apt-get -f -y install
 
-# mongodb
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10 -y
-sudo sh -c 'echo "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen" > /etc/apt/sources.list.d/10gen.list'
-sudo apt-get update
-sudo apt-get install -y mongodb-10gen
-
 # install rvm and ruby
 curl -L https://get.rvm.io | bash -s stable --rails --autolibs=enabled
 
-# nodejs and coffee-script
-sudo add-apt-repository -y ppa:chris-lea/node.js
-sudo apt-get update
-sudo apt-get install nodejs -y
+# npm packages
 sudo npm install -g mocha cucumber coffee-script iced-coffee-script brunch
 
 # clojure
@@ -88,10 +76,7 @@ wget http://download.jetbrains.com/ruby/RubyMine-5.4.3.tar.gz -T 5
 tar xfz RubyMine-5.4.3.tar.gz
 mv RubyMine-5.4.3 ~/apps/rubymine
 
-# juju
-sudo add-apt-repository -y ppa:juju/devel
-sudo apt-get update
-sudo apt-get install -y juju-core
+# juju keygen
 ssh-keygen -t rsa -b 2048
 juju generate-config -w
 juju bootstrap
