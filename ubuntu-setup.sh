@@ -81,6 +81,9 @@ ssh-keygen -t rsa -b 2048
 juju generate-config -w
 juju bootstrap
 
+rm *.deb
+rm *.gz
+
 # mono
 mkdir -p dev/src
 cd dev/src
@@ -109,9 +112,3 @@ git submodule update --init --recursive
 make -j2
 sudo make install
 make clean
-
-rm *.deb
-rm *.gz
-
-
-
