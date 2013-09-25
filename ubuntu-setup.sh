@@ -81,7 +81,7 @@ mkdir ~/apps
 # intellij
 wget http://download.jetbrains.com/idea/ideaIU-12.1.4.tar.gz
 tar xfz ideaIU-12.1.4.tar.gz
-mv idea-IU-129.354 ~/apps/idea
+mv idea-IU-129.713 ~/apps/idea
 
 # rubymine
 wget http://download.jetbrains.com/ruby/RubyMine-5.4.3.tar.gz -T 5
