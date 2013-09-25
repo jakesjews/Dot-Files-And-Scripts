@@ -1,13 +1,13 @@
 sudo apt-get update
+sudo apt-get upgrade -y
+sudo apt-get dist-upgrade -y
 
 sudo apt-get install -y build-essential llvm clang \
   mono-runtime python2.7 python3.3 python-software-properties \
   perl ghc cabal-install golang-go golang-go \
-  golang-tools erlang gprolog g++ make quickly quickly-ubuntu-template
+  golang-tools erlang gprolog quickly quickly-ubuntu-template
 
 sudo apt-get install -y tmux vim p7zip cmake curl wget exuberant-ctags htop zsh
-
-sudo apt-get install -y postgresql
 
 sudo apt-get install -y subversion mercurial git cvs
 
@@ -39,8 +39,8 @@ sudo apt-get update
 sudo apt-get install -y sublime-text
 
 # beyond compare
-wget http://www.scootersoftware.com/bcompare-3.3.7.15876_amd64.deb
-sudo dpkg -i bcompare-3.3.7.15876_amd64.deb
+wget http://www.scootersoftware.com/bcompare-3.3.8.16340_amd64.deb
+sudo dpkg -i bcompare-3.3.8.16340_amd64.deb
 sudo apt-get -f -y install
 
 # mongodb
@@ -56,7 +56,7 @@ curl -L https://get.rvm.io | bash -s stable --rails --autolibs=enabled
 sudo add-apt-repository -y ppa:chris-lea/node.js
 sudo apt-get update
 sudo apt-get install nodejs -y
-sudo npm install -g mocha cucumber coffee-script iced-coffee-script
+sudo npm install -g mocha cucumber coffee-script iced-coffee-script brunch
 
 # clojure
 wget https://raw.github.com/technomancy/leiningen/stable/bin/lein
@@ -72,8 +72,6 @@ curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | 
 wget "https://raw.github.com/jakesjews/Dot-Files-And-Scripts/master/.zshrc" -P ~/
 
 # install Chrome
-wget -c www.mirrorservice.org/sites/archive.ubuntu.com/ubuntu//pool/main/u/udev/libudev0_175-0ubuntu13_amd64.deb
-sudo dpkg -i libudev0*.deb
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 sudo dpkg -i ./google-chrome*.deb
 sudo apt-get -f -y install
@@ -81,14 +79,14 @@ sudo apt-get -f -y install
 mkdir ~/apps
 
 # intellij
-wget http://download.jetbrains.com/idea/ideaIU-12.1.2.tar.gz -T 5
-tar xfz ideaIU-12.1.2.tar.gz
+wget http://download.jetbrains.com/idea/ideaIU-12.1.4.tar.gz
+tar xfz ideaIU-12.1.4.tar.gz
 mv idea-IU-129.354 ~/apps/idea
 
 # rubymine
-wget http://download.jetbrains.com/ruby/RubyMine-5.4.1.tar.gz -T 5
-tar xfz RubyMine-5.4.1.tar.gz
-mv RubyMine-5.4.1 ~/apps/rubymine
+wget http://download.jetbrains.com/ruby/RubyMine-5.4.3.tar.gz -T 5
+tar xfz RubyMine-5.4.3.tar.gz
+mv RubyMine-5.4.3 ~/apps/rubymine
 
 # juju
 sudo add-apt-repository -y ppa:juju/devel
@@ -98,8 +96,37 @@ ssh-keygen -t rsa -b 2048
 juju generate-config -w
 juju bootstrap
 
-sudo apt-get upgrade -y
-sudo apt-get dist-upgrade -y
+# mono
+mkdir -p dev/src
+cd dev/src
+git clone https://github.com/mono/mono.git --depth 100
+cd mono
+git checkout 'mono-3.2.3'
+git submodule update --init --recursive
+./autogen.sh --prefix=/usr
+make -j2
+sudo make install
+make clean
+
+cd ~/dev/src
+git clone https://github.com/mono/xsp.git --depth 100
+cd xsp
+./autogen.sh --prefix=/usr
+make -j2
+sudo make install
+make clean
+
+cd ~/dev/src
+git clone https://github.com/mono/monodevelop.git
+cd monodevelop
+git submodule update --init --recursive
+./configure --profile=dist
+make -j2
+sudo make install
+make clean
 
 rm *.deb
 rm *.gz
+
+
+
