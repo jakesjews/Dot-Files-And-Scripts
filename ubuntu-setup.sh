@@ -16,7 +16,7 @@ sudo apt-get update
 
 sudo apt-get install -y build-essential llvm clang \
   mono-gmcs python2.7 python3.3 ansible tortoisehg \
-  perl ghc cabal-install golang-go golang-go \
+  perl ghc cabal-install golang-go golang-go libtool \
   golang-tools erlang gprolog quickly quickly-ubuntu-template \
   redis-server oracle-java7-installer nginx \
   zookeeper zookeeperd zookeeper-bin sublime-text juju-core \
