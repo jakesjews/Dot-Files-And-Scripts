@@ -12,10 +12,10 @@ sudo add-apt-repository -y ppa:juju/devel
 sudo add-apt-repository -y ppa:chris-lea/node.js
 sudo add-apt-repository -y ppa:rquillo/ansible
 
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10 -y
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
 sudo sh -c 'echo "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen" > /etc/apt/sources.list.d/10gen.list'
 
-sudo ` echo "deb http://www.rabbitmq.com/debian/ testing main" > /etc/apt/sources.list `
+sudo ` echo "deb http://www.rabbitmq.com/debian/ testing main" >> /etc/apt/sources.list `
 wget http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
 sudo apt-key add rabbitmq-signing-key-public.asc
 rm rabbitmq-signing-key-public.asc
