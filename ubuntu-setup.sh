@@ -15,7 +15,7 @@ sudo sh -c 'echo "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart di
 sudo apt-get update
 
 sudo apt-get install -y build-essential llvm clang \
-  mono-gmcs python2.7 python3.3 ansible \
+  mono-gmcs python2.7 python3.3 ansible tortoisehg \
   perl ghc cabal-install golang-go golang-go \
   golang-tools erlang gprolog quickly quickly-ubuntu-template \
   redis-server oracle-java7-installer nginx \
