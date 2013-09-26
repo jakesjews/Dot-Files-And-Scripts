@@ -22,7 +22,7 @@ sudo apt-get install -y build-essential llvm clang \
   zookeeper zookeeperd zookeeper-bin sublime-text juju-core \
   nodejs mongodb-10gen rabbitmq-server tmux vim p7zip \
   cmake wget curl exuberant-ctags htop zsh subversion \
-  mercurial git cvs unzip automake pv dtrx rsync \
+  mercurial git cvs unzip automake pv dtrx rsync libglade2.0-cil-dev \
   parallel ack cifs-utils smbclient winbind vsftpd \
   gawk ack-grep ufw libnss-mdns sshpass apt-offline \
   python-httplib2 linux-firmware-nonfree python-keyczar
