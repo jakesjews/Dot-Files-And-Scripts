@@ -18,7 +18,7 @@ sudo apt-get install -y build-essential llvm clang \
   mono-gmcs python2.7 python3.3 ansible tortoisehg \
   perl ghc cabal-install golang-go golang-go libtool \
   golang-tools erlang gprolog quickly quickly-ubuntu-template \
-  redis-server oracle-java7-installer nginx \
+  redis-server oracle-java7-installer nginx gnome-sharp2 \
   zookeeper zookeeperd zookeeper-bin sublime-text juju-core \
   nodejs mongodb-10gen rabbitmq-server tmux vim p7zip \
   cmake wget curl exuberant-ctags htop zsh subversion \
