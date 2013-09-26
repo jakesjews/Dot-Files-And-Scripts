@@ -32,6 +32,11 @@ wget http://www.scootersoftware.com/bcompare-3.3.8.16340_amd64.deb
 sudo dpkg -i bcompare-3.3.8.16340_amd64.deb
 sudo apt-get -f -y install
 
+# robomongo
+wget http://robomongo.org/files/linux/robomongo-0.8.2-x86_64.deb
+sudo dpkg -i robomongo-0.8.2-x86_64.deb
+sudo apt-get -f -y install
+
 # install rvm and ruby
 curl -L https://get.rvm.io | bash -s stable --rails --autolibs=enabled
 
