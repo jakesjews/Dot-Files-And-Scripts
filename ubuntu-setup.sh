@@ -41,7 +41,7 @@ sudo apt-get -f -y install
 curl -L https://get.rvm.io | bash -s stable --rails --autolibs=enabled
 
 # npm packages
-sudo npm install -g mocha cucumber coffee-script iced-coffee-script brunch
+sudo npm install -g mocha cucumber coffee-script iced-coffee-script brunch bower mocha-phantomjs
 
 # clojure
 wget https://raw.github.com/technomancy/leiningen/stable/bin/lein
