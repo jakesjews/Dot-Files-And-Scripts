@@ -3,10 +3,7 @@ sudo apt-get upgrade -y
 sudo apt-get dist-upgrade -y
 
 # add ppas
-sudo add-apt-repository -y ppa:chris-lea/redis-server
 sudo add-apt-repository -y ppa:webupd8team/java
-sudo add-apt-repository -y ppa:nginx/stable
-sudo add-apt-repository -y ppa:hadoop-ubuntu/stable
 sudo add-apt-repository -y ppa:webupd8team/sublime-text-2
 sudo add-apt-repository -y ppa:juju/devel
 sudo add-apt-repository -y ppa:chris-lea/node.js
@@ -15,11 +12,6 @@ sudo add-apt-repository -y ppa:rquillo/ansible
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
 sudo sh -c 'echo "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen" > /etc/apt/sources.list.d/10gen.list'
 
-sudo ` echo "deb http://www.rabbitmq.com/debian/ testing main" >> /etc/apt/sources.list `
-wget http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
-sudo apt-key add rabbitmq-signing-key-public.asc
-rm rabbitmq-signing-key-public.asc
-
 sudo apt-get update
 
 sudo apt-get install -y build-essential llvm clang \
@@ -27,7 +19,7 @@ sudo apt-get install -y build-essential llvm clang \
   perl ghc cabal-install golang-go golang-go \
   golang-tools erlang gprolog quickly quickly-ubuntu-template \
   redis-server oracle-java7-installer nginx \
-  hadoop-zookeeper-server sublime-text juju-core \
+  zookeeper zookeeperd zookeeper-bin sublime-text juju-core \
   nodejs mongodb-10gen rabbitmq-server tmux vim p7zip \
   cmake wget curl exuberant-ctags htop zsh subversion \
   mercurial git cvs unzip automake pv dtrx rsync \
