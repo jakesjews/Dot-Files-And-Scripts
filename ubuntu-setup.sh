@@ -14,7 +14,7 @@ sudo sh -c 'echo "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart di
 
 sudo apt-get update
 
-sudo apt-get install -y build-essential llvm clang \
+sudo apt-get install -y build-essential llvm clang phantomjs \
   mono-gmcs python2.7 python3.3 ansible tortoisehg \
   perl ghc cabal-install golang-go golang-go libtool \
   golang-tools erlang gprolog quickly quickly-ubuntu-template \
