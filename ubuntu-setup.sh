@@ -26,7 +26,7 @@ sudo apt-get install -y build-essential llvm clang phantomjs \
   parallel ack cifs-utils smbclient winbind vsftpd \
   gawk ack-grep ufw libnss-mdns sshpass apt-offline \
   python-httplib2 linux-firmware-nonfree python-keyczar \
-  libboost-all-dev
+  libboost-all-dev scons
 
 # beyond compare
 wget http://www.scootersoftware.com/bcompare-3.3.8.16340_amd64.deb
