@@ -12,6 +12,9 @@ sudo add-apt-repository -y ppa:rquillo/ansible
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
 sudo sh -c 'echo "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen" > /etc/apt/sources.list.d/10gen.list'
 
+sudo sh -c "wget -qO- https://get.docker.io/gpg | apt-key add -"
+sudo sh -c "echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
+
 sudo apt-get update
 
 sudo apt-get install -y build-essential llvm clang phantomjs \
@@ -26,7 +29,7 @@ sudo apt-get install -y build-essential llvm clang phantomjs \
   parallel ack cifs-utils smbclient winbind vsftpd \
   gawk ack-grep ufw libnss-mdns sshpass apt-offline \
   python-httplib2 linux-firmware-nonfree python-keyczar \
-  libboost-all-dev scons
+  libboost-all-dev scons lxc-docker
 
 # beyond compare
 wget http://www.scootersoftware.com/bcompare-3.3.8.16340_i386.deb
