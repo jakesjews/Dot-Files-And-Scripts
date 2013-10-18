@@ -29,13 +29,13 @@ sudo apt-get install -y build-essential llvm clang phantomjs \
   libboost-all-dev scons
 
 # beyond compare
-wget http://www.scootersoftware.com/bcompare-3.3.8.16340_amd64.deb
+wget http://www.scootersoftware.com/bcompare-3.3.8.16340_i386.deb
 sudo dpkg -i bcompare-3.3.8.16340_amd64.deb
 sudo apt-get -f -y install
 
 # robomongo
-wget http://robomongo.org/files/linux/robomongo-0.8.2-x86_64.deb
-sudo dpkg -i robomongo-0.8.2-x86_64.deb
+wget http://robomongo.org/files/linux/robomongo-0.8.3-x86_64.deb
+sudo dpkg -i robomongo-0.8.3-x86_64.deb
 sudo apt-get -f -y install
 
 # install rvm and ruby
@@ -65,8 +65,8 @@ sudo apt-get -f -y install
 mkdir ~/apps
 
 # intellij
-wget http://download.jetbrains.com/idea/ideaIU-12.1.4.tar.gz
-tar xfz ideaIU-12.1.4.tar.gz
+wget http://download.jetbrains.com/idea/ideaIU-12.1.6.tar.gz
+tar xfz ideaIU-12.1.6.tar.gz
 mv idea-IU-129.713 ~/apps/idea
 
 # rubymine
@@ -76,8 +76,7 @@ mv RubyMine-5.4.3 ~/apps/rubymine
 
 # juju keygen
 ssh-keygen -t rsa -b 2048
-juju generate-config -w
-juju bootstrap
+juju generate-config
 
 rm *.deb
 rm *.gz
