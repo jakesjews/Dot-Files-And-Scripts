@@ -10,7 +10,7 @@ Bundle 'taglist.vim'
 Bundle 'The-NERD-tree'
 Bundle 'vcscommand.vim'
 Bundle 'project.tar.gz'
-Bundle 'AutoComplPop'
+Bundle 'Shougo/neocomplete.vim'
 Bundle 'The-NERD-Commenter'
 Bundle 'surround.vim'
 Bundle 'scrooloose/syntastic'
@@ -40,6 +40,8 @@ Bundle 'applescript.vim'
 Bundle 'kongo2002/fsharp-vim'
 Bundle 'elixir-lang/vim-elixir'
 Bundle 'tpope/vim-cucumber'
+
+let g:neocomplete#enable_at_startup = 1
 
 set showcmd
 set smartindent
