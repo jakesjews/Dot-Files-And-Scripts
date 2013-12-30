@@ -1,2 +1,2 @@
-#! /bin/bash
-git repack -a -d --depth=100 --window=100
+#!/usr/bin/env bash
+gfind . -name ".git" -type d | parallel gitgc
