@@ -10,14 +10,14 @@ Bundle 'taglist.vim'
 Bundle 'The-NERD-tree'
 Bundle 'vcscommand.vim'
 Bundle 'project.tar.gz'
-Bundle 'Shougo/neocomplete.vim'
 Bundle 'The-NERD-Commenter'
 Bundle 'surround.vim'
 Bundle 'scrooloose/syntastic'
 Bundle 'rizzatti/funcoo.vim'
 Bundle 'rizzatti/dash.vim'
+Bundle 'Valloric/YouCompleteMe'
+" Bundle 'Shougo/neocomplete.vim'
 
-"Language autocompletion
 Bundle 'JSON.vim'
 Bundle 'cocoa.vim'
 Bundle 'scala.vim'
@@ -40,8 +40,11 @@ Bundle 'applescript.vim'
 Bundle 'kongo2002/fsharp-vim'
 Bundle 'elixir-lang/vim-elixir'
 Bundle 'tpope/vim-cucumber'
+Bundle 'mustache/vim-mustache-handlebars'
+Bundle 'slim-template/vim-slim'
 
-let g:neocomplete#enable_at_startup = 1
+let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py'
+" let g:neocomplete#enable_at_startup = 1
 
 set showcmd
 set smartindent
@@ -55,7 +58,6 @@ set incsearch
 set autowrite
 syntax on
 
-" Make the mouse work
 set mouse=a
 
 " Turn on auto indenting for pasted code
