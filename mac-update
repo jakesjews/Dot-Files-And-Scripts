@@ -35,8 +35,6 @@ END
 rvm cleanup all
 rvm get latest
 
-heroku update
-
 meteor update
 
 nuget update -self
