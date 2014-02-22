@@ -16,8 +16,9 @@ alias ms='mocha -g "#slow" -i'
 alias redis='redis-server /usr/local/etc/redis.conf'
 alias zk='zkServer start-foreground'
 alias julia='/Applications/Julia.app/Contents/Resources/julia/bin/julia'
+alias vim='mvim -v'
 
-plugins=(ant bundler vi-mode gitfast brew cake gem lein mvn node osx perl redis-cli textmate github heroku mercurial npm pip python sublime vagrant coffee git-extras pow svn golang bower scala rebar rails colorize zsh-syntax-highlighting cabal cpanm jira sbt mix tmux mosh rvm ruby rake dircycle pod autojump vundle colored-man docker rsync extract encode64 history-substring-search copydir copyfile colorize cabal-upgrade functional) 
+plugins=(ant bundler vi-mode gitfast brew cake gem lein mvn node osx perl redis-cli textmate github heroku mercurial npm pip python sublime vagrant coffee git-extras pow svn golang bower scala rebar rails colorize zsh-syntax-highlighting cabal cpanm jira sbt mix tmux mosh rvm ruby rake dircycle pod autojump vundle colored-man docker rsync extract encode64 history-substring-search copydir copyfile colorize cabal-upgrade functional npmls) 
 
 source $ZSH/oh-my-zsh.sh
 
@@ -75,9 +76,9 @@ bindkey -v
 
 alias 9=/usr/local/plan9/bin/9
 
-function npmls() {
-    npm ls "$@" | grep "^[└├]" | sed "s/─┬/──/g"
-}
+#function npmls() {
+#    npm ls "$@" | grep "^[└├]" | sed "s/─┬/──/g"
+#}
 
 go_libs="-lm"
 go_flags="-g -Wall -include /usr/local/include/allheads.h -O3"
