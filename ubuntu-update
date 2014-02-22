@@ -1,11 +1,12 @@
 #! /bin/bash
-
 apt-get update
-apt-get upgrade
-apt-get dist-upgrade
+apt-get dist-upgrade -y
+apt-get autoremove -y
+
 gem update
 
 expect -c "
+    set timeout -1
     spawn gem cleanup
     set done 0
 
@@ -20,4 +21,15 @@ expect -c "
 "
 
 npm -g update
-cabal update
+npm cache clean
+
+python << END
+import pip
+from subprocess import call
+ 
+for dist in pip.get_installed_distributions():
+  call("pip install --upgrade " + dist.project_name, shell=True)
+END
+
+rvm cleanup all
+rvm get latest
