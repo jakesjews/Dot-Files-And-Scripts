@@ -5,28 +5,19 @@ LANG=en_US.UTF-8
 ZSH_THEME="robbyrussell"
 
 alias space="du -d 1 -h | sort -n"
-alias ipconfig=ifconfig
 alias tracegl="node /usr/local/bin/tracegl.js"
 alias l="ls"
 alias immersiveapps='ssh immersiveapplications.com'
-alias df='df -h'
-alias grep='grep --color=auto'
-alias egrep='egrep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias bc='bc -l'
-alias diff='colordiff'
-alias ed='ed -p:'
+alias ed='ged -p:'
 alias mmv="noglob zmv -W"
 alias xsp="xsp4"
-alias ssh-aws="ssh ec2-user@ec2-54-200-114-224.us-west-2.compute.amazonaws.com"
 alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
 alias ms='mocha -g "#slow" -i'
 alias redis='redis-server /usr/local/etc/redis.conf'
 alias zk='zkServer start-foreground'
 alias julia='/Applications/Julia.app/Contents/Resources/julia/bin/julia'
-alias eclim="/Applications/eclipse/eclimd"
 
-plugins=(bundler vi-mode gitfast brew cake gem lein mvn node osx perl redis-cli textmate github heroku mercurial npm pip python sublime vagrant coffee git-extras pow svn golang bower scala rebar rails colorize go web-search zsh-syntax-highlighting cabal cpanm jira sbt mix tmux mosh rvm ruby rake dircycle pod bzr autojump) 
+plugins=(ant bundler vi-mode gitfast brew cake gem lein mvn node osx perl redis-cli textmate github heroku mercurial npm pip python sublime vagrant coffee git-extras pow svn golang bower scala rebar rails colorize zsh-syntax-highlighting cabal cpanm jira sbt mix tmux mosh rvm ruby rake dircycle pod autojump vundle colored-man docker rsync extract encode64 history-substring-search copydir copyfile colorize cabal-upgrade functional) 
 
 source $ZSH/oh-my-zsh.sh
 
@@ -54,17 +45,16 @@ export JBOSS_HOME=/usr/local/opt/wildfly-as/libexec
 
 export ANDROID_SDK_ROOT=/usr/local/opt/android-sdk
 export POSTGRES_ROOT=/Applications/Postgres.app/Contents/Versions/9.3/bin
-export J_ROOT=/Applications/j64-701/bin
+export J_ROOT=/Applications/j64-801/bin
 export CLOJURE_ROOT=/Users/jacob/.cljr/bin
 export CABAL_ROOT=/Users/jacob/.cabal/bin
-export RACKET_ROOT=/Applications/racket/bin
 export LATEX_ROOT=/usr/local/texlive/2013/bin/x86_64-darwin
 export CUDA_ROOT=/Developer/NVIDIA/CUDA-5.5/bin
 export VMWARE_ROOT="/Applications/VMware Fusion.app/Contents/Library"
 export HEROKU_ROOT=/usr/local/heroku/bin
 export PHP_ROOT=$(brew --prefix josegonzalez/php/php55)/bin
 
-export PATH=$J_ROOT:$CABAL_ROOT:/usr/local/bin:/usr/local/sbin:$PHP_ROOT:$POSTGRES_ROOT:$CLOJURE_ROOT:$RACKET_ROOT:$LATEX_ROOT:$HEROKU_ROOT:$VMWARE_ROOT:$GOPATH/bin:$PATH:$PLAN9/bin:$CUDA_ROOT:$JBOSS_HOME/bin
+export PATH=$J_ROOT:$CABAL_ROOT:/usr/local/bin:/usr/local/sbin:$PHP_ROOT:$POSTGRES_ROOT:$CLOJURE_ROOT:$LATEX_ROOT:$HEROKU_ROOT:$VMWARE_ROOT:$GOPATH/bin:$PATH:$PLAN9/bin:$CUDA_ROOT:$JBOSS_HOME/bin
 
 alias say=/usr/bin/say
 
@@ -80,9 +70,6 @@ zmodload zsh/net/socket
 zmodload zsh/zftp
 zmodload zsh/attr
 zmodload zsh/net/tcp
-
-# ZSH Higher Order Functions
-. $HOME/.zsh/functional/load
 
 bindkey -v
 
