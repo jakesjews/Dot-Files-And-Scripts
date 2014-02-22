@@ -56,13 +56,11 @@ set smartcase
 set number
 set incsearch
 set autowrite
-syntax on
-
-set mouse=a
-
-" Turn on auto indenting for pasted code
 set pastetoggle=<F2>
+set mouse=a
+set clipboard=unnamed
 
+syntax on
 filetype plugin indent on
 
 if has("gui_running")
