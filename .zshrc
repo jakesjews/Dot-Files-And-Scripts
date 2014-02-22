@@ -76,10 +76,6 @@ bindkey -v
 
 alias 9=/usr/local/plan9/bin/9
 
-#function npmls() {
-#    npm ls "$@" | grep "^[└├]" | sed "s/─┬/──/g"
-#}
-
 go_libs="-lm"
 go_flags="-g -Wall -include /usr/local/include/allheads.h -O3"
 alias go_c="clang -xc '-' $go_libs $go_flags"
