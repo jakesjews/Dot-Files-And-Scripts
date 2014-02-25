@@ -23,7 +23,8 @@ plugins=(ant bundler vi-mode gitfast brew cake gem lein mvn node osx perl redis-
 source $ZSH/oh-my-zsh.sh
 
 export ENABLE_CORRECTION="true"
-export EDITOR='subl -w'
+export EDITOR='vim'
+export SHELL='zsh'
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export VAGRANT_DEFAULT_PROVIDER='vmware_fusion'
@@ -73,6 +74,7 @@ zmodload zsh/attr
 zmodload zsh/net/tcp
 
 bindkey -v
+KEYTIMEOUT=1
 
 alias 9=/usr/local/plan9/bin/9
 
