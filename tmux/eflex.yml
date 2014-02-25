@@ -1,0 +1,41 @@
+# ~/.tmuxinator/eflex.yml
+
+name: eflex
+root: ~/dev/eflexsystems/eflex
+pre:
+  - mongod --fork --logpath /usr/local/var/log/mongodb/mongodb.log
+  - zkServer start
+  - redis-server /usr/local/etc/redis.conf
+
+windows:
+  - editor:
+      layout: main-horizontal
+      layout: 3a6f,178x50,0,0[178x40,0,0,0,178x9,0,41,6]
+      panes:
+        - vim -c "NERDTree"
+        - #default
+  - webApp:
+      layout: main-horizontal
+      panes:
+        - iced 
+        - cd webApp && ./run.sh
+  - mono:
+      layout: main-horizontal
+      panes:
+        - csharp
+        - cd WebApi && xbuild && xsp4
+  - mongo:
+      layout: main-horizontal
+      panes:
+        - mongo
+        - mongostat
+  - redis:
+      layout: main-horizontal
+      panes:
+        - redis-cli
+        - redis-cli monitor
+  - zookeeper:
+      layout: main-horizontal
+      panes:
+        - zkCli
+        - tail -f /usr/local/var/log/zookeeper/zookeeper.log
