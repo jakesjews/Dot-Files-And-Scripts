@@ -27,7 +27,7 @@ windows:
   - mongo:
       layout: main-horizontal
       panes:
-        - mongo
+        - mongo eflex
         - mongostat
   - redis:
       layout: main-horizontal
@@ -39,3 +39,10 @@ windows:
       panes:
         - zkCli
         - tail -f /usr/local/var/log/zookeeper/zookeeper.log
+  - ssh:
+      layout: even-vertical
+      panes:
+        - ssh eflex@eflexplclistener
+        - ssh eflex@eflexwebserver
+        - ssh eflex@eflexmongo
+
