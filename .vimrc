@@ -15,6 +15,7 @@ Bundle 'surround.vim'
 Bundle 'scrooloose/syntastic'
 Bundle 'rizzatti/funcoo.vim'
 Bundle 'rizzatti/dash.vim'
+Bundle 'kien/ctrlp.vim'
 Bundle 'Valloric/YouCompleteMe'
 " Bundle 'Shougo/neocomplete.vim'
 
@@ -26,8 +27,6 @@ Bundle 'VimClojure'
 Bundle 'haskell.vim'
 Bundle 'checksyntax-B'
 Bundle 'vim-coffee-script'
-Bundle 'dbext.vim'
-Bundle 'SQLComplete.vim'
 Bundle 'digitaltoad/vim-jade'
 Bundle 'wavded/vim-stylus'
 Bundle 'myhere/vim-nodejs-complete'
@@ -42,9 +41,24 @@ Bundle 'elixir-lang/vim-elixir'
 Bundle 'tpope/vim-cucumber'
 Bundle 'mustache/vim-mustache-handlebars'
 Bundle 'slim-template/vim-slim'
+"Bundle 'nosami/Omnisharp'
 
 let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py'
 " let g:neocomplete#enable_at_startup = 1
+
+let NERDTreeIgnore = [
+\ '\.hgcheck',    '\.hglf',     '\.nuget',           'packages', 
+\ '.\vagrant',    '\.idea',      'eflex.bbprojectd', 'tmp',
+\ 'test-results', 'TestResults', 'public',           'compiled',
+\ 'node_modules', 'bin',         'obj',              'Properties',
+\ 'publish',
+\
+\ '\.suo$',            '\.hgtabs$',      '\.orig$',       '\.userconfig$', 
+\ 'npm-debug.log',     '\.swp$',         '\.tmp$',        '\.reh$', 
+\ '.DS_Store',         '\.iml$',         '\~$',           '.sublime-workspace', 
+\ '\.userprefs$',      '.tm_properties', '\.jar$',        '\.pfx$', 
+\ '\.sublime-project', '\.DotSettings',  'TestResult.xml'
+\ ]
 
 set showcmd
 set smartindent
