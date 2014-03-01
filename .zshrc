@@ -18,7 +18,7 @@ alias zk='zkServer start-foreground'
 alias julia='/Applications/Julia.app/Contents/Resources/julia/bin/julia'
 alias vim='mvim -v'
 
-plugins=(ant bundler vi-mode gitfast brew cake gem lein mvn node osx perl redis-cli textmate github heroku mercurial npm pip python sublime vagrant coffee git-extras pow svn golang bower scala rebar rails colorize zsh-syntax-highlighting cabal cpanm jira sbt mix tmux mosh rvm ruby rake dircycle pod autojump vundle colored-man docker rsync extract encode64 history-substring-search copydir copyfile colorize cabal-upgrade functional npmls) 
+plugins=(ant vi-mode gitfast brew cake gem lein mvn node osx perl redis-cli textmate github heroku mercurial npm pip python sublime vagrant coffee git-extras pow svn golang bower scala rebar rails colorize zsh-syntax-highlighting cabal cpanm jira sbt mix tmux mosh rvm ruby rake dircycle pod autojump vundle colored-man docker rsync extract encode64 history-substring-search copydir copyfile colorize cabal-upgrade functional npmls) 
 
 source $ZSH/oh-my-zsh.sh
 
@@ -33,6 +33,7 @@ export NNTPSERVER='news.tweaknews.eu'
 export MUTT_EMAIL_ADDRESS="jakesjews@gmail.com"
 export MUTT_REALNAME="Jacob Jewell"
 export MUTT_SMTP_URL="smtp://jakesjews@smtp.gmail.com:587/"
+export DISABLE_AUTO_TITLE=true
 
 export JAVA_HOME=`/usr/libexec/java_home -v 1.7`
 export HIVE_HOME=/usr/local/Cellar/hive/0.10.0/libexec
