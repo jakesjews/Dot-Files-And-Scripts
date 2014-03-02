@@ -1,0 +1,40 @@
+[user]
+	name = Jacob Jewell
+	email = jakesjews@gmail.com
+
+[core]
+	excludesfile = /Users/jacob/.gitignore_global
+
+[color]
+	ui = auto
+
+[push]
+	default = simple
+
+[diff]
+  tool = bcomp
+[difftool]
+  prompt = false
+[difftool "bcomp"]
+  trustExitCode = true
+  cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE"
+[merge]
+  tool = bcomp
+[mergetool]
+  prompt = false
+[mergetool "bcomp"]
+  trustExitCode = true
+  cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
+
+[difftool "sourcetree"]
+	cmd = /usr/local/bin/bcomp $LOCAL $REMOTE
+	path = 
+
+[mergetool "sourcetree"]
+	cmd = /usr/local/bin/bcomp $LOCAL $REMOTE $BASE $MERGED
+	trustExitCode = true
+
+[filter "media"]
+	clean = git-media-clean %f
+	smudge = git-media-smudge %f
+
