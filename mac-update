@@ -2,6 +2,7 @@
 brew update
 brew upgrade
 brew cleanup -s
+brew prune
 rm -rf /Library/Caches/Homebrew/*
 
 gem update
