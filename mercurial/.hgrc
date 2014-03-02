@@ -1,0 +1,28 @@
+[extensions]
+churn=
+hgext.extdiff =
+extdiff =
+purge =
+color = 
+graphlog = 
+largefiles = 
+mq = 
+progress = 
+transplant = 
+
+[ui]
+username = Jacob Jewell <jakesjews@gmail.com>
+merge = bcomp
+
+[tortoisehg]
+workbench.single = True
+
+[extdiff]
+cmd.bcomp = /usr/local/bin/bcomp
+
+[merge-tools]
+bcomp.executable = /usr/local/bin/bcomp
+bcomp.args = $local $other $base $output
+bcomp.priority = 1
+bcomp.premerge = True
+bcomp.gui = True
