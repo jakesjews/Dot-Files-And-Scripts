@@ -16,6 +16,7 @@ Bundle 'scrooloose/syntastic'
 Bundle 'rizzatti/funcoo.vim'
 Bundle 'rizzatti/dash.vim'
 Bundle 'kien/ctrlp.vim'
+Bundle 'rking/ag.vim'
 Bundle 'Valloric/YouCompleteMe'
 " Bundle 'Shougo/neocomplete.vim'
 
