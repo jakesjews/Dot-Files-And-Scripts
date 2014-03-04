@@ -74,6 +74,8 @@ set autowrite
 set pastetoggle=<F2>
 set mouse=a
 set clipboard=unnamed
+set foldmethod=indent
+set foldlevel=99
 
 syntax on
 filetype plugin indent on
