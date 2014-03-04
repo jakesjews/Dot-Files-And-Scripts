@@ -83,5 +83,5 @@ filetype plugin indent on
 if has("gui_running")
   colorscheme molokai
   set guifont=Consolas:h12
-  let do_syntax_sel_menu = 1|runtime! synmenu.vim|aunmenu &Syntax.&show\ filetypes\ in\ menu
+  let do_syntax_sel_menu = 1|runtime! synmenu.vim|aunmenu &Syntax.&Show\ filetypes\ in\ menu
 endif
