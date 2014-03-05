@@ -77,6 +77,7 @@ set mouse=a
 set clipboard=unnamed
 set foldmethod=indent
 set foldlevel=99
+set splitright
 
 syntax on
 filetype plugin indent on
