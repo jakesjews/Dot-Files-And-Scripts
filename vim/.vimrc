@@ -42,13 +42,14 @@ Bundle 'elixir-lang/vim-elixir'
 Bundle 'tpope/vim-cucumber'
 Bundle 'mustache/vim-mustache-handlebars'
 Bundle 'slim-template/vim-slim'
+Bundle 'moll/vim-node'
 "Bundle 'nosami/Omnisharp'
 
 let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py'
 " let g:neocomplete#enable_at_startup = 1
 
 let NERDTreeIgnore = [
-\ '\.hgcheck',    '\.hglf',     '\.nuget',           'packages', 
+\ '\.hgcheck',    '\.hglf',     '\.nuget',           
 \ '.\vagrant',    '\.idea',      'eflex.bbprojectd', 'tmp',
 \ 'test-results', 'TestResults', 'public',           'compiled',
 \ 'node_modules', 'bin',         'obj',              'Properties',
@@ -79,6 +80,10 @@ set foldlevel=99
 
 syntax on
 filetype plugin indent on
+
+if &term =~ '^screen'
+  set ttymouse=xterm2
+endif
 
 if has("gui_running")
   colorscheme molokai
