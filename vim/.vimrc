@@ -43,17 +43,17 @@ Bundle 'tpope/vim-cucumber'
 Bundle 'mustache/vim-mustache-handlebars'
 Bundle 'slim-template/vim-slim'
 Bundle 'moll/vim-node'
+Bundle 'ekalinin/Dockerfile.vim'
 "Bundle 'nosami/Omnisharp'
 
 let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py'
 " let g:neocomplete#enable_at_startup = 1
 
 let NERDTreeIgnore = [
-\ '\.hgcheck',    '\.hglf',     '\.nuget',           
-\ '.\vagrant',    '\.idea',      'eflex.bbprojectd', 'tmp',
+\ '\.hgcheck',    '\.hglf',     '\.nuget',           'publish',
+\ '.\vagrant$',   '\.idea',      'eflex.bbprojectd', 'tmp',
 \ 'test-results', 'TestResults', 'public',           'compiled',
 \ 'node_modules', 'bin',         'obj',              'Properties',
-\ 'publish',
 \
 \ '\.suo$',            '\.hgtabs$',      '\.orig$',       '\.userconfig$', 
 \ 'npm-debug.log',     '\.swp$',         '\.tmp$',        '\.reh$', 
