@@ -3,6 +3,7 @@ brew update
 brew upgrade
 brew cleanup -s
 brew prune
+brew tap --repair
 rm -rf /Library/Caches/Homebrew/*
 
 gem update
@@ -25,13 +26,14 @@ expect -c "
 npm -g update
 npm cache clean
 
-python << END
-import pip
-from subprocess import call
+#
+#python << END
+#import pip
+#from subprocess import call
  
-for dist in pip.get_installed_distributions():
-  call("pip install --upgrade " + dist.project_name, shell=True)
-END
+#for dist in pip.get_installed_distributions():
+#  call("pip install --upgrade " + dist.project_name, shell=True)
+#END
 
 rvm cleanup all
 rvm get latest
@@ -40,4 +42,6 @@ meteor update
 
 nuget update -self
 
-vagrant plugin update vagrant-vmware-fusion
+vagrant plugin update
+
+vundle-update
