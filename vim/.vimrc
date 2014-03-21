@@ -1,15 +1,23 @@
+" Keymapping 
+
+" Disable ex mode
+nnoremap Q <nop>
+
+nnoremap <C-K> :call HighlightNearCursor()<CR>
+map <C-c> <leader>c<space>
+map <C-w> <leader><leader>w
+
 set nocompatible
 filetype off
+
+" Plugins
 
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
 Bundle 'gmarik/vundle'
-Bundle 'rails.vim'
 Bundle 'taglist.vim'
 Bundle 'The-NERD-tree'
-Bundle 'vcscommand.vim'
-Bundle 'project.tar.gz'
 Bundle 'The-NERD-Commenter'
 Bundle 'surround.vim'
 Bundle 'scrooloose/syntastic'
@@ -18,36 +26,37 @@ Bundle 'rizzatti/dash.vim'
 Bundle 'kien/ctrlp.vim'
 Bundle 'rking/ag.vim'
 Bundle 'Valloric/YouCompleteMe'
-" Bundle 'Shougo/neocomplete.vim'
+Bundle 'Lokaltog/vim-easymotion'
 
-Bundle 'JSON.vim'
-Bundle 'cocoa.vim'
-Bundle 'scala.vim'
-Bundle 'Erlang-plugin-package'
-Bundle 'VimClojure'
-Bundle 'haskell.vim'
-Bundle 'checksyntax-B'
+Bundle 'elzr/vim-json'
+Bundle 'rails.vim'
+Bundle 'derekwyatt/vim-scala'
+Bundle 'jimenezrick/vimerl'
+Bundle 'slimv.vim'
+Bundle 'eagletmt/ghcmod-vim'
 Bundle 'vim-coffee-script'
 Bundle 'digitaltoad/vim-jade'
 Bundle 'wavded/vim-stylus'
-Bundle 'myhere/vim-nodejs-complete'
-Bundle 'go.vim'
+Bundle 'moll/vim-node'
+Bundle 'ahayman/vim-nodejs-complete'
+Bundle 'jnwhiteh/vim-golang'
 Bundle 'adimit/prolog.vim'
 Bundle 'leafgarland/typescript-vim'
-Bundle 'nono/vim-handlebars'
+Bundle 'mustache/vim-mustache-handlebars'
 Bundle 'darthdeus/vim-emblem'
 Bundle 'applescript.vim'
 Bundle 'kongo2002/fsharp-vim'
 Bundle 'elixir-lang/vim-elixir'
 Bundle 'tpope/vim-cucumber'
-Bundle 'mustache/vim-mustache-handlebars'
 Bundle 'slim-template/vim-slim'
-Bundle 'moll/vim-node'
 Bundle 'ekalinin/Dockerfile.vim'
-"Bundle 'nosami/Omnisharp'
+Bundle 'vim-scripts/Vim-R-plugin'
+
+" Bundle 'nosami/Omnisharp'
+" Bundle 'Shougo/neocomplete.vim'
+" let g:neocomplete#enable_at_startup = 1
 
 let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py'
-" let g:neocomplete#enable_at_startup = 1
 
 let NERDTreeIgnore = [
 \ '\.hgcheck',    '\.hglf',     '\.nuget',           'publish',
@@ -64,8 +73,6 @@ let NERDTreeIgnore = [
 
 set showcmd
 set smartindent
-set tabstop=4
-set shiftwidth=4
 set expandtab
 set ignorecase
 set smartcase
@@ -86,8 +93,26 @@ if &term =~ '^screen'
   set ttymouse=xterm2
 endif
 
+if executable('ag')
+  set grepprg=ag\ --nogroup\ --nocolor
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+  let g:ctrlp_use_caching = 0
+endif
+
 if has("gui_running")
   colorscheme molokai
   set guifont=Consolas:h12
   let do_syntax_sel_menu = 1|runtime! synmenu.vim|aunmenu &Syntax.&Show\ filetypes\ in\ menu
 endif
+
+" Functions
+
+function HighlightNearCursor()
+  if !exists("s:highlightcursor")
+    match Todo /\k*\%#\k*/
+    let s:highlightcursor=1
+  else
+    match None
+    unlet s:highlightcursor
+  endif
+endfunction
