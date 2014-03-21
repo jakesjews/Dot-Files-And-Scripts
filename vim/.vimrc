@@ -72,7 +72,9 @@ let NERDTreeIgnore = [
 \ ]
 
 set showcmd
-set smartindent
+set tabstop=4
+set shiftwidth=4
+set autoindent
 set expandtab
 set ignorecase
 set smartcase
