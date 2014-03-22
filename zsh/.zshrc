@@ -117,6 +117,5 @@ alias xsp="xsp4"
 alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
 alias ms='mocha -g "#slow" -i'
 alias test-mono="xbuild && make test-webApi"
-alias derp="vim -c 'NERDTree'"
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
