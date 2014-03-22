@@ -44,4 +44,4 @@ nuget update -self
 
 vagrant plugin update
 
-vundle-update
+/usr/local/bin/vim -c "execute \"BundleInstall\" | q | q"
