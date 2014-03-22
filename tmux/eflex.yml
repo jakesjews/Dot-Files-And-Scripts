@@ -3,7 +3,7 @@
 name: eflex
 root: ~/dev/eflexsystems/eflex
 pre:
-  - mongod --fork --logpath /usr/local/var/log/mongodb/mongodb.log
+  - mongod --fork --logpath /usr/local/var/log/mongodb/mongodb.log --config /usr/local/etc/mongod.conf
   - zkServer start
   - redis-server /usr/local/etc/redis.conf
 
@@ -23,7 +23,7 @@ windows:
       layout: main-horizontal
       panes:
         - csharp
-        - cd WebApi && xbuild && xsp4
+        - mono --runtime=v4.0 lib/NuGet.exe restore EFlex.sln && cd WebApi && xbuild && xsp4
   - mongo:
       layout: main-horizontal
       panes:
