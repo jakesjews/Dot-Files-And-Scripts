@@ -51,6 +51,7 @@ Bundle 'tpope/vim-cucumber'
 Bundle 'slim-template/vim-slim'
 Bundle 'ekalinin/Dockerfile.vim'
 Bundle 'vim-scripts/Vim-R-plugin'
+Bundle 'JuliaLang/julia-vim'
 
 " Bundle 'nosami/Omnisharp'
 " Bundle 'Shougo/neocomplete.vim'
