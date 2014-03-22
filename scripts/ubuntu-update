@@ -33,3 +33,5 @@ END
 
 rvm cleanup all
 rvm get latest
+
+vim -c "execute \"BundleInstall\" | q | q"
