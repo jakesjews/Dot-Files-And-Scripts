@@ -5,7 +5,7 @@ nnoremap Q <nop>
 
 nnoremap <C-K> :call HighlightNearCursor()<CR>
 map <C-c> <leader>c<space>
-map <C-w> <leader><leader>w
+map <C-f> <leader><leader>w
 
 set nocompatible
 filetype off
@@ -21,8 +21,6 @@ Bundle 'The-NERD-tree'
 Bundle 'The-NERD-Commenter'
 Bundle 'surround.vim'
 Bundle 'scrooloose/syntastic'
-Bundle 'rizzatti/funcoo.vim'
-Bundle 'rizzatti/dash.vim'
 Bundle 'kien/ctrlp.vim'
 Bundle 'rking/ag.vim'
 Bundle 'Valloric/YouCompleteMe'
@@ -56,6 +54,10 @@ Bundle 'JuliaLang/julia-vim'
 " Bundle 'nosami/Omnisharp'
 " Bundle 'Shougo/neocomplete.vim'
 " let g:neocomplete#enable_at_startup = 1
+
+" Re-add when not so slow
+" Bundle 'rizzatti/funcoo.vim'
+" Bundle 'rizzatti/dash.vim'
 
 let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py'
 
