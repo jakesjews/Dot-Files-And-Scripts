@@ -44,4 +44,6 @@ nuget update -self
 
 vagrant plugin update
 
-/usr/local/bin/vim -c "execute \"BundleInstall\" | q | q"
+/usr/local/bin/vim -c "execute \"PluginInstall!\" | q | q"
+
+cd /Users/jacob/.vim/bundle/YouCompleteMe && ./install.sh --clang-completer --omnisharp-completer
