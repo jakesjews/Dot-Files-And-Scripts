@@ -52,6 +52,7 @@ Bundle 'ekalinin/Dockerfile.vim'
 Bundle 'vim-scripts/Vim-R-plugin'
 Bundle 'JuliaLang/julia-vim'
 Bundle 'nosami/Omnisharp'
+Bundle 'wting/rust.vim'
 
 " Bundle 'Shougo/neocomplete.vim'
 " let g:neocomplete#enable_at_startup = 1
