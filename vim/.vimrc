@@ -25,6 +25,7 @@ Bundle 'kien/ctrlp.vim'
 Bundle 'rking/ag.vim'
 Bundle 'Valloric/YouCompleteMe'
 Bundle 'Lokaltog/vim-easymotion'
+Bundle 'tpope/vim-dispatch'
 
 Bundle 'elzr/vim-json'
 Bundle 'rails.vim'
@@ -50,8 +51,8 @@ Bundle 'slim-template/vim-slim'
 Bundle 'ekalinin/Dockerfile.vim'
 Bundle 'vim-scripts/Vim-R-plugin'
 Bundle 'JuliaLang/julia-vim'
+Bundle 'nosami/Omnisharp'
 
-" Bundle 'nosami/Omnisharp'
 " Bundle 'Shougo/neocomplete.vim'
 " let g:neocomplete#enable_at_startup = 1
 
@@ -60,6 +61,8 @@ Bundle 'JuliaLang/julia-vim'
 " Bundle 'rizzatti/dash.vim'
 
 let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py'
+
+let g:agprg="ag --smart-case --column"
 
 let NERDTreeIgnore = [
 \ '\.hgcheck',    '\.hglf',     '\.nuget',           'publish',
@@ -73,6 +76,22 @@ let NERDTreeIgnore = [
 \ '\.userprefs$',      '.tm_properties', '\.jar$',        '\.pfx$', 
 \ '\.sublime-project', '\.DotSettings',  'TestResult.xml'
 \ ]
+
+""" Omnisharp settings
+
+" check for csharp syntax errors and code issues with syntastic
+let g:syntastic_cs_checkers = ['syntax', 'issues']
+autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
+
+"don't autoselect first item in omnicomplete, show if only one item (for
+"preview)
+set completeopt=longest,menuone,preview
+
+" automatically add new cs files to the nearest project on save
+autocmd BufWritePost *.cs call OmniSharp#AddToProject()
+
+set updatetime=500
+set cmdheight=2
 
 set showcmd
 set tabstop=4
@@ -100,7 +119,7 @@ endif
 
 if executable('ag')
   set grepprg=ag\ --nogroup\ --nocolor
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+  let g:ctrlp_user_command = 'ag %s -S -l --nocolor -g ""'
   let g:ctrlp_use_caching = 0
 endif
 
