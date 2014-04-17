@@ -7,6 +7,10 @@ nnoremap <C-K> :call HighlightNearCursor()<CR>
 map <C-c> <leader>c<space>
 map <C-f> <leader><leader>w
 
+vnoremap . :normal .<CR>
+
+nnoremap <C-e> :e.<CR>
+
 set nocompatible
 filetype off
 
@@ -27,7 +31,6 @@ Bundle 'Valloric/YouCompleteMe'
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'tpope/vim-dispatch'
 
-Bundle 'elzr/vim-json'
 Bundle 'rails.vim'
 Bundle 'derekwyatt/vim-scala'
 Bundle 'jimenezrick/vimerl'
@@ -54,6 +57,7 @@ Bundle 'JuliaLang/julia-vim'
 Bundle 'nosami/Omnisharp'
 Bundle 'wting/rust.vim'
 Bundle 'andreimaxim/vim-io'
+Bundle 'guersam/vim-j'
 
 " Bundle 'Shougo/neocomplete.vim'
 " let g:neocomplete#enable_at_startup = 1
@@ -91,6 +95,8 @@ set completeopt=longest,menuone,preview
 
 " automatically add new cs files to the nearest project on save
 autocmd BufWritePost *.cs call OmniSharp#AddToProject()
+
+"""
 
 set updatetime=500
 set cmdheight=2
