@@ -54,6 +54,7 @@ if [[ $platform == 'macos' ]]; then
     export JBOSS_ROOT=$JBOSS_HOME/bin
     export RVM_ROOT=$HOME/.rvm/bin
     export EMSCRIPTEN_ROOT="/Users/jacob/dev/sdk/emscripten/emscripten/1.13.0"
+    export HAXE_STD_PATH="/usr/local/lib/haxe/std"
     export BREW_ROOT=/usr/local/bin:/usr/local/sbin
 
     # python
@@ -63,6 +64,8 @@ if [[ $platform == 'macos' ]]; then
     export PIP_VIRTUALENV_BASE=$WORKON_HOME
     export PIP_RESPECT_VIRTUALENV=true
 
+
+
     source /usr/local/bin/virtualenvwrapper.sh
 
     export PATH=$J_ROOT:$CABAL_ROOT:$BREW_ROOT:$POSTGRES_ROOT:$CLOJURE_ROOT:$LATEX_ROOT:$HEROKU_ROOT:$VMWARE_ROOT:$GO_ROOT:$PATH:$RACKET_ROOT:$NPM_ROOT:$TEX_ROOT:$PLAN9_ROOT:$CUDA_ROOT:$JBOSS_ROOT:$RVM_ROOT:$EMSCRIPTEN_ROOT
@@ -70,7 +73,7 @@ else
     export PATH=$PATH
 fi
 
-plugins_base=(ant vi-mode git cake gem lein mvn node perl redis-cli github heroku mercurial npm pip python sublime vagrant coffee pow svn golang bower scala rebar rails colorize zsh-syntax-highlighting cabal cpanm jira sbt mix tmux mosh rvm ruby rake dircycle pod autojump vundle colored-man docker rsync extract encode64 history-substring-search copydir copyfile colorize meteor cabal-upgrade functional npmls)
+plugins_base=(ant vi-mode git cake gem lein mvn node perl redis-cli github heroku mercurial npm pip python sublime vagrant coffee pow svn golang bower scala rebar rails colorize zsh-syntax-highlighting cabal cpanm jira sbt mix tmux mosh rvm ruby rake dircycle pod autojump vundle colored-man docker rsync extract encode64 history-substring-search copydir copyfile colorize meteor zsh_reload jsontools cabal-upgrade functional npmls)
 
 if [[ $platform == 'macos' ]]; then
     plugins_extra=(brew osx textmate atom)
