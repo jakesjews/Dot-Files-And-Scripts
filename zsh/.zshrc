@@ -21,6 +21,7 @@ export MUTT_EMAIL_ADDRESS="jakesjews@gmail.com"
 export MUTT_REALNAME="Jacob Jewell"
 export MUTT_SMTP_URL="smtp://jakesjews@smtp.gmail.com:587/"
 export DISABLE_AUTO_TITLE=true
+export TERM=xterm-256color
 
 if [[ $platform == 'macos' ]]; then
     export VAGRANT_DEFAULT_PROVIDER='vmware_fusion'
@@ -28,7 +29,6 @@ if [[ $platform == 'macos' ]]; then
 
     export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
     export HIVE_HOME=/usr/local/Cellar/hive/0.10.0/libexec
-    export PLAN9=/usr/local/plan9
     export GROOVY_HOME=/usr/local/Cellar/groovy/2.0.5/libexec
     export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
     export NODE_PATH=/usr/local/share/npm/lib/node_modules
@@ -47,10 +47,9 @@ if [[ $platform == 'macos' ]]; then
     export CUDA_ROOT=/Developer/NVIDIA/CUDA-5.5/bin
     export VMWARE_ROOT="/Applications/VMware Fusion.app/Contents/Library"
     export HEROKU_ROOT=/usr/local/heroku/bin
-    export RACKET_ROOT=/Applications/Racket.0/bin
     export NPM_ROOT=/usr/local/share/npm/bin
     export GO_ROOT=$GOPATH/bin
-    export PLAN9_ROOT=$PLAN9/bin
+    #export PLAN9_ROOT=$PLAN9/bin
     export JBOSS_ROOT=$JBOSS_HOME/bin
     export RVM_ROOT=$HOME/.rvm/bin
     export EMSCRIPTEN_ROOT="/Users/jacob/dev/sdk/emscripten/emscripten/1.13.0"
@@ -68,7 +67,7 @@ if [[ $platform == 'macos' ]]; then
 
     source /usr/local/bin/virtualenvwrapper.sh
 
-    export PATH=$J_ROOT:$CABAL_ROOT:$BREW_ROOT:$POSTGRES_ROOT:$CLOJURE_ROOT:$LATEX_ROOT:$HEROKU_ROOT:$VMWARE_ROOT:$GO_ROOT:$PATH:$RACKET_ROOT:$NPM_ROOT:$TEX_ROOT:$PLAN9_ROOT:$CUDA_ROOT:$JBOSS_ROOT:$RVM_ROOT:$EMSCRIPTEN_ROOT
+    export PATH=$J_ROOT:$CABAL_ROOT:$BREW_ROOT:$POSTGRES_ROOT:$CLOJURE_ROOT:$LATEX_ROOT:$HEROKU_ROOT:$VMWARE_ROOT:$GO_ROOT:$PATH:$NPM_ROOT:$TEX_ROOT:$CUDA_ROOT:$JBOSS_ROOT:$RVM_ROOT:$EMSCRIPTEN_ROOT
 else
     export PATH=$PATH
 fi
@@ -110,7 +109,7 @@ if [[ $platform == 'macos' ]]; then
     alias vim='mvim -v'
     alias mongod='mongod --config /usr/local/etc/mongod.conf'
     alias say=/usr/bin/say
-    alias 9="$PLAN9_ROOT/9"
+    alias 9="/usr/local/bin/9"
 fi
 
 alias l="ls"
