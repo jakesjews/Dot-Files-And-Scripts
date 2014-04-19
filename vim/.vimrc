@@ -30,6 +30,7 @@ Bundle 'rking/ag.vim'
 Bundle 'Valloric/YouCompleteMe'
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'tpope/vim-dispatch'
+Bundle 'guicolorscheme.vim'
 
 Bundle 'rails.vim'
 Bundle 'derekwyatt/vim-scala'
@@ -131,14 +132,22 @@ if executable('ag')
   let g:ctrlp_use_caching = 0
 endif
 
+" Colors
+
+colorscheme jellybeans
+
 if has("gui_running")
-  colorscheme molokai
   set guifont=Consolas:h12
   let do_syntax_sel_menu = 1|runtime! synmenu.vim|aunmenu &Syntax.&Show\ filetypes\ in\ menu
+else
+  " make black background work in iterm
+  highlight Normal ctermbg=NONE
+  highlight nonText ctermbg=NONE
 endif
 
-" Functions
 
+" Functions
+"
 function HighlightNearCursor()
   if !exists("s:highlightcursor")
     match Todo /\k*\%#\k*/
