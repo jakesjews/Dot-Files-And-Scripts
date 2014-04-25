@@ -16,56 +16,58 @@ filetype off
 
 " Plugins
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
 
-Bundle 'gmarik/vundle'
-Bundle 'taglist.vim'
-Bundle 'The-NERD-tree'
-Bundle 'The-NERD-Commenter'
-Bundle 'surround.vim'
-Bundle 'scrooloose/syntastic'
-Bundle 'kien/ctrlp.vim'
-Bundle 'rking/ag.vim'
-Bundle 'Valloric/YouCompleteMe'
-Bundle 'Lokaltog/vim-easymotion'
-Bundle 'tpope/vim-dispatch'
-Bundle 'guicolorscheme.vim'
+Plugin 'gmarik/Vundle.vim'
 
-Bundle 'rails.vim'
-Bundle 'derekwyatt/vim-scala'
-Bundle 'jimenezrick/vimerl'
-Bundle 'slimv.vim'
-Bundle 'eagletmt/ghcmod-vim'
-Bundle 'vim-coffee-script'
-Bundle 'digitaltoad/vim-jade'
-Bundle 'wavded/vim-stylus'
-Bundle 'moll/vim-node'
-Bundle 'ahayman/vim-nodejs-complete'
-Bundle 'jnwhiteh/vim-golang'
-Bundle 'adimit/prolog.vim'
-Bundle 'leafgarland/typescript-vim'
-Bundle 'mustache/vim-mustache-handlebars'
-Bundle 'darthdeus/vim-emblem'
-Bundle 'applescript.vim'
-Bundle 'kongo2002/fsharp-vim'
-Bundle 'elixir-lang/vim-elixir'
-Bundle 'tpope/vim-cucumber'
-Bundle 'slim-template/vim-slim'
-Bundle 'ekalinin/Dockerfile.vim'
-Bundle 'vim-scripts/Vim-R-plugin'
-Bundle 'JuliaLang/julia-vim'
-Bundle 'nosami/Omnisharp'
-Bundle 'wting/rust.vim'
-Bundle 'andreimaxim/vim-io'
-Bundle 'guersam/vim-j'
+Plugin 'taglist.vim'
+Plugin 'The-NERD-tree'
+Plugin 'The-NERD-Commenter'
+Plugin 'surround.vim'
+Plugin 'scrooloose/syntastic'
+Plugin 'kien/ctrlp.vim'
+Plugin 'rking/ag.vim'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'Lokaltog/vim-easymotion'
+Plugin 'tpope/vim-dispatch'
+Plugin 'guicolorscheme.vim'
 
-" Bundle 'Shougo/neocomplete.vim'
-" let g:neocomplete#enable_at_startup = 1
+Plugin 'rails.vim'
+Plugin 'derekwyatt/vim-scala'
+Plugin 'jimenezrick/vimerl'
+Plugin 'slimv.vim'
+Plugin 'eagletmt/ghcmod-vim'
+Plugin 'vim-coffee-script'
+Plugin 'digitaltoad/vim-jade'
+Plugin 'wavded/vim-stylus'
+Plugin 'moll/vim-node'
+Plugin 'ahayman/vim-nodejs-complete'
+Plugin 'jnwhiteh/vim-golang'
+Plugin 'adimit/prolog.vim'
+Plugin 'leafgarland/typescript-vim'
+Plugin 'mustache/vim-mustache-handlebars'
+Plugin 'darthdeus/vim-emblem'
+Plugin 'applescript.vim'
+Plugin 'kongo2002/fsharp-vim'
+Plugin 'elixir-lang/vim-elixir'
+Plugin 'tpope/vim-cucumber'
+Plugin 'slim-template/vim-slim'
+Plugin 'ekalinin/Dockerfile.vim'
+Plugin 'vim-scripts/Vim-R-plugin'
+Plugin 'JuliaLang/julia-vim'
+Plugin 'nosami/Omnisharp'
+Plugin 'wting/rust.vim'
+Plugin 'andreimaxim/vim-io'
+Plugin 'guersam/vim-j'
 
 " Re-add when not so slow
 " Bundle 'rizzatti/funcoo.vim'
 " Bundle 'rizzatti/dash.vim'
+
+call vundle#end()
+syntax on
+filetype plugin indent on
 
 let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py'
 
@@ -119,8 +121,6 @@ set foldmethod=indent
 set foldlevel=99
 set splitright
 
-syntax on
-filetype plugin indent on
 
 if &term =~ '^screen'
   set ttymouse=xterm2
