@@ -1,5 +1,4 @@
 sudo apt-get update
-sudo apt-get upgrade -y
 sudo apt-get dist-upgrade -y
 
 # add ppas
@@ -24,20 +23,10 @@ sudo apt-get install -y build-essential llvm clang phantomjs \
   nodejs mongodb-org tmux vim p7zip \
   cmake wget curl exuberant-ctags htop zsh subversion \
   mercurial git cvs unzip automake pv dtrx rsync \
-  parallel cifs-utils smbclient winbind \
+  parallel smbclient silversearcher-ag \
   gawk ufw libnss-mdns sshpass apt-offline \
-  python-httplib2 linux-firmware-nonfree python-keyczar \
-  libboost-all-dev scons lxc-docker
-
-# beyond compare
-wget http://www.scootersoftware.com/bcompare-3.3.8.16340_i386.deb
-sudo dpkg -i bcompare-3.3.8.16340_amd64.deb
-sudo apt-get -f -y install
-
-# robomongo
-wget http://robomongo.org/files/linux/robomongo-0.8.4-x86_64.deb
-sudo dpkg -i robomongo-0.8.4-x86_64.deb
-sudo apt-get -f -y install
+  linux-firmware-nonfree python-keyczar \
+  libboost-all-dev scons lxc-docker mono-devel mono-xsp
 
 # install rvm and ruby
 curl -L https://get.rvm.io | bash -s stable --rails --autolibs=enabled
@@ -57,10 +46,3 @@ wget "https://raw.github.com/jakesjews/Dot-Files-And-Scripts/master/.vimrc" -P ~
 # oh-my-zsh
 curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh
 wget "https://raw.github.com/jakesjews/Dot-Files-And-Scripts/master/.zshrc" -P ~/
-
-# install Chrome
-wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-sudo dpkg -i ./google-chrome*.deb
-sudo apt-get -f -y install
-
-make clean
