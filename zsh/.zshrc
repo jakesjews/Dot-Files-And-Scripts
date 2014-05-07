@@ -49,7 +49,6 @@ if [[ $platform == 'macos' ]]; then
     export HEROKU_ROOT=/usr/local/heroku/bin
     export NPM_ROOT=/usr/local/share/npm/bin
     export GO_ROOT=$GOPATH/bin
-    #export PLAN9_ROOT=$PLAN9/bin
     export JBOSS_ROOT=$JBOSS_HOME/bin
     export RVM_ROOT=$HOME/.rvm/bin
     export EMSCRIPTEN_ROOT="/Users/jacob/dev/sdk/emscripten/emscripten/1.13.0"
@@ -63,9 +62,16 @@ if [[ $platform == 'macos' ]]; then
     export PIP_VIRTUALENV_BASE=$WORKON_HOME
     export PIP_RESPECT_VIRTUALENV=true
 
+    export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/Library/Frameworks/Mono.framework/Versions/Current/lib/pkgconfig
 
+    export COFFEELINT_CONFIG=/Users/jacob/.coffelintrc
 
     source /usr/local/bin/virtualenvwrapper.sh
+
+    export JAVA_MAN=/Library/Java/JavaVirtualMachines/jdk1.8.0_05.jdk/Contents/Home/man
+    export ERLANG_MAN=/usr/local/opt/erlang/lib/erlang/man
+
+    export MANPATH=$JAVA_MAN:$MANPATH:$ERLANG_MAN
 
     export PATH=$J_ROOT:$CABAL_ROOT:$BREW_ROOT:$POSTGRES_ROOT:$CLOJURE_ROOT:$LATEX_ROOT:$HEROKU_ROOT:$VMWARE_ROOT:$GO_ROOT:$PATH:$NPM_ROOT:$TEX_ROOT:$CUDA_ROOT:$JBOSS_ROOT:$RVM_ROOT:$EMSCRIPTEN_ROOT
 else
@@ -102,7 +108,7 @@ source "$ZSH/oh-my-zsh.sh"
 if [[ $platform == 'macos' ]]; then
     alias space="du -d 1 -h | sort -n"
     alias tracegl="node /usr/local/bin/tracegl.js"
-    alias ed='ged -p:'
+    alias ed='ed -p:'
     alias redis='redis-server /usr/local/etc/redis.conf --daemonize no'
     alias zk='zkServer start-foreground'
     alias julia='/Applications/Julia.app/Contents/Resources/julia/bin/julia'
@@ -110,6 +116,9 @@ if [[ $platform == 'macos' ]]; then
     alias mongod='mongod --config /usr/local/etc/mongod.conf'
     alias say=/usr/bin/say
     alias 9="/usr/local/bin/9"
+    alias influxdb="influxdb -config=/usr/local/etc/influxdb.conf"
+    alias elasticsearch="elasticsearch --config=/usr/local/opt/elasticsearch/config/elasticsearch.yml"
+    alias betty="/usr/local/betty/main.rb"
 fi
 
 alias l="ls"
@@ -119,5 +128,6 @@ alias xsp="xsp4"
 alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
 alias ms='mocha -g "#slow" -i'
 alias test-mono="xbuild && make test-webApi"
+alias findproc="pgrep -ifL"
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
