@@ -15,7 +15,7 @@ sudo sh -c "echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.
 sudo apt-get update
 
 sudo apt-get install -y build-essential llvm clang phantomjs \
-  python2.7 ansible tortoisehg \
+  python2.7 ansible \
   perl ghc cabal-install golang-go libtool \
   erlang gprolog \
   redis-server oracle-java8-installer nginx \
