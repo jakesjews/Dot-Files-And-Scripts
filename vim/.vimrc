@@ -42,7 +42,7 @@ Plugin 'vim-coffee-script'
 Plugin 'digitaltoad/vim-jade'
 Plugin 'wavded/vim-stylus'
 Plugin 'moll/vim-node'
-Plugin 'ahayman/vim-nodejs-complete'
+Plugin 'marijnh/tern_for_vim'
 Plugin 'jnwhiteh/vim-golang'
 Plugin 'adimit/prolog.vim'
 Plugin 'leafgarland/typescript-vim'
@@ -98,6 +98,8 @@ set completeopt=longest,menuone,preview
 
 " automatically add new cs files to the nearest project on save
 autocmd BufWritePost *.cs call OmniSharp#AddToProject()
+
+nnoremap <leader><space> :OmniSharpGetCodeActions<cr>
 
 """
 
