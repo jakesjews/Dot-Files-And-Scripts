@@ -6,6 +6,7 @@ nnoremap Q <nop>
 nnoremap <C-K> :call HighlightNearCursor()<CR>
 map <C-c> <leader>c<space>
 map <C-f> <leader><leader>w
+map <silent> <C-@> <Plug>DashSearch
 
 vnoremap . :normal .<CR>
 
@@ -32,6 +33,7 @@ Plugin 'Valloric/YouCompleteMe'
 Plugin 'Lokaltog/vim-easymotion'
 Plugin 'tpope/vim-dispatch'
 Plugin 'guicolorscheme.vim'
+Plugin 'rizzatti/dash.vim'
 
 Plugin 'rails.vim'
 Plugin 'derekwyatt/vim-scala'
@@ -60,16 +62,13 @@ Plugin 'nosami/Omnisharp'
 Plugin 'wting/rust.vim'
 Plugin 'andreimaxim/vim-io'
 Plugin 'guersam/vim-j'
-
-" Re-add when not so slow
-" Bundle 'rizzatti/funcoo.vim'
-" Bundle 'rizzatti/dash.vim'
+Plugin 'idris-hackers/idris-vim'
 
 call vundle#end()
 syntax on
 filetype plugin indent on
 
-let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py'
+let g:ycm_confirm_extra_conf = 0
 
 let g:agprg="ag --smart-case --column"
 
@@ -89,15 +88,12 @@ let NERDTreeIgnore = [
 """ Omnisharp settings
 
 " check for csharp syntax errors and code issues with syntastic
-let g:syntastic_cs_checkers = ['syntax', 'issues']
-autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
+"let g:syntastic_cs_checkers = ['syntax']
+"autocmd TextChanged,InsertLeave *.cs SyntasticCheck
 
 "don't autoselect first item in omnicomplete, show if only one item (for
 "preview)
 set completeopt=longest,menuone,preview
-
-" automatically add new cs files to the nearest project on save
-autocmd BufWritePost *.cs call OmniSharp#AddToProject()
 
 nnoremap <leader><space> :OmniSharpGetCodeActions<cr>
 
