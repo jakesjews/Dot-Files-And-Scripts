@@ -68,6 +68,8 @@ if [[ $platform == 'macos' ]]; then
 
     source /usr/local/bin/virtualenvwrapper.sh
 
+    export NODE_PATH=$NODE_PATH:/usr/local/lib/node_modules
+
     export JAVA_MAN=/Library/Java/JavaVirtualMachines/jdk1.8.0_05.jdk/Contents/Home/man
     export ERLANG_MAN=/usr/local/opt/erlang/lib/erlang/man
 
@@ -119,6 +121,7 @@ if [[ $platform == 'macos' ]]; then
     alias influxdb="influxdb -config=/usr/local/etc/influxdb.conf"
     alias elasticsearch="elasticsearch --config=/usr/local/opt/elasticsearch/config/elasticsearch.yml"
     alias betty="/usr/local/betty/main.rb"
+    alias profile-mono="LD_LIBRARY_PATH=/Library/Frameworks/Mono.framework/Versions/Current/lib MONO_OPTIONS=--profile=log xsp"
 fi
 
 alias l="ls"
