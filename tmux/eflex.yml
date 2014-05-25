@@ -3,9 +3,6 @@
 name: eflex
 root: ~/dev/eflexsystems/eflex
 pre:
-  - mongod --fork --logpath /usr/local/var/log/mongodb/mongodb.log --config /usr/local/etc/mongod.conf
-  - zkServer start
-  - redis-server /usr/local/etc/redis.conf
   - sudo proftpd
 
 windows:
@@ -39,7 +36,6 @@ windows:
       layout: main-horizontal
       panes:
         - redis-cli
-        - redis-cli monitor
   - zookeeper:
       layout: main-horizontal
       panes:
