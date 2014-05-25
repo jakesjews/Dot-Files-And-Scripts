@@ -41,8 +41,8 @@ sudo chmod +x /usr/local/bin/lein
 
 # vim
 git clone http://github.com/gmarik/vundle.git ~/.vim/bundle/vundle/
-wget "https://raw.github.com/jakesjews/Dot-Files-And-Scripts/master/.vimrc" -P ~/
+wget "https://raw.githubusercontent.com/jakesjews/Dot-Files-And-Scripts/master/vim/.vimrc" -P ~/
 
 # oh-my-zsh
 curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh
-wget "https://raw.github.com/jakesjews/Dot-Files-And-Scripts/master/.zshrc" -P ~/
+wget "https://raw.githubusercontent.com/jakesjews/Dot-Files-And-Scripts/master/zsh/.zshrc" -P ~/
