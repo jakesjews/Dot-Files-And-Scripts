@@ -88,19 +88,14 @@ let NERDTreeIgnore = [
 """ Omnisharp settings
 
 " check for csharp syntax errors and code issues with syntastic
-"let g:syntastic_cs_checkers = ['syntax']
-"autocmd TextChanged,InsertLeave *.cs SyntasticCheck
+let g:syntastic_cs_checkers = ['syntax']
+autocmd InsertLeave *.cs SyntasticCheck
 
 "don't autoselect first item in omnicomplete, show if only one item (for
 "preview)
 set completeopt=longest,menuone,preview
 
-nnoremap <leader><space> :OmniSharpGetCodeActions<cr>
-
-"""
-
-set updatetime=500
-set cmdheight=2
+"nnoremap <leader><space> :OmniSharpGetCodeActions<cr>
 
 set showcmd
 set tabstop=4
@@ -118,7 +113,7 @@ set clipboard=unnamed
 set foldmethod=indent
 set foldlevel=99
 set splitright
-
+set cursorline
 
 if &term =~ '^screen'
   set ttymouse=xterm2
@@ -131,7 +126,6 @@ if executable('ag')
 endif
 
 " Colors
-
 colorscheme jellybeans
 
 if has("gui_running")
@@ -155,3 +149,4 @@ function HighlightNearCursor()
     unlet s:highlightcursor
   endif
 endfunction
+
