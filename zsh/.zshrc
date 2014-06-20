@@ -10,6 +10,7 @@ ZSH=$HOME/.oh-my-zsh
 
 LANG=en_US.UTF-8
 
+export DISABLE_AUTO_UPDATE="true"
 export ZSH_THEME="robbyrussell"
 export ENABLE_CORRECTION="true"
 export EDITOR='vim'
@@ -27,6 +28,8 @@ if [[ $platform == 'macos' ]]; then
     export VAGRANT_DEFAULT_PROVIDER='vmware_fusion'
     export HOMEBREW_GITHUB_API_TOKEN='c2cb29a67cee76e48d933eae6b36b9c51e79609b'
 
+    export VIMRUNTIME=/usr/local/opt/macvim/MacVim.app/Contents/Resources/vim/runtime
+    export NEOVIM_LISTEN_ADDRESS=/tmp/neovim.sock
     export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
     export HIVE_HOME=/usr/local/Cellar/hive/0.10.0/libexec
     export GROOVY_HOME=/usr/local/Cellar/groovy/2.0.5/libexec
@@ -43,7 +46,7 @@ if [[ $platform == 'macos' ]]; then
     export CLOJURE_ROOT=/Users/jacob/.cljr/bin
     export CABAL_ROOT=/Users/jacob/.cabal/bin
     export TEX_ROOT=/usr/textbin
-    export LATEX_ROOT=/usr/local/texlive/2013/bin/x86_64-darwin
+    export LATEX_ROOT=/usr/local/texlive/2014/bin/x86_64-darwin
     export CUDA_ROOT=/Developer/NVIDIA/CUDA-5.5/bin
     export VMWARE_ROOT="/Applications/VMware Fusion.app/Contents/Library"
     export HEROKU_ROOT=/usr/local/heroku/bin
@@ -106,6 +109,8 @@ zmodload zsh/net/tcp
 KEYTIMEOUT=1
 
 source "$ZSH/oh-my-zsh.sh"
+bindkey '\e[A' history-substring-search-up
+bindkey '\e[B' history-substring-search-down
 
 if [[ $platform == 'macos' ]]; then
     alias space="du -d 1 -h | sort -n"
@@ -134,3 +139,6 @@ alias test-mono="xbuild && make test-webApi"
 alias findproc="pgrep -ifL"
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
+# OPAM configuration
+. /Users/jacob/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
