@@ -25,7 +25,7 @@ sudo apt-get install -y build-essential llvm clang phantomjs \
   mercurial git cvs unzip automake pv dtrx rsync \
   parallel smbclient silversearcher-ag \
   gawk ufw libnss-mdns sshpass apt-offline \
-  linux-firmware-nonfree python-keyczar \
+  linux-firmware-nonfree python-keyczar fail2ban \
   libboost-all-dev scons lxc-docker mono-devel mono-xsp
 
 # install rvm and ruby
