@@ -38,14 +38,15 @@ Plugin 'rizzatti/dash.vim'
 Plugin 'rails.vim'
 Plugin 'derekwyatt/vim-scala'
 Plugin 'jimenezrick/vimerl'
-Plugin 'slimv.vim'
+Plugin 'guns/vim-clojure-static'
+Plugin 'kien/rainbow_parentheses.vim'
 Plugin 'eagletmt/ghcmod-vim'
 Plugin 'vim-coffee-script'
 Plugin 'digitaltoad/vim-jade'
 Plugin 'wavded/vim-stylus'
 Plugin 'moll/vim-node'
 Plugin 'marijnh/tern_for_vim'
-Plugin 'jnwhiteh/vim-golang'
+Plugin 'fatih/vim-go'
 Plugin 'adimit/prolog.vim'
 Plugin 'leafgarland/typescript-vim'
 Plugin 'mustache/vim-mustache-handlebars'
@@ -63,14 +64,42 @@ Plugin 'wting/rust.vim'
 Plugin 'andreimaxim/vim-io'
 Plugin 'guersam/vim-j'
 Plugin 'idris-hackers/idris-vim'
+Plugin 'ngn/vim-apl'
 
 call vundle#end()
 syntax on
 filetype plugin indent on
 
+autocmd BufNewFile,BufReadPost *.coffee setl shiftwidth=2 tabstop=2
+autocmd BufNewFile,BufReadPost *.feature setl shiftwidth=2 tabstop=2
+autocmd BufNewFile,BufReadPost *.js setl shiftwidth=2 tabstop=2
+autocmd BufNewFile,BufReadPost *.rb setl shiftwidth=2 tabstop=2
+autocmd BufNewFile,BufReadPost *.styl setl shiftwidth=2 tabstop=2
+autocmd BufNewFile,BufReadPost *.yml setl shiftwidth=2 tabstop=2
+autocmd BufNewFile,BufReadPost *.cs setl shiftwidth=4 tabstop=4
+
 let g:ycm_confirm_extra_conf = 0
 
 let g:agprg="ag --smart-case --column"
+
+let g:rbpt_colorpairs = [
+  \ [ '13', '#6c71c4'],
+  \ [ '5',  '#d33682'],
+  \ [ '1',  '#dc322f'],
+  \ [ '9',  '#cb4b16'],
+  \ [ '3',  '#b58900'],
+  \ [ '2',  '#859900'],
+  \ [ '6',  '#2aa198'],
+  \ [ '4',  '#268bd2'],
+  \ ]
+
+augroup rainbow_parentheses
+  au!
+  au VimEnter *.clj RainbowParenthesesActivate
+  au BufEnter *.clj RainbowParenthesesLoadRound
+  au BufEnter *.clj RainbowParenthesesLoadSquare
+  au BufEnter *.clj RainbowParenthesesLoadBraces
+augroup END
 
 let NERDTreeIgnore = [
 \ '\.hgcheck',    '\.hglf',     '\.nuget',           'publish',
