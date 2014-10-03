@@ -58,13 +58,15 @@ Plugin 'tpope/vim-cucumber'
 Plugin 'slim-template/vim-slim'
 Plugin 'ekalinin/Dockerfile.vim'
 Plugin 'vim-scripts/Vim-R-plugin'
-Plugin 'JuliaLang/julia-vim'
+"Plugin 'JuliaLang/julia-vim'
 Plugin 'nosami/Omnisharp'
 Plugin 'wting/rust.vim'
 Plugin 'andreimaxim/vim-io'
 Plugin 'guersam/vim-j'
 Plugin 'idris-hackers/idris-vim'
 Plugin 'ngn/vim-apl'
+Plugin 'b4winckler/vim-objc'
+Plugin 'tfnico/vim-gradle'
 
 call vundle#end()
 syntax on
@@ -99,6 +101,10 @@ augroup rainbow_parentheses
   au BufEnter *.clj RainbowParenthesesLoadRound
   au BufEnter *.clj RainbowParenthesesLoadSquare
   au BufEnter *.clj RainbowParenthesesLoadBraces
+augroup END
+
+augroup filetypedetect
+    au! BufRead,BufNewFile *.m       setfiletype objc
 augroup END
 
 let NERDTreeIgnore = [
