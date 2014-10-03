@@ -57,22 +57,22 @@ filtera() {
   filterl "$f" "$@"
 }
 
-fold () {
-  if (($#<2)) {
-    {
-    print -- 'usage: fold function list'
-    print 
-    print -- 'example:'
-    print -- '    > bar() { print $(($1 + $2)) }' 
-    print -- '    > fold bar 0 1 2 3 4 5' 
-    print -- '    15'
-    } >&2
-    return 1
-  } else {
-    typeset f="\$($1 \$acc \$1)"; shift
-    foldlp "$f" "$@"
-  }
-}
+#fold () {
+  #if (($#<2)) {
+    #{
+    #print -- 'usage: fold function list'
+    #print 
+    #print -- 'example:'
+    #print -- '    > bar() { print $(($1 + $2)) }' 
+    #print -- '    > fold bar 0 1 2 3 4 5' 
+    #print -- '    15'
+    #} >&2
+    #return 1
+  #} else {
+    #typeset f="\$($1 \$acc \$1)"; shift
+    #foldlp "$f" "$@"
+  #}
+#}
 
 foldl () {
   if (($#<2)) {
