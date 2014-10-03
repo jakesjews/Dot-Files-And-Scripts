@@ -85,7 +85,7 @@ else
     export PATH=$PATH
 fi
 
-plugins_base=(ant vi-mode git cake gem lein mvn node perl redis-cli github heroku mercurial npm pip python sublime vagrant coffee pow svn golang bower scala rebar rails colorize zsh-syntax-highlighting cabal cpanm jira sbt mix tmux mosh rvm ruby rake dircycle pod autojump vundle colored-man docker rsync extract encode64 history-substring-search copydir copyfile colorize meteor zsh_reload jsontools cabal-upgrade functional npmls)
+plugins_base=(ant vi-mode git cake gem lein mvn node perl redis-cli github heroku mercurial npm pip python sublime vagrant coffee pow svn golang bower scala rebar rails colorize zsh-syntax-highlighting cabal cpanm jira sbt mix tmux mosh rvm ruby rake dircycle pod autojump vundle colored-man docker rsync extract encode64 history-substring-search copydir copyfile colorize meteor zsh_reload jsontools cabal-upgrade functional)
 
 if [[ $platform == 'macos' ]]; then
     plugins_extra=(brew osx textmate atom)
