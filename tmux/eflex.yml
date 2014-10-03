@@ -21,11 +21,11 @@ windows:
       layout: main-horizontal
       panes:
         - csharp
-        - mono --runtime=v4.0 lib/NuGet.exe restore EFlex.sln && cd WebApi && xbuild && xsp4
+        - cd WebApi && mono --runtime=v4.0 lib/NuGet.exe restore EFlex.sln && cd WebApi && xbuild && xsp4
   - trigger:
       layout: main-horizontal
       panes:
-        - make trigger && cd webApp/public && mkdir -p imagefiles && chmod a+w imagefiles && ../../Services/eVisionTrigger/bin/eVisionTrigger -c eflex/localhost -p imagefiles
+        - make trigger && cd webApp/public && mkdir -p imagefiles && chmod a+w imagefiles && ../../eVisionTrigger/bin/eVisionTrigger -c localhost -p imagefiles
         - cd ~/Downloads && ftp anonymous@localhost
   - mongo:
       layout: main-horizontal
