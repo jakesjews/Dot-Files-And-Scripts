@@ -10,6 +10,8 @@ ZSH=$HOME/.oh-my-zsh
 
 LANG=en_US.UTF-8
 
+zstyle ':vcs_info:*' enable git hg
+
 export ENABLE_CORRECTION="true"
 export DISABLE_AUTO_UPDATE="true"
 export ZSH_THEME="robbyrussell"
@@ -26,10 +28,10 @@ export TERM=xterm-256color
 export ANSIBLE_HOST_KEY_CHECKING=False
 
 if [[ $platform == 'macos' ]]; then
-    alias swift="/Applications/Xcode6-Beta6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift"
+    alias swift="/Applications/Xcode6-Beta7.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift"
     alias jconsole="/Applications/j64-802/bin/jconsole"
 
-    export VAGRANT_DEFAULT_PROVIDER='vmware_desktop'
+    export VAGRANT_DEFAULT_PROVIDER='vmware_fusion'
     export HOMEBREW_GITHUB_API_TOKEN='c2cb29a67cee76e48d933eae6b36b9c51e79609b'
 
     export VIMRUNTIME=/usr/local/opt/macvim/MacVim.app/Contents/Resources/vim/runtime
@@ -37,13 +39,13 @@ if [[ $platform == 'macos' ]]; then
     export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
     export HIVE_HOME=/usr/local/Cellar/hive/0.10.0/libexec
     export GROOVY_HOME=/usr/local/Cellar/groovy/2.0.5/libexec
-    export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
+    export PYTHONPATH=/usr/local/lib/python2.7/site-packages
     export GOPATH=/usr/local/lib/go
     export VOLDEMORT_HOME='/usr/local/Cellar/voldemort/0.90.1/libexec'
     export LIQUIBASE_HOME="/usr/local/Cellar/liquibase/3.1.1/libexec"
     export JBOSS_HOME=/usr/local/opt/wildfly-as/libexec
 
-    export ANDROID_SDK_ROOT=/usr/local/opt/android-sdk
+    export ANDROID_HOME=/usr/local/opt/android-sdk
     export POSTGRES_ROOT=/Applications/Postgres.app/Contents/Versions/9.3/bin
     export CLOJURE_ROOT=/Users/jacob/.cljr/bin
     export CABAL_ROOT=/Users/jacob/.cabal/bin
@@ -69,18 +71,16 @@ if [[ $platform == 'macos' ]]; then
 
     export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/Library/Frameworks/Mono.framework/Versions/Current/lib/pkgconfig
 
-    export COFFEELINT_CONFIG=/Users/jacob/.coffelintrc
-
     source /usr/local/bin/virtualenvwrapper.sh
 
     export NODE_PATH=/usr/local/lib/node_modules
-
+    export COFFEELINT_CONFIG=/Users/jacob/.coffelintrc
     export JAVA_MAN=/Library/Java/JavaVirtualMachines/jdk1.8.0_05.jdk/Contents/Home/man
     export ERLANG_MAN=/usr/local/opt/erlang/lib/erlang/man
 
     export MANPATH=$JAVA_MAN:$MANPATH:$ERLANG_MAN
 
-    export PATH=$CABAL_ROOT:$BREW_ROOT:$POSTGRES_ROOT:$CLOJURE_ROOT:$LATEX_ROOT:$HEROKU_ROOT:$VMWARE_ROOT:$GO_ROOT:$PATH:$NPM_ROOT:$TEX_ROOT:$CUDA_ROOT:$JBOSS_ROOT:$RVM_ROOT:$EMSCRIPTEN_ROOT
+    export PATH=/bin:/sbin:$CABAL_ROOT:$BREW_ROOT:$POSTGRES_ROOT:$CLOJURE_ROOT:$LATEX_ROOT:$HEROKU_ROOT:$VMWARE_ROOT:$GO_ROOT:$PATH:$NPM_ROOT:$TEX_ROOT:$CUDA_ROOT:$JBOSS_ROOT:$RVM_ROOT:$EMSCRIPTEN_ROOT:$JAVA_HOME/bin
 else
     export PATH=$PATH
 fi
@@ -129,6 +129,7 @@ if [[ $platform == 'macos' ]]; then
     alias elasticsearch="elasticsearch --config=/usr/local/opt/elasticsearch/config/elasticsearch.yml"
     alias betty="/usr/local/betty/main.rb"
     alias profile-mono="LD_LIBRARY_PATH=/Library/Frameworks/Mono.framework/Versions/Current/lib MONO_OPTIONS=--profile=log xsp"
+    alias factor="/Applications/factor/factor"
 fi
 
 alias l="ls"
