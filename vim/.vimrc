@@ -34,6 +34,7 @@ Plugin 'Lokaltog/vim-easymotion'
 Plugin 'tpope/vim-dispatch'
 Plugin 'guicolorscheme.vim'
 Plugin 'rizzatti/dash.vim'
+Plugin 'junegunn/vim-easy-align'
 
 Plugin 'rails.vim'
 Plugin 'derekwyatt/vim-scala'
@@ -58,7 +59,7 @@ Plugin 'tpope/vim-cucumber'
 Plugin 'slim-template/vim-slim'
 Plugin 'ekalinin/Dockerfile.vim'
 Plugin 'vim-scripts/Vim-R-plugin'
-"Plugin 'JuliaLang/julia-vim'
+Plugin 'JuliaLang/julia-vim'
 Plugin 'nosami/Omnisharp'
 Plugin 'wting/rust.vim'
 Plugin 'andreimaxim/vim-io'
@@ -67,6 +68,8 @@ Plugin 'idris-hackers/idris-vim'
 Plugin 'ngn/vim-apl'
 Plugin 'b4winckler/vim-objc'
 Plugin 'tfnico/vim-gradle'
+Plugin 'petRUShka/vim-opencl'
+Plugin 'lambdatoast/elm.vim'
 
 call vundle#end()
 syntax on
@@ -80,6 +83,7 @@ autocmd BufNewFile,BufReadPost *.styl setl shiftwidth=2 tabstop=2
 autocmd BufNewFile,BufReadPost *.yml setl shiftwidth=2 tabstop=2
 autocmd BufNewFile,BufReadPost *.cs setl shiftwidth=4 tabstop=4
 
+let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf = 0
 
 let g:agprg="ag --smart-case --column"
@@ -121,7 +125,6 @@ let NERDTreeIgnore = [
 \ ]
 
 """ Omnisharp settings
-
 " check for csharp syntax errors and code issues with syntastic
 let g:syntastic_cs_checkers = ['syntax']
 autocmd InsertLeave *.cs SyntasticCheck
@@ -131,6 +134,9 @@ autocmd InsertLeave *.cs SyntasticCheck
 set completeopt=longest,menuone,preview
 
 "nnoremap <leader><space> :OmniSharpGetCodeActions<cr>
+
+let g:syntastic_cpp_compiler = 'clang++'
+let g:syntastic_cpp_compiler_options = ' -std=c++11 -stdlib=libc++'
 
 set showcmd
 set tabstop=4
