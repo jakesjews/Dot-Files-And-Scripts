@@ -28,11 +28,13 @@ export TERM=xterm-256color
 export ANSIBLE_HOST_KEY_CHECKING=False
 
 if [[ $platform == 'macos' ]]; then
-    alias swift="/Applications/Xcode6-Beta7.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift"
+    alias swift="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift"
     alias jconsole="/Applications/j64-802/bin/jconsole"
 
     export VAGRANT_DEFAULT_PROVIDER='vmware_fusion'
     export HOMEBREW_GITHUB_API_TOKEN='c2cb29a67cee76e48d933eae6b36b9c51e79609b'
+
+    #export DYLD_FALLBACK_LIBRARY_PATH=/Library/Frameworks/Mono.framework/Versions/Current/lib:/lib:/usr/lib
 
     export VIMRUNTIME=/usr/local/opt/macvim/MacVim.app/Contents/Resources/vim/runtime
     export NEOVIM_LISTEN_ADDRESS=/tmp/neovim.sock
@@ -85,7 +87,7 @@ else
     export PATH=$PATH
 fi
 
-plugins_base=(ant vi-mode git cake gem lein mvn node perl redis-cli github heroku mercurial npm pip python sublime vagrant coffee pow svn golang bower scala rebar rails colorize zsh-syntax-highlighting cabal cpanm jira sbt mix tmux mosh rvm ruby rake dircycle pod autojump vundle colored-man docker rsync extract encode64 history-substring-search copydir copyfile colorize meteor zsh_reload jsontools cabal-upgrade functional)
+plugins_base=(ant vi-mode git cake gem lein mvn node perl redis-cli github heroku mercurial npm pip python sublime vagrant coffee pow svn golang bower scala rebar rails colorize zsh-syntax-highlighting cabal cpanm jira sbt mix tmux mosh rvm ruby rake dircycle pod autojump vundle colored-man docker rsync extract encode64 history-substring-search copydir copyfile colorize meteor zsh_reload jsontools cabal-upgrade functional npmls)
 
 if [[ $platform == 'macos' ]]; then
     plugins_extra=(brew osx textmate atom)
@@ -141,9 +143,15 @@ alias ms='mocha -g "#slow" -i'
 alias test-mono="xbuild && make test-webApi"
 alias findproc="pgrep -ifL"
 
-function mcd() { mkdir $1 && cd $1; }
+function mcd() { mkdir "$1" && cd "$1"; }
 
-function terminate() { kill $1 && sound terminated }
+function terminate() { kill "$1" && sound terminated; }
+
+function run-on-all() { ansible all -m "shell" -a "$1" -s; }
+
+function enable-mono-tools() { 
+    export DYLD_FALLBACK_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib:/Library/Frameworks/Mono.framework/Versions/Current/lib
+}
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
