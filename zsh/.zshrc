@@ -1,3 +1,5 @@
+#!/usr/local/bin/zsh
+
 platform='unknown'
 unamestr=$(uname)
 if [[ "$unamestr" == 'Darwin' ]]; then
@@ -15,7 +17,7 @@ zstyle ':vcs_info:*' enable git hg
 export ENABLE_CORRECTION="true"
 export DISABLE_AUTO_UPDATE="true"
 export ZSH_THEME="robbyrussell"
-export EDITOR='vim'
+export EDITOR='nvim'
 export SHELL='zsh'
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
@@ -34,21 +36,17 @@ if [[ $platform == 'macos' ]]; then
     export VAGRANT_DEFAULT_PROVIDER='vmware_fusion'
     export HOMEBREW_GITHUB_API_TOKEN='c2cb29a67cee76e48d933eae6b36b9c51e79609b'
 
-    #export DYLD_FALLBACK_LIBRARY_PATH=/Library/Frameworks/Mono.framework/Versions/Current/lib:/lib:/usr/lib
-
-    export VIMRUNTIME=/usr/local/opt/macvim/MacVim.app/Contents/Resources/vim/runtime
     export NEOVIM_LISTEN_ADDRESS=/tmp/neovim.sock
     export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
     export HIVE_HOME=/usr/local/Cellar/hive/0.10.0/libexec
     export GROOVY_HOME=/usr/local/Cellar/groovy/2.0.5/libexec
-    export PYTHONPATH=/usr/local/lib/python2.7/site-packages
     export GOPATH=/usr/local/lib/go
     export VOLDEMORT_HOME='/usr/local/Cellar/voldemort/0.90.1/libexec'
     export LIQUIBASE_HOME="/usr/local/Cellar/liquibase/3.1.1/libexec"
     export JBOSS_HOME=/usr/local/opt/wildfly-as/libexec
 
     export ANDROID_HOME=/usr/local/opt/android-sdk
-    export POSTGRES_ROOT=/Applications/Postgres.app/Contents/Versions/9.3/bin
+    export POSTGRES_ROOT=/Applications/Postgres.app/Contents/Versions/9.4/bin
     export CLOJURE_ROOT=/Users/jacob/.cljr/bin
     export CABAL_ROOT=/Users/jacob/.cabal/bin
     export TEX_ROOT=/usr/textbin
@@ -66,18 +64,16 @@ if [[ $platform == 'macos' ]]; then
 
     # python
     export WORKON_HOME=$HOME/.virtualenvs
-    export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python2.7
+    export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python2.7
     export VIRTUALENVWRAPPER_VIRTUALENV_ARGS='--no-site-packages'
     export PIP_VIRTUALENV_BASE=$WORKON_HOME
     export PIP_RESPECT_VIRTUALENV=true
 
     export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/Library/Frameworks/Mono.framework/Versions/Current/lib/pkgconfig
 
-    source /usr/local/bin/virtualenvwrapper.sh
-
     export NODE_PATH=/usr/local/lib/node_modules
     export COFFEELINT_CONFIG=/Users/jacob/.coffelintrc
-    export JAVA_MAN=/Library/Java/JavaVirtualMachines/jdk1.8.0_05.jdk/Contents/Home/man
+    export JAVA_MAN=/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/man
     export ERLANG_MAN=/usr/local/opt/erlang/lib/erlang/man
 
     export MANPATH=$JAVA_MAN:$MANPATH:$ERLANG_MAN
@@ -87,15 +83,13 @@ else
     export PATH=$PATH
 fi
 
-plugins_base=(ant vi-mode git cake gem lein mvn node perl redis-cli github heroku mercurial npm pip python sublime vagrant coffee pow svn golang bower scala rebar rails colorize zsh-syntax-highlighting cabal cpanm jira sbt mix tmux mosh rvm ruby rake dircycle pod autojump vundle colored-man docker rsync extract encode64 history-substring-search copydir copyfile colorize meteor zsh_reload jsontools cabal-upgrade functional npmls)
+plugins=(vi-mode git cake gem lein mvn node redis-cli github heroku mercurial npm pip sublime vagrant coffee golang bower scala rebar colorize zsh-syntax-highlighting cabal cpanm jira sbt mix tmux rvm pod autojump vundle colored-man docker rsync extract encode64 history-substring-search copyfile colorize zsh_reload jsontools cabal-upgrade functional npmls)
 
 if [[ $platform == 'macos' ]]; then
-    plugins_extra=(brew osx textmate atom)
+    plugins+=(brew osx)
 else
-    plugins_extra=(debian command-not-found)
+    plugins+=(debian command-not-found)
 fi
-
-set -A plugins $plugins_base $plugins_extra
 
 autoload zargs
 autoload zmv
@@ -122,8 +116,7 @@ if [[ $platform == 'macos' ]]; then
     alias redis='redis-server /usr/local/etc/redis.conf --daemonize no'
     alias zk='zkServer start-foreground'
     alias julia='/Applications/Julia.app/Contents/Resources/julia/bin/julia'
-    alias vim='mvim -v'
-    alias vi='mvim -v'
+    alias vim='nvim'
     alias mongod='mongod --config /usr/local/etc/mongod.conf'
     alias say=/usr/bin/say
     alias 9="/usr/local/bin/9"
@@ -138,16 +131,14 @@ alias l="ls"
 alias immersiveapps='ssh immersiveapplications.com'
 alias mmv="noglob zmv -W"
 alias xsp="xsp4"
-alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
+#alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
+alias ssh-tunnel="ssh -D 8080 -C -N eflex@198.0.122.62"
 alias ms='mocha -g "#slow" -i'
 alias test-mono="xbuild && make test-webApi"
 alias findproc="pgrep -ifL"
+alias clearParts="mongo /Users/jacob/dev/mongo/clearParts.js"
 
 function mcd() { mkdir "$1" && cd "$1"; }
-
-function terminate() { kill "$1" && sound terminated; }
-
-function run-on-all() { ansible all -m "shell" -a "$1" -s; }
 
 function enable-mono-tools() { 
     export DYLD_FALLBACK_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib:/Library/Frameworks/Mono.framework/Versions/Current/lib
