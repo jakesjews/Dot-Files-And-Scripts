@@ -7,13 +7,16 @@ nnoremap <C-K> :call HighlightNearCursor()<CR>
 map <C-c> <leader>c<space>
 map <C-f> <leader><leader>w
 map <silent> <C-@> <Plug>DashSearch
+vmap <Enter> <Plug>(EasyAlign)
 
 vnoremap . :normal .<CR>
-
 nnoremap <C-e> :e.<CR>
+
+set backspace=indent,eol,start
 
 set nocompatible
 filetype off
+
 
 " Plugins
 
@@ -35,6 +38,7 @@ Plugin 'tpope/vim-dispatch'
 Plugin 'guicolorscheme.vim'
 Plugin 'rizzatti/dash.vim'
 Plugin 'junegunn/vim-easy-align'
+Plugin 'editorconfig/editorconfig-vim'
 
 Plugin 'rails.vim'
 Plugin 'derekwyatt/vim-scala'
@@ -70,6 +74,7 @@ Plugin 'b4winckler/vim-objc'
 Plugin 'tfnico/vim-gradle'
 Plugin 'petRUShka/vim-opencl'
 Plugin 'lambdatoast/elm.vim'
+Plugin 'Keithbsmiley/swift.vim'
 
 call vundle#end()
 syntax on
@@ -162,7 +167,7 @@ endif
 
 if executable('ag')
   set grepprg=ag\ --nogroup\ --nocolor
-  let g:ctrlp_user_command = 'ag %s -S -l --nocolor -g ""'
+  let g:ctrlp_user_command = 'ag %s -S -l --depth -1 --nocolor -g ""'
   let g:ctrlp_use_caching = 0
 endif
 
