@@ -3,7 +3,6 @@
 " Disable ex mode
 nnoremap Q <nop>
 
-nnoremap <C-K> :call HighlightNearCursor()<CR>
 map <C-c> <leader>c<space>
 map <C-f> <leader><leader>w
 map <silent> <C-@> <Plug>DashSearch
@@ -39,12 +38,12 @@ Plugin 'guicolorscheme.vim'
 Plugin 'rizzatti/dash.vim'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'editorconfig/editorconfig-vim'
+Plugin 'kien/rainbow_parentheses.vim'
 
 Plugin 'rails.vim'
 Plugin 'derekwyatt/vim-scala'
 Plugin 'jimenezrick/vimerl'
 Plugin 'guns/vim-clojure-static'
-Plugin 'kien/rainbow_parentheses.vim'
 Plugin 'eagletmt/ghcmod-vim'
 Plugin 'vim-coffee-script'
 Plugin 'digitaltoad/vim-jade'
@@ -182,17 +181,4 @@ else
   highlight Normal ctermbg=NONE
   highlight nonText ctermbg=NONE
 endif
-
-
-" Functions
-"
-function HighlightNearCursor()
-  if !exists("s:highlightcursor")
-    match Todo /\k*\%#\k*/
-    let s:highlightcursor=1
-  else
-    match None
-    unlet s:highlightcursor
-  endif
-endfunction
 
