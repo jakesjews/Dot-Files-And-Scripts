@@ -10,12 +10,12 @@ mq =
 progress = 
 transplant = 
 
-[ui]
-username = Jacob Jewell <jakesjews@gmail.com>
-merge = bcomp
-
 [tortoisehg]
 workbench.single = True
+
+[ui]
+username = Jacob Jewell <jacobjewell@eflexsystems.com>
+merge = bcomp
 
 [extdiff]
 cmd.bcomp = /usr/local/bin/bcomp
