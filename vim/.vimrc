@@ -1,7 +1,6 @@
-" Keymapping 
-
 " Disable ex mode
 nnoremap Q <nop>
+nnoremap x "_x
 
 map <C-c> <leader>c<space>
 map <C-f> <leader><leader>w
@@ -15,7 +14,6 @@ set backspace=indent,eol,start
 
 set nocompatible
 filetype off
-
 
 " Plugins
 
@@ -74,6 +72,7 @@ Plugin 'tfnico/vim-gradle'
 Plugin 'petRUShka/vim-opencl'
 Plugin 'lambdatoast/elm.vim'
 Plugin 'Keithbsmiley/swift.vim'
+Plugin 'brandonbloom/vim-factor'
 
 call vundle#end()
 syntax on
@@ -154,7 +153,7 @@ set incsearch
 set autowrite
 set pastetoggle=<F2>
 set mouse=a
-set clipboard=unnamed
+set clipboard=unnamedplus
 set foldmethod=indent
 set foldlevel=99
 set splitright
