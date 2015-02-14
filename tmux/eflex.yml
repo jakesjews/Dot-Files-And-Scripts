@@ -7,10 +7,10 @@ pre:
 
 windows:
   - editor:
-      layout: main-horizontal
-      layout: 3a6f,178x50,0,0[178x40,0,0,0,178x9,0,41,6]
       panes:
         - vim
+  - terminal:
+      panes:
         - #default
   - webApp:
       layout: main-horizontal
