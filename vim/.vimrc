@@ -27,7 +27,7 @@ Plugin 'The-NERD-tree'
 Plugin 'The-NERD-Commenter'
 Plugin 'surround.vim'
 Plugin 'scrooloose/syntastic'
-Plugin 'kien/ctrlp.vim'
+Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'rking/ag.vim'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'Lokaltog/vim-easymotion'
@@ -37,6 +37,7 @@ Plugin 'rizzatti/dash.vim'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'kien/rainbow_parentheses.vim'
+Plugin 'ryanss/vim-hackernews'
 
 Plugin 'rails.vim'
 Plugin 'derekwyatt/vim-scala'
@@ -117,7 +118,7 @@ augroup END
 let NERDTreeIgnore = [
 \ '\.hgcheck',    '\.hglf',     '\.nuget',           'publish',
 \ '.\vagrant$',   '\.idea',      'eflex.bbprojectd', 'tmp',
-\ 'test-results', 'TestResults', 'public',           'compiled',
+\ 'test-results', 'TestResults',            'compiled',
 \ 'node_modules', 'bin',         'obj',              'Properties',
 \
 \ '\.suo$',            '\.hgtabs$',      '\.orig$',       '\.userconfig$', 
@@ -165,6 +166,7 @@ endif
 
 if executable('ag')
   set grepprg=ag\ --nogroup\ --nocolor
+
   let g:ctrlp_user_command = 'ag %s -S -l --depth -1 --nocolor -g ""'
   let g:ctrlp_use_caching = 0
 endif
