@@ -37,7 +37,6 @@ Plugin 'rizzatti/dash.vim'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'kien/rainbow_parentheses.vim'
-Plugin 'ryanss/vim-hackernews'
 
 Plugin 'rails.vim'
 Plugin 'derekwyatt/vim-scala'
@@ -154,7 +153,8 @@ set incsearch
 set autowrite
 set pastetoggle=<F2>
 set mouse=a
-set clipboard=unnamedplus
+set clipboard=unnamed
+"set clipboard=unnamedplus
 set foldmethod=indent
 set foldlevel=99
 set splitright

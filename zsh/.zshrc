@@ -34,7 +34,7 @@ if [[ $platform == 'macos' ]]; then
     alias jconsole="/Applications/j64-802/bin/jconsole"
 
     export VAGRANT_DEFAULT_PROVIDER='vmware_fusion'
-    export HOMEBREW_GITHUB_API_TOKEN='c2cb29a67cee76e48d933eae6b36b9c51e79609b'
+    source ~/.homebrew.token
 
     export NEOVIM_LISTEN_ADDRESS=/tmp/neovim.sock
     export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
@@ -83,7 +83,7 @@ else
     export PATH=$PATH
 fi
 
-plugins=(vi-mode git cake gem lein mvn node redis-cli github heroku mercurial npm pip sublime vagrant coffee golang bower scala rebar colorize zsh-syntax-highlighting cabal cpanm jira sbt mix tmux rvm pod autojump vundle colored-man docker rsync extract encode64 history-substring-search copyfile colorize zsh_reload jsontools cabal-upgrade functional npmls)
+plugins=(vi-mode git cake gem lein mvn node redis-cli github heroku mercurial npm pip sublime vagrant coffee golang bower scala rebar colorize zsh-syntax-highlighting cabal cpanm jira sbt mix tmux rvm pod autojump vundle colored-man docker rsync extract encode64 history-substring-search copyfile colorize zsh_reload jsontools grunt cabal-upgrade functional npmls)
 
 if [[ $platform == 'macos' ]]; then
     plugins+=(brew osx)
@@ -118,7 +118,6 @@ if [[ $platform == 'macos' ]]; then
     alias julia='/Applications/Julia.app/Contents/Resources/julia/bin/julia'
     alias vim='nvim'
     alias mongod='mongod --config /usr/local/etc/mongod.conf'
-    alias say=/usr/bin/say
     alias 9="/usr/local/bin/9"
     alias influxdb="influxdb -config=/usr/local/etc/influxdb.conf"
     alias elasticsearch="elasticsearch --config=/usr/local/opt/elasticsearch/config/elasticsearch.yml"
