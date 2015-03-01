@@ -14,7 +14,7 @@ sudo sh -c "echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.
 
 sudo apt-get update
 
-sudo apt-get install -y build-essential llvm clang phantomjs \
+sudo apt-get install -y build-essential llvm clang \
   python2.7 ansible \
   perl ghc cabal-install golang-go libtool \
   erlang gprolog \
@@ -32,7 +32,7 @@ sudo apt-get install -y build-essential llvm clang phantomjs \
 curl -L https://get.rvm.io | bash -s stable --rails --autolibs=enabled
 
 # npm packages
-sudo npm install -g mocha coffee-script iced-coffee-script brunch bower mocha-phantomjs
+sudo npm install -g mocha coffee-script iced-coffee-script brunch bower mocha-phantomjs phantomjs
 
 # clojure
 wget https://raw.github.com/technomancy/leiningen/stable/bin/lein
