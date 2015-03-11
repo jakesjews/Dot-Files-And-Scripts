@@ -1,0 +1,10 @@
+bower_components
+node_modules
+/*packages*/
+public
+assets
+vendor
+*.mdb
+*.dll
+eFlexI18n.js
+bin
