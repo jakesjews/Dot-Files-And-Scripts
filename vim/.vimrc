@@ -11,6 +11,8 @@ vnoremap . :normal .<CR>
 nnoremap <C-e> :e.<CR>
 
 set backspace=indent,eol,start
+set backupdir=$HOME/.vim/swap//
+set directory=$HOME/.vim/swap//
 
 set nocompatible
 filetype off
@@ -73,6 +75,7 @@ Plugin 'petRUShka/vim-opencl'
 Plugin 'lambdatoast/elm.vim'
 Plugin 'Keithbsmiley/swift.vim'
 Plugin 'brandonbloom/vim-factor'
+Plugin 'alunny/pegjs-vim'
 
 call vundle#end()
 syntax on
