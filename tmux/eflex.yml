@@ -21,7 +21,7 @@ windows:
       layout: main-horizontal
       panes:
         - csharp
-        - cd WebApi && nuget restore EFlex.sln && cd WebApi && xbuild && xsp4
+        - cd WebApi && nuget restore EFlex.sln && cd WebApi && xbuild && xsp4 --port 8080
   - trigger:
       layout: main-horizontal
       panes:
@@ -31,7 +31,6 @@ windows:
       layout: main-horizontal
       panes:
         - mongo eflex
-        - mongostat
   - redis:
       layout: main-horizontal
       panes:
@@ -40,7 +39,6 @@ windows:
       layout: main-horizontal
       panes:
         - zkCli
-        - tail -f /usr/local/var/log/zookeeper/zookeeper.log
   - ssh:
       layout: even-vertical
       panes:

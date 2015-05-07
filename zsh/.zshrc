@@ -32,7 +32,6 @@ export ANSIBLE_HOST_KEY_CHECKING=False
 if [[ $platform == 'macos' ]]; then
     alias swift="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift"
     alias jconsole="/Applications/j64-802/bin/jconsole"
-    alias npm="npm --node-gyp=/usr/local/lib/node_modules/pangyp/bin/node-gyp.js"
 
     export VAGRANT_DEFAULT_PROVIDER='vmware_fusion'
     source ~/.homebrew.token
@@ -74,7 +73,7 @@ if [[ $platform == 'macos' ]]; then
     export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/Library/Frameworks/Mono.framework/Versions/Current/lib/pkgconfig
 
     export NODE_PATH=/usr/local/lib/node_modules
-    export COFFEELINT_CONFIG=/Users/jacob/.coffelintrc
+    export COFFEELINT_CONFIG=/Users/jacob/.coffeelintrc
     export JAVA_MAN=/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/man
     export ERLANG_MAN=/usr/local/opt/erlang/lib/erlang/man
 
@@ -107,6 +106,8 @@ zmodload zsh/attr
 zmodload zsh/net/tcp
 
 KEYTIMEOUT=1
+LISTMAX=0
+unsetopt listambiguous
 
 source "$ZSH/oh-my-zsh.sh"
 bindkey '\e[A' history-substring-search-up
@@ -117,7 +118,6 @@ if [[ $platform == 'macos' ]]; then
     alias ed='ed -p:'
     alias redis='redis-server /usr/local/etc/redis.conf --daemonize no'
     alias zk='zkServer start-foreground'
-    alias julia='/Applications/Julia.app/Contents/Resources/julia/bin/julia'
     alias vim='shell=bash nvim'
     alias mongod='mongod --config /usr/local/etc/mongod.conf'
     alias 9="/usr/local/bin/9"
@@ -131,12 +131,13 @@ fi
 alias l="ls"
 alias immersiveapps='ssh immersiveapplications.com'
 alias mmv="noglob zmv -W"
-alias xsp="xsp4"
+alias xsp="xsp4 --port 8080"
 alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
 alias ms='mocha --fgrep "#slow" -i'
 alias findproc="pgrep -ifL"
 alias clearParts="mongo /Users/jacob/dev/mongo/clearParts.js"
 alias sl="ls"
+alias mocha="mocha --bail"
 
 function mcd() { mkdir "$1" && cd "$1"; }
 
@@ -152,6 +153,20 @@ function clean-eflex() {
 function restart-eflex() {
     clean-eflex
     mux eflex
+}
+
+function update-servers() {
+    ansible all -m "apt" -a "upgrade=dist" -s
+}
+
+code () {
+    if [[ $# = 0 ]]
+    then
+        open -a "Visual Studio Code"
+    else
+        [[ $1 = /* ]] && F="$1" || F="$PWD/${1#./}"
+        open -a "Visual Studio Code" --args "$F"
+    fi
 }
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting

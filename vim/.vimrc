@@ -24,28 +24,30 @@ call vundle#begin()
 
 Plugin 'gmarik/Vundle.vim'
 
-Plugin 'taglist.vim'
-Plugin 'The-NERD-tree'
-Plugin 'The-NERD-Commenter'
-Plugin 'surround.vim'
+Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/syntastic'
+Plugin 'tpope/vim-surround'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'rking/ag.vim'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'Lokaltog/vim-easymotion'
 Plugin 'tpope/vim-dispatch'
-Plugin 'guicolorscheme.vim'
 Plugin 'rizzatti/dash.vim'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'kien/rainbow_parentheses.vim'
+Plugin 'tpope/vim-repeat'
+Plugin 'kurkale6ka/vim-sequence'
+Plugin 'vim-scripts/taglist.vim'
+Plugin 'vim-scripts/guicolorscheme.vim'
 
-Plugin 'rails.vim'
+Plugin 'tpope/vim-rails'
 Plugin 'derekwyatt/vim-scala'
 Plugin 'jimenezrick/vimerl'
 Plugin 'guns/vim-clojure-static'
 Plugin 'eagletmt/ghcmod-vim'
-Plugin 'vim-coffee-script'
+Plugin 'kchmck/vim-coffee-script'
 Plugin 'digitaltoad/vim-jade'
 Plugin 'wavded/vim-stylus'
 Plugin 'moll/vim-node'
@@ -54,8 +56,8 @@ Plugin 'fatih/vim-go'
 Plugin 'adimit/prolog.vim'
 Plugin 'leafgarland/typescript-vim'
 Plugin 'mustache/vim-mustache-handlebars'
-Plugin 'darthdeus/vim-emblem'
-Plugin 'applescript.vim'
+Plugin 'heartsentwined/vim-emblem'
+Plugin 'vim-scripts/applescript.vim'
 Plugin 'kongo2002/fsharp-vim'
 Plugin 'elixir-lang/vim-elixir'
 Plugin 'tpope/vim-cucumber'
@@ -76,6 +78,8 @@ Plugin 'lambdatoast/elm.vim'
 Plugin 'Keithbsmiley/swift.vim'
 Plugin 'brandonbloom/vim-factor'
 Plugin 'alunny/pegjs-vim'
+Plugin 'jplaut/vim-arduino-ino'
+Plugin 'zah/nimrod.vim'
 
 call vundle#end()
 syntax on
@@ -88,6 +92,9 @@ autocmd BufNewFile,BufReadPost *.rb setl shiftwidth=2 tabstop=2
 autocmd BufNewFile,BufReadPost *.styl setl shiftwidth=2 tabstop=2
 autocmd BufNewFile,BufReadPost *.yml setl shiftwidth=2 tabstop=2
 autocmd BufNewFile,BufReadPost *.cs setl shiftwidth=4 tabstop=4
+autocmd BufNewFile,BufReadPost *.jade setl shiftwidth=2 tabstop=2
+
+au BufRead,BufNewFile *.AWL set filetype=asm
 
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf = 0
@@ -149,6 +156,7 @@ set tabstop=4
 set shiftwidth=4
 set autoindent
 set expandtab
+set smarttab
 set ignorecase
 set smartcase
 set number
@@ -157,11 +165,25 @@ set autowrite
 set pastetoggle=<F2>
 set mouse=a
 set clipboard=unnamed
-"set clipboard=unnamedplus
 set foldmethod=indent
 set foldlevel=99
 set splitright
 set cursorline
+set ruler
+set wildmenu
+set formatoptions+=j " Delete comment character when joining commented lines
+set autoread
+set fileformats+=mac
+
+setglobal tags-=./tags tags-=./tags; tags^=./tags;
+
+if !&scrolloff
+  set scrolloff=1
+endif
+if !&sidescrolloff
+  set sidescrolloff=5
+endif
+set display+=lastline
 
 if &term =~ '^screen'
   set ttymouse=xterm2
