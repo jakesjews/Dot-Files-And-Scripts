@@ -36,7 +36,7 @@ Plugin 'tpope/vim-dispatch'
 Plugin 'rizzatti/dash.vim'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'editorconfig/editorconfig-vim'
-Plugin 'kien/rainbow_parentheses.vim'
+Plugin 'junegunn/rainbow_parentheses.vim'
 Plugin 'tpope/vim-repeat'
 Plugin 'kurkale6ka/vim-sequence'
 Plugin 'vim-scripts/taglist.vim'
@@ -45,7 +45,6 @@ Plugin 'vim-scripts/guicolorscheme.vim'
 Plugin 'tpope/vim-rails'
 Plugin 'derekwyatt/vim-scala'
 Plugin 'jimenezrick/vimerl'
-Plugin 'guns/vim-clojure-static'
 Plugin 'eagletmt/ghcmod-vim'
 Plugin 'kchmck/vim-coffee-script'
 Plugin 'digitaltoad/vim-jade'
@@ -66,7 +65,7 @@ Plugin 'ekalinin/Dockerfile.vim'
 Plugin 'vim-scripts/Vim-R-plugin'
 Plugin 'JuliaLang/julia-vim'
 Plugin 'nosami/Omnisharp'
-Plugin 'wting/rust.vim'
+Plugin 'rust-lang/rust.vim'
 Plugin 'andreimaxim/vim-io'
 Plugin 'guersam/vim-j'
 Plugin 'idris-hackers/idris-vim'
@@ -75,11 +74,18 @@ Plugin 'b4winckler/vim-objc'
 Plugin 'tfnico/vim-gradle'
 Plugin 'petRUShka/vim-opencl'
 Plugin 'lambdatoast/elm.vim'
-Plugin 'Keithbsmiley/swift.vim'
 Plugin 'brandonbloom/vim-factor'
+Plugin 'toyamarinyon/vim-swift'
 Plugin 'alunny/pegjs-vim'
 Plugin 'jplaut/vim-arduino-ino'
 Plugin 'zah/nimrod.vim'
+Plugin 'cespare/vim-toml'
+
+" Clojure
+Plugin 'guns/vim-clojure-static'
+Plugin 'tpope/vim-leiningen'
+Plugin 'tpope/vim-fireplace'
+Plugin 'dgrnbrg/vim-redl'
 
 call vundle#end()
 syntax on
@@ -99,25 +105,9 @@ au BufRead,BufNewFile *.AWL set filetype=asm
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf = 0
 
-let g:agprg="ag --smart-case --column"
-
-let g:rbpt_colorpairs = [
-  \ [ '13', '#6c71c4'],
-  \ [ '5',  '#d33682'],
-  \ [ '1',  '#dc322f'],
-  \ [ '9',  '#cb4b16'],
-  \ [ '3',  '#b58900'],
-  \ [ '2',  '#859900'],
-  \ [ '6',  '#2aa198'],
-  \ [ '4',  '#268bd2'],
-  \ ]
-
-augroup rainbow_parentheses
-  au!
-  au VimEnter *.clj RainbowParenthesesActivate
-  au BufEnter *.clj RainbowParenthesesLoadRound
-  au BufEnter *.clj RainbowParenthesesLoadSquare
-  au BufEnter *.clj RainbowParenthesesLoadBraces
+augroup rainbow_lisp
+    autocmd!
+    autocmd FileType lisp,clojure,scheme RainbowParentheses
 augroup END
 
 augroup filetypedetect
@@ -192,6 +182,7 @@ endif
 if executable('ag')
   set grepprg=ag\ --nogroup\ --nocolor
 
+  let g:agprg="ag --smart-case --column"
   let g:ctrlp_user_command = 'ag %s -S -l --depth -1 --nocolor -g ""'
   let g:ctrlp_use_caching = 0
 endif
