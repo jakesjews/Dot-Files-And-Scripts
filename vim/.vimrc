@@ -15,81 +15,80 @@ set backupdir=$HOME/.vim/swap//
 set directory=$HOME/.vim/swap//
 
 set nocompatible
-filetype off
-
-" Plugins
-
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-Plugin 'gmarik/Vundle.vim'
-
-Plugin 'scrooloose/nerdtree'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'scrooloose/syntastic'
-Plugin 'tpope/vim-surround'
-Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'rking/ag.vim'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'Lokaltog/vim-easymotion'
-Plugin 'tpope/vim-dispatch'
-Plugin 'rizzatti/dash.vim'
-Plugin 'junegunn/vim-easy-align'
-Plugin 'editorconfig/editorconfig-vim'
-Plugin 'junegunn/rainbow_parentheses.vim'
-Plugin 'tpope/vim-repeat'
-Plugin 'kurkale6ka/vim-sequence'
-Plugin 'vim-scripts/taglist.vim'
-Plugin 'vim-scripts/guicolorscheme.vim'
-
-Plugin 'tpope/vim-rails'
-Plugin 'derekwyatt/vim-scala'
-Plugin 'jimenezrick/vimerl'
-Plugin 'eagletmt/ghcmod-vim'
-Plugin 'kchmck/vim-coffee-script'
-Plugin 'digitaltoad/vim-jade'
-Plugin 'wavded/vim-stylus'
-Plugin 'moll/vim-node'
-Plugin 'marijnh/tern_for_vim'
-Plugin 'fatih/vim-go'
-Plugin 'adimit/prolog.vim'
-Plugin 'leafgarland/typescript-vim'
-Plugin 'mustache/vim-mustache-handlebars'
-Plugin 'heartsentwined/vim-emblem'
-Plugin 'vim-scripts/applescript.vim'
-Plugin 'kongo2002/fsharp-vim'
-Plugin 'elixir-lang/vim-elixir'
-Plugin 'tpope/vim-cucumber'
-Plugin 'slim-template/vim-slim'
-Plugin 'ekalinin/Dockerfile.vim'
-Plugin 'vim-scripts/Vim-R-plugin'
-Plugin 'JuliaLang/julia-vim'
-Plugin 'nosami/Omnisharp'
-Plugin 'rust-lang/rust.vim'
-Plugin 'andreimaxim/vim-io'
-Plugin 'guersam/vim-j'
-Plugin 'idris-hackers/idris-vim'
-Plugin 'ngn/vim-apl'
-Plugin 'b4winckler/vim-objc'
-Plugin 'tfnico/vim-gradle'
-Plugin 'petRUShka/vim-opencl'
-Plugin 'lambdatoast/elm.vim'
-Plugin 'brandonbloom/vim-factor'
-Plugin 'toyamarinyon/vim-swift'
-Plugin 'alunny/pegjs-vim'
-Plugin 'jplaut/vim-arduino-ino'
-Plugin 'zah/nimrod.vim'
-Plugin 'cespare/vim-toml'
-
-" Clojure
-Plugin 'guns/vim-clojure-static'
-Plugin 'tpope/vim-leiningen'
-Plugin 'tpope/vim-fireplace'
-Plugin 'dgrnbrg/vim-redl'
-
-call vundle#end()
 syntax on
 filetype plugin indent on
+
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall
+endif
+
+" Plugins
+call plug#begin('~/.vim/plugged')
+
+Plug 'Lokaltog/vim-easymotion'
+Plug 'tpope/vim-dispatch'
+Plug 'scrooloose/nerdcommenter'
+Plug 'scrooloose/syntastic'
+Plug 'tpope/vim-surround'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'editorconfig/editorconfig-vim'
+Plug 'tpope/vim-repeat'
+Plug 'kurkale6ka/vim-sequence'
+Plug 'vim-scripts/taglist.vim'
+Plug 'vim-scripts/guicolorscheme.vim'
+Plug 'scrooloose/nerdtree'
+Plug 'rking/ag.vim',                     { 'on': 'Ag' }
+Plug 'Valloric/YouCompleteMe',           { 'do': './install.sh --clang-completer --omnisharp-completer' }
+Plug 'rizzatti/dash.vim',                { 'on': '<Plug>DashSearch' }
+Plug 'junegunn/vim-easy-align',          { 'on': '<Plug>(EasyAlign)' }
+Plug 'junegunn/rainbow_parentheses.vim', { 'for': ['lisp', 'clojure', 'scheme'] }
+
+Plug 'tpope/vim-rails', { 'for': 'ruby' } 
+Plug 'derekwyatt/vim-scala'
+Plug 'jimenezrick/vimerl'
+Plug 'kchmck/vim-coffee-script'
+Plug 'digitaltoad/vim-jade'
+Plug 'wavded/vim-stylus'
+Plug 'marijnh/tern_for_vim'
+Plug 'fatih/vim-go'
+Plug 'adimit/prolog.vim'
+Plug 'leafgarland/typescript-vim'
+Plug 'mustache/vim-mustache-handlebars'
+Plug 'heartsentwined/vim-emblem'
+Plug 'vim-scripts/applescript.vim'
+Plug 'kongo2002/fsharp-vim'
+Plug 'elixir-lang/vim-elixir'
+Plug 'tpope/vim-cucumber'
+Plug 'slim-template/vim-slim'
+Plug 'ekalinin/Dockerfile.vim'
+Plug 'vim-scripts/Vim-R-plugin'
+Plug 'JuliaLang/julia-vim'
+Plug 'nosami/Omnisharp'
+Plug 'rust-lang/rust.vim'
+Plug 'andreimaxim/vim-io'
+Plug 'guersam/vim-j'
+Plug 'idris-hackers/idris-vim'
+Plug 'ngn/vim-apl'
+Plug 'b4winckler/vim-objc'
+Plug 'tfnico/vim-gradle'
+Plug 'petRUShka/vim-opencl'
+Plug 'lambdatoast/elm.vim'
+Plug 'brandonbloom/vim-factor'
+Plug 'toyamarinyon/vim-swift'
+Plug 'alunny/pegjs-vim'
+Plug 'jplaut/vim-arduino-ino'
+Plug 'zah/nimrod.vim'
+Plug 'cespare/vim-toml'
+
+"" Clojure
+Plug 'guns/vim-clojure-static', { 'for': 'clojure' }
+Plug 'tpope/vim-leiningen', { 'for': 'clojure' }
+Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
+Plug 'dgrnbrg/vim-redl', { 'for': 'clojure' }
+
+call plug#end()
 
 autocmd BufNewFile,BufReadPost *.coffee setl shiftwidth=2 tabstop=2
 autocmd BufNewFile,BufReadPost *.feature setl shiftwidth=2 tabstop=2

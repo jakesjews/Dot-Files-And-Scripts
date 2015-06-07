@@ -14,7 +14,6 @@ LANG=en_US.UTF-8
 
 zstyle ':vcs_info:*' enable git hg
 
-export ENABLE_CORRECTION="true"
 export DISABLE_AUTO_UPDATE="true"
 export ZSH_THEME="robbyrussell"
 export EDITOR='nvim'
@@ -28,10 +27,14 @@ export MUTT_SMTP_URL="smtp://jakesjews@smtp.gmail.com:587/"
 export DISABLE_AUTO_TITLE=true
 export TERM=xterm-256color
 export ANSIBLE_HOST_KEY_CHECKING=False
+export KEYTIMEOUT=1
+export LISTMAX=9998
 
 if [[ $platform == 'macos' ]]; then
     alias swift="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift"
     alias jconsole="/Applications/j64-802/bin/jconsole"
+    alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
+    alias ag='ag -i'
 
     export VAGRANT_DEFAULT_PROVIDER='vmware_fusion'
     source ~/.homebrew.token
@@ -84,7 +87,9 @@ else
     export PATH=$PATH
 fi
 
-plugins=(vi-mode git cake gem lein mvn node redis-cli github heroku mercurial npm pip sublime vagrant coffee golang bower scala rebar colorize zsh-syntax-highlighting cabal cpanm jira sbt mix tmux rvm pod autojump vundle colored-man docker rsync extract encode64 history-substring-search copyfile colorize zsh_reload jsontools grunt cabal-upgrade functional npmls)
+plugins=(vi-mode gitfast cake gem lein mvn node redis-cli github heroku mercurial npm pip sublime vagrant coffee golang bower scala rebar colorize zsh-syntax-highlighting cabal cpanm jira sbt mix tmux tmuxinator rvm pod autojump vundle colored-man docker rsync extract encode64 history-substring-search copyfile colorize zsh_reload jsontools grunt adb)
+
+plugins+=(cabal-upgrade functional)
 
 if [[ $platform == 'macos' ]]; then
     plugins+=(brew osx)
@@ -105,8 +110,6 @@ zmodload zsh/zftp
 zmodload zsh/attr
 zmodload zsh/net/tcp
 
-KEYTIMEOUT=1
-LISTMAX=0
 unsetopt listambiguous
 
 source "$ZSH/oh-my-zsh.sh"
@@ -156,7 +159,7 @@ function restart-eflex() {
 }
 
 function update-servers() {
-    ansible all -m "apt" -a "upgrade=dist" -s
+    ansible all -m "apt" -a "upgrade=dist update_cache=true" -s
 }
 
 code () {
