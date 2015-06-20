@@ -8,12 +8,8 @@ elif [[ "$unamestr" == 'Linux' ]]; then
    platform='linux'
 fi
 
-ZSH=$HOME/.oh-my-zsh
-
-LANG=en_US.UTF-8
-
-zstyle ':vcs_info:*' enable git hg
-
+export ZSH=$HOME/.oh-my-zsh
+export LANG=en_US.UTF-8
 export DISABLE_AUTO_UPDATE="true"
 export ZSH_THEME="robbyrussell"
 export EDITOR='nvim'
@@ -31,16 +27,10 @@ export KEYTIMEOUT=1
 export LISTMAX=9998
 
 if [[ $platform == 'macos' ]]; then
-    alias swift="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift"
-    alias jconsole="/Applications/j64-802/bin/jconsole"
-    alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
-    alias ag='ag -i'
-
     export VAGRANT_DEFAULT_PROVIDER='vmware_fusion'
     source ~/.homebrew.token
 
     export NEOVIM_LISTEN_ADDRESS=/tmp/neovim.sock
-    #export NVIM_TUI_ENABLE_TRUE_COLOR=1
     export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
     export HIVE_HOME=/usr/local/Cellar/hive/0.10.0/libexec
     export GROOVY_HOME=/usr/local/Cellar/groovy/2.0.5/libexec
@@ -77,7 +67,7 @@ if [[ $platform == 'macos' ]]; then
 
     export NODE_PATH=/usr/local/lib/node_modules
     export COFFEELINT_CONFIG=/Users/jacob/.coffeelintrc
-    export JAVA_MAN=/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/man
+    export JAVA_MAN=/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/man
     export ERLANG_MAN=/usr/local/opt/erlang/lib/erlang/man
 
     export MANPATH=$JAVA_MAN:$MANPATH:$ERLANG_MAN
@@ -87,7 +77,7 @@ else
     export PATH=$PATH
 fi
 
-plugins=(vi-mode gitfast cake gem lein mvn node redis-cli github heroku mercurial npm pip sublime vagrant coffee golang bower scala rebar colorize zsh-syntax-highlighting cabal cpanm jira sbt mix tmux tmuxinator rvm pod autojump vundle colored-man docker rsync extract encode64 history-substring-search copyfile colorize zsh_reload jsontools grunt adb)
+plugins=(vi-mode gitfast cake gem lein mvn node redis-cli github heroku mercurial npm pip sublime vagrant coffee golang bower scala rebar colorize zsh-syntax-highlighting cabal cpanm sbt mix tmux tmuxinator rvm pod autojump colored-man docker rsync extract encode64 history-substring-search copyfile colorize zsh_reload jsontools grunt adb coffee docker-compose)
 
 plugins+=(cabal-upgrade functional)
 
@@ -117,20 +107,16 @@ bindkey '\e[A' history-substring-search-up
 bindkey '\e[B' history-substring-search-down
 
 if [[ $platform == 'macos' ]]; then
-    alias space="du -d 1 -h | sort -n"
-    alias ed='ed -p:'
-    alias redis='redis-server /usr/local/etc/redis.conf --daemonize no'
-    alias zk='zkServer start-foreground'
     alias vim='shell=bash nvim'
-    alias mongod='mongod --config /usr/local/etc/mongod.conf'
     alias 9="/usr/local/bin/9"
-    alias influxdb="influxdb -config=/usr/local/etc/influxdb.conf"
-    alias elasticsearch="elasticsearch --config=/usr/local/opt/elasticsearch/config/elasticsearch.yml"
-    alias betty="/usr/local/betty/main.rb"
     alias profile-mono="LD_LIBRARY_PATH=/Library/Frameworks/Mono.framework/Versions/Current/lib MONO_OPTIONS=--profile=log:noalloc xsp"
-    alias factor="/Applications/factor/factor"
+    alias jconsole="/Applications/j64-802/bin/jconsole"
 fi
 
+alias space="du -d 1 -h | sort -n"
+alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
+alias ag='ag -i'
+alias dockersetup='eval "$(docker-machine env dev)"'
 alias l="ls"
 alias immersiveapps='ssh immersiveapplications.com'
 alias mmv="noglob zmv -W"
@@ -138,9 +124,15 @@ alias xsp="xsp4 --port 8080"
 alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
 alias ms='mocha --fgrep "#slow" -i'
 alias findproc="pgrep -ifL"
-alias clearParts="mongo /Users/jacob/dev/mongo/clearParts.js"
 alias sl="ls"
 alias mocha="mocha --bail"
+
+ # Add RVM to PATH for scripting
+PATH=$PATH:$HOME/.rvm/bin
+# OPAM configuration
+. /Users/jacob/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+
+source ~/.xsh
 
 function mcd() { mkdir "$1" && cd "$1"; }
 
@@ -162,7 +154,7 @@ function update-servers() {
     ansible all -m "apt" -a "upgrade=dist update_cache=true" -s
 }
 
-code () {
+function code () {
     if [[ $# = 0 ]]
     then
         open -a "Visual Studio Code"
@@ -172,11 +164,46 @@ code () {
     fi
 }
 
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+function update() {
+    setopt localoptions rmstarsilent
 
-# OPAM configuration
-. /Users/jacob/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+    brew update
+    brew upgrade --all
+    brew cleanup -s
+    brew prune
+    brew tap --repair
+    rm -rf /Library/Caches/Homebrew/*
 
+    brew remove neovim
+    brew install --HEAD neovim
 
-source ~/.xsh
+    npm cache clean
+    npm update -g
+     
+    gem update
+
+    julia -e "Pkg.update()"
+
+    expect -c "
+        set timeout -1
+        spawn gem cleanup
+        set done 0
+
+        while {\$done == 0} {
+            expect {
+                \"Continue with Uninstall\\\\\\? \\\\\\[Yn\\\\\\]\" { send \"n\r\" }
+                \"Clean Up Complete\" { set done 1 }
+            }
+        }
+        wait
+        close $spawn_id
+    "
+
+    rvm cleanup all
+    rvm get latest
+
+    meteor update
+
+    vagrant plugin update
+}
 
