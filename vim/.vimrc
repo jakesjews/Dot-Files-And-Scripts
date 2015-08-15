@@ -24,6 +24,7 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall
 endif
 
+
 " Plugins
 call plug#begin('~/.vim/plugged')
 
@@ -44,6 +45,7 @@ Plug 'Valloric/YouCompleteMe',           { 'do': './install.sh --clang-completer
 Plug 'rizzatti/dash.vim',                { 'on': '<Plug>DashSearch' }
 Plug 'junegunn/vim-easy-align',          { 'on': '<Plug>(EasyAlign)' }
 Plug 'junegunn/rainbow_parentheses.vim', { 'for': ['lisp', 'clojure', 'scheme'] }
+"Plug 'vim-scripts/paredit.vim',          { 'for': ['lisp', 'clojure', 'scheme'] }
 
 Plug 'tpope/vim-rails', { 'for': 'ruby' } 
 Plug 'derekwyatt/vim-scala'
@@ -85,7 +87,6 @@ Plug 'cespare/vim-toml'
 Plug 'guns/vim-clojure-static', { 'for': 'clojure' }
 Plug 'tpope/vim-leiningen', { 'for': 'clojure' }
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
-Plug 'dgrnbrg/vim-redl', { 'for': 'clojure' }
 
 call plug#end()
 
