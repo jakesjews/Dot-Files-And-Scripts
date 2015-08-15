@@ -40,7 +40,7 @@ if [[ $platform == 'macos' ]]; then
     export JBOSS_HOME=/usr/local/opt/wildfly-as/libexec
 
     export ANDROID_HOME=/usr/local/opt/android-sdk
-    export POSTGRES_ROOT=/Applications/Postgres.app/Contents/Versions/9.4/bin
+    #export POSTGRES_ROOT=/Applications/Postgres.app/Contents/Versions/9.4/bin
     export CLOJURE_ROOT=/Users/jacob/.cljr/bin
     export CABAL_ROOT=/Users/jacob/.cabal/bin
     export TEX_ROOT=/usr/textbin
@@ -51,7 +51,6 @@ if [[ $platform == 'macos' ]]; then
     export NPM_ROOT=/usr/local/share/npm/bin
     export GO_ROOT=$GOPATH/bin
     export JBOSS_ROOT=$JBOSS_HOME/bin
-    export RVM_ROOT=$HOME/.rvm/bin
     export EMSCRIPTEN_ROOT="/Users/jacob/dev/sdk/emscripten/emscripten/1.13.0"
     export HAXE_STD_PATH="/usr/local/lib/haxe/std"
     export BREW_ROOT=/usr/local/bin:/usr/local/sbin
@@ -72,12 +71,12 @@ if [[ $platform == 'macos' ]]; then
 
     export MANPATH=$JAVA_MAN:$MANPATH:$ERLANG_MAN
 
-    export PATH=/bin:/sbin:$CABAL_ROOT:$BREW_ROOT:$POSTGRES_ROOT:$CLOJURE_ROOT:$LATEX_ROOT:$HEROKU_ROOT:$VMWARE_ROOT:$GO_ROOT:$PATH:$NPM_ROOT:$TEX_ROOT:$CUDA_ROOT:$JBOSS_ROOT:$RVM_ROOT:$EMSCRIPTEN_ROOT:$JAVA_HOME/bin
+    export PATH=/bin:/sbin:$CABAL_ROOT:$BREW_ROOT:$CLOJURE_ROOT:$LATEX_ROOT:$HEROKU_ROOT:$VMWARE_ROOT:$GO_ROOT:$PATH:$NPM_ROOT:$TEX_ROOT:$CUDA_ROOT:$JBOSS_ROOT:$EMSCRIPTEN_ROOT:$JAVA_HOME/bin
 else
     export PATH=$PATH
 fi
 
-plugins=(vi-mode gitfast cake gem lein mvn node redis-cli github heroku mercurial npm pip sublime vagrant coffee golang bower scala rebar colorize zsh-syntax-highlighting cabal cpanm sbt mix tmux tmuxinator rvm pod autojump colored-man docker rsync extract encode64 history-substring-search copyfile colorize zsh_reload jsontools grunt adb coffee docker-compose)
+plugins=(vi-mode gitfast cake gem lein mvn node redis-cli github heroku mercurial npm pip sublime vagrant coffee golang bower scala rebar colorize zsh-syntax-highlighting cabal cpanm sbt mix tmux tmuxinator rbenv pod autojump colored-man docker rsync extract encode64 history-substring-search copyfile colorize zsh_reload jsontools grunt adb coffee docker-compose terraform)
 
 plugins+=(cabal-upgrade functional)
 
@@ -111,6 +110,7 @@ if [[ $platform == 'macos' ]]; then
     alias 9="/usr/local/bin/9"
     alias profile-mono="LD_LIBRARY_PATH=/Library/Frameworks/Mono.framework/Versions/Current/lib MONO_OPTIONS=--profile=log:noalloc xsp"
     alias jconsole="/Applications/j64-802/bin/jconsole"
+    alias postgres="postgres -D /usr/local/var/postgres"
 fi
 
 alias space="du -d 1 -h | sort -n"
@@ -126,9 +126,8 @@ alias ms='mocha --fgrep "#slow" -i'
 alias findproc="pgrep -ifL"
 alias sl="ls"
 alias mocha="mocha --bail"
+alias npmo="npm outdated"
 
- # Add RVM to PATH for scripting
-PATH=$PATH:$HOME/.rvm/bin
 # OPAM configuration
 . /Users/jacob/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 
@@ -199,11 +198,10 @@ function update() {
         close $spawn_id
     "
 
-    rvm cleanup all
-    rvm get latest
-
     meteor update
 
     vagrant plugin update
 }
 
+eval "$(rbenv init -)"
+source /Users/jacob/.iterm2_shell_integration.zsh
