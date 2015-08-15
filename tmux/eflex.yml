@@ -16,7 +16,7 @@ windows:
       layout: main-horizontal
       panes:
         - iced 
-        - cd webApp && ./run.sh
+        - cd webApp && npm i && bower i && ./run.sh
   - mono:
       layout: main-horizontal
       panes:
@@ -25,7 +25,7 @@ windows:
   - trigger:
       layout: main-horizontal
       panes:
-        - make trigger && cd webApp/public && mkdir -p imagefiles && chmod a+w imagefiles && ../../eVisionTrigger/bin/eVisionTrigger -c localhost -p imagefiles -w 1
+        - make trigger && cd webApp/dist && mkdir -p imagefiles && chmod a+w imagefiles && ../../eVisionTrigger/bin/eVisionTrigger -c localhost -p imagefiles -w 1
         - cd ~/Downloads && ftp anonymous@localhost
   - mongo:
       layout: main-horizontal
