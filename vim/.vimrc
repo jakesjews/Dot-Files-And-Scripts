@@ -45,7 +45,6 @@ Plug 'Valloric/YouCompleteMe',           { 'do': './install.sh --clang-completer
 Plug 'rizzatti/dash.vim',                { 'on': '<Plug>DashSearch' }
 Plug 'junegunn/vim-easy-align',          { 'on': '<Plug>(EasyAlign)' }
 Plug 'junegunn/rainbow_parentheses.vim', { 'for': ['lisp', 'clojure', 'scheme'] }
-"Plug 'vim-scripts/paredit.vim',          { 'for': ['lisp', 'clojure', 'scheme'] }
 
 Plug 'tpope/vim-rails', { 'for': 'ruby' } 
 Plug 'derekwyatt/vim-scala'
