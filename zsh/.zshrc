@@ -111,6 +111,7 @@ if [[ $platform == 'macos' ]]; then
     alias profile-mono="LD_LIBRARY_PATH=/Library/Frameworks/Mono.framework/Versions/Current/lib MONO_OPTIONS=--profile=log:noalloc xsp"
     alias jconsole="/Applications/j64-802/bin/jconsole"
     alias postgres="postgres -D /usr/local/var/postgres"
+    alias Factor="/Applications/factor/factor"
 fi
 
 alias space="du -d 1 -h | sort -n"
@@ -127,6 +128,7 @@ alias findproc="pgrep -ifL"
 alias sl="ls"
 alias mocha="mocha --bail"
 alias npmo="npm outdated"
+alias orig="rm **/*.orig"
 
 # OPAM configuration
 . /Users/jacob/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
@@ -204,4 +206,5 @@ function update() {
 }
 
 eval "$(rbenv init -)"
-source /Users/jacob/.iterm2_shell_integration.zsh
+
+test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
