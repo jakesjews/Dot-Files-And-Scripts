@@ -13,6 +13,8 @@ export LANG=en_US.UTF-8
 export DISABLE_AUTO_UPDATE="true"
 export ZSH_THEME="robbyrussell"
 export EDITOR='nvim'
+#export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+#export NVIM_TUI_ENABLE_TRUE_COLOR=1
 export SHELL='zsh'
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
@@ -76,7 +78,7 @@ else
     export PATH=$PATH
 fi
 
-plugins=(vi-mode gitfast cake gem lein mvn node redis-cli github heroku mercurial npm pip sublime vagrant coffee golang bower scala rebar colorize zsh-syntax-highlighting cabal cpanm sbt mix tmux tmuxinator rbenv pod autojump colored-man docker rsync extract encode64 history-substring-search copyfile colorize zsh_reload jsontools grunt adb coffee docker-compose terraform)
+plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli github heroku mercurial pip vagrant coffee golang bower scala rebar colorize zsh-syntax-highlighting cabal cpanm sbt mix tmux tmuxinator rbenv pod autojump colored-man docker rsync extract encode64 history-substring-search copyfile colorize zsh_reload jsontools grunt adb coffee docker-compose terraform ember-cli)
 
 plugins+=(cabal-upgrade functional)
 
@@ -165,6 +167,14 @@ function code () {
     fi
 }
 
+function update-git-bzr() {
+    wget https://raw.github.com/felipec/git-remote-bzr/master/git-remote-bzr -O /usr/local/opt/git/bin/git-remote-bzr && \
+    chmod +x /usr/local/opt/git/bin/git-remote-bzr && \
+    rm /usr/local/bin/git-remote-bzr 2>/dev/null && \
+    ln -s /usr/local/opt/git/bin/git-remote-bzr /usr/local/bin/git-remote-bzr && \
+    vim /usr/local/opt/git/bin/git-remote-bzr
+}
+
 function update() {
     setopt localoptions rmstarsilent
 
@@ -208,3 +218,4 @@ function update() {
 eval "$(rbenv init -)"
 
 test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
+
