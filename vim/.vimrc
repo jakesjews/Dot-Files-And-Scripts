@@ -6,13 +6,17 @@ map <C-c> <leader>c<space>
 map <C-f> <leader><leader>w
 map <silent> <C-@> <Plug>DashSearch
 vmap <Enter> <Plug>(EasyAlign)
-
 vnoremap . :normal .<CR>
 nnoremap <C-e> :e.<CR>
+
+if has('nvim')
+    tnoremap <C-w> <C-\><C-n> 
+endif
 
 set backspace=indent,eol,start
 set backupdir=$HOME/.vim/swap//
 set directory=$HOME/.vim/swap//
+set undodir=~/.vim/undo//
 
 set nocompatible
 syntax on
@@ -24,8 +28,7 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall
 endif
 
-
-" Plugins
+"" Plugins
 call plug#begin('~/.vim/plugged')
 
 Plug 'Lokaltog/vim-easymotion'
@@ -41,49 +44,31 @@ Plug 'vim-scripts/taglist.vim'
 Plug 'vim-scripts/guicolorscheme.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'rking/ag.vim'
-Plug 'Valloric/YouCompleteMe',           { 'do': './install.sh --clang-completer --omnisharp-completer' }
+Plug 'Valloric/YouCompleteMe',           { 'do': './install.py --clang-completer --omnisharp-completer --gocode-completer' }
 Plug 'rizzatti/dash.vim',                { 'on': '<Plug>DashSearch' }
 Plug 'junegunn/vim-easy-align',          { 'on': '<Plug>(EasyAlign)' }
 Plug 'junegunn/rainbow_parentheses.vim', { 'for': ['lisp', 'clojure', 'scheme'] }
-
 Plug 'tpope/vim-rails', { 'for': 'ruby' } 
-Plug 'derekwyatt/vim-scala'
-Plug 'jimenezrick/vimerl'
-Plug 'kchmck/vim-coffee-script'
-Plug 'digitaltoad/vim-jade'
-Plug 'wavded/vim-stylus'
-Plug 'fatih/vim-go'
+
 Plug 'adimit/prolog.vim'
-Plug 'leafgarland/typescript-vim'
-Plug 'mustache/vim-mustache-handlebars'
-Plug 'heartsentwined/vim-emblem'
 Plug 'vim-scripts/applescript.vim'
 Plug 'kongo2002/fsharp-vim'
-Plug 'elixir-lang/vim-elixir'
-Plug 'tpope/vim-cucumber'
-Plug 'slim-template/vim-slim'
-Plug 'ekalinin/Dockerfile.vim'
-Plug 'vim-scripts/Vim-R-plugin'
-Plug 'JuliaLang/julia-vim'
 Plug 'OmniSharp/omnisharp-vim'
-Plug 'rust-lang/rust.vim'
 Plug 'andreimaxim/vim-io'
 Plug 'guersam/vim-j'
 Plug 'idris-hackers/idris-vim'
 Plug 'ngn/vim-apl'
 Plug 'b4winckler/vim-objc'
 Plug 'tfnico/vim-gradle'
-Plug 'petRUShka/vim-opencl'
 Plug 'lambdatoast/elm.vim'
 Plug 'brandonbloom/vim-factor'
-Plug 'toyamarinyon/vim-swift'
 Plug 'alunny/pegjs-vim'
-Plug 'jplaut/vim-arduino-ino'
 Plug 'zah/nimrod.vim'
-Plug 'cespare/vim-toml'
+Plug 'JuliaLang/julia-vim'
+Plug 'rust-lang/rust.vim'
+Plug 'sheerun/vim-polyglot'
 
 "" Clojure
-Plug 'guns/vim-clojure-static', { 'for': 'clojure' }
 Plug 'tpope/vim-leiningen', { 'for': 'clojure' }
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 
@@ -102,6 +87,8 @@ au BufRead,BufNewFile *.AWL set filetype=asm
 
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf = 0
+
+let g:polyglot_disabled = ['rust', 'julia']
 
 augroup rainbow_lisp
     autocmd!
@@ -162,6 +149,7 @@ set wildmenu
 set formatoptions+=j " Delete comment character when joining commented lines
 set autoread
 set fileformats+=mac
+"set showmatch
 
 setglobal tags-=./tags tags-=./tags; tags^=./tags;
 
@@ -180,7 +168,7 @@ endif
 if executable('ag')
   set grepprg=ag\ --nogroup\ --nocolor
 
-  let g:agprg="ag --smart-case --column"
+  let g:ag_prg="ag --smart-case --column"
   let g:ctrlp_user_command = 'ag %s -S -l --depth -1 --nocolor -g ""'
   let g:ctrlp_use_caching = 0
 endif
@@ -196,4 +184,3 @@ else
   highlight Normal ctermbg=NONE
   highlight nonText ctermbg=NONE
 endif
-
