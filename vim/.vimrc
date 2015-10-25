@@ -42,6 +42,7 @@ Plug 'tpope/vim-repeat'
 Plug 'kurkale6ka/vim-sequence'
 Plug 'vim-scripts/taglist.vim'
 Plug 'vim-scripts/guicolorscheme.vim'
+Plug 'flazz/vim-colorschemes'
 Plug 'scrooloose/nerdtree'
 Plug 'rking/ag.vim'
 Plug 'Valloric/YouCompleteMe',           { 'do': './install.py --clang-completer --omnisharp-completer --gocode-completer' }
@@ -49,6 +50,7 @@ Plug 'rizzatti/dash.vim',                { 'on': '<Plug>DashSearch' }
 Plug 'junegunn/vim-easy-align',          { 'on': '<Plug>(EasyAlign)' }
 Plug 'junegunn/rainbow_parentheses.vim', { 'for': ['lisp', 'clojure', 'scheme'] }
 Plug 'tpope/vim-rails', { 'for': 'ruby' } 
+Plug 'moll/vim-node'
 
 Plug 'adimit/prolog.vim'
 Plug 'vim-scripts/applescript.vim'
@@ -63,7 +65,7 @@ Plug 'tfnico/vim-gradle'
 Plug 'lambdatoast/elm.vim'
 Plug 'brandonbloom/vim-factor'
 Plug 'alunny/pegjs-vim'
-Plug 'zah/nimrod.vim'
+Plug 'zah/nim.vim'
 Plug 'JuliaLang/julia-vim'
 Plug 'rust-lang/rust.vim'
 Plug 'sheerun/vim-polyglot'
