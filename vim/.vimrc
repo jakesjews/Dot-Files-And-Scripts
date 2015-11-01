@@ -145,7 +145,6 @@ set clipboard=unnamed
 set foldmethod=indent
 set foldlevel=99
 set splitright
-set cursorline
 set ruler
 set wildmenu
 set formatoptions+=j " Delete comment character when joining commented lines
