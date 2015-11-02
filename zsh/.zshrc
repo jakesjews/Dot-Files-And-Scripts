@@ -78,7 +78,7 @@ else
     export PATH=$PATH
 fi
 
-plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli github heroku mercurial pip vagrant coffee golang bower scala rebar colorize zsh-syntax-highlighting cabal cpanm sbt mix tmux tmuxinator rbenv pod autojump colored-man docker rsync extract encode64 history-substring-search copyfile colorize zsh_reload jsontools grunt adb coffee docker-compose terraform ember-cli)
+plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli github heroku mercurial pip vagrant coffee golang bower scala rebar colorize zsh-syntax-highlighting cabal cpanm sbt mix tmux tmuxinator rbenv pod autojump colored-man docker rsync extract encode64 history-substring-search copyfile colorize zsh_reload jsontools grunt adb coffee docker-compose terraform ember-cli colored-man-pages)
 
 plugins+=(cabal-upgrade functional)
 
@@ -185,8 +185,7 @@ function update() {
     brew tap --repair
     rm -rf /Library/Caches/Homebrew/*
 
-    brew remove neovim
-    brew install --HEAD neovim
+    vim +PlugUpdate +PlugUpgrade +qa
 
     npm cache clean
     npm update -g
@@ -213,9 +212,10 @@ function update() {
     meteor update
 
     vagrant plugin update
+
+    cd /Users/jacob/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting && git pull
 }
 
 eval "$(rbenv init -)"
 
-test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
 
