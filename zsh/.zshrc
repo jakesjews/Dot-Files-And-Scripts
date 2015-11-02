@@ -213,7 +213,9 @@ function update() {
 
     vagrant plugin update
 
-    cd /Users/jacob/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting && git pull
+    pushd /Users/jacob/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+    git pull
+    popd
 }
 
 eval "$(rbenv init -)"
