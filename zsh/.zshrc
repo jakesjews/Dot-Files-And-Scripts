@@ -13,8 +13,6 @@ export LANG=en_US.UTF-8
 export DISABLE_AUTO_UPDATE="true"
 export ZSH_THEME="robbyrussell"
 export EDITOR='nvim'
-#export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-#export NVIM_TUI_ENABLE_TRUE_COLOR=1
 export SHELL='zsh'
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
@@ -42,7 +40,6 @@ if [[ $platform == 'macos' ]]; then
     export JBOSS_HOME=/usr/local/opt/wildfly-as/libexec
 
     export ANDROID_HOME=/usr/local/opt/android-sdk
-    #export POSTGRES_ROOT=/Applications/Postgres.app/Contents/Versions/9.4/bin
     export CLOJURE_ROOT=/Users/jacob/.cljr/bin
     export CABAL_ROOT=/Users/jacob/.cabal/bin
     export TEX_ROOT=/usr/textbin
@@ -56,13 +53,6 @@ if [[ $platform == 'macos' ]]; then
     export EMSCRIPTEN_ROOT="/Users/jacob/dev/sdk/emscripten/emscripten/1.13.0"
     export HAXE_STD_PATH="/usr/local/lib/haxe/std"
     export BREW_ROOT=/usr/local/bin:/usr/local/sbin
-
-    # python
-    #export WORKON_HOME=$HOME/.virtualenvs
-    #export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python2.7
-    #export VIRTUALENVWRAPPER_VIRTUALENV_ARGS='--no-site-packages'
-    #export PIP_VIRTUALENV_BASE=$WORKON_HOME
-    #export PIP_RESPECT_VIRTUALENV=true
 
     export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/Library/Frameworks/Mono.framework/Versions/Current/lib/pkgconfig
 
@@ -78,7 +68,7 @@ else
     export PATH=$PATH
 fi
 
-plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli github heroku mercurial pip vagrant coffee golang bower scala rebar colorize zsh-syntax-highlighting cabal cpanm sbt mix tmux tmuxinator rbenv pod autojump colored-man docker rsync extract encode64 history-substring-search copyfile colorize zsh_reload jsontools grunt adb coffee docker-compose terraform ember-cli colored-man-pages)
+plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli github heroku mercurial pip vagrant coffee golang bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator rbenv pod autojump colored-man docker rsync extract encode64 history-substring-search copyfile colorize zsh_reload jsontools grunt adb coffee docker-compose terraform ember-cli colored-man-pages)
 
 plugins+=(cabal-upgrade functional)
 
@@ -114,6 +104,7 @@ if [[ $platform == 'macos' ]]; then
     alias jconsole="/Applications/j64-802/bin/jconsole"
     alias postgres="postgres -D /usr/local/var/postgres"
     alias Factor="/Applications/factor/factor"
+    alias galileo="screen /dev/tty.usbserial 115200"
 fi
 
 alias space="du -d 1 -h | sort -n"
@@ -130,6 +121,7 @@ alias findproc="pgrep -ifL"
 alias sl="ls"
 alias mocha="mocha --bail"
 alias npmo="npm outdated"
+alias npmog="npm outdated -g"
 alias orig="rm **/*.orig"
 
 # OPAM configuration
@@ -155,16 +147,7 @@ function restart-eflex() {
 
 function update-servers() {
     ansible all -m "apt" -a "upgrade=dist update_cache=true" -s
-}
-
-function code () {
-    if [[ $# = 0 ]]
-    then
-        open -a "Visual Studio Code"
-    else
-        [[ $1 = /* ]] && F="$1" || F="$PWD/${1#./}"
-        open -a "Visual Studio Code" --args "$F"
-    fi
+    ansible all -m "shell" -a "apt-get autoremove -y" -s
 }
 
 function update-git-bzr() {
@@ -177,13 +160,14 @@ function update-git-bzr() {
 
 function update() {
     setopt localoptions rmstarsilent
+    unsetopt nomatch
 
     brew update
     brew upgrade --all
     brew cleanup -s
     brew prune
     brew tap --repair
-    rm -rf /Library/Caches/Homebrew/*
+    rm -rf /Library/Caches/Homebrew/* 2>/dev/null
 
     vim +PlugUpdate +PlugUpgrade +qa
 
@@ -212,12 +196,10 @@ function update() {
     meteor update
 
     vagrant plugin update
-
-    pushd /Users/jacob/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
-    git pull
-    popd
 }
 
 eval "$(rbenv init -)"
 
+[ -s "/Users/jacob/.dnx/dnvm/dnvm.sh" ] && . "/Users/jacob/.dnx/dnvm/dnvm.sh" # Load dnvm
 
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
