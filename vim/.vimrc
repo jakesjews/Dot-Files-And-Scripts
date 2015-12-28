@@ -51,6 +51,7 @@ Plug 'junegunn/vim-easy-align',          { 'on': '<Plug>(EasyAlign)' }
 Plug 'junegunn/rainbow_parentheses.vim', { 'for': ['lisp', 'clojure', 'scheme'] }
 Plug 'tpope/vim-rails', { 'for': 'ruby' } 
 Plug 'moll/vim-node'
+Plug 'Konfekt/FastFold'
 
 Plug 'adimit/prolog.vim'
 Plug 'vim-scripts/applescript.vim'
@@ -60,14 +61,11 @@ Plug 'andreimaxim/vim-io'
 Plug 'guersam/vim-j'
 Plug 'idris-hackers/idris-vim'
 Plug 'ngn/vim-apl'
-Plug 'b4winckler/vim-objc'
 Plug 'tfnico/vim-gradle'
-Plug 'lambdatoast/elm.vim'
 Plug 'brandonbloom/vim-factor'
 Plug 'alunny/pegjs-vim'
 Plug 'zah/nim.vim'
 Plug 'JuliaLang/julia-vim'
-Plug 'rust-lang/rust.vim'
 Plug 'sheerun/vim-polyglot'
 
 "" Clojure
@@ -76,21 +74,20 @@ Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 
 call plug#end()
 
-autocmd BufNewFile,BufReadPost *.coffee setl shiftwidth=2 tabstop=2
-autocmd BufNewFile,BufReadPost *.feature setl shiftwidth=2 tabstop=2
-autocmd BufNewFile,BufReadPost *.js setl shiftwidth=2 tabstop=2
-autocmd BufNewFile,BufReadPost *.rb setl shiftwidth=2 tabstop=2
-autocmd BufNewFile,BufReadPost *.styl setl shiftwidth=2 tabstop=2
-autocmd BufNewFile,BufReadPost *.yml setl shiftwidth=2 tabstop=2
-autocmd BufNewFile,BufReadPost *.cs setl shiftwidth=4 tabstop=4
-autocmd BufNewFile,BufReadPost *.jade setl shiftwidth=2 tabstop=2
+au FileType python setl sw=2 sts=2 et
+au FileType coffee setl sw=2 sts=2 et
+au FileType javascript setl sw=2 sts=2 et
+au FileType ruby setl sw=2 sts=2 et
+au FileType styl setl sw=2 sts=2 et
+au FileType yml setl sw=2 sts=2 et
+au FileType cs setl sw=4 sts=4 et
 
 au BufRead,BufNewFile *.AWL set filetype=asm
 
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf = 0
 
-let g:polyglot_disabled = ['rust', 'julia']
+let g:polyglot_disabled = ['julia']
 
 augroup rainbow_lisp
     autocmd!
