@@ -58,7 +58,7 @@ if [[ $platform == 'macos' ]]; then
 
     export NODE_PATH=/usr/local/lib/node_modules
     export COFFEELINT_CONFIG=/Users/jacob/.coffeelintrc
-    export JAVA_MAN=/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/man
+    export JAVA_MAN=/Library/Java/JavaVirtualMachines/jdk1.8.0_72.jdk/Contents/Home/man
     export ERLANG_MAN=/usr/local/opt/erlang/lib/erlang/man
 
     export MANPATH=$JAVA_MAN:$MANPATH:$ERLANG_MAN
@@ -123,6 +123,8 @@ alias mocha="mocha --bail"
 alias npmo="npm outdated"
 alias npmog="npm outdated -g"
 alias orig="rm **/*.orig"
+alias build-objc="xcrun -sdk macosx clang -x objective-c -Xclang -fmodules"
+alias git-oops="git reset --soft HEAD~"
 
 # OPAM configuration
 . /Users/jacob/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true

@@ -17,11 +17,12 @@ windows:
       panes:
         - iced 
         - cd webApp && npm i && bower i && ./run.sh
-  - mono:
+  - webApi:
       layout: main-horizontal
       panes:
         - csharp
         - cd WebApi && nuget restore EFlex.sln && cd WebApi && xbuild && xsp4 --port 8080
+        - cd api && ./run
   - trigger:
       layout: main-horizontal
       panes:

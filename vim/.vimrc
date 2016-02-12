@@ -37,15 +37,15 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/syntastic'
 Plug 'tpope/vim-surround'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'editorconfig/editorconfig-vim'
+"Plug 'editorconfig/editorconfig-vim'
 Plug 'tpope/vim-repeat'
 Plug 'kurkale6ka/vim-sequence'
 Plug 'vim-scripts/taglist.vim'
 Plug 'vim-scripts/guicolorscheme.vim'
 Plug 'flazz/vim-colorschemes'
-Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree', { 'tag': '5.0.0' }
 Plug 'rking/ag.vim'
-Plug 'Valloric/YouCompleteMe',           { 'do': './install.py --clang-completer --omnisharp-completer --gocode-completer' }
+Plug 'Valloric/YouCompleteMe',           { 'do': './install.py --clang-completer --omnisharp-completer --gocode-completer --tern-completer --racer-completer' }
 Plug 'rizzatti/dash.vim',                { 'on': '<Plug>DashSearch' }
 Plug 'junegunn/vim-easy-align',          { 'on': '<Plug>(EasyAlign)' }
 Plug 'junegunn/rainbow_parentheses.vim', { 'for': ['lisp', 'clojure', 'scheme'] }
@@ -66,28 +66,20 @@ Plug 'brandonbloom/vim-factor'
 Plug 'alunny/pegjs-vim'
 Plug 'zah/nim.vim'
 Plug 'JuliaLang/julia-vim'
+Plug 'rust-lang/rust.vim'
 Plug 'sheerun/vim-polyglot'
 
-"" Clojure
+""" Clojure
 Plug 'tpope/vim-leiningen', { 'for': 'clojure' }
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 
 call plug#end()
 
-au FileType python setl sw=2 sts=2 et
-au FileType coffee setl sw=2 sts=2 et
-au FileType javascript setl sw=2 sts=2 et
-au FileType ruby setl sw=2 sts=2 et
-au FileType styl setl sw=2 sts=2 et
-au FileType yml setl sw=2 sts=2 et
-au FileType cs setl sw=4 sts=4 et
-
-au BufRead,BufNewFile *.AWL set filetype=asm
-
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf = 0
+let g:ycm_rust_src_path = '/usr/local/source/rust/src'
 
-let g:polyglot_disabled = ['julia']
+let g:polyglot_disabled = ['julia', 'rust']
 
 augroup rainbow_lisp
     autocmd!
@@ -120,8 +112,6 @@ autocmd InsertLeave *.cs SyntasticCheck
 "preview)
 set completeopt=longest,menuone,preview
 
-"nnoremap <leader><space> :OmniSharpGetCodeActions<cr>
-
 let g:syntastic_cpp_compiler = 'clang++'
 let g:syntastic_cpp_compiler_options = ' -std=c++11 -stdlib=libc++'
 
@@ -147,7 +137,17 @@ set wildmenu
 set formatoptions+=j " Delete comment character when joining commented lines
 set autoread
 set fileformats+=mac
-"set showmatch
+
+au FileType python setl sw=2 sts=2 ts=2 et
+au FileType coffee setl sw=2 sts=2 ts=2 et
+au FileType javascript setl sw=2 sts=2 ts=2 et
+au FileType javascript set sw=2 sts=2 ts=2 et
+au FileType ruby setl sw=2 sts=2 ts=2 et
+au FileType styl setl sw=2 sts=2 ts=2 et
+au FileType yml setl sw=2 sts=2 ts=2 et
+au FileType cs setl sw=4 sts=4 ts=4 et
+
+au BufRead,BufNewFile *.AWL set filetype=asm
 
 setglobal tags-=./tags tags-=./tags; tags^=./tags;
 
