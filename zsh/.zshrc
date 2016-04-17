@@ -68,7 +68,7 @@ else
     export PATH=$PATH
 fi
 
-plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli github heroku mercurial pip vagrant coffee golang bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator rbenv pod autojump colored-man docker rsync extract encode64 history-substring-search copyfile colorize zsh_reload jsontools grunt adb coffee docker-compose terraform ember-cli colored-man-pages)
+plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli github heroku mercurial pip vagrant coffee golang bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod autojump colored-man docker rsync extract encode64 history-substring-search copyfile colorize zsh_reload jsontools grunt adb coffee docker-compose terraform ember-cli colored-man-pages)
 
 plugins+=(cabal-upgrade functional)
 
@@ -110,7 +110,7 @@ fi
 alias space="du -d 1 -h | sort -n"
 alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
 alias ag='ag -i'
-alias dockersetup='eval "$(docker-machine env dev)"'
+alias dockersetup='eval "$(docker-machine env)"'
 alias l="ls"
 alias immersiveapps='ssh immersiveapplications.com'
 alias mmv="noglob zmv -W"
@@ -125,6 +125,9 @@ alias npmog="npm outdated -g"
 alias orig="rm **/*.orig"
 alias build-objc="xcrun -sdk macosx clang -x objective-c -Xclang -fmodules"
 alias git-oops="git reset --soft HEAD~"
+alias git-clear="git reset --hard HEAD"
+alias flush-cache="sudo dscacheutil -flushcache;sudo killall -HUP mDNSResponder; say cache flushed"
+alias mux="tmuxinator"
 
 # OPAM configuration
 . /Users/jacob/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
@@ -153,10 +156,10 @@ function update-servers() {
 }
 
 function update-git-bzr() {
-    wget https://raw.github.com/felipec/git-remote-bzr/master/git-remote-bzr -O /usr/local/opt/git/bin/git-remote-bzr && \
-    chmod +x /usr/local/opt/git/bin/git-remote-bzr && \
-    rm /usr/local/bin/git-remote-bzr 2>/dev/null && \
-    ln -s /usr/local/opt/git/bin/git-remote-bzr /usr/local/bin/git-remote-bzr && \
+    wget https://raw.github.com/felipec/git-remote-bzr/master/git-remote-bzr -O /usr/local/opt/git/bin/git-remote-bzr
+    chmod +x /usr/local/opt/git/bin/git-remote-bzr
+    rm /usr/local/bin/git-remote-bzr 2>/dev/null
+    ln -s /usr/local/opt/git/bin/git-remote-bzr /usr/local/bin/git-remote-bzr
     vim /usr/local/opt/git/bin/git-remote-bzr
 }
 
@@ -200,8 +203,6 @@ function update() {
     vagrant plugin update
 }
 
-eval "$(rbenv init -)"
-
 [ -s "/Users/jacob/.dnx/dnvm/dnvm.sh" ] && . "/Users/jacob/.dnx/dnvm/dnvm.sh" # Load dnvm
-
+eval "$(rbenv init -)"
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

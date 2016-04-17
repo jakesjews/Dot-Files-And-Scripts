@@ -4,6 +4,7 @@ nnoremap x "_x
 
 map <C-c> <leader>c<space>
 map <C-f> <leader><leader>w
+map <C-t> :TestNearest<CR>
 map <silent> <C-@> <Plug>DashSearch
 vmap <Enter> <Plug>(EasyAlign)
 vnoremap . :normal .<CR>
@@ -34,10 +35,10 @@ call plug#begin('~/.vim/plugged')
 Plug 'Lokaltog/vim-easymotion'
 Plug 'tpope/vim-dispatch'
 Plug 'scrooloose/nerdcommenter'
-Plug 'scrooloose/syntastic'
+Plug 'blueyed/neomake', { 'branch': 'process-by-tabwin' }
 Plug 'tpope/vim-surround'
 Plug 'ctrlpvim/ctrlp.vim'
-"Plug 'editorconfig/editorconfig-vim'
+Plug 'editorconfig/editorconfig-vim'
 Plug 'tpope/vim-repeat'
 Plug 'kurkale6ka/vim-sequence'
 Plug 'vim-scripts/taglist.vim'
@@ -52,6 +53,7 @@ Plug 'junegunn/rainbow_parentheses.vim', { 'for': ['lisp', 'clojure', 'scheme'] 
 Plug 'tpope/vim-rails', { 'for': 'ruby' } 
 Plug 'moll/vim-node'
 Plug 'Konfekt/FastFold'
+Plug 'janko-m/vim-test'
 
 Plug 'adimit/prolog.vim'
 Plug 'vim-scripts/applescript.vim'
@@ -77,9 +79,11 @@ call plug#end()
 
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf = 0
-let g:ycm_rust_src_path = '/usr/local/source/rust/src'
+let g:ycm_rust_src_path = '/usr/local/src/rust/src'
 
 let g:polyglot_disabled = ['julia', 'rust']
+
+let test#strategy = "neovim"
 
 augroup rainbow_lisp
     autocmd!
@@ -103,17 +107,11 @@ let NERDTreeIgnore = [
 \ '\.sublime-project', '\.DotSettings',  'TestResult.xml'
 \ ]
 
-""" Omnisharp settings
-" check for csharp syntax errors and code issues with syntastic
-let g:syntastic_cs_checkers = ['syntax']
-autocmd InsertLeave *.cs SyntasticCheck
+autocmd! BufWritePost * Neomake
 
 "don't autoselect first item in omnicomplete, show if only one item (for
 "preview)
 set completeopt=longest,menuone,preview
-
-let g:syntastic_cpp_compiler = 'clang++'
-let g:syntastic_cpp_compiler_options = ' -std=c++11 -stdlib=libc++'
 
 set showcmd
 set tabstop=4

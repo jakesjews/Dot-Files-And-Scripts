@@ -12,31 +12,18 @@ ui = auto
 default = simple
 
 [diff]
-tool = bcomp
+tool = bc3
 
 [difftool]
+bc3 = trustExitCode
 prompt = false
-
-[difftool "bcomp"]
-trustExitCode = true
-cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE"
-
-[merge]
-tool = bcomp
-
-[mergetool]
-prompt = false
-
-[mergetool "bcomp"]
-trustExitCode = true
-cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
 
 [difftool "sourcetree"]
-	cmd = /usr/local/bin/bcomp $LOCAL $REMOTE
-	path = 
+	cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\"
+	path = -ro
 
 [mergetool "sourcetree"]
-	cmd = /usr/local/bin/bcomp $LOCAL $REMOTE $BASE $MERGED
+	cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
 	trustExitCode = true
 
 [filter "media"]
@@ -50,6 +37,16 @@ smudge = git hawser smudge %f
 required = true
 
 [filter "lfs"]
-clean = git lfs clean %f
-smudge = git lfs smudge %f
+clean = git-lfs clean %f
+smudge = git-lfs smudge %f
 required = true
+
+[merge]
+tool = bc3
+
+[mergetool]
+bc3 = trustExitCode
+
+[pager]
+diff = diff-so-fancy | less --tabs=1,5 -RFX
+show = diff-so-fancy | less --tabs=1,5 -RFX

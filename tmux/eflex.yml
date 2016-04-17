@@ -15,7 +15,7 @@ windows:
   - webApp:
       layout: main-horizontal
       panes:
-        - iced 
+        - coffee 
         - cd webApp && npm i && bower i && ./run.sh
   - webApi:
       layout: main-horizontal
