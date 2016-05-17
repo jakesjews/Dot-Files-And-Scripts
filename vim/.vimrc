@@ -45,7 +45,7 @@ Plug 'vim-scripts/taglist.vim'
 Plug 'vim-scripts/guicolorscheme.vim'
 Plug 'flazz/vim-colorschemes'
 Plug 'scrooloose/nerdtree', { 'tag': '5.0.0' }
-Plug 'rking/ag.vim'
+Plug 'mhinz/vim-grepper'
 Plug 'Valloric/YouCompleteMe',           { 'do': './install.py --clang-completer --omnisharp-completer --gocode-completer --tern-completer --racer-completer' }
 Plug 'rizzatti/dash.vim',                { 'on': '<Plug>DashSearch' }
 Plug 'junegunn/vim-easy-align',          { 'on': '<Plug>(EasyAlign)' }
@@ -54,6 +54,7 @@ Plug 'tpope/vim-rails', { 'for': 'ruby' }
 Plug 'moll/vim-node'
 Plug 'Konfekt/FastFold'
 Plug 'janko-m/vim-test'
+Plug 'slashmili/alchemist.vim', { 'for': ['elixir'] }
 
 Plug 'adimit/prolog.vim'
 Plug 'vim-scripts/applescript.vim'
@@ -66,9 +67,7 @@ Plug 'ngn/vim-apl'
 Plug 'tfnico/vim-gradle'
 Plug 'brandonbloom/vim-factor'
 Plug 'alunny/pegjs-vim'
-Plug 'zah/nim.vim'
 Plug 'JuliaLang/julia-vim'
-Plug 'rust-lang/rust.vim'
 Plug 'sheerun/vim-polyglot'
 
 """ Clojure

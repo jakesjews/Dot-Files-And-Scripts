@@ -132,8 +132,6 @@ alias mux="tmuxinator"
 # OPAM configuration
 . /Users/jacob/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 
-source ~/.xsh
-
 function mcd() { mkdir "$1" && cd "$1"; }
 
 function enable-mono-tools() { 
@@ -181,7 +179,7 @@ function update() {
      
     gem update
 
-    julia -e "Pkg.update()"
+    #julia -e "Pkg.update()"
 
     expect -c "
         set timeout -1
@@ -198,9 +196,9 @@ function update() {
         close $spawn_id
     "
 
-    meteor update
+    #meteor update
 
-    vagrant plugin update
+    #vagrant plugin update
 }
 
 [ -s "/Users/jacob/.dnx/dnvm/dnvm.sh" ] && . "/Users/jacob/.dnx/dnvm/dnvm.sh" # Load dnvm
