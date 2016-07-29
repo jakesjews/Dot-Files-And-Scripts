@@ -16,10 +16,10 @@ export EDITOR='nvim'
 export SHELL='zsh'
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
-export NNTPSERVER='news.tweaknews.eu'
 export MUTT_EMAIL_ADDRESS="jakesjews@gmail.com"
 export MUTT_REALNAME="Jacob Jewell"
 export MUTT_SMTP_URL="smtp://jakesjews@smtp.gmail.com:587/"
+export NNTPSERVER='news.tweaknews.eu'
 export DISABLE_AUTO_TITLE=true
 export TERM=xterm-256color
 export ANSIBLE_HOST_KEY_CHECKING=False
@@ -62,13 +62,14 @@ if [[ $platform == 'macos' ]]; then
     export ERLANG_MAN=/usr/local/opt/erlang/lib/erlang/man
 
     export MANPATH=$JAVA_MAN:$MANPATH:$ERLANG_MAN
+    export DOTNET_PATH=/usr/local/share/dotnet
 
-    export PATH=/bin:/sbin:$CABAL_ROOT:$BREW_ROOT:$CLOJURE_ROOT:$LATEX_ROOT:$HEROKU_ROOT:$VMWARE_ROOT:$GO_ROOT:$PATH:$NPM_ROOT:$TEX_ROOT:$CUDA_ROOT:$JBOSS_ROOT:$EMSCRIPTEN_ROOT:$JAVA_HOME/bin
+    export PATH=/bin:/sbin:$CABAL_ROOT:$BREW_ROOT:$CLOJURE_ROOT:$LATEX_ROOT:$HEROKU_ROOT:$VMWARE_ROOT:$GO_ROOT:$PATH:$NPM_ROOT:$TEX_ROOT:$CUDA_ROOT:$JBOSS_ROOT:$EMSCRIPTEN_ROOT:$DOTNET_PATH:$JAVA_HOME/bin
 else
     export PATH=$PATH
 fi
 
-plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli github heroku mercurial pip vagrant coffee golang bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod autojump colored-man docker rsync extract encode64 history-substring-search copyfile colorize zsh_reload jsontools grunt adb coffee docker-compose terraform ember-cli colored-man-pages)
+plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli github heroku mercurial pip vagrant coffee golang bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod autojump colored-man docker rsync extract encode64 history-substring-search copyfile colorize zsh_reload jsontools grunt adb coffee docker-compose terraform ember-cli colored-man-pages rust react-native)
 
 plugins+=(cabal-upgrade functional)
 
@@ -107,14 +108,14 @@ if [[ $platform == 'macos' ]]; then
     alias galileo="screen /dev/tty.usbserial 115200"
 fi
 
-alias space="du -d 1 -h | sort -n"
+alias space="du -hs * | gsort -h"
 alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
 alias ag='ag -i'
 alias dockersetup='eval "$(docker-machine env)"'
 alias l="ls"
 alias immersiveapps='ssh immersiveapplications.com'
 alias mmv="noglob zmv -W"
-alias xsp="xsp4 --port 8080"
+alias xsp="MONO_OPTIONS=--arch=64 xsp4 --port 8080"
 alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
 alias ms='mocha --fgrep "#slow" -i'
 alias findproc="pgrep -ifL"
@@ -149,8 +150,13 @@ function restart-eflex() {
 }
 
 function update-servers() {
-    ansible all -m "apt" -a "upgrade=dist update_cache=true" -s
-    ansible all -m "shell" -a "apt-get autoremove -y" -s
+    ansible all -m "apt" -a "upgrade=dist autoremove=true update_cache=true" -s
+}
+
+function update-eflexwork {
+    ansible eflexwork -m "shell" -a "docker pull eflexsystems/eflex:stable" -s --ask-sudo-pass
+    ansible eflexwork -m "shell" -a "docker stop eflex && docker rm eflex && eflex-start" -s --ask-sudo-pass
+    ansible eflexwork -m "shell" -a "sudo docker exec eflex /bin/bash -c 'cd /home/eflex/eflex && make migrate'" -s --ask-sudo-pass
 }
 
 function update-git-bzr() {
@@ -179,7 +185,7 @@ function update() {
      
     gem update
 
-    #julia -e "Pkg.update()"
+    julia -e "Pkg.update()"
 
     expect -c "
         set timeout -1
@@ -196,9 +202,9 @@ function update() {
         close $spawn_id
     "
 
-    #meteor update
+    meteor update
 
-    #vagrant plugin update
+    vagrant plugin update
 }
 
 [ -s "/Users/jacob/.dnx/dnvm/dnvm.sh" ] && . "/Users/jacob/.dnx/dnvm/dnvm.sh" # Load dnvm
