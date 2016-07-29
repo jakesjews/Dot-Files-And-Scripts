@@ -35,7 +35,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'Lokaltog/vim-easymotion'
 Plug 'tpope/vim-dispatch'
 Plug 'scrooloose/nerdcommenter'
-Plug 'blueyed/neomake', { 'branch': 'process-by-tabwin' }
+Plug 'neomake/neomake'
 Plug 'tpope/vim-surround'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'editorconfig/editorconfig-vim'
@@ -45,8 +45,9 @@ Plug 'vim-scripts/taglist.vim'
 Plug 'vim-scripts/guicolorscheme.vim'
 Plug 'flazz/vim-colorschemes'
 Plug 'scrooloose/nerdtree', { 'tag': '5.0.0' }
-Plug 'mhinz/vim-grepper'
-Plug 'Valloric/YouCompleteMe',           { 'do': './install.py --clang-completer --omnisharp-completer --gocode-completer --tern-completer --racer-completer' }
+"Plug 'mhinz/vim-grepper'
+Plug 'rking/ag.vim'
+Plug 'Valloric/YouCompleteMe',           { 'do': './install.py --clang-completer --omnisharp-completer --gocode-completer --racer-completer' }
 Plug 'rizzatti/dash.vim',                { 'on': '<Plug>DashSearch' }
 Plug 'junegunn/vim-easy-align',          { 'on': '<Plug>(EasyAlign)' }
 Plug 'junegunn/rainbow_parentheses.vim', { 'for': ['lisp', 'clojure', 'scheme'] }
@@ -54,6 +55,7 @@ Plug 'tpope/vim-rails', { 'for': 'ruby' }
 Plug 'moll/vim-node'
 Plug 'Konfekt/FastFold'
 Plug 'janko-m/vim-test'
+Plug 'AndrewRadev/ember_tools.vim'
 Plug 'slashmili/alchemist.vim', { 'for': ['elixir'] }
 
 Plug 'adimit/prolog.vim'
@@ -80,7 +82,7 @@ let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_rust_src_path = '/usr/local/src/rust/src'
 
-let g:polyglot_disabled = ['julia', 'rust']
+let g:polyglot_disabled = ['julia']
 
 let test#strategy = "neovim"
 
