@@ -40,10 +40,3 @@ windows:
       layout: main-horizontal
       panes:
         - zkCli
-  - ssh:
-      layout: even-vertical
-      panes:
-        - ssh eflex@eflexplclistener
-        - ssh eflex@eflexwebserver
-        - ssh eflex@eflexmongo
-

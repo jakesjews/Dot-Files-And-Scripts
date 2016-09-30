@@ -47,7 +47,7 @@ Plug 'flazz/vim-colorschemes'
 Plug 'scrooloose/nerdtree', { 'tag': '5.0.0' }
 "Plug 'mhinz/vim-grepper'
 Plug 'rking/ag.vim'
-Plug 'Valloric/YouCompleteMe',           { 'do': './install.py --clang-completer --omnisharp-completer --gocode-completer --racer-completer' }
+Plug 'Valloric/YouCompleteMe',           { 'do': './install.py --clang-completer --omnisharp-completer --gocode-completer --racer-completer --tern-completer' }
 Plug 'rizzatti/dash.vim',                { 'on': '<Plug>DashSearch' }
 Plug 'junegunn/vim-easy-align',          { 'on': '<Plug>(EasyAlign)' }
 Plug 'junegunn/rainbow_parentheses.vim', { 'for': ['lisp', 'clojure', 'scheme'] }
@@ -59,7 +59,6 @@ Plug 'AndrewRadev/ember_tools.vim'
 Plug 'slashmili/alchemist.vim', { 'for': ['elixir'] }
 
 Plug 'adimit/prolog.vim'
-Plug 'vim-scripts/applescript.vim'
 Plug 'kongo2002/fsharp-vim'
 Plug 'OmniSharp/omnisharp-vim'
 Plug 'andreimaxim/vim-io'
@@ -70,6 +69,7 @@ Plug 'tfnico/vim-gradle'
 Plug 'brandonbloom/vim-factor'
 Plug 'alunny/pegjs-vim'
 Plug 'JuliaLang/julia-vim'
+Plug 'rust-lang/rust.vim'
 Plug 'sheerun/vim-polyglot'
 
 """ Clojure
@@ -82,7 +82,7 @@ let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_rust_src_path = '/usr/local/src/rust/src'
 
-let g:polyglot_disabled = ['julia']
+let g:polyglot_disabled = ['julia', 'rust']
 
 let test#strategy = "neovim"
 
@@ -105,7 +105,7 @@ let NERDTreeIgnore = [
 \ 'npm-debug.log',     '\.swp$',         '\.tmp$',        '\.reh$', 
 \ '.DS_Store',         '\.iml$',         '\~$',           '.sublime-workspace', 
 \ '\.userprefs$',      '.tm_properties', '\.jar$',        '\.pfx$', 
-\ '\.sublime-project', '\.DotSettings',  'TestResult.xml'
+\ '\.sublime-project', '\.DotSettings',  'TestResult.xml', 'target'
 \ ]
 
 autocmd! BufWritePost * Neomake
@@ -142,7 +142,7 @@ au FileType coffee setl sw=2 sts=2 ts=2 et
 au FileType javascript setl sw=2 sts=2 ts=2 et
 au FileType javascript set sw=2 sts=2 ts=2 et
 au FileType ruby setl sw=2 sts=2 ts=2 et
-au FileType styl setl sw=2 sts=2 ts=2 et
+au FileType stylus setl sw=2 sts=2 ts=2 et
 au FileType yml setl sw=2 sts=2 ts=2 et
 au FileType cs setl sw=4 sts=4 ts=4 et
 

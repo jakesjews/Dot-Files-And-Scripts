@@ -53,6 +53,9 @@ if [[ $platform == 'macos' ]]; then
     export EMSCRIPTEN_ROOT="/Users/jacob/dev/sdk/emscripten/emscripten/1.13.0"
     export HAXE_STD_PATH="/usr/local/lib/haxe/std"
     export BREW_ROOT=/usr/local/bin:/usr/local/sbin
+    export CARGO_ROOT=~/.cargo/bin
+    export OPENSSL_INCLUDE_DIR=`brew --prefix openssl`/include
+    export OPENSSL_LIB_DIR=`brew --prefix openssl`/lib
 
     export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/Library/Frameworks/Mono.framework/Versions/Current/lib/pkgconfig
 
@@ -64,7 +67,7 @@ if [[ $platform == 'macos' ]]; then
     export MANPATH=$JAVA_MAN:$MANPATH:$ERLANG_MAN
     export DOTNET_PATH=/usr/local/share/dotnet
 
-    export PATH=/bin:/sbin:$CABAL_ROOT:$BREW_ROOT:$CLOJURE_ROOT:$LATEX_ROOT:$HEROKU_ROOT:$VMWARE_ROOT:$GO_ROOT:$PATH:$NPM_ROOT:$TEX_ROOT:$CUDA_ROOT:$JBOSS_ROOT:$EMSCRIPTEN_ROOT:$DOTNET_PATH:$JAVA_HOME/bin
+    export PATH=/bin:/sbin:$CABAL_ROOT:$BREW_ROOT:$CLOJURE_ROOT:$LATEX_ROOT:$HEROKU_ROOT:$VMWARE_ROOT:$GO_ROOT:$PATH:$NPM_ROOT:$TEX_ROOT:$CUDA_ROOT:$JBOSS_ROOT:$EMSCRIPTEN_ROOT:$DOTNET_PATH:$JAVA_HOME/bin:$CARGO_ROOT
 else
     export PATH=$PATH
 fi
@@ -151,6 +154,7 @@ function restart-eflex() {
 
 function update-servers() {
     ansible all -m "apt" -a "upgrade=dist autoremove=true update_cache=true" -s
+    ansible all -m "shell" -a "apt-get autoremove -y" -s
 }
 
 function update-eflexwork {
@@ -172,11 +176,12 @@ function update() {
     unsetopt nomatch
 
     brew update
-    brew upgrade --all
+    #brew upgrade --all
     brew cleanup -s
     brew prune
     brew tap --repair
     rm -rf /Library/Caches/Homebrew/* 2>/dev/null
+    rm -rf ~/Library/Caches/Homebrew/* 2>/dev/null
 
     vim +PlugUpdate +PlugUpgrade +qa
 
@@ -205,6 +210,7 @@ function update() {
     meteor update
 
     vagrant plugin update
+    mix archive.install https://github.com/phoenixframework/archives/raw/master/phoenix_new.ez --force
 }
 
 [ -s "/Users/jacob/.dnx/dnvm/dnvm.sh" ] && . "/Users/jacob/.dnx/dnvm/dnvm.sh" # Load dnvm
