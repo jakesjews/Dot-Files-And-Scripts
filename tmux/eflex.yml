@@ -36,7 +36,4 @@ windows:
       layout: main-horizontal
       panes:
         - redis-cli
-  - zookeeper:
-      layout: main-horizontal
-      panes:
-        - zkCli
+

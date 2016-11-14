@@ -113,7 +113,7 @@ fi
 
 alias space="du -hs * | gsort -h"
 alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
-alias ag='ag -i'
+#alias ag='ag -i'
 alias dockersetup='eval "$(docker-machine env)"'
 alias l="ls"
 alias immersiveapps='ssh immersiveapplications.com'
@@ -176,7 +176,7 @@ function update() {
     unsetopt nomatch
 
     brew update
-    #brew upgrade --all
+    brew upgrade
     brew cleanup -s
     brew prune
     brew tap --repair
