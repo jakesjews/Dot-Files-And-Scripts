@@ -46,7 +46,7 @@ Plug 'vim-scripts/guicolorscheme.vim'
 Plug 'flazz/vim-colorschemes'
 Plug 'scrooloose/nerdtree', { 'tag': '5.0.0' }
 "Plug 'mhinz/vim-grepper'
-Plug 'rking/ag.vim'
+Plug 'mileszs/ack.vim'
 Plug 'Valloric/YouCompleteMe',           { 'do': './install.py --clang-completer --omnisharp-completer --gocode-completer --racer-completer --tern-completer' }
 Plug 'rizzatti/dash.vim',                { 'on': '<Plug>DashSearch' }
 Plug 'junegunn/vim-easy-align',          { 'on': '<Plug>(EasyAlign)' }
@@ -69,7 +69,6 @@ Plug 'tfnico/vim-gradle'
 Plug 'brandonbloom/vim-factor'
 Plug 'alunny/pegjs-vim'
 Plug 'JuliaLang/julia-vim'
-Plug 'rust-lang/rust.vim'
 Plug 'sheerun/vim-polyglot'
 
 """ Clojure
@@ -82,7 +81,7 @@ let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_rust_src_path = '/usr/local/src/rust/src'
 
-let g:polyglot_disabled = ['julia', 'rust']
+let g:polyglot_disabled = ['julia']
 
 let test#strategy = "neovim"
 
@@ -163,11 +162,14 @@ if &term =~ '^screen'
   set ttymouse=xterm2
 endif
 
-if executable('ag')
-  set grepprg=ag\ --nogroup\ --nocolor
+if executable('rg')
+  let g:ackprg = 'rg --vimgrep --smart-case'   
+  cnoreabbrev rg Ack
+  cnoreabbrev rG Ack
+  cnoreabbrev Rg Ack
+  cnoreabbrev RG Ack
 
-  let g:ag_prg="ag --smart-case --column"
-  let g:ctrlp_user_command = 'ag %s -S -l --depth -1 --nocolor -g ""'
+  let g:ctrlp_user_command = 'rg %s -S -l --files -g ""'
   let g:ctrlp_use_caching = 0
 endif
 

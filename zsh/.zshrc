@@ -21,7 +21,6 @@ export MUTT_REALNAME="Jacob Jewell"
 export MUTT_SMTP_URL="smtp://jakesjews@smtp.gmail.com:587/"
 export NNTPSERVER='news.tweaknews.eu'
 export DISABLE_AUTO_TITLE=true
-export TERM=xterm-256color
 export ANSIBLE_HOST_KEY_CHECKING=False
 export KEYTIMEOUT=1
 export LISTMAX=9998
@@ -113,7 +112,8 @@ fi
 
 alias space="du -hs * | gsort -h"
 alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
-#alias ag='ag -i'
+alias ag='ag -i'
+alias rg='rg -i'
 alias dockersetup='eval "$(docker-machine env)"'
 alias l="ls"
 alias immersiveapps='ssh immersiveapplications.com'
@@ -132,6 +132,7 @@ alias git-oops="git reset --soft HEAD~"
 alias git-clear="git reset --hard HEAD"
 alias flush-cache="sudo dscacheutil -flushcache;sudo killall -HUP mDNSResponder; say cache flushed"
 alias mux="tmuxinator"
+alias redis-master="redis-cli -h qa-plclistener -p 26379 SENTINEL get-master-addr-by-name eflex-redis"
 
 # OPAM configuration
 . /Users/jacob/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true

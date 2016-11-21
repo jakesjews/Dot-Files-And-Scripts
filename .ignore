@@ -8,8 +8,10 @@ vendor
 *.dll
 eFlexI18n.js
 bin
+obj
 locales
 tmp
 Content/Scripts
 evisionPortable
 swagger-ui
+dist
