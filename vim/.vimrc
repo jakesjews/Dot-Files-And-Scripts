@@ -20,6 +20,7 @@ set directory=$HOME/.vim/swap//
 set undodir=~/.vim/undo//
 
 set nocompatible
+set hlsearch
 syntax on
 filetype plugin indent on
 

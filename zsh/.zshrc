@@ -71,7 +71,7 @@ else
     export PATH=$PATH
 fi
 
-plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli github heroku mercurial pip vagrant coffee golang bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod autojump colored-man docker rsync extract encode64 history-substring-search copyfile colorize zsh_reload jsontools grunt adb coffee docker-compose terraform ember-cli colored-man-pages rust react-native)
+plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli github heroku mercurial pip vagrant coffee golang bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod autojump colored-man docker rsync extract encode64 history-substring-search copyfile colorize zsh_reload jsontools grunt adb coffee docker-compose terraform ember-cli colored-man-pages rust react-native yarn)
 
 plugins+=(cabal-upgrade functional)
 
@@ -132,7 +132,7 @@ alias git-oops="git reset --soft HEAD~"
 alias git-clear="git reset --hard HEAD"
 alias flush-cache="sudo dscacheutil -flushcache;sudo killall -HUP mDNSResponder; say cache flushed"
 alias mux="tmuxinator"
-alias redis-master="redis-cli -h qa-plclistener -p 26379 SENTINEL get-master-addr-by-name eflex-redis"
+alias redis-master="redis-cli -h qa-db -p 26379 SENTINEL get-master-addr-by-name eflex-redis"
 
 # OPAM configuration
 . /Users/jacob/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
