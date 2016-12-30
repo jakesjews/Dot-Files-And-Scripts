@@ -58,9 +58,7 @@ else
     export PATH=$PATH
 fi
 
-plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli github heroku mercurial pip vagrant coffee golang bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod autojump colored-man docker rsync extract encode64 history-substring-search copyfile colorize zsh_reload jsontools grunt adb coffee docker-compose terraform ember-cli colored-man-pages rust react-native yarn)
-
-plugins+=(cabal-upgrade functional)
+plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli github heroku mercurial pip vagrant coffee go bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod autojump docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp)
 
 if [[ $platform == 'macos' ]]; then
     plugins+=(brew osx)
