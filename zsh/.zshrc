@@ -16,10 +16,6 @@ export EDITOR='nvim'
 export SHELL='zsh'
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
-export MUTT_EMAIL_ADDRESS="jakesjews@gmail.com"
-export MUTT_REALNAME="Jacob Jewell"
-export MUTT_SMTP_URL="smtp://jakesjews@smtp.gmail.com:587/"
-export NNTPSERVER='news.tweaknews.eu'
 export DISABLE_AUTO_TITLE=true
 export ANSIBLE_HOST_KEY_CHECKING=False
 export KEYTIMEOUT=1
@@ -31,26 +27,17 @@ if [[ $platform == 'macos' ]]; then
 
     export NEOVIM_LISTEN_ADDRESS=/tmp/neovim.sock
     export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
-    export HIVE_HOME=/usr/local/Cellar/hive/0.10.0/libexec
-    export GROOVY_HOME=/usr/local/Cellar/groovy/2.0.5/libexec
     export GOPATH=/usr/local/lib/go
-    export VOLDEMORT_HOME='/usr/local/Cellar/voldemort/0.90.1/libexec'
-    export LIQUIBASE_HOME="/usr/local/Cellar/liquibase/3.1.1/libexec"
-    export JBOSS_HOME=/usr/local/opt/wildfly-as/libexec
 
     export ANDROID_HOME=/usr/local/opt/android-sdk
     export CLOJURE_ROOT=/Users/jacob/.cljr/bin
     export CABAL_ROOT=/Users/jacob/.cabal/bin
     export TEX_ROOT=/usr/textbin
     export LATEX_ROOT=/usr/local/texlive/2014/bin/x86_64-darwin
-    export CUDA_ROOT=/Developer/NVIDIA/CUDA-5.5/bin
     export VMWARE_ROOT="/Applications/VMware Fusion.app/Contents/Library"
     export HEROKU_ROOT=/usr/local/heroku/bin
     export NPM_ROOT=/usr/local/share/npm/bin
     export GO_ROOT=$GOPATH/bin
-    export JBOSS_ROOT=$JBOSS_HOME/bin
-    export EMSCRIPTEN_ROOT="/Users/jacob/dev/sdk/emscripten/emscripten/1.13.0"
-    export HAXE_STD_PATH="/usr/local/lib/haxe/std"
     export BREW_ROOT=/usr/local/bin:/usr/local/sbin
     export CARGO_ROOT=~/.cargo/bin
     export OPENSSL_INCLUDE_DIR=`brew --prefix openssl`/include
@@ -97,13 +84,11 @@ zmodload zsh/net/tcp
 unsetopt listambiguous
 
 source "$ZSH/oh-my-zsh.sh"
-bindkey '\e[A' history-substring-search-up
-bindkey '\e[B' history-substring-search-down
 
 if [[ $platform == 'macos' ]]; then
     alias vim='shell=bash nvim'
+    alias vi='shell=bash nvim'
     alias 9="/usr/local/bin/9"
-    alias profile-mono="LD_LIBRARY_PATH=/Library/Frameworks/Mono.framework/Versions/Current/lib MONO_OPTIONS=--profile=log:noalloc xsp"
     alias jconsole="/Applications/j64-802/bin/jconsole"
     alias postgres="postgres -D /usr/local/var/postgres"
     alias Factor="/Applications/factor/factor"
@@ -112,22 +97,14 @@ fi
 
 alias space="du -hs * | gsort -h"
 alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
-alias ag='ag -i'
 alias rg='rg -i'
-alias dockersetup='eval "$(docker-machine env)"'
 alias l="ls"
-alias immersiveapps='ssh immersiveapplications.com'
-alias mmv="noglob zmv -W"
 alias xsp="MONO_OPTIONS=--arch=64 xsp4 --port 8080"
 alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
 alias ms='mocha --fgrep "#slow" -i'
-alias findproc="pgrep -ifL"
 alias sl="ls"
-alias mocha="mocha --bail"
 alias npmo="npm outdated"
 alias npmog="npm outdated -g"
-alias orig="rm **/*.orig"
-alias build-objc="xcrun -sdk macosx clang -x objective-c -Xclang -fmodules"
 alias git-oops="git reset --soft HEAD~"
 alias git-clear="git reset --hard HEAD"
 alias flush-cache="sudo dscacheutil -flushcache;sudo killall -HUP mDNSResponder; say cache flushed"
@@ -138,10 +115,6 @@ alias redis-master="redis-cli -h qa-db -p 26379 SENTINEL get-master-addr-by-name
 . /Users/jacob/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 
 function mcd() { mkdir "$1" && cd "$1"; }
-
-function enable-mono-tools() { 
-    export DYLD_FALLBACK_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib:/Library/Frameworks/Mono.framework/Versions/Current/lib
-}
 
 function clean-eflex() {
     tmux kill-server
@@ -162,14 +135,6 @@ function update-eflexwork {
     ansible eflexwork -m "shell" -a "docker pull eflexsystems/eflex:stable" -s --ask-sudo-pass
     ansible eflexwork -m "shell" -a "docker stop eflex && docker rm eflex && eflex-start" -s --ask-sudo-pass
     ansible eflexwork -m "shell" -a "sudo docker exec eflex /bin/bash -c 'cd /home/eflex/eflex && make migrate'" -s --ask-sudo-pass
-}
-
-function update-git-bzr() {
-    wget https://raw.github.com/felipec/git-remote-bzr/master/git-remote-bzr -O /usr/local/opt/git/bin/git-remote-bzr
-    chmod +x /usr/local/opt/git/bin/git-remote-bzr
-    rm /usr/local/bin/git-remote-bzr 2>/dev/null
-    ln -s /usr/local/opt/git/bin/git-remote-bzr /usr/local/bin/git-remote-bzr
-    vim /usr/local/opt/git/bin/git-remote-bzr
 }
 
 function update() {
@@ -214,6 +179,5 @@ function update() {
     mix archive.install https://github.com/phoenixframework/archives/raw/master/phoenix_new.ez --force
 }
 
-[ -s "/Users/jacob/.dnx/dnvm/dnvm.sh" ] && . "/Users/jacob/.dnx/dnvm/dnvm.sh" # Load dnvm
 eval "$(rbenv init -)"
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

@@ -16,7 +16,7 @@ windows:
       layout: main-horizontal
       panes:
         - coffee 
-        - cd webApp && npm i && bower i && ./run.sh
+        - cd webApp && ./run.sh
   - webApi:
       layout: main-horizontal
       panes:
