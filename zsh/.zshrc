@@ -52,6 +52,7 @@ if [[ $platform == 'macos' ]]; then
 
     export MANPATH=$JAVA_MAN:$MANPATH:$ERLANG_MAN
     export DOTNET_PATH=/usr/local/share/dotnet
+    export RUST_SRC_PATH=/usr/local/src/rust/src
 
     export PATH=/bin:/sbin:$CABAL_ROOT:$BREW_ROOT:$CLOJURE_ROOT:$LATEX_ROOT:$HEROKU_ROOT:$VMWARE_ROOT:$GO_ROOT:$PATH:$NPM_ROOT:$TEX_ROOT:$CUDA_ROOT:$JBOSS_ROOT:$EMSCRIPTEN_ROOT:$DOTNET_PATH:$JAVA_HOME/bin:$CARGO_ROOT
 else

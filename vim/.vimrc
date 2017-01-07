@@ -46,9 +46,9 @@ Plug 'vim-scripts/taglist.vim'
 Plug 'vim-scripts/guicolorscheme.vim'
 Plug 'flazz/vim-colorschemes'
 Plug 'scrooloose/nerdtree', { 'tag': '5.0.0' }
-"Plug 'mhinz/vim-grepper'
 Plug 'mileszs/ack.vim'
-Plug 'Valloric/YouCompleteMe',           { 'do': './install.py --clang-completer --omnisharp-completer --gocode-completer --racer-completer --tern-completer' }
+Plug 'racer-rust/vim-racer'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'rizzatti/dash.vim',                { 'on': '<Plug>DashSearch' }
 Plug 'junegunn/vim-easy-align',          { 'on': '<Plug>(EasyAlign)' }
 Plug 'junegunn/rainbow_parentheses.vim', { 'for': ['lisp', 'clojure', 'scheme'] }
@@ -56,8 +56,9 @@ Plug 'tpope/vim-rails', { 'for': 'ruby' }
 Plug 'moll/vim-node'
 Plug 'Konfekt/FastFold'
 Plug 'janko-m/vim-test'
+Plug 'thinca/vim-ref'
 Plug 'AndrewRadev/ember_tools.vim'
-Plug 'slashmili/alchemist.vim', { 'for': ['elixir'] }
+Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
 
 Plug 'adimit/prolog.vim'
 Plug 'kongo2002/fsharp-vim'
@@ -70,22 +71,36 @@ Plug 'tfnico/vim-gradle'
 Plug 'brandonbloom/vim-factor'
 Plug 'alunny/pegjs-vim'
 Plug 'JuliaLang/julia-vim'
+Plug 'reasonml/vim-reason-loader'
+Plug 'elixir-lang/vim-elixir', { 'for': 'elixir' }
 Plug 'sheerun/vim-polyglot'
 
 """ Clojure
 Plug 'tpope/vim-leiningen', { 'for': 'clojure' }
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 
+Plug 'awetzel/elixir.nvim', { 'do': 'yes \| ./install.sh', 'for': 'elixir' }
+Plug 'mhartington/deoplete-typescript', { 'for': 'typescript' }
+Plug 'fishbullet/deoplete-ruby', { 'for': 'ruby' }
+Plug 'JuliaEditorSupport/deoplete-julia', { 'for': 'julia' }
+Plug 'tweekmonster/deoplete-clang2'
+Plug 'zchee/deoplete-go', { 'do': 'make', 'for': 'go' }
+
 call plug#end()
 
-let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
-let g:ycm_confirm_extra_conf = 0
-let g:ycm_rust_src_path = '/usr/local/src/rust/src'
-let g:ycm_python_binary_path = '/usr/local/bin/python3'
-
-let g:polyglot_disabled = ['julia']
+let g:polyglot_disabled = ['julia', 'elixir']
 
 let test#strategy = "neovim"
+
+let g:racer_cmd = "/Users/jacob/.cargo/bin/racer"
+
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#file#enable_buffer_path = 1
+let g:deoplete#keyword_patterns = {}
+let g:deoplete#keyword_patterns.clojure = '[\w!$%&*+/:<=>?@\^_~\-\.#]*'
+
+inoremap <expr><Down> pumvisible() ? "\<C-n>" : "\<Down>"
+inoremap <expr><Up>   pumvisible() ? "\<C-p>" : "\<Up>"
 
 augroup rainbow_lisp
     autocmd!
