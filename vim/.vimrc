@@ -73,6 +73,7 @@ Plug 'alunny/pegjs-vim'
 Plug 'JuliaLang/julia-vim'
 Plug 'reasonml/vim-reason-loader'
 Plug 'elixir-lang/vim-elixir', { 'for': 'elixir' }
+Plug 'robbles/logstash.vim'
 Plug 'sheerun/vim-polyglot'
 
 """ Clojure
@@ -162,6 +163,7 @@ au FileType stylus setl sw=2 sts=2 ts=2 et
 au FileType yml setl sw=2 sts=2 ts=2 et
 au FileType cs setl sw=4 sts=4 ts=4 et
 au FileType pug setl sw=2 sts=2 ts=2 et
+au FileType logstash setl sw=2 sts=2 ts=2 et
 
 au BufRead,BufNewFile *.AWL set filetype=asm
 

@@ -92,6 +92,7 @@ if [[ $platform == 'macos' ]]; then
     alias postgres="postgres -D /usr/local/var/postgres"
     alias Factor="/Applications/factor/factor"
     alias galileo="screen /dev/tty.usbserial 115200"
+    alias git=hub
 fi
 
 alias space="du -hs * | gsort -h"
@@ -140,6 +141,7 @@ function update() {
     setopt localoptions rmstarsilent
     unsetopt nomatch
 
+    echo "updating homebrew packages"
     brew update
     brew upgrade
     brew cleanup -s
@@ -148,14 +150,15 @@ function update() {
     rm -rf /Library/Caches/Homebrew/* 2>/dev/null
     rm -rf ~/Library/Caches/Homebrew/* 2>/dev/null
 
+    echo "updating vim plugins"
     vim +PlugUpdate +PlugUpgrade +qa
 
+    echo "updating npm packages"
     npm cache clean
     npm update -g
      
+    echo "updating ruby gems"
     gem update
-
-    julia -e "Pkg.update()"
 
     expect -c "
         set timeout -1
@@ -172,10 +175,20 @@ function update() {
         close $spawn_id
     "
 
+    echo "updating julia packages"
+    julia -e "Pkg.update()"
+
+    echo "updating meteor"
     meteor update
 
+    echo "updating vagrant plugins"
     vagrant plugin update
+
+    echo "updating phoenix"
     mix archive.install https://github.com/phoenixframework/archives/raw/master/phoenix_new.ez --force
+
+    echo "update tex packages"
+    tlmgr update --self --all --reinstall-forcibly-removed
 }
 
 eval "$(rbenv init -)"
