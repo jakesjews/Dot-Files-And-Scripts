@@ -34,7 +34,6 @@ if [[ $platform == 'macos' ]]; then
     export CABAL_ROOT=/Users/jacob/.cabal/bin
     export TEX_ROOT=/usr/textbin
     export LATEX_ROOT=/usr/local/texlive/2014/bin/x86_64-darwin
-    export VMWARE_ROOT="/Applications/VMware Fusion.app/Contents/Library"
     export HEROKU_ROOT=/usr/local/heroku/bin
     export NPM_ROOT=/usr/local/share/npm/bin
     export GO_ROOT=$GOPATH/bin
@@ -54,7 +53,7 @@ if [[ $platform == 'macos' ]]; then
     export DOTNET_PATH=/usr/local/share/dotnet
     export RUST_SRC_PATH=/usr/local/src/rust/src
 
-    export PATH=/bin:/sbin:$CABAL_ROOT:$BREW_ROOT:$CLOJURE_ROOT:$LATEX_ROOT:$HEROKU_ROOT:$VMWARE_ROOT:$GO_ROOT:$PATH:$NPM_ROOT:$TEX_ROOT:$CUDA_ROOT:$JBOSS_ROOT:$EMSCRIPTEN_ROOT:$DOTNET_PATH:$JAVA_HOME/bin:$CARGO_ROOT
+    export PATH=/bin:/sbin:$CABAL_ROOT:$BREW_ROOT:$CLOJURE_ROOT:$LATEX_ROOT:$HEROKU_ROOT:$GO_ROOT:$PATH:$NPM_ROOT:$TEX_ROOT:$CUDA_ROOT:$JBOSS_ROOT:$EMSCRIPTEN_ROOT:$DOTNET_PATH:$JAVA_HOME/bin:$CARGO_ROOT
 else
     export PATH=$PATH
 fi
@@ -92,7 +91,6 @@ if [[ $platform == 'macos' ]]; then
     alias postgres="postgres -D /usr/local/var/postgres"
     alias Factor="/Applications/factor/factor"
     alias galileo="screen /dev/tty.usbserial 115200"
-    alias git=hub
 fi
 
 alias space="du -hs * | gsort -h"
@@ -131,10 +129,17 @@ function update-servers() {
     ansible all -m "shell" -a "apt-get autoremove -y" -s
 }
 
-function update-eflexwork {
+function update-eflexwork() {
     ansible eflexwork -m "shell" -a "docker pull eflexsystems/eflex:stable" -s --ask-sudo-pass
     ansible eflexwork -m "shell" -a "docker stop eflex && docker rm eflex && eflex-start" -s --ask-sudo-pass
     ansible eflexwork -m "shell" -a "sudo docker exec eflex /bin/bash -c 'cd /home/eflex/eflex && make migrate'" -s --ask-sudo-pass
+}
+
+function git-rename() {
+    old_branch=$(git rev-parse --abbrev-ref HEAD)
+    git branch -m "$old_branch" "$1"
+    git push origin ":$old_branch"
+    git push --set-upstream origin "$1"
 }
 
 function update() {
@@ -154,7 +159,6 @@ function update() {
     vim +PlugUpdate +PlugUpgrade +qa
 
     echo "updating npm packages"
-    npm cache clean
     npm update -g
      
     echo "updating ruby gems"
@@ -189,6 +193,9 @@ function update() {
 
     echo "update tex packages"
     tlmgr update --self --all --reinstall-forcibly-removed
+
+    echo "outdated cask packages"
+    brew cask outdated
 }
 
 eval "$(rbenv init -)"
