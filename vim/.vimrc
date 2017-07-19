@@ -41,10 +41,10 @@ Plug 'tpope/vim-surround'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'tpope/vim-repeat'
-Plug 'vim-scripts/taglist.vim'
+Plug 'majutsushi/tagbar'
 Plug 'vim-scripts/guicolorscheme.vim'
 Plug 'flazz/vim-colorschemes'
-Plug 'scrooloose/nerdtree', { 'tag': '5.0.0' }
+Plug 'scrooloose/nerdtree'
 Plug 'mileszs/ack.vim'
 Plug 'racer-rust/vim-racer'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -55,7 +55,6 @@ Plug 'tpope/vim-rails', { 'for': 'ruby' }
 Plug 'moll/vim-node'
 Plug 'Konfekt/FastFold'
 Plug 'janko-m/vim-test'
-Plug 'thinca/vim-ref'
 Plug 'AndrewRadev/ember_tools.vim'
 Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
 
@@ -70,13 +69,12 @@ Plug 'tfnico/vim-gradle'
 Plug 'brandonbloom/vim-factor'
 Plug 'alunny/pegjs-vim'
 Plug 'JuliaLang/julia-vim'
-Plug 'reasonml/vim-reason-loader'
-Plug 'elixir-lang/vim-elixir', { 'for': 'elixir' }
 Plug 'robbles/logstash.vim'
+Plug 'reasonml-editor/vim-reason'
 Plug 'sheerun/vim-polyglot'
 
 """ Clojure
-Plug 'tpope/vim-leiningen', { 'for': 'clojure' }
+Plug 'tpope/vim-salve', { 'for': 'clojure' }
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 
 Plug 'awetzel/elixir.nvim', { 'do': 'yes \| ./install.sh', 'for': 'elixir' }
@@ -98,6 +96,12 @@ let g:deoplete#enable_at_startup = 1
 let g:deoplete#file#enable_buffer_path = 1
 let g:deoplete#keyword_patterns = {}
 let g:deoplete#keyword_patterns.clojure = '[\w!$%&*+/:<=>?@\^_~\-\.#]*'
+
+let g:deoplete#omni_patterns = {}
+let g:deoplete#omni_patterns.reason = '[^. *\t]\.\w*\|\h\w*|#'
+let g:deoplete#omni_patterns.ocaml = '[^. *\t]\.\w*|\s\w*|#'
+let g:deoplete#sources = {}
+let g:deoplete#sources.reason = ['omni', 'buffer']
 
 inoremap <expr><Down> pumvisible() ? "\<C-n>" : "\<Down>"
 inoremap <expr><Up>   pumvisible() ? "\<C-p>" : "\<Up>"

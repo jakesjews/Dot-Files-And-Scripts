@@ -11,7 +11,9 @@ bin
 obj
 locales
 tmp
-Content/Scripts
 evisionPortable
 swagger-ui
 dist
+WebApi/Content
+yarn.lock
+license.txt
