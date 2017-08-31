@@ -188,8 +188,9 @@ function update() {
     echo "updating vagrant plugins"
     vagrant plugin update
 
-    echo "updating phoenix"
-    mix archive.install https://github.com/phoenixframework/archives/raw/master/phoenix_new.ez --force
+    echo "updating phoenix and mix"
+    mix local.hex --force
+    mix archive.install https://github.com/phoenixframework/archives/raw/master/phx_new.ez --force
 
     echo "update tex packages"
     tlmgr update --self --all --reinstall-forcibly-removed
