@@ -2,7 +2,8 @@
 
 name: eflex
 root: ~/dev/eflexsystems/eflex
-pre:
+
+on_project_first_start:
   - sudo proftpd
 
 windows:

@@ -19,12 +19,12 @@ bc3 = trustExitCode
 prompt = false
 
 [difftool "sourcetree"]
-	cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\"
-	path = -ro
+cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\"
+path = -ro
 
 [mergetool "sourcetree"]
-	cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
-	trustExitCode = true
+cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
+trustExitCode = true
 
 [filter "media"]
 required = true
@@ -37,9 +37,10 @@ smudge = git hawser smudge %f
 required = true
 
 [filter "lfs"]
-clean = git-lfs clean %f
-smudge = git-lfs smudge %f
 required = true
+process = git-lfs filter-process
+clean = git-lfs clean -- %f
+smudge = git-lfs smudge -- %f
 
 [merge]
 tool = bc3

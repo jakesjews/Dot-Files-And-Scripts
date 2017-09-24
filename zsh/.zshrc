@@ -26,7 +26,7 @@ if [[ $platform == 'macos' ]]; then
     source ~/.homebrew.token
 
     export NEOVIM_LISTEN_ADDRESS=/tmp/neovim.sock
-    export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
+    export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-9.jdk/Contents/Home
     export GOPATH=/usr/local/lib/go
 
     export ANDROID_HOME=/usr/local/opt/android-sdk
@@ -41,21 +41,16 @@ if [[ $platform == 'macos' ]]; then
     export CARGO_ROOT=~/.cargo/bin
     export OPENSSL_INCLUDE_DIR=`brew --prefix openssl`/include
     export OPENSSL_LIB_DIR=`brew --prefix openssl`/lib
+    export PERLBREW_ROOT=~/.perl5/perlbrew
 
     export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/Library/Frameworks/Mono.framework/Versions/Current/lib/pkgconfig
 
     export NODE_PATH=/usr/local/lib/node_modules
     export COFFEELINT_CONFIG=/Users/jacob/.coffeelintrc
-    export JAVA_MAN=/Library/Java/JavaVirtualMachines/jdk1.8.0_72.jdk/Contents/Home/man
-    export ERLANG_MAN=/usr/local/opt/erlang/lib/erlang/man
-
-    export MANPATH=$JAVA_MAN:$MANPATH:$ERLANG_MAN
     export DOTNET_PATH=/usr/local/share/dotnet
     export RUST_SRC_PATH=/usr/local/src/rust/src
 
     export PATH=/bin:/sbin:$CABAL_ROOT:$BREW_ROOT:$CLOJURE_ROOT:$LATEX_ROOT:$HEROKU_ROOT:$GO_ROOT:$PATH:$NPM_ROOT:$TEX_ROOT:$CUDA_ROOT:$JBOSS_ROOT:$EMSCRIPTEN_ROOT:$DOTNET_PATH:$JAVA_HOME/bin:$CARGO_ROOT
-else
-    export PATH=$PATH
 fi
 
 plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli github heroku mercurial pip vagrant coffee go bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod autojump docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp)
@@ -95,7 +90,7 @@ fi
 
 alias space="du -hs * | gsort -h"
 alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
-alias rg='rg -i'
+alias rg='rg -S'
 alias l="ls"
 alias xsp="MONO_OPTIONS=--arch=64 xsp4 --port 8080"
 alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
@@ -112,8 +107,6 @@ alias redis-master="redis-cli -h qa-db -p 26379 SENTINEL get-master-addr-by-name
 # OPAM configuration
 . /Users/jacob/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 
-function mcd() { mkdir "$1" && cd "$1"; }
-
 function clean-eflex() {
     tmux kill-server
     sudo pkill proftpd
@@ -125,14 +118,8 @@ function restart-eflex() {
 }
 
 function update-servers() {
-    ansible all -m "apt" -a "upgrade=dist autoremove=true update_cache=true" -s
-    ansible all -m "shell" -a "apt-get autoremove -y" -s
-}
-
-function update-eflexwork() {
-    ansible eflexwork -m "shell" -a "docker pull eflexsystems/eflex:stable" -s --ask-sudo-pass
-    ansible eflexwork -m "shell" -a "docker stop eflex && docker rm eflex && eflex-start" -s --ask-sudo-pass
-    ansible eflexwork -m "shell" -a "sudo docker exec eflex /bin/bash -c 'cd /home/eflex/eflex && make migrate'" -s --ask-sudo-pass
+    ansible all -m "apt" -a "upgrade=dist autoremove=true update_cache=true" -b
+    ansible all -m "shell" -a "apt-get autoremove -y" -b
 }
 
 function git-rename() {
@@ -188,8 +175,9 @@ function update() {
     echo "updating vagrant plugins"
     vagrant plugin update
 
-    echo "updating phoenix"
-    mix archive.install https://github.com/phoenixframework/archives/raw/master/phoenix_new.ez --force
+    echo "updating phoenix and mix"
+    mix local.hex --force
+    mix archive.install https://github.com/phoenixframework/archives/raw/master/phx_new.ez --force
 
     echo "update tex packages"
     tlmgr update --self --all --reinstall-forcibly-removed

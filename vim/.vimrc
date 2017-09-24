@@ -48,8 +48,8 @@ Plug 'scrooloose/nerdtree'
 Plug 'mileszs/ack.vim'
 Plug 'racer-rust/vim-racer'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'rizzatti/dash.vim',                { 'on': '<Plug>DashSearch' }
-Plug 'junegunn/vim-easy-align',          { 'on': '<Plug>(EasyAlign)' }
+Plug 'rizzatti/dash.vim', { 'on': '<Plug>DashSearch' }
+Plug 'junegunn/vim-easy-align', { 'on': '<Plug>(EasyAlign)' }
 Plug 'junegunn/rainbow_parentheses.vim', { 'for': ['lisp', 'clojure', 'scheme'] }
 Plug 'tpope/vim-rails', { 'for': 'ruby' } 
 Plug 'moll/vim-node'
@@ -60,7 +60,7 @@ Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
 
 Plug 'adimit/prolog.vim'
 Plug 'kongo2002/fsharp-vim'
-Plug 'OmniSharp/omnisharp-vim'
+Plug 'OmniSharp/omnisharp-vim', { 'do': 'cd server && msbuild' }
 Plug 'andreimaxim/vim-io'
 Plug 'guersam/vim-j'
 Plug 'idris-hackers/idris-vim'
@@ -71,6 +71,7 @@ Plug 'alunny/pegjs-vim'
 Plug 'JuliaLang/julia-vim'
 Plug 'robbles/logstash.vim'
 Plug 'reasonml-editor/vim-reason'
+Plug 'tomlion/vim-solidity'
 Plug 'sheerun/vim-polyglot'
 
 """ Clojure
@@ -158,7 +159,8 @@ set autoread
 set fileformats+=mac
 
 au FileType python setl sw=2 sts=2 ts=2 et
-au FileType coffee setl sw=2 sts=2 ts=2 et
+"au FileType coffee setl sw=2 sts=2 ts=2 et
+au FileType coffee setl sw=4 sts=4 ts=4 et
 au FileType javascript setl sw=2 sts=2 ts=2 et
 au FileType javascript set sw=2 sts=2 ts=2 et
 au FileType ruby setl sw=2 sts=2 ts=2 et
