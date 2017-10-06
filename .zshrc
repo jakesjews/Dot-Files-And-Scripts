@@ -39,8 +39,8 @@ if [[ $platform == 'macos' ]]; then
     export GO_ROOT=$GOPATH/bin
     export BREW_ROOT=/usr/local/bin:/usr/local/sbin
     export CARGO_ROOT=~/.cargo/bin
-    export OPENSSL_INCLUDE_DIR=`brew --prefix openssl`/include
-    export OPENSSL_LIB_DIR=`brew --prefix openssl`/lib
+    export OPENSSL_INCLUDE_DIR=/usr/local/opt/openssl/include
+    export OPENSSL_LIB_DIR=/usr/local/opt/openssl/lib
     export PERLBREW_ROOT=~/.perl5/perlbrew
 
     export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/Library/Frameworks/Mono.framework/Versions/Current/lib/pkgconfig
@@ -118,8 +118,8 @@ function restart-eflex() {
 }
 
 function update-servers() {
-    ansible all -m "apt" -a "upgrade=dist autoremove=true update_cache=true" -b
-    ansible all -m "shell" -a "apt-get autoremove -y" -b
+    ansible all -i /usr/local/etc/ansible/hosts -m "apt" -a "upgrade=dist autoremove=true update_cache=true" -b
+    ansible all -i /usr/local/etc/ansible/hosts -m "shell" -a "apt-get autoremove -y" -b
 }
 
 function git-rename() {
