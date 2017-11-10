@@ -53,7 +53,7 @@ if [[ $platform == 'macos' ]]; then
     export PATH=/bin:/sbin:$CABAL_ROOT:$BREW_ROOT:$CLOJURE_ROOT:$LATEX_ROOT:$HEROKU_ROOT:$GO_ROOT:$PATH:$NPM_ROOT:$TEX_ROOT:$CUDA_ROOT:$JBOSS_ROOT:$EMSCRIPTEN_ROOT:$DOTNET_PATH:$JAVA_HOME/bin:$CARGO_ROOT
 fi
 
-plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli github heroku mercurial pip vagrant coffee go bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod autojump docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp)
+plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli github heroku mercurial vagrant coffee go bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod autojump docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip)
 
 if [[ $platform == 'macos' ]]; then
     plugins+=(brew osx)
@@ -172,15 +172,15 @@ function update() {
     echo "updating meteor"
     meteor update
 
-    echo "updating vagrant plugins"
-    vagrant plugin update
-
     echo "updating phoenix and mix"
     mix local.hex --force
     mix archive.install https://github.com/phoenixframework/archives/raw/master/phx_new.ez --force
 
     echo "update tex packages"
     tlmgr update --self --all --reinstall-forcibly-removed
+
+    echo "updating vagrant plugins"
+    vagrant plugin update
 
     echo "outdated cask packages"
     brew cask outdated

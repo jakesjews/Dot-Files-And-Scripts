@@ -36,7 +36,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'Lokaltog/vim-easymotion'
 Plug 'tpope/vim-dispatch'
 Plug 'scrooloose/nerdcommenter'
-Plug 'neomake/neomake'
+Plug 'w0rp/ale'
 Plug 'tpope/vim-surround'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'editorconfig/editorconfig-vim'
@@ -129,15 +129,13 @@ let NERDTreeIgnore = [
 \ '\.sublime-project', '\.DotSettings',  'TestResult.xml', 'target'
 \ ]
 
-autocmd! BufWritePost * Neomake
-
 "don't autoselect first item in omnicomplete, show if only one item (for
 "preview)
 set completeopt=longest,menuone,preview
 
 set showcmd
-set tabstop=4
-set shiftwidth=4
+set tabstop=2
+set shiftwidth=2
 set autoindent
 set expandtab
 set smarttab
@@ -158,17 +156,7 @@ set formatoptions+=j " Delete comment character when joining commented lines
 set autoread
 set fileformats+=mac
 
-au FileType python setl sw=2 sts=2 ts=2 et
-"au FileType coffee setl sw=2 sts=2 ts=2 et
-au FileType coffee setl sw=4 sts=4 ts=4 et
-au FileType javascript setl sw=2 sts=2 ts=2 et
-au FileType javascript set sw=2 sts=2 ts=2 et
-au FileType ruby setl sw=2 sts=2 ts=2 et
-au FileType stylus setl sw=2 sts=2 ts=2 et
-au FileType yml setl sw=2 sts=2 ts=2 et
 au FileType cs setl sw=4 sts=4 ts=4 et
-au FileType pug setl sw=2 sts=2 ts=2 et
-au FileType logstash setl sw=2 sts=2 ts=2 et
 
 au BufRead,BufNewFile *.AWL set filetype=asm
 
