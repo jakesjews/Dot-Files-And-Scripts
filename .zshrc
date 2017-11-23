@@ -145,8 +145,8 @@ function update() {
     echo "updating vim plugins"
     vim +PlugUpdate +PlugUpgrade +qa
 
-    echo "updating npm packages"
-    npm update -g
+    echo "updating node packages"
+    yarn global upgrade
      
     echo "updating ruby gems"
     gem update
@@ -178,9 +178,6 @@ function update() {
 
     echo "update tex packages"
     tlmgr update --self --all --reinstall-forcibly-removed
-
-    echo "updating vagrant plugins"
-    vagrant plugin update
 
     echo "outdated cask packages"
     brew cask outdated
