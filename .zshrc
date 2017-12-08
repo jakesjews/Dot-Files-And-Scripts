@@ -109,7 +109,6 @@ alias redis-master="redis-cli -h qa-db -p 26379 SENTINEL get-master-addr-by-name
 
 function clean-eflex() {
     tmux kill-server
-    sudo pkill proftpd
 }
 
 function restart-eflex() {
@@ -120,6 +119,9 @@ function restart-eflex() {
 function update-servers() {
     ansible all -i /usr/local/etc/ansible/hosts -m "apt" -a "upgrade=dist autoremove=true update_cache=true" -b
     ansible all -i /usr/local/etc/ansible/hosts -m "shell" -a "apt-get autoremove -y" -b
+    ansible integration -i /usr/local/etc/ansible/hosts -m "shell" -a "docker pull selenium/standalone-chrome" -b
+    ansible integration -i /usr/local/etc/ansible/hosts -m "shell" -a "docker stop selenium && docker rm selenium" -b
+    ansible integration -i /usr/local/etc/ansible/hosts -m "shell" -a "docker run --name selenium --restart=always -v /dev/shm:/dev/shm -d --publish=4444:4444 selenium/standalone-chrome" -b
 }
 
 function git-rename() {
@@ -146,7 +148,7 @@ function update() {
     vim +PlugUpdate +PlugUpgrade +qa
 
     echo "updating node packages"
-    yarn global upgrade
+    yarn global upgrade --latest
      
     echo "updating ruby gems"
     gem update
@@ -168,9 +170,6 @@ function update() {
 
     echo "updating julia packages"
     julia -e "Pkg.update()"
-
-    echo "updating meteor"
-    meteor update
 
     echo "updating phoenix and mix"
     mix local.hex --force

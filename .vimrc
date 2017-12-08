@@ -19,7 +19,6 @@ set backupdir=$HOME/.vim/swap//
 set directory=$HOME/.vim/swap//
 set undodir=~/.vim/undo//
 
-set nocompatible
 set hlsearch
 syntax on
 filetype plugin indent on
@@ -27,7 +26,9 @@ filetype plugin indent on
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall
+  augroup install_vim_plug
+    autocmd VimEnter * PlugInstall
+  augroup end
 endif
 
 "" Plugins
@@ -89,9 +90,9 @@ call plug#end()
 
 let g:polyglot_disabled = ['julia', 'elixir']
 
-let test#strategy = "neovim"
+let g:test#strategy = 'neovim'
 
-let g:racer_cmd = "/Users/jacob/.cargo/bin/racer"
+let g:racer_cmd = '/Users/jacob/.cargo/bin/racer'
 
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#file#enable_buffer_path = 1
@@ -113,10 +114,12 @@ augroup rainbow_lisp
 augroup END
 
 augroup filetypedetect
-    au! BufRead,BufNewFile *.m       setfiletype objc
+    au! BufRead,BufNewFile *.m setfiletype objc
+    au BufRead,BufNewFile *.AWL set filetype=asm
+    au FileType cs setl sw=4 sts=4 ts=4 et
 augroup END
 
-let NERDTreeIgnore = [
+let g:NERDTreeIgnore = [
 \ '\.hgcheck',    '\.hglf',     '\.nuget',           'publish',
 \ '.\vagrant$',   '\.idea',      'eflex.bbprojectd', 'tmp',
 \ 'test-results', 'TestResults',            'compiled',
@@ -156,10 +159,6 @@ set formatoptions+=j " Delete comment character when joining commented lines
 set autoread
 set fileformats+=mac
 
-au FileType cs setl sw=4 sts=4 ts=4 et
-
-au BufRead,BufNewFile *.AWL set filetype=asm
-
 setglobal tags-=./tags tags-=./tags; tags^=./tags;
 
 if !&scrolloff
@@ -170,7 +169,7 @@ if !&sidescrolloff
 endif
 set display+=lastline
 
-if &term =~ '^screen'
+if &term =~? '^screen'
   set ttymouse=xterm2
 endif
 
@@ -188,9 +187,9 @@ endif
 " Colors
 colorscheme jellybeans
 
-if has("gui_running")
+if has('gui_running')
   set guifont=Consolas:h12
-  let do_syntax_sel_menu = 1|runtime! synmenu.vim|aunmenu &Syntax.&Show\ filetypes\ in\ menu
+  let g:do_syntax_sel_menu = 1|runtime! synmenu.vim|aunmenu &Syntax.&Show\ filetypes\ in\ menu
 else
   " make black background work in iterm
   highlight Normal ctermbg=NONE
