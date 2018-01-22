@@ -58,6 +58,7 @@ Plug 'Konfekt/FastFold'
 Plug 'janko-m/vim-test'
 Plug 'AndrewRadev/ember_tools.vim'
 Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
+Plug 'yegappan/mru'
 
 Plug 'adimit/prolog.vim'
 Plug 'kongo2002/fsharp-vim'
@@ -69,10 +70,10 @@ Plug 'ngn/vim-apl'
 Plug 'tfnico/vim-gradle'
 Plug 'brandonbloom/vim-factor'
 Plug 'alunny/pegjs-vim'
-Plug 'JuliaLang/julia-vim'
 Plug 'robbles/logstash.vim'
 Plug 'reasonml-editor/vim-reason'
 Plug 'tomlion/vim-solidity'
+Plug 'kchmck/vim-coffee-script'
 Plug 'sheerun/vim-polyglot'
 
 """ Clojure
@@ -88,7 +89,7 @@ Plug 'zchee/deoplete-go', { 'do': 'make', 'for': 'go' }
 
 call plug#end()
 
-let g:polyglot_disabled = ['julia', 'elixir']
+let g:polyglot_disabled = ['elixir', 'coffee-script']
 
 let g:test#strategy = 'neovim'
 
@@ -117,6 +118,9 @@ augroup filetypedetect
     au! BufRead,BufNewFile *.m setfiletype objc
     au BufRead,BufNewFile *.AWL set filetype=asm
     au FileType cs setl sw=4 sts=4 ts=4 et
+    au FileType c setl sw=4 sts=4 ts=4 et
+    au FileType cpp setl sw=4 sts=4 ts=4 et
+    au FileType make setl noexpandtab sw=4 sts=0 ts=4
 augroup END
 
 let g:NERDTreeIgnore = [

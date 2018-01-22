@@ -26,34 +26,26 @@ if [[ $platform == 'macos' ]]; then
     source ~/.homebrew.token
 
     export NEOVIM_LISTEN_ADDRESS=/tmp/neovim.sock
-    export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-9.jdk/Contents/Home
+    export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-9.0.4.jdk/Contents/Home
     export GOPATH=/usr/local/lib/go
 
     export ANDROID_HOME=/usr/local/opt/android-sdk
-    export CLOJURE_ROOT=/Users/jacob/.cljr/bin
-    export CABAL_ROOT=/Users/jacob/.cabal/bin
-    export TEX_ROOT=/usr/textbin
-    export LATEX_ROOT=/usr/local/texlive/2014/bin/x86_64-darwin
-    export HEROKU_ROOT=/usr/local/heroku/bin
-    export NPM_ROOT=/usr/local/share/npm/bin
     export GO_ROOT=$GOPATH/bin
     export BREW_ROOT=/usr/local/bin:/usr/local/sbin
     export CARGO_ROOT=~/.cargo/bin
     export OPENSSL_INCLUDE_DIR=/usr/local/opt/openssl/include
     export OPENSSL_LIB_DIR=/usr/local/opt/openssl/lib
-    export PERLBREW_ROOT=~/.perl5/perlbrew
 
     export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/Library/Frameworks/Mono.framework/Versions/Current/lib/pkgconfig
 
-    export NODE_PATH=/usr/local/lib/node_modules
     export COFFEELINT_CONFIG=/Users/jacob/.coffeelintrc
     export DOTNET_PATH=/usr/local/share/dotnet
     export RUST_SRC_PATH=/usr/local/src/rust/src
 
-    export PATH=/bin:/sbin:$CABAL_ROOT:$BREW_ROOT:$CLOJURE_ROOT:$LATEX_ROOT:$HEROKU_ROOT:$GO_ROOT:$PATH:$NPM_ROOT:$TEX_ROOT:$CUDA_ROOT:$JBOSS_ROOT:$EMSCRIPTEN_ROOT:$DOTNET_PATH:$JAVA_HOME/bin:$CARGO_ROOT
+    export PATH=/bin:/sbin:$BREW_ROOT:$GO_ROOT:$PATH:$DOTNET_PATH:$JAVA_HOME/bin:$CARGO_ROOT
 fi
 
-plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli github heroku mercurial vagrant coffee go bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod autojump docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip)
+plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli github heroku mercurial vagrant coffee go bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod autojump docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip cargo)
 
 if [[ $platform == 'macos' ]]; then
     plugins+=(brew osx)
@@ -82,9 +74,6 @@ if [[ $platform == 'macos' ]]; then
     alias vim='shell=bash nvim'
     alias vi='shell=bash nvim'
     alias 9="/usr/local/bin/9"
-    alias jconsole="/Applications/j64-802/bin/jconsole"
-    alias postgres="postgres -D /usr/local/var/postgres"
-    alias Factor="/Applications/factor/factor"
     alias galileo="screen /dev/tty.usbserial 115200"
 fi
 
@@ -94,10 +83,7 @@ alias rg='rg -S'
 alias l="ls"
 alias xsp="MONO_OPTIONS=--arch=64 xsp4 --port 8080"
 alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
-alias ms='mocha --fgrep "#slow" -i'
 alias sl="ls"
-alias npmo="npm outdated"
-alias npmog="npm outdated -g"
 alias git-oops="git reset --soft HEAD~"
 alias git-clear="git reset --hard HEAD"
 alias flush-cache="sudo dscacheutil -flushcache;sudo killall -HUP mDNSResponder; say cache flushed"
@@ -124,13 +110,6 @@ function update-servers() {
     ansible integration -i /usr/local/etc/ansible/hosts -m "shell" -a "docker run --name selenium --restart=always -v /dev/shm:/dev/shm -d --publish=4444:4444 selenium/standalone-chrome" -b
 }
 
-function git-rename() {
-    old_branch=$(git rev-parse --abbrev-ref HEAD)
-    git branch -m "$old_branch" "$1"
-    git push origin ":$old_branch"
-    git push --set-upstream origin "$1"
-}
-
 function update() {
     setopt localoptions rmstarsilent
     unsetopt nomatch
@@ -149,24 +128,10 @@ function update() {
 
     echo "updating node packages"
     yarn global upgrade --latest
-     
+
     echo "updating ruby gems"
     gem update
-
-    expect -c "
-        set timeout -1
-        spawn gem cleanup
-        set done 0
-
-        while {\$done == 0} {
-            expect {
-                \"Continue with Uninstall\\\\\\? \\\\\\[Yn\\\\\\]\" { send \"n\r\" }
-                \"Clean Up Complete\" { set done 1 }
-            }
-        }
-        wait
-        close $spawn_id
-    "
+    gem cleanup
 
     echo "updating julia packages"
     julia -e "Pkg.update()"
@@ -180,6 +145,11 @@ function update() {
 
     echo "outdated cask packages"
     brew cask outdated
+}
+
+function fix-watchman() {
+  watchman watch-del "/Users/jacob/dev/eflexsystems/eflex/webApp"
+  lunchy restart watchman
 }
 
 eval "$(rbenv init -)"

@@ -20,10 +20,6 @@ windows:
       panes:
         - cd WebApi && nuget restore EFlex.sln && cd WebApi && xbuild && xsp4 --port 8080
         - cd api && ./run
-  - trigger:
-      layout: main-horizontal
-      panes:
-        - make trigger && cd webApp/dist && mkdir -p imagefiles && chmod a+w imagefiles && ../../eVisionTrigger/bin/eVisionTrigger -c localhost -p ~/dev/eflexsystems/eflex/webApp/dist/imagefiles -w 1
   - mongo:
       layout: main-horizontal
       panes:
