@@ -11,7 +11,8 @@ vnoremap . :normal .<CR>
 nnoremap <C-e> :e.<CR>
 
 if has('nvim')
-    tnoremap <C-w> <C-\><C-n> 
+  tnoremap <C-w> <C-\><C-n> 
+  set termguicolors
 endif
 
 set backspace=indent,eol,start
@@ -43,8 +44,7 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'tpope/vim-repeat'
 Plug 'majutsushi/tagbar'
-Plug 'vim-scripts/guicolorscheme.vim'
-Plug 'flazz/vim-colorschemes'
+Plug 'morhetz/gruvbox'
 Plug 'scrooloose/nerdtree'
 Plug 'mileszs/ack.vim'
 Plug 'racer-rust/vim-racer'
@@ -81,7 +81,6 @@ Plug 'tpope/vim-salve', { 'for': 'clojure' }
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 
 Plug 'awetzel/elixir.nvim', { 'do': 'yes \| ./install.sh', 'for': 'elixir' }
-Plug 'mhartington/deoplete-typescript', { 'for': 'typescript' }
 Plug 'fishbullet/deoplete-ruby', { 'for': 'ruby' }
 Plug 'JuliaEditorSupport/deoplete-julia', { 'for': 'julia' }
 Plug 'tweekmonster/deoplete-clang2'
@@ -124,10 +123,10 @@ augroup filetypedetect
 augroup END
 
 let g:NERDTreeIgnore = [
-\ '\.hgcheck',    '\.hglf',     '\.nuget',           'publish',
-\ '.\vagrant$',   '\.idea',      'eflex.bbprojectd', 'tmp',
-\ 'test-results', 'TestResults',            'compiled',
-\ 'node_modules', 'bin',         'obj',              'Properties',
+\ '\.hgcheck',    '\.hglf', '\.nuget', 'publish',
+\ '.\vagrant$',   '\.idea', 'eflex.bbprojectd', 'tmp',
+\ 'test-results', 'TestResults', 'compiled',
+\ 'node_modules', 'bin', 'obj', 'Properties', 'coverage',
 \
 \ '\.suo$',            '\.hgtabs$',      '\.orig$',       '\.userconfig$', 
 \ 'npm-debug.log',     '\.swp$',         '\.tmp$',        '\.reh$', 
@@ -188,8 +187,9 @@ if executable('rg')
   let g:ctrlp_use_caching = 0
 endif
 
-" Colors
-colorscheme jellybeans
+set background=dark
+colorscheme gruvbox
+hi Normal guibg=NONE ctermbg=NONE
 
 if has('gui_running')
   set guifont=Consolas:h12

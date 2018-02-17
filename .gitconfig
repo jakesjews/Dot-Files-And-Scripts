@@ -1,9 +1,9 @@
 [user]
-name = Jacob Jewell
-email = jacobjewell@eflexsystems.com
+	name = Jacob Jewell
+	email = jacobjewell@eflexsystems.com
 
 [core]
-excludesfile = /Users/jacob/.gitignore_global
+	excludesfile = /Users/jacob/.gitignore_global
 
 [color]
 ui = auto
@@ -19,12 +19,12 @@ bc3 = trustExitCode
 prompt = false
 
 [difftool "sourcetree"]
-cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\"
-path = -ro
+	cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\"
+	path = -ro
 
 [mergetool "sourcetree"]
-cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
-trustExitCode = true
+	cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
+	trustExitCode = true
 
 [filter "media"]
 required = true

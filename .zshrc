@@ -86,7 +86,7 @@ alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
 alias sl="ls"
 alias git-oops="git reset --soft HEAD~"
 alias git-clear="git reset --hard HEAD"
-alias flush-cache="sudo dscacheutil -flushcache;sudo killall -HUP mDNSResponder; say cache flushed"
+alias flush-cache="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
 alias mux="tmuxinator"
 alias redis-master="redis-cli -h qa-db -p 26379 SENTINEL get-master-addr-by-name eflex-redis"
 
@@ -104,10 +104,10 @@ function restart-eflex() {
 
 function update-servers() {
     ansible all -i /usr/local/etc/ansible/hosts -m "apt" -a "upgrade=dist autoremove=true update_cache=true" -b
-    ansible all -i /usr/local/etc/ansible/hosts -m "shell" -a "apt-get autoremove -y" -b
     ansible integration -i /usr/local/etc/ansible/hosts -m "shell" -a "docker pull selenium/standalone-chrome" -b
     ansible integration -i /usr/local/etc/ansible/hosts -m "shell" -a "docker stop selenium && docker rm selenium" -b
     ansible integration -i /usr/local/etc/ansible/hosts -m "shell" -a "docker run --name selenium --restart=always -v /dev/shm:/dev/shm -d --publish=4444:4444 selenium/standalone-chrome" -b
+    ansible all -i /usr/local/etc/ansible/hosts -m "shell" -a "apt-get autoremove -y" -b
 }
 
 function update() {
@@ -143,8 +143,8 @@ function update() {
     echo "update tex packages"
     tlmgr update --self --all --reinstall-forcibly-removed
 
-    echo "outdated cask packages"
-    brew cask outdated
+    echo "upgrade cask packages"
+    brew cu --all --cleanup -q -y
 }
 
 function fix-watchman() {
