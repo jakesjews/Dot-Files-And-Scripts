@@ -123,11 +123,11 @@ function update() {
     rm -rf /Library/Caches/Homebrew/* 2>/dev/null
     rm -rf ~/Library/Caches/Homebrew/* 2>/dev/null
 
-    echo "updating vim plugins"
-    vim +PlugUpdate +PlugUpgrade +qa
-
     echo "updating node packages"
     yarn global upgrade --latest
+
+    echo "updating vim plugins"
+    vim +PlugUpdate +PlugUpgrade +qa
 
     echo "updating ruby gems"
     gem update
@@ -145,6 +145,12 @@ function update() {
 
     echo "upgrade cask packages"
     brew cu --all --cleanup -q -y
+
+    echo "upgrade up"
+    up upgrade
+
+    echo "upgrade apex"
+    apex upgrade
 }
 
 function fix-watchman() {

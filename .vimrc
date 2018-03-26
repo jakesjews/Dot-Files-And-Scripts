@@ -41,6 +41,7 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'w0rp/ale'
 Plug 'tpope/vim-surround'
 Plug 'ctrlpvim/ctrlp.vim'
+Plug 'nixprime/cpsm', { 'do': 'env PY3=ON ./install.sh' }
 Plug 'editorconfig/editorconfig-vim'
 Plug 'tpope/vim-repeat'
 Plug 'majutsushi/tagbar'
@@ -59,10 +60,11 @@ Plug 'janko-m/vim-test'
 Plug 'AndrewRadev/ember_tools.vim'
 Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
 Plug 'yegappan/mru'
+Plug 'tpope/vim-db'
 
 Plug 'adimit/prolog.vim'
 Plug 'kongo2002/fsharp-vim'
-Plug 'OmniSharp/omnisharp-vim', { 'do': 'cd server && msbuild' }
+"Plug 'OmniSharp/omnisharp-vim', { 'do': 'cd server && msbuild' }
 Plug 'andreimaxim/vim-io'
 Plug 'guersam/vim-j'
 Plug 'idris-hackers/idris-vim'
@@ -104,6 +106,8 @@ let g:deoplete#omni_patterns.reason = '[^. *\t]\.\w*\|\h\w*|#'
 let g:deoplete#omni_patterns.ocaml = '[^. *\t]\.\w*|\s\w*|#'
 let g:deoplete#sources = {}
 let g:deoplete#sources.reason = ['omni', 'buffer']
+
+let g:ctrlp_match_func = { 'match': 'cpsm#CtrlPMatch' }
 
 inoremap <expr><Down> pumvisible() ? "\<C-n>" : "\<Down>"
 inoremap <expr><Up>   pumvisible() ? "\<C-p>" : "\<Up>"
