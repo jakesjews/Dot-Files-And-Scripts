@@ -58,13 +58,14 @@ Plug 'moll/vim-node'
 Plug 'Konfekt/FastFold'
 Plug 'janko-m/vim-test'
 Plug 'AndrewRadev/ember_tools.vim'
+Plug 'sukima/vim-ember-imports'
 Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
 Plug 'yegappan/mru'
 Plug 'tpope/vim-db'
+Plug 'tpope/vim-fugitive'
 
 Plug 'adimit/prolog.vim'
 Plug 'kongo2002/fsharp-vim'
-"Plug 'OmniSharp/omnisharp-vim', { 'do': 'cd server && msbuild' }
 Plug 'andreimaxim/vim-io'
 Plug 'guersam/vim-j'
 Plug 'idris-hackers/idris-vim'
@@ -82,7 +83,6 @@ Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-salve', { 'for': 'clojure' }
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 
-Plug 'awetzel/elixir.nvim', { 'do': 'yes \| ./install.sh', 'for': 'elixir' }
 Plug 'fishbullet/deoplete-ruby', { 'for': 'ruby' }
 Plug 'JuliaEditorSupport/deoplete-julia', { 'for': 'julia' }
 Plug 'tweekmonster/deoplete-clang2'
@@ -90,7 +90,7 @@ Plug 'zchee/deoplete-go', { 'do': 'make', 'for': 'go' }
 
 call plug#end()
 
-let g:polyglot_disabled = ['elixir', 'coffee-script']
+let g:polyglot_disabled = ['coffee-script']
 
 let g:test#strategy = 'neovim'
 
@@ -98,16 +98,11 @@ let g:racer_cmd = '/Users/jacob/.cargo/bin/racer'
 
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#file#enable_buffer_path = 1
-let g:deoplete#keyword_patterns = {}
-let g:deoplete#keyword_patterns.clojure = '[\w!$%&*+/:<=>?@\^_~\-\.#]*'
-
-let g:deoplete#omni_patterns = {}
-let g:deoplete#omni_patterns.reason = '[^. *\t]\.\w*\|\h\w*|#'
-let g:deoplete#omni_patterns.ocaml = '[^. *\t]\.\w*|\s\w*|#'
-let g:deoplete#sources = {}
-let g:deoplete#sources.reason = ['omni', 'buffer']
 
 let g:ctrlp_match_func = { 'match': 'cpsm#CtrlPMatch' }
+
+let g:vim_ember_imports_use_semicolons = 0
+let g:vim_ember_imports_multiline_max_col = 120
 
 inoremap <expr><Down> pumvisible() ? "\<C-n>" : "\<Down>"
 inoremap <expr><Up>   pumvisible() ? "\<C-p>" : "\<Up>"

@@ -138,19 +138,23 @@ function update() {
 
     echo "updating phoenix and mix"
     mix local.hex --force
+    mix local.rebar --force
     mix archive.install https://github.com/phoenixframework/archives/raw/master/phx_new.ez --force
 
     echo "update tex packages"
     tlmgr update --self --all --reinstall-forcibly-removed
 
-    echo "upgrade cask packages"
-    brew cu --all --cleanup -q -y
+    echo "update rust packages"
+    cargo install-update -a
 
     echo "upgrade up"
     up upgrade
 
     echo "upgrade apex"
     apex upgrade
+
+    echo "upgrade cask packages"
+    brew cu --all --cleanup -q -y
 }
 
 function fix-watchman() {
