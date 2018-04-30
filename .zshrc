@@ -26,7 +26,7 @@ if [[ $platform == 'macos' ]]; then
     source ~/.homebrew.token
 
     export NEOVIM_LISTEN_ADDRESS=/tmp/neovim.sock
-    export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-9.0.4.jdk/Contents/Home
+    export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-10.0.1.jdk/Contents/Home
     export GOPATH=/usr/local/lib/go
 
     export ANDROID_HOME=/usr/local/opt/android-sdk
