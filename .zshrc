@@ -71,10 +71,12 @@ unsetopt listambiguous
 source "$ZSH/oh-my-zsh.sh"
 
 if [[ $platform == 'macos' ]]; then
-    alias vim='shell=bash nvim'
-    alias vi='shell=bash nvim'
     alias 9="/usr/local/bin/9"
     alias galileo="screen /dev/tty.usbserial 115200"
+
+    source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
+    source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
 fi
 
 alias space="du -hs * | gsort -h"
@@ -89,6 +91,8 @@ alias git-clear="git reset --hard HEAD"
 alias flush-cache="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
 alias mux="tmuxinator"
 alias redis-master="redis-cli -h qa-db -p 26379 SENTINEL get-master-addr-by-name eflex-redis"
+alias vim='shell=bash nvim'
+alias vi='shell=bash nvim'
 
 # OPAM configuration
 . /Users/jacob/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
@@ -163,6 +167,4 @@ function fix-watchman() {
 }
 
 eval "$(rbenv init -)"
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
-source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
+
