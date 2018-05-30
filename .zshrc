@@ -111,7 +111,7 @@ function update-servers() {
     ansible integration -i /usr/local/etc/ansible/hosts -m "shell" -a "docker pull selenium/standalone-chrome" -b
     ansible integration -i /usr/local/etc/ansible/hosts -m "shell" -a "docker stop selenium && docker rm selenium" -b
     ansible integration -i /usr/local/etc/ansible/hosts -m "shell" -a "docker run --name selenium --restart=always -v /dev/shm:/dev/shm -d --publish=4444:4444 selenium/standalone-chrome" -b
-    ansible all -i /usr/local/etc/ansible/hosts -m "shell" -a "apt-get autoremove -y" -b
+    ansible all -i /usr/local/etc/ansible/hosts -m "apt" -a "autoremove=true" -b
 }
 
 function update() {
@@ -128,7 +128,7 @@ function update() {
     rm -rf ~/Library/Caches/Homebrew/* 2>/dev/null
 
     echo "updating node packages"
-    yarn global upgrade --latest
+    npm update -g
 
     echo "updating vim plugins"
     vim +PlugUpdate +PlugUpgrade +qa
@@ -159,11 +159,6 @@ function update() {
 
     echo "upgrade cask packages"
     brew cu --all --cleanup -q -y
-}
-
-function fix-watchman() {
-  watchman watch-del "/Users/jacob/dev/eflexsystems/eflex/webApp"
-  lunchy restart watchman
 }
 
 eval "$(rbenv init -)"

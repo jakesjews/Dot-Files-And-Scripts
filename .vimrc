@@ -90,7 +90,7 @@ Plug 'zchee/deoplete-go', { 'do': 'make', 'for': 'go' }
 
 call plug#end()
 
-let g:polyglot_disabled = ['coffee-script']
+let g:polyglot_disabled = ['coffee-script', 'graphql']
 
 let g:test#strategy = 'neovim'
 
@@ -103,6 +103,12 @@ let g:ctrlp_match_func = { 'match': 'cpsm#CtrlPMatch' }
 
 let g:vim_ember_imports_use_semicolons = 0
 let g:vim_ember_imports_multiline_max_col = 120
+
+let g:ansible_template_syntaxes = { 
+\ '*.sh.j2': 'sh', 
+\ '*.json.j2': 'json', 
+\ '*.js.j2': 'javascript' 
+\ }
 
 inoremap <expr><Down> pumvisible() ? "\<C-n>" : "\<Down>"
 inoremap <expr><Up>   pumvisible() ? "\<C-p>" : "\<Up>"
@@ -133,6 +139,9 @@ let g:NERDTreeIgnore = [
 \ '\.userprefs$',      '.tm_properties', '\.jar$',        '\.pfx$', 
 \ '\.sublime-project', '\.DotSettings',  'TestResult.xml', 'target'
 \ ]
+
+let g:NERDTreeAutoDeleteBuffer = 1
+let g:NERDTreeMinimalUI = 1
 
 "don't autoselect first item in omnicomplete, show if only one item (for
 "preview)
