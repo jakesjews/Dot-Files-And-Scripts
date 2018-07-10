@@ -20,6 +20,7 @@ export DISABLE_AUTO_TITLE=true
 export ANSIBLE_HOST_KEY_CHECKING=False
 export KEYTIMEOUT=1
 export LISTMAX=9998
+export REPORTER=spec
 
 if [[ $platform == 'macos' ]]; then
     export VAGRANT_DEFAULT_PROVIDER='vmware_fusion'
@@ -107,11 +108,11 @@ function restart-eflex() {
 }
 
 function update-servers() {
-    ansible all -i /usr/local/etc/ansible/hosts -m "apt" -a "upgrade=dist autoremove=true update_cache=true" -b
+    ansible all -i /usr/local/etc/ansible/hosts -m "apt" -a "upgrade=dist update_cache=true" -b
+    ansible all -i /usr/local/etc/ansible/hosts -m "apt" -a "autoremove=true" -b
     ansible integration -i /usr/local/etc/ansible/hosts -m "shell" -a "docker pull selenium/standalone-chrome" -b
     ansible integration -i /usr/local/etc/ansible/hosts -m "shell" -a "docker stop selenium && docker rm selenium" -b
-    ansible integration -i /usr/local/etc/ansible/hosts -m "shell" -a "docker run --name selenium --restart=always -v /dev/shm:/dev/shm -d --publish=4444:4444 selenium/standalone-chrome" -b
-    ansible all -i /usr/local/etc/ansible/hosts -m "apt" -a "autoremove=true" -b
+    ansible integration -i /usr/local/etc/ansible/hosts -m "shell" -a "docker run --name selenium --net=host --restart=always -v /dev/shm:/dev/shm -d selenium/standalone-chrome" -b
 }
 
 function update() {
@@ -150,6 +151,7 @@ function update() {
 
     echo "update rust packages"
     cargo install-update -a
+    rustup update
 
     echo "upgrade up"
     up upgrade
@@ -159,6 +161,9 @@ function update() {
 
     echo "upgrade cask packages"
     brew cu --all --cleanup -q -y
+
+    echo "update app store apps"
+    mas upgrade
 }
 
 eval "$(rbenv init -)"

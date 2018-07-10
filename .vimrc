@@ -41,7 +41,7 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'w0rp/ale'
 Plug 'tpope/vim-surround'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'nixprime/cpsm', { 'do': 'env PY3=ON ./install.sh' }
+Plug 'nixprime/cpsm', { 'do': 'env ./install.sh' }
 Plug 'editorconfig/editorconfig-vim'
 Plug 'tpope/vim-repeat'
 Plug 'majutsushi/tagbar'
@@ -77,6 +77,7 @@ Plug 'robbles/logstash.vim'
 Plug 'reasonml-editor/vim-reason'
 Plug 'tomlion/vim-solidity'
 Plug 'kchmck/vim-coffee-script'
+Plug 'rhysd/vim-wasm'
 Plug 'sheerun/vim-polyglot'
 
 """ Clojure
