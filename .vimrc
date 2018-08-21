@@ -63,6 +63,7 @@ Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
 Plug 'yegappan/mru'
 Plug 'tpope/vim-db'
 Plug 'tpope/vim-fugitive'
+Plug 'eraserhd/parinfer-rust', {'do': 'cargo build --release'}
 
 Plug 'adimit/prolog.vim'
 Plug 'kongo2002/fsharp-vim'

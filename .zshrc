@@ -42,11 +42,12 @@ if [[ $platform == 'macos' ]]; then
     export COFFEELINT_CONFIG=/Users/jacob/.coffeelintrc
     export DOTNET_PATH=/usr/local/share/dotnet
     export RUST_SRC_PATH=/usr/local/src/rust/src
+    export FACTOR_ROOT=/Applications/factor
 
-    export PATH=/bin:/sbin:$BREW_ROOT:$GO_ROOT:$PATH:$DOTNET_PATH:$JAVA_HOME/bin:$CARGO_ROOT
+    export PATH=/bin:/sbin:$BREW_ROOT:$GO_ROOT:$PATH:$DOTNET_PATH:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT
 fi
 
-plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli github heroku mercurial vagrant coffee go bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod autojump docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip cargo)
+plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli heroku mercurial vagrant coffee go bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod autojump docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip cargo)
 
 if [[ $platform == 'macos' ]]; then
     plugins+=(brew osx)
@@ -98,6 +99,10 @@ alias vi='shell=bash nvim'
 # OPAM configuration
 . /Users/jacob/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 
+fpkill() {
+  lsof -i tcp:$1 | awk 'NR!=1 {print $2}' | xargs kill -9
+}
+
 function clean-eflex() {
     tmux kill-server
 }
@@ -107,9 +112,14 @@ function restart-eflex() {
     mux eflex
 }
 
+function countInstances() {
+    rg $1 -c | sort -k 2 -t ":" -n
+}
+
 function update-servers() {
     ansible all -i /usr/local/etc/ansible/hosts -m "apt" -a "upgrade=dist update_cache=true" -b
     ansible all -i /usr/local/etc/ansible/hosts -m "apt" -a "autoremove=true" -b
+
     ansible integration -i /usr/local/etc/ansible/hosts -m "shell" -a "docker pull selenium/standalone-chrome" -b
     ansible integration -i /usr/local/etc/ansible/hosts -m "shell" -a "docker stop selenium && docker rm selenium" -b
     ansible integration -i /usr/local/etc/ansible/hosts -m "shell" -a "docker run --name selenium --net=host --restart=always -v /dev/shm:/dev/shm -d selenium/standalone-chrome" -b
@@ -138,9 +148,6 @@ function update() {
     gem update
     gem cleanup
 
-    echo "updating julia packages"
-    julia -e "Pkg.update()"
-
     echo "updating phoenix and mix"
     mix local.hex --force
     mix local.rebar --force
@@ -153,14 +160,8 @@ function update() {
     cargo install-update -a
     rustup update
 
-    echo "upgrade up"
-    up upgrade
-
-    echo "upgrade apex"
-    apex upgrade
-
     echo "upgrade cask packages"
-    brew cu --all --cleanup -q -y
+    brew cu --all -q -y
 
     echo "update app store apps"
     mas upgrade
