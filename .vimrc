@@ -86,8 +86,7 @@ Plug 'tpope/vim-salve', { 'for': 'clojure' }
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 
 Plug 'fishbullet/deoplete-ruby', { 'for': 'ruby' }
-Plug 'JuliaEditorSupport/deoplete-julia', { 'for': 'julia' }
-Plug 'tweekmonster/deoplete-clang2'
+"Plug 'tweekmonster/deoplete-clang2'
 Plug 'zchee/deoplete-go', { 'do': 'make', 'for': 'go' }
 
 call plug#end()
@@ -126,6 +125,7 @@ augroup filetypedetect
     au FileType cs setl sw=4 sts=4 ts=4 et
     au FileType c setl sw=4 sts=4 ts=4 et
     au FileType cpp setl sw=4 sts=4 ts=4 et
+    au FileType zsh setl sw=4 sts=4 ts=4 et
     au FileType make setl noexpandtab sw=4 sts=0 ts=4
 augroup END
 
@@ -187,7 +187,7 @@ if &term =~? '^screen'
 endif
 
 if executable('rg')
-  let g:ackprg = 'rg --vimgrep --smart-case'   
+  let g:ackprg = 'rg -P --vimgrep --smart-case'   
   cnoreabbrev rg Ack
   cnoreabbrev rG Ack
   cnoreabbrev Rg Ack

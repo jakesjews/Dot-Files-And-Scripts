@@ -27,7 +27,7 @@ if [[ $platform == 'macos' ]]; then
     source ~/.homebrew.token
 
     export NEOVIM_LISTEN_ADDRESS=/tmp/neovim.sock
-    export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-10.0.1.jdk/Contents/Home
+    export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-10.0.2.jdk/Contents/Home
     export GOPATH=/usr/local/lib/go
 
     export ANDROID_HOME=/usr/local/opt/android-sdk
@@ -79,6 +79,11 @@ if [[ $platform == 'macos' ]]; then
     source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
     source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
     source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
+
+    bindkey '^[[A' history-substring-search-up
+    bindkey '^[[B' history-substring-search-down
+    bindkey -M vicmd 'k' history-substring-search-up
+    bindkey -M vicmd 'j' history-substring-search-down
 fi
 
 alias space="du -hs * | gsort -h"
@@ -95,13 +100,6 @@ alias mux="tmuxinator"
 alias redis-master="redis-cli -h qa-db -p 26379 SENTINEL get-master-addr-by-name eflex-redis"
 alias vim='shell=bash nvim'
 alias vi='shell=bash nvim'
-
-# OPAM configuration
-. /Users/jacob/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
-
-fpkill() {
-  lsof -i tcp:$1 | awk 'NR!=1 {print $2}' | xargs kill -9
-}
 
 function clean-eflex() {
     tmux kill-server
@@ -160,6 +158,9 @@ function update() {
     cargo install-update -a
     rustup update
 
+    echo "upgrade oh-my-zsh"
+    upgrade_oh_my_zsh
+
     echo "upgrade cask packages"
     brew cu --all -q -y
 
@@ -168,4 +169,6 @@ function update() {
 }
 
 eval "$(rbenv init -)"
+
+. /Users/jacob/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 
