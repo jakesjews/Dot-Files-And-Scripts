@@ -63,13 +63,13 @@ Plug 'AndrewRadev/ember_tools.vim'
 Plug 'sukima/vim-ember-imports'
 Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
 Plug 'yegappan/mru'
-Plug 'tpope/vim-db'
+Plug 'tpope/vim-dadbod'
 Plug 'tpope/vim-fugitive'
 Plug 'eraserhd/parinfer-rust', {'do': 'cargo build --release'}
 Plug 'tmux-plugins/vim-tmux-focus-events'
+Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
 
 Plug 'adimit/prolog.vim'
-Plug 'kongo2002/fsharp-vim'
 Plug 'guersam/vim-j'
 Plug 'idris-hackers/idris-vim'
 Plug 'ngn/vim-apl'
@@ -78,18 +78,14 @@ Plug 'brandonbloom/vim-factor'
 Plug 'alunny/pegjs-vim'
 Plug 'robbles/logstash.vim'
 Plug 'reasonml-editor/vim-reason'
-Plug 'tomlion/vim-solidity'
 Plug 'kchmck/vim-coffee-script'
 Plug 'rhysd/vim-wasm'
 Plug 'sheerun/vim-polyglot'
-Plug 'tpope/vim-alve', { 'for': 'clojure' }
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
-
-"Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
 
 call plug#end()
 
-let g:polyglot_disabled = ['coffee-script', 'graphql']
+let g:polyglot_disabled = ['coffee-script']
 
 let g:test#strategy = 'neovim'
 
