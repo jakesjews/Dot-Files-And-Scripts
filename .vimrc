@@ -21,6 +21,7 @@ set directory=$HOME/.vim/swap//
 set undodir=~/.vim/undo//
 
 set hlsearch
+set autoread
 syntax on
 filetype plugin indent on
 
@@ -40,6 +41,7 @@ Plug 'tpope/vim-dispatch'
 Plug 'scrooloose/nerdcommenter'
 Plug 'w0rp/ale'
 Plug 'tpope/vim-surround'
+Plug 'machakann/vim-sandwich'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'nixprime/cpsm', { 'do': 'env ./install.sh' }
 Plug 'editorconfig/editorconfig-vim'
@@ -64,10 +66,10 @@ Plug 'yegappan/mru'
 Plug 'tpope/vim-db'
 Plug 'tpope/vim-fugitive'
 Plug 'eraserhd/parinfer-rust', {'do': 'cargo build --release'}
+Plug 'tmux-plugins/vim-tmux-focus-events'
 
 Plug 'adimit/prolog.vim'
 Plug 'kongo2002/fsharp-vim'
-Plug 'andreimaxim/vim-io'
 Plug 'guersam/vim-j'
 Plug 'idris-hackers/idris-vim'
 Plug 'ngn/vim-apl'
@@ -80,14 +82,10 @@ Plug 'tomlion/vim-solidity'
 Plug 'kchmck/vim-coffee-script'
 Plug 'rhysd/vim-wasm'
 Plug 'sheerun/vim-polyglot'
-
-""" Clojure
-Plug 'tpope/vim-salve', { 'for': 'clojure' }
+Plug 'tpope/vim-alve', { 'for': 'clojure' }
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 
-Plug 'fishbullet/deoplete-ruby', { 'for': 'ruby' }
-"Plug 'tweekmonster/deoplete-clang2'
-Plug 'zchee/deoplete-go', { 'do': 'make', 'for': 'go' }
+"Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
 
 call plug#end()
 
@@ -104,12 +102,30 @@ let g:ctrlp_match_func = { 'match': 'cpsm#CtrlPMatch' }
 
 let g:vim_ember_imports_use_semicolons = 0
 let g:vim_ember_imports_multiline_max_col = 120
+let g:ember_imports_ember_data_next = 1
 
 let g:ansible_template_syntaxes = { 
 \ '*.sh.j2': 'sh', 
 \ '*.json.j2': 'json', 
 \ '*.js.j2': 'javascript' 
 \ }
+
+let g:LanguageClient_serverCommands = {
+  \ 'rust': ['rustup', 'run', 'stable', 'rls'],
+  \ 'sh': ['bash-language-server', 'start'],
+  \ 'clojure': ['clojure-lsp'],
+  \ 'css': ['css-languageserver', '--stdio'],
+  \ 'cpp': ['cquery', '--log-file=/tmp/cq.log'],
+  \ 'c': ['cquery', '--log-file=/tmp/cq.log'],
+  \ 'go': ['go-langserver'],
+  \ 'javascript': ['/usr/local/lib/node_modules/javascript-typescript-langserver/lib/language-server-stdio.js'],
+  \ 'typescript': ['/usr/local/lib/node_modules/javascript-typescript-langserver/lib/language-server-stdio.js'],
+  \ 'ocaml': ['ocam-language-server', '--stdio'],
+  \ 'ruby': ['solargraph', 'stdio'],
+  \ 'python': ['pyls'],
+  \ }
+
+let g:LanguageClient_autoStart = 1
 
 inoremap <expr><Down> pumvisible() ? "\<C-n>" : "\<Down>"
 inoremap <expr><Up>   pumvisible() ? "\<C-p>" : "\<Up>"
@@ -187,7 +203,7 @@ if &term =~? '^screen'
 endif
 
 if executable('rg')
-  let g:ackprg = 'rg -P --vimgrep --smart-case'   
+  let g:ackprg = 'rg --vimgrep --smart-case'   
   cnoreabbrev rg Ack
   cnoreabbrev rG Ack
   cnoreabbrev Rg Ack

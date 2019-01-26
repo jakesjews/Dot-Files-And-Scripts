@@ -27,7 +27,7 @@ if [[ $platform == 'macos' ]]; then
     source ~/.homebrew.token
 
     export NEOVIM_LISTEN_ADDRESS=/tmp/neovim.sock
-    export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-10.0.2.jdk/Contents/Home
+    export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-11.0.1.jdk/Contents/Home
     export GOPATH=/usr/local/lib/go
 
     export ANDROID_HOME=/usr/local/opt/android-sdk
@@ -43,8 +43,10 @@ if [[ $platform == 'macos' ]]; then
     export DOTNET_PATH=/usr/local/share/dotnet
     export RUST_SRC_PATH=/usr/local/src/rust/src
     export FACTOR_ROOT=/Applications/factor
+    export DENO_ROOT=/Users/jacob/.deno/bin
+    export TPM_ROOT=~/.tmux/plugins/tpm
 
-    export PATH=/bin:/sbin:$BREW_ROOT:$GO_ROOT:$PATH:$DOTNET_PATH:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT
+    export PATH=/bin:/sbin:$BREW_ROOT:$GO_ROOT:$PATH:$DOTNET_PATH:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT
 fi
 
 plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli heroku mercurial vagrant coffee go bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod autojump docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip cargo)
@@ -131,10 +133,8 @@ function update() {
     brew update
     brew upgrade
     brew cleanup -s
-    brew prune
     brew tap --repair
-    rm -rf /Library/Caches/Homebrew/* 2>/dev/null
-    rm -rf ~/Library/Caches/Homebrew/* 2>/dev/null
+    rm -rf "$(brew --cache)"
 
     echo "updating node packages"
     npm update -g
