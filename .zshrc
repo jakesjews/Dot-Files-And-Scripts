@@ -24,10 +24,14 @@ export REPORTER=spec
 
 if [[ $platform == 'macos' ]]; then
     export VAGRANT_DEFAULT_PROVIDER='vmware_fusion'
+
     source ~/.homebrew.token
+    export HOMEBREW_NO_INSTALL_CLEANUP=true
+
+    export RUBY_CFLAGS="-Os -march=native"
 
     export NEOVIM_LISTEN_ADDRESS=/tmp/neovim.sock
-    export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-11.0.1.jdk/Contents/Home
+    export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-12.jdk/Contents/Home
     export GOPATH=/usr/local/lib/go
 
     export ANDROID_HOME=/usr/local/opt/android-sdk
@@ -140,7 +144,7 @@ function update() {
     npm update -g
 
     echo "updating vim plugins"
-    vim +PlugUpdate +PlugUpgrade +qa
+    vim +PlugUpdate +PlugUpgrade +UpdateRemotePlugins +qa
 
     echo "updating ruby gems"
     gem update
@@ -166,6 +170,8 @@ function update() {
 
     echo "update app store apps"
     mas upgrade
+
+    npm outdated -g
 }
 
 eval "$(rbenv init -)"

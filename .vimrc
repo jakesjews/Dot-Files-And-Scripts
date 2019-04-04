@@ -36,7 +36,6 @@ endif
 "" Plugins
 call plug#begin('~/.vim/plugged')
 
-Plug 'Lokaltog/vim-easymotion'
 Plug 'tpope/vim-dispatch'
 Plug 'scrooloose/nerdcommenter'
 Plug 'w0rp/ale'
@@ -67,17 +66,13 @@ Plug 'tpope/vim-dadbod'
 Plug 'tpope/vim-fugitive'
 Plug 'eraserhd/parinfer-rust', {'do': 'cargo build --release'}
 Plug 'tmux-plugins/vim-tmux-focus-events'
-Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
 
 Plug 'adimit/prolog.vim'
 Plug 'guersam/vim-j'
-Plug 'idris-hackers/idris-vim'
 Plug 'ngn/vim-apl'
-Plug 'tfnico/vim-gradle'
 Plug 'brandonbloom/vim-factor'
 Plug 'alunny/pegjs-vim'
 Plug 'robbles/logstash.vim'
-Plug 'reasonml-editor/vim-reason'
 Plug 'kchmck/vim-coffee-script'
 Plug 'rhysd/vim-wasm'
 Plug 'sheerun/vim-polyglot'
@@ -105,23 +100,6 @@ let g:ansible_template_syntaxes = {
 \ '*.json.j2': 'json', 
 \ '*.js.j2': 'javascript' 
 \ }
-
-let g:LanguageClient_serverCommands = {
-  \ 'rust': ['rustup', 'run', 'stable', 'rls'],
-  \ 'sh': ['bash-language-server', 'start'],
-  \ 'clojure': ['clojure-lsp'],
-  \ 'css': ['css-languageserver', '--stdio'],
-  \ 'cpp': ['cquery', '--log-file=/tmp/cq.log'],
-  \ 'c': ['cquery', '--log-file=/tmp/cq.log'],
-  \ 'go': ['go-langserver'],
-  \ 'javascript': ['/usr/local/lib/node_modules/javascript-typescript-langserver/lib/language-server-stdio.js'],
-  \ 'typescript': ['/usr/local/lib/node_modules/javascript-typescript-langserver/lib/language-server-stdio.js'],
-  \ 'ocaml': ['ocam-language-server', '--stdio'],
-  \ 'ruby': ['solargraph', 'stdio'],
-  \ 'python': ['pyls'],
-  \ }
-
-let g:LanguageClient_autoStart = 1
 
 inoremap <expr><Down> pumvisible() ? "\<C-n>" : "\<Down>"
 inoremap <expr><Up>   pumvisible() ? "\<C-p>" : "\<Up>"
@@ -156,6 +134,7 @@ let g:NERDTreeIgnore = [
 
 let g:NERDTreeAutoDeleteBuffer = 1
 let g:NERDTreeMinimalUI = 1
+let g:NERDTreeCascadeSingleChildDir = 0
 
 "don't autoselect first item in omnicomplete, show if only one item (for
 "preview)
