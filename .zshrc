@@ -23,9 +23,10 @@ export LISTMAX=9998
 export REPORTER=spec
 
 if [[ $platform == 'macos' ]]; then
-    export VAGRANT_DEFAULT_PROVIDER='vmware_fusion'
+    export VAGRANT_DEFAULT_PROVIDER='vmware_desktop'
 
     source ~/.homebrew.token
+    export HOMEBREW_NO_AUTO_UPDATE=true
     export HOMEBREW_NO_INSTALL_CLEANUP=true
 
     export RUBY_CFLAGS="-Os -march=native"
@@ -34,14 +35,12 @@ if [[ $platform == 'macos' ]]; then
     export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-12.jdk/Contents/Home
     export GOPATH=/usr/local/lib/go
 
-    export ANDROID_HOME=/usr/local/opt/android-sdk
+    export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
     export GO_ROOT=$GOPATH/bin
     export BREW_ROOT=/usr/local/bin:/usr/local/sbin
     export CARGO_ROOT=~/.cargo/bin
     export OPENSSL_INCLUDE_DIR=/usr/local/opt/openssl/include
     export OPENSSL_LIB_DIR=/usr/local/opt/openssl/lib
-
-    export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/Library/Frameworks/Mono.framework/Versions/Current/lib/pkgconfig
 
     export COFFEELINT_CONFIG=/Users/jacob/.coffeelintrc
     export DOTNET_PATH=/usr/local/share/dotnet
@@ -49,11 +48,14 @@ if [[ $platform == 'macos' ]]; then
     export FACTOR_ROOT=/Applications/factor
     export DENO_ROOT=/Users/jacob/.deno/bin
     export TPM_ROOT=~/.tmux/plugins/tpm
+    export DART_ROOT=~/.pub-cache/bin
+    export WASMER_DIR="$HOME/.wasmer"
 
-    export PATH=/bin:/sbin:$BREW_ROOT:$GO_ROOT:$PATH:$DOTNET_PATH:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT
+    export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/opt/libffi/lib/pkgconfig
+    export PATH=/bin:/sbin:$BREW_ROOT:$GO_ROOT:$PATH:$DOTNET_PATH:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT
 fi
 
-plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli heroku mercurial vagrant coffee go bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod autojump docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip cargo)
+plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli heroku mercurial vagrant coffee go bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod autojump docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip cargo kubectl)
 
 if [[ $platform == 'macos' ]]; then
     plugins+=(brew osx)
@@ -120,6 +122,12 @@ function countInstances() {
     rg $1 -c | sort -k 2 -t ":" -n
 }
 
+function flacToMp3() {
+    for a in ./*.flac; do
+      < /dev/null ffmpeg -i "$a" -qscale:a 0 "${a[@]/%flac/mp3}"
+    done
+}
+
 function update-servers() {
     ansible all -i /usr/local/etc/ansible/hosts -m "apt" -a "upgrade=dist update_cache=true" -b
     ansible all -i /usr/local/etc/ansible/hosts -m "apt" -a "autoremove=true" -b
@@ -162,6 +170,9 @@ function update() {
     cargo install-update -a
     rustup update
 
+    echo "update wasmer"
+    wasmer self-update
+
     echo "upgrade oh-my-zsh"
     upgrade_oh_my_zsh
 
@@ -176,5 +187,6 @@ function update() {
 
 eval "$(rbenv init -)"
 
-. /Users/jacob/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+. /Users/jacob/.opam/opam-init/init.zsh > /dev/null 2> /dev/null
 
+[ -s "$WASMER_DIR/wasmer.sh" ] && source "$WASMER_DIR/wasmer.sh"

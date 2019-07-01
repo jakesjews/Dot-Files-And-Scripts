@@ -50,7 +50,6 @@ Plug 'morhetz/gruvbox'
 Plug 'scrooloose/nerdtree'
 Plug 'mileszs/ack.vim'
 Plug 'racer-rust/vim-racer'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'rizzatti/dash.vim', { 'on': '<Plug>DashSearch' }
 Plug 'junegunn/vim-easy-align', { 'on': '<Plug>(EasyAlign)' }
 Plug 'junegunn/rainbow_parentheses.vim', { 'for': ['lisp', 'clojure', 'scheme'] }
@@ -58,6 +57,7 @@ Plug 'tpope/vim-rails', { 'for': 'ruby' }
 Plug 'moll/vim-node'
 Plug 'Konfekt/FastFold'
 Plug 'janko-m/vim-test'
+Plug 'sukima/vim-javascript-imports'
 Plug 'AndrewRadev/ember_tools.vim'
 Plug 'sukima/vim-ember-imports'
 Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
@@ -66,6 +66,7 @@ Plug 'tpope/vim-dadbod'
 Plug 'tpope/vim-fugitive'
 Plug 'eraserhd/parinfer-rust', {'do': 'cargo build --release'}
 Plug 'tmux-plugins/vim-tmux-focus-events'
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
 
 Plug 'adimit/prolog.vim'
 Plug 'guersam/vim-j'
@@ -75,23 +76,21 @@ Plug 'alunny/pegjs-vim'
 Plug 'robbles/logstash.vim'
 Plug 'kchmck/vim-coffee-script'
 Plug 'rhysd/vim-wasm'
+Plug 'jakesjews/vim-emblem'
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 
 call plug#end()
 
-let g:polyglot_disabled = ['coffee-script']
+let g:polyglot_disabled = ['coffee-script', 'emblem']
 
 let g:test#strategy = 'neovim'
 
 let g:racer_cmd = '/Users/jacob/.cargo/bin/racer'
 
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#file#enable_buffer_path = 1
-
 let g:ctrlp_match_func = { 'match': 'cpsm#CtrlPMatch' }
 
-let g:vim_ember_imports_use_semicolons = 0
+let g:vim_javascript_imports_use_semicolons = 0
 let g:vim_ember_imports_multiline_max_col = 120
 let g:ember_imports_ember_data_next = 1
 
@@ -100,6 +99,8 @@ let g:ansible_template_syntaxes = {
 \ '*.json.j2': 'json', 
 \ '*.js.j2': 'javascript' 
 \ }
+
+let g:ale_echo_msg_format = '%linter% says %s'
 
 inoremap <expr><Down> pumvisible() ? "\<C-n>" : "\<Down>"
 inoremap <expr><Up>   pumvisible() ? "\<C-p>" : "\<Up>"
@@ -200,3 +201,4 @@ else
   highlight Normal ctermbg=NONE
   highlight nonText ctermbg=NONE
 endif
+
