@@ -73,7 +73,6 @@ zmodload zsh/mapfile
 zmodload zsh/mathfunc
 zmodload zsh/net/socket
 zmodload zsh/zftp
-zmodload zsh/attr
 zmodload zsh/net/tcp
 
 unsetopt listambiguous
