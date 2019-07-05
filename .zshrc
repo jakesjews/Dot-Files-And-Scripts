@@ -72,7 +72,6 @@ zmodload zsh/files
 zmodload zsh/mapfile
 zmodload zsh/mathfunc
 zmodload zsh/net/socket
-zmodload zsh/zftp
 zmodload zsh/net/tcp
 
 unsetopt listambiguous
