@@ -66,7 +66,7 @@ Plug 'tpope/vim-dadbod'
 Plug 'tpope/vim-fugitive'
 Plug 'eraserhd/parinfer-rust', {'do': 'cargo build --release'}
 Plug 'tmux-plugins/vim-tmux-focus-events'
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 Plug 'adimit/prolog.vim'
 Plug 'guersam/vim-j'

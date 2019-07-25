@@ -188,3 +188,5 @@ eval "$(rbenv init -)"
 . /Users/jacob/.opam/opam-init/init.zsh > /dev/null 2> /dev/null
 
 [ -s "$WASMER_DIR/wasmer.sh" ] && source "$WASMER_DIR/wasmer.sh"
+
+export PATH=/Users/jacob/.local/bin:$PATH
