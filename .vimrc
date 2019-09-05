@@ -38,7 +38,7 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'tpope/vim-dispatch'
 Plug 'scrooloose/nerdcommenter'
-Plug 'w0rp/ale'
+Plug 'dense-analysis/ale'
 Plug 'tpope/vim-surround'
 Plug 'machakann/vim-sandwich'
 Plug 'ctrlpvim/ctrlp.vim'
@@ -48,7 +48,7 @@ Plug 'tpope/vim-repeat'
 Plug 'majutsushi/tagbar'
 Plug 'morhetz/gruvbox'
 Plug 'scrooloose/nerdtree'
-Plug 'mileszs/ack.vim'
+Plug 'mhinz/vim-grepper'
 Plug 'racer-rust/vim-racer'
 Plug 'rizzatti/dash.vim', { 'on': '<Plug>DashSearch' }
 Plug 'junegunn/vim-easy-align', { 'on': '<Plug>(EasyAlign)' }
@@ -178,13 +178,19 @@ if &term =~? '^screen'
   set ttymouse=xterm2
 endif
 
-if executable('rg')
-  let g:ackprg = 'rg --vimgrep --smart-case'   
-  cnoreabbrev rg Ack
-  cnoreabbrev rG Ack
-  cnoreabbrev Rg Ack
-  cnoreabbrev RG Ack
+let g:grepper = {
+    \ 'prompt': 0,
+    \ 'rg': {
+    \   'grepprg': 'rg -H --no-heading --vimgrep --smart-case'
+    \ }}
 
+if executable('rg')
+  cnoreabbrev rg GrepperRg
+  cnoreabbrev rG GrepperRg
+  cnoreabbrev Rg GrepperRg
+  cnoreabbrev RG GrepperRg
+
+  let g:ctrlp_user_command_async = 1
   let g:ctrlp_user_command = 'rg %s -S -l --files -g ""'
   let g:ctrlp_use_caching = 0
 endif

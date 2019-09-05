@@ -21,6 +21,8 @@ export ANSIBLE_HOST_KEY_CHECKING=False
 export KEYTIMEOUT=1
 export LISTMAX=9998
 export REPORTER=spec
+export BROCCOLI_ENABLED_MEMOIZE=true 
+export EMBER_CLI_BROCCOLI_WATCHER=true
 
 if [[ $platform == 'macos' ]]; then
     export VAGRANT_DEFAULT_PROVIDER='vmware_desktop'
@@ -44,7 +46,6 @@ if [[ $platform == 'macos' ]]; then
 
     export COFFEELINT_CONFIG=/Users/jacob/.coffeelintrc
     export DOTNET_PATH=/usr/local/share/dotnet
-    export RUST_SRC_PATH=/usr/local/src/rust/src
     export FACTOR_ROOT=/Applications/factor
     export DENO_ROOT=/Users/jacob/.deno/bin
     export TPM_ROOT=~/.tmux/plugins/tpm
@@ -135,6 +136,10 @@ function update-servers() {
     ansible integration -i /usr/local/etc/ansible/hosts -m "shell" -a "docker run --name selenium --net=host --restart=always -v /dev/shm:/dev/shm -d selenium/standalone-chrome" -b
 }
 
+function pwdx {
+  lsof -a -d cwd -p $1 -n -Fn | awk '/^n/ {print substr($0,2)}'
+}
+
 function update() {
     setopt localoptions rmstarsilent
     unsetopt nomatch
@@ -165,8 +170,8 @@ function update() {
     tlmgr update --self --all --reinstall-forcibly-removed
 
     echo "update rust packages"
-    cargo install-update -a
     rustup update
+    cargo install-update -a
 
     echo "update wasmer"
     wasmer self-update
@@ -188,5 +193,3 @@ eval "$(rbenv init -)"
 . /Users/jacob/.opam/opam-init/init.zsh > /dev/null 2> /dev/null
 
 [ -s "$WASMER_DIR/wasmer.sh" ] && source "$WASMER_DIR/wasmer.sh"
-
-export PATH=/Users/jacob/.local/bin:$PATH
