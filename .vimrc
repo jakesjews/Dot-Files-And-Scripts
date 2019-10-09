@@ -42,11 +42,11 @@ Plug 'dense-analysis/ale'
 Plug 'tpope/vim-surround'
 Plug 'machakann/vim-sandwich'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'nixprime/cpsm', { 'do': 'env ./install.sh' }
+Plug 'nixprime/cpsm', { 'do': 'PY3=ON env ./install.sh' }
 Plug 'editorconfig/editorconfig-vim'
 Plug 'tpope/vim-repeat'
 Plug 'majutsushi/tagbar'
-Plug 'morhetz/gruvbox'
+Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'scrooloose/nerdtree'
 Plug 'mhinz/vim-grepper'
 Plug 'racer-rust/vim-racer'
@@ -196,11 +196,16 @@ if executable('rg')
 endif
 
 set background=dark
-colorscheme gruvbox
+colorscheme dracula
+hi! link SpecialComment DraculaCyan
+hi! link Type DraculaCyan
+hi! def link coffeeObjAssign Function
+hi! def link coffeeParens DraculaPurple
+hi! def link coffeeSpecialIdent DraculaOrange
 hi Normal guibg=NONE ctermbg=NONE
 
 if has('gui_running')
-  set guifont=Consolas:h12
+  set guifont=FiraCode:h12
   let g:do_syntax_sel_menu = 1|runtime! synmenu.vim|aunmenu &Syntax.&Show\ filetypes\ in\ menu
 else
   " make black background work in iterm

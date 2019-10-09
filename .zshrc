@@ -11,7 +11,7 @@ fi
 export ZSH=$HOME/.oh-my-zsh
 export LANG=en_US.UTF-8
 export DISABLE_AUTO_UPDATE="true"
-export ZSH_THEME="robbyrussell"
+export ZSH_THEME="dracula"
 export EDITOR='nvim'
 export SHELL='zsh'
 export LC_CTYPE=en_US.UTF-8
@@ -28,8 +28,8 @@ if [[ $platform == 'macos' ]]; then
     export VAGRANT_DEFAULT_PROVIDER='vmware_desktop'
 
     source ~/.homebrew.token
-    export HOMEBREW_NO_AUTO_UPDATE=true
-    export HOMEBREW_NO_INSTALL_CLEANUP=true
+    export HOMEBREW_NO_AUTO_UPDATE=1
+    export HOMEBREW_NO_INSTALL_CLEANUP=1
 
     export RUBY_CFLAGS="-Os -march=native"
 
@@ -66,6 +66,7 @@ fi
 
 autoload zargs
 autoload zmv
+autoload tcp_open
 
 zmodload zsh/datetime
 zmodload zsh/stat
@@ -124,6 +125,12 @@ function countInstances() {
 function flacToMp3() {
     for a in ./*.flac; do
       < /dev/null ffmpeg -i "$a" -qscale:a 0 "${a[@]/%flac/mp3}"
+    done
+}
+
+function wavToMp3() {
+    for a in ./*.wav; do
+      < /dev/null ffmpeg -i "$a" "${a[@]/%wav/mp3}"
     done
 }
 
