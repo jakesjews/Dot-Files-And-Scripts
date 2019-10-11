@@ -200,8 +200,9 @@ colorscheme dracula
 hi! link SpecialComment DraculaCyan
 hi! link Type DraculaCyan
 hi! def link coffeeObjAssign Function
-hi! def link coffeeParens DraculaPurple
 hi! def link coffeeSpecialIdent DraculaOrange
+hi! def link coffeeKeyword DraculaRed
+hi! def link coffeeStatement DraculaRed
 hi Normal guibg=NONE ctermbg=NONE
 
 if has('gui_running')
