@@ -181,7 +181,7 @@ endif
 let g:grepper = {
     \ 'prompt': 0,
     \ 'rg': {
-    \   'grepprg': 'rg -H --no-heading --vimgrep --smart-case'
+    \   'grepprg': 'rg -H --no-heading --vimgrep --smart-case --auto-hybrid-regex'
     \ }}
 
 if executable('rg')
@@ -191,7 +191,7 @@ if executable('rg')
   cnoreabbrev RG GrepperRg
 
   let g:ctrlp_user_command_async = 1
-  let g:ctrlp_user_command = 'rg %s -S -l --files -g ""'
+  let g:ctrlp_user_command = 'rg %s -S -l --auto-hybrid-regex --files -g ""'
   let g:ctrlp_use_caching = 0
 endif
 

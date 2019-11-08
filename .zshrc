@@ -56,7 +56,7 @@ if [[ $platform == 'macos' ]]; then
     export PATH=/bin:/sbin:$BREW_ROOT:$GO_ROOT:$PATH:$DOTNET_PATH:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT
 fi
 
-plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli heroku mercurial vagrant coffee go bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod autojump docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip cargo kubectl)
+plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli heroku mercurial vagrant coffee go bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod autojump docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip cargo kubectl httpie jira redis-cli ng fzf)
 
 if [[ $platform == 'macos' ]]; then
     plugins+=(brew osx)
@@ -81,7 +81,6 @@ unsetopt listambiguous
 source "$ZSH/oh-my-zsh.sh"
 
 if [[ $platform == 'macos' ]]; then
-    alias 9="/usr/local/bin/9"
     alias galileo="screen /dev/tty.usbserial 115200"
 
     source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -96,7 +95,7 @@ fi
 
 alias space="du -hs * | gsort -h"
 alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
-alias rg='rg -S'
+alias rg='rg -S --auto-hybrid-regex'
 alias l="ls"
 alias xsp="MONO_OPTIONS=--arch=64 xsp4 --port 8080"
 alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
@@ -135,8 +134,8 @@ function wavToMp3() {
 }
 
 function update-servers() {
-    ansible all -i /usr/local/etc/ansible/hosts -m "apt" -a "upgrade=dist update_cache=true" -b
-    ansible all -i /usr/local/etc/ansible/hosts -m "apt" -a "autoremove=true" -b
+    ansible all -i /usr/local/etc/ansible/hosts -f 13 -m "apt" -a "upgrade=dist update_cache=true" -b
+    ansible all -i /usr/local/etc/ansible/hosts -f 13 -m "apt" -a "autoremove=true" -b
 
     ansible integration -i /usr/local/etc/ansible/hosts -m "shell" -a "docker pull selenium/standalone-chrome" -b
     ansible integration -i /usr/local/etc/ansible/hosts -m "shell" -a "docker stop selenium && docker rm selenium" -b
@@ -171,7 +170,7 @@ function update() {
     echo "updating phoenix and mix"
     mix local.hex --force
     mix local.rebar --force
-    mix archive.install https://github.com/phoenixframework/archives/raw/master/phx_new.ez --force
+    mix archive.install hex phx_new --force
 
     echo "update tex packages"
     tlmgr update --self --all --reinstall-forcibly-removed
@@ -185,6 +184,11 @@ function update() {
 
     echo "upgrade oh-my-zsh"
     upgrade_oh_my_zsh
+
+    echo "upgrade arduino packages"
+    arduino-cli lib update-index
+    arduino-cli core update-index
+    arduino-cli core upgrade
 
     echo "upgrade cask packages"
     brew cu --all -q -y
