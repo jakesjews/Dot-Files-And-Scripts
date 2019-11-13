@@ -5,6 +5,7 @@ email = jacobjewell@eflexsystems.com
 [core]
 excludesfile = /Users/jacob/.gitignore_global
 editor = nvim
+pager = delta --dark 
 
 [color]
 ui = auto
@@ -48,10 +49,6 @@ required = true
 process = git-lfs filter-process
 clean = git-lfs clean -- %f
 smudge = git-lfs smudge -- %f
-
-[pager]
-diff = diff-so-fancy | less --tabs=1,5 -RFX
-show = diff-so-fancy | less --tabs=1,5 -RFX
 
 [commit]
 template = /Users/jacob/.stCommitMsg
