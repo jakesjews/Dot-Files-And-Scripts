@@ -51,6 +51,7 @@ if [[ $platform == 'macos' ]]; then
     export TPM_ROOT=~/.tmux/plugins/tpm
     export DART_ROOT=~/.pub-cache/bin
     export WASMER_DIR="$HOME/.wasmer"
+    export CABAL_DIR="$HOME/.cabal/bin"
 
     export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/opt/libffi/lib/pkgconfig
     export PATH=/bin:/sbin:$BREW_ROOT:$GO_ROOT:$PATH:$DOTNET_PATH:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT
@@ -134,12 +135,12 @@ function wavToMp3() {
 }
 
 function update-servers() {
-    ansible all -i /usr/local/etc/ansible/hosts -f 13 -m "apt" -a "upgrade=dist update_cache=true" -b
-    ansible all -i /usr/local/etc/ansible/hosts -f 13 -m "apt" -a "autoremove=true" -b
+    ansible all -i /usr/local/etc/ansible/hosts -f 12 -m "apt" -a "upgrade=dist update_cache=true" -b
+    ansible all -i /usr/local/etc/ansible/hosts -f 12 -m "apt" -a "autoremove=true" -b
 
-    ansible integration -i /usr/local/etc/ansible/hosts -m "shell" -a "docker pull selenium/standalone-chrome" -b
-    ansible integration -i /usr/local/etc/ansible/hosts -m "shell" -a "docker stop selenium && docker rm selenium" -b
-    ansible integration -i /usr/local/etc/ansible/hosts -m "shell" -a "docker run --name selenium --net=host --restart=always -v /dev/shm:/dev/shm -d selenium/standalone-chrome" -b
+    ansible integration -i /usr/local/etc/ansible/hosts -f 3 -m "shell" -a "docker pull selenium/standalone-chrome" -b
+    ansible integration -i /usr/local/etc/ansible/hosts -f 3 -m "shell" -a "docker stop selenium && docker rm selenium" -b
+    ansible integration -i /usr/local/etc/ansible/hosts -f 3 -m "shell" -a "docker run --name selenium --net=host --restart=always -v /dev/shm:/dev/shm -d selenium/standalone-chrome" -b
 }
 
 function pwdx {
