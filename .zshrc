@@ -34,7 +34,7 @@ if [[ $platform == 'macos' ]]; then
     export RUBY_CFLAGS="-Os -march=native"
 
     export NEOVIM_LISTEN_ADDRESS=/tmp/neovim.sock
-    export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-12.jdk/Contents/Home
+    export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-13.jdk/Contents/Home
     export GOPATH=/usr/local/lib/go
 
     export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
@@ -52,9 +52,10 @@ if [[ $platform == 'macos' ]]; then
     export DART_ROOT=~/.pub-cache/bin
     export WASMER_DIR="$HOME/.wasmer"
     export CABAL_DIR="$HOME/.cabal/bin"
+    export DOTNET_TOOLS_ROOT=~/.dotnet/tools
 
     export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/opt/libffi/lib/pkgconfig
-    export PATH=/bin:/sbin:$BREW_ROOT:$GO_ROOT:$PATH:$DOTNET_PATH:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT
+    export PATH=/bin:/sbin:$BREW_ROOT:$GO_ROOT:$PATH:$DOTNET_PATH:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT:$DOTNET_TOOLS_ROOT
 fi
 
 plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli heroku mercurial vagrant coffee go bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod autojump docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip cargo kubectl httpie jira redis-cli ng fzf)
@@ -174,7 +175,7 @@ function update() {
     mix archive.install hex phx_new --force
 
     echo "update tex packages"
-    tlmgr update --self --all --reinstall-forcibly-removed
+    tlmgr update --self --all
 
     echo "update rust packages"
     rustup update
@@ -186,13 +187,8 @@ function update() {
     echo "upgrade oh-my-zsh"
     upgrade_oh_my_zsh
 
-    echo "upgrade arduino packages"
-    arduino-cli lib update-index
-    arduino-cli core update-index
-    arduino-cli core upgrade
-
     echo "upgrade cask packages"
-    brew cu --all -q -y
+    brew cu --all -q -y --no-brew-update
 
     echo "update app store apps"
     mas upgrade

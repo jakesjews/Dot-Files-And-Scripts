@@ -33,13 +33,14 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   augroup end
 endif
 
+let g:polyglot_disabled = ['coffee-script', 'emblem']
+
 "" Plugins
 call plug#begin('~/.vim/plugged')
 
 Plug 'tpope/vim-dispatch'
 Plug 'scrooloose/nerdcommenter'
 Plug 'dense-analysis/ale'
-Plug 'tpope/vim-surround'
 Plug 'machakann/vim-sandwich'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'nixprime/cpsm', { 'do': 'PY3=ON env ./install.sh' }
@@ -81,8 +82,6 @@ Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 
 call plug#end()
-
-let g:polyglot_disabled = ['coffee-script', 'emblem']
 
 let g:test#strategy = 'neovim'
 
