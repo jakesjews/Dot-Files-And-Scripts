@@ -69,8 +69,6 @@ Plug 'eraserhd/parinfer-rust', {'do': 'cargo build --release'}
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
-Plug 'adimit/prolog.vim'
-Plug 'guersam/vim-j'
 Plug 'ngn/vim-apl'
 Plug 'brandonbloom/vim-factor'
 Plug 'alunny/pegjs-vim'
@@ -78,6 +76,7 @@ Plug 'robbles/logstash.vim'
 Plug 'kchmck/vim-coffee-script'
 Plug 'rhysd/vim-wasm'
 Plug 'jakesjews/vim-emblem'
+Plug 'wlangstroth/vim-racket'
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 
@@ -116,6 +115,7 @@ augroup filetypedetect
     au FileType c setl sw=4 sts=4 ts=4 et
     au FileType cpp setl sw=4 sts=4 ts=4 et
     au FileType zsh setl sw=4 sts=4 ts=4 et
+    au FileType sh setl sw=4 sts=4 ts=4 et
     au FileType make setl noexpandtab sw=4 sts=0 ts=4
 augroup END
 

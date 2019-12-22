@@ -21,8 +21,6 @@ export ANSIBLE_HOST_KEY_CHECKING=False
 export KEYTIMEOUT=1
 export LISTMAX=9998
 export REPORTER=spec
-export BROCCOLI_ENABLED_MEMOIZE=true 
-export EMBER_CLI_BROCCOLI_WATCHER=true
 
 if [[ $platform == 'macos' ]]; then
     export VAGRANT_DEFAULT_PROVIDER='vmware_desktop'
@@ -34,7 +32,7 @@ if [[ $platform == 'macos' ]]; then
     export RUBY_CFLAGS="-Os -march=native"
 
     export NEOVIM_LISTEN_ADDRESS=/tmp/neovim.sock
-    export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-13.jdk/Contents/Home
+    export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-13.0.1.jdk/Contents/Home
     export GOPATH=/usr/local/lib/go
 
     export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
@@ -45,17 +43,14 @@ if [[ $platform == 'macos' ]]; then
     export OPENSSL_LIB_DIR=/usr/local/opt/openssl/lib
 
     export COFFEELINT_CONFIG=/Users/jacob/.coffeelintrc
-    export DOTNET_PATH=/usr/local/share/dotnet
     export FACTOR_ROOT=/Applications/factor
     export DENO_ROOT=/Users/jacob/.deno/bin
     export TPM_ROOT=~/.tmux/plugins/tpm
     export DART_ROOT=~/.pub-cache/bin
     export WASMER_DIR="$HOME/.wasmer"
     export CABAL_DIR="$HOME/.cabal/bin"
-    export DOTNET_TOOLS_ROOT=~/.dotnet/tools
 
-    export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/opt/libffi/lib/pkgconfig
-    export PATH=/bin:/sbin:$BREW_ROOT:$GO_ROOT:$PATH:$DOTNET_PATH:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT:$DOTNET_TOOLS_ROOT
+    export PATH=/usr/local/sbin:$GO_ROOT:$PATH:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT
 fi
 
 plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli heroku mercurial vagrant coffee go bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod autojump docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip cargo kubectl httpie jira redis-cli ng fzf)
@@ -180,6 +175,7 @@ function update() {
     echo "update rust packages"
     rustup update
     cargo install-update -a
+    cargo cache --autoclean
 
     echo "update wasmer"
     wasmer self-update
@@ -189,6 +185,7 @@ function update() {
 
     echo "upgrade cask packages"
     brew cu --all -q -y --no-brew-update
+    rm -rf /usr/local/Caskroom/**/*.pkg
 
     echo "update app store apps"
     mas upgrade
