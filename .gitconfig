@@ -56,3 +56,5 @@ smudge = git-lfs smudge -- %f
 [fetch]
 writeCommitGraph = true
 
+[protocol]
+version = 2

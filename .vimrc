@@ -5,7 +5,7 @@ nnoremap x "_x
 map <C-c> <leader>c<space>
 map <C-f> <leader><leader>w
 map <C-t> :TestNearest<CR>
-map <silent> <C-@> <Plug>DashSearch
+map <C-q> :Dash<CR>
 vmap <Enter> <Plug>(EasyAlign)
 vnoremap . :normal .<CR>
 nnoremap <C-e> :e.<CR>
@@ -51,7 +51,7 @@ Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'scrooloose/nerdtree'
 Plug 'mhinz/vim-grepper'
 Plug 'racer-rust/vim-racer'
-Plug 'rizzatti/dash.vim', { 'on': '<Plug>DashSearch' }
+Plug 'rizzatti/dash.vim'
 Plug 'junegunn/vim-easy-align', { 'on': '<Plug>(EasyAlign)' }
 Plug 'junegunn/rainbow_parentheses.vim', { 'for': ['lisp', 'clojure', 'scheme'] }
 Plug 'tpope/vim-rails', { 'for': 'ruby' } 
@@ -99,6 +99,8 @@ let g:ansible_template_syntaxes = {
 \ }
 
 let g:ale_echo_msg_format = '%linter% says %s'
+let g:ale_linter_aliases = {'coffee': ['javascript']}
+let g:ale_linters = {'coffee': ['eslint']}
 
 inoremap <expr><Down> pumvisible() ? "\<C-n>" : "\<Down>"
 inoremap <expr><Up>   pumvisible() ? "\<C-p>" : "\<Up>"
@@ -136,8 +138,7 @@ let g:NERDTreeAutoDeleteBuffer = 1
 let g:NERDTreeMinimalUI = 1
 let g:NERDTreeCascadeSingleChildDir = 0
 
-"don't autoselect first item in omnicomplete, show if only one item (for
-"preview)
+"don't autoselect first item in omnicomplete, show if only one item (for preview)
 set completeopt=longest,menuone,preview
 
 set showcmd

@@ -49,6 +49,7 @@ if [[ $platform == 'macos' ]]; then
     export DART_ROOT=~/.pub-cache/bin
     export WASMER_DIR="$HOME/.wasmer"
     export CABAL_DIR="$HOME/.cabal/bin"
+    export QHOME="$HOME/.q"
 
     export PATH=/usr/local/sbin:$GO_ROOT:$PATH:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT
 fi
@@ -78,7 +79,7 @@ unsetopt listambiguous
 source "$ZSH/oh-my-zsh.sh"
 
 if [[ $platform == 'macos' ]]; then
-    alias galileo="screen /dev/tty.usbserial 115200"
+    alias q='rlwrap -r $QHOME/m64/q'
 
     source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
     source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
@@ -122,6 +123,7 @@ function flacToMp3() {
     for a in ./*.flac; do
       < /dev/null ffmpeg -i "$a" -qscale:a 0 "${a[@]/%flac/mp3}"
     done
+    rm *.flac
 }
 
 function wavToMp3() {
@@ -141,6 +143,26 @@ function update-servers() {
 
 function pwdx {
   lsof -a -d cwd -p $1 -n -Fn | awk '/^n/ {print substr($0,2)}'
+}
+
+function rustMode() {
+    alias cat=bat
+    alias ps=procs
+    alias xargs=rargs
+    alias ls=exa
+    alias find=fd
+    alias sed=sd
+    alias uniq=runiq
+    alias du=dust
+    alias cp=xcp
+    alias hexdump=hexyl
+    alias ascii=chars
+    alias tree=broot
+    alias bc=eva
+    alias rm=rip
+    alias dd=bcp
+    alias wc=cw
+    alias less=peep
 }
 
 function update() {
