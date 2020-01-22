@@ -52,7 +52,7 @@ if [[ $platform == 'macos' ]]; then
     export QHOME="$HOME/.q"
     export PLAN9=/usr/local/plan9
 
-    export PATH=/usr/local/sbin:$GO_ROOT:$PATH:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT
+    export PATH=/usr/local/sbin:$GO_ROOT:$PATH:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin
 fi
 
 plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli heroku mercurial vagrant coffee go bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod autojump docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip cargo kubectl httpie jira redis-cli ng fzf)
