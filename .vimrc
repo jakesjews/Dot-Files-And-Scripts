@@ -33,7 +33,7 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   augroup end
 endif
 
-let g:polyglot_disabled = ['coffee-script', 'emblem']
+let g:polyglot_disabled = ['coffee-script', 'emblem', 'yaml']
 
 "" Plugins
 call plug#begin('~/.vim/plugged')
