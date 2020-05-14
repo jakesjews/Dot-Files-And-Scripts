@@ -16,7 +16,7 @@ if has('nvim')
 endif
 
 set backspace=indent,eol,start
-set backupdir=$HOME/.vim/swap//
+set backupdir=$HOME/.vim/backup//
 set directory=$HOME/.vim/swap//
 set undodir=~/.vim/undo//
 
@@ -67,6 +67,9 @@ Plug 'tpope/vim-dadbod'
 Plug 'tpope/vim-fugitive'
 Plug 'eraserhd/parinfer-rust', {'do': 'cargo build --release'}
 Plug 'tmux-plugins/vim-tmux-focus-events'
+Plug 'tpope/vim-projectionist'
+Plug 'tpope/vim-sleuth'
+Plug 'OmniSharp/omnisharp-vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 Plug 'ngn/vim-apl'
@@ -100,7 +103,14 @@ let g:ansible_template_syntaxes = {
 
 let g:ale_echo_msg_format = '%linter% says %s'
 let g:ale_linter_aliases = {'coffee': ['javascript']}
-let g:ale_linters = {'coffee': ['eslint']}
+
+let g:ale_linters = {
+\ 'coffee': ['eslint'],
+\ 'cs': ['OmniSharp']
+\}
+
+let g:OmniSharp_server_stdio = 1
+let g:OmniSharp_highlight_types = 3
 
 inoremap <expr><Down> pumvisible() ? "\<C-n>" : "\<Down>"
 inoremap <expr><Up>   pumvisible() ? "\<C-p>" : "\<Up>"

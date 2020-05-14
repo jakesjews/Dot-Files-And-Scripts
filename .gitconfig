@@ -1,9 +1,9 @@
 [user]
-	name = Jacob Jewell
-	email = jacobjewell@eflexsystems.com
+name = Jacob Jewell
+email = jacobjewell@eflexsystems.com
 
 [core]
-	excludesfile = /Users/jacob/.gitignore_global
+excludesfile = /Users/jacob/.gitignore_global
 editor = nvim
 pager = delta --dark 
 
@@ -27,12 +27,12 @@ tool = bc3
 bc3 = trustExitCode
 
 [difftool "sourcetree"]
-	cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\"
-	path = -ro
+cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\"
+path = -ro
 
 [mergetool "sourcetree"]
-	cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
-	trustExitCode = true
+cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
+trustExitCode = true
 
 [filter "media"]
 required = true
@@ -51,10 +51,7 @@ clean = git-lfs clean -- %f
 smudge = git-lfs smudge -- %f
 
 [commit]
-	template = /Users/jacob/.stCommitMsg
+template = /Users/jacob/.stCommitMsg
 
 [fetch]
 writeCommitGraph = true
-
-[protocol]
-version = 2
