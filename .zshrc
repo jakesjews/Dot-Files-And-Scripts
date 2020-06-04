@@ -60,11 +60,12 @@ if [[ $platform == 'macos' ]]; then
     export PYTHON_USER_PATH=/Users/jacob/Library/Python/3.7/bin
     export NIM_ROOT=~/.nimble/bin
     export DOTNET_TOOLS_ROOT=/Users/jacob/.dotnet/tools
+    export COMPOSER_ROOT=/Users/jacob/.composer/vendor/bin
 
-    export PATH=/usr/local/sbin:$PATH:$GO_ROOT:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$PYTHON_USER_PATH:$NIM_ROOT:$DOTNET_TOOLS_ROOT
+    export PATH=/usr/local/sbin:$PATH:$GO_ROOT:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$PYTHON_USER_PATH:$NIM_ROOT:$DOTNET_TOOLS_ROOT:$COMPOSER_ROOT
 fi
 
-plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli heroku mercurial vagrant coffee go bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip cargo httpie jira redis-cli ng rbenv)
+plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli heroku mercurial vagrant coffee golang bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip cargo httpie jira redis-cli ng rbenv)
 
 if [[ $platform == 'macos' ]]; then
     plugins+=(brew osx)
@@ -235,12 +236,15 @@ function update() {
    echo "upgrade dotnet tools"
    dotnet tool list -g | tail -n +3 | tr -s ' ' | cut -f 1 -d' ' | xargs -n 1 dotnet tool update -g
 
+   echo "update app store apps"
+   mas upgrade
+
+   echo "update gcloud"
+   gcloud components update --quiet
+
    echo "upgrade cask packages"
    brew cu --all -q -y --no-brew-update
    rm -rf /usr/local/Caskroom/**/*.pkg
-
-   echo "update app store apps"
-   mas upgrade
 
    echo "outdated python packages"
    pip3 list --user --outdated --not-required

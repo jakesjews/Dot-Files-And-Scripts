@@ -33,7 +33,7 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   augroup end
 endif
 
-let g:polyglot_disabled = ['coffee-script', 'emblem', 'yaml']
+let g:polyglot_disabled = ['coffee-script', 'emblem', 'yaml', 'cs', 'jinja', 'ansible']
 
 "" Plugins
 call plug#begin('~/.vim/plugged')
@@ -45,6 +45,7 @@ Plug 'machakann/vim-sandwich'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'nixprime/cpsm', { 'do': 'PY3=ON env ./install.sh' }
 Plug 'editorconfig/editorconfig-vim'
+Plug 'pearofducks/ansible-vim'
 Plug 'tpope/vim-repeat'
 Plug 'majutsushi/tagbar'
 Plug 'dracula/vim', { 'as': 'dracula' }
@@ -70,6 +71,7 @@ Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'tpope/vim-projectionist'
 Plug 'tpope/vim-sleuth'
 Plug 'OmniSharp/omnisharp-vim'
+Plug 'metakirby5/codi.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 Plug 'ngn/vim-apl'
@@ -98,7 +100,8 @@ let g:ember_imports_ember_data_next = 1
 let g:ansible_template_syntaxes = { 
 \ '*.sh.j2': 'sh', 
 \ '*.json.j2': 'json', 
-\ '*.js.j2': 'javascript' 
+\ '*.js.j2': 'javascript', 
+\ '*.conf.j2': 'dosini', 
 \ }
 
 let g:ale_echo_msg_format = '%linter% says %s'
@@ -122,7 +125,8 @@ augroup END
 
 augroup filetypedetect
     au! BufRead,BufNewFile *.m setfiletype objc
-    au BufRead,BufNewFile *.AWL set filetype=asm
+    au BufRead,BufNewFile *.AWL setfiletype asm
+    au BufRead,BufNewFile *.razor setfiletype razor
     au FileType cs setl sw=4 sts=4 ts=4 et
     au FileType c setl sw=4 sts=4 ts=4 et
     au FileType cpp setl sw=4 sts=4 ts=4 et
@@ -214,13 +218,4 @@ hi! def link coffeeSpecialIdent DraculaOrange
 hi! def link coffeeKeyword DraculaRed
 hi! def link coffeeStatement DraculaRed
 hi Normal guibg=NONE ctermbg=NONE
-
-if has('gui_running')
-  set guifont=FiraCode:h12
-  let g:do_syntax_sel_menu = 1|runtime! synmenu.vim|aunmenu &Syntax.&Show\ filetypes\ in\ menu
-else
-  " make black background work in iterm
-  highlight Normal ctermbg=NONE
-  highlight nonText ctermbg=NONE
-endif
 
