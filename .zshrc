@@ -25,6 +25,7 @@ export ZSH_DISABLE_COMPFIX=true
 export ZSH_AUTOSUGGEST_USE_ASYNC=true
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+export TEZOS_CLIENT_UNSAFE_DISABLE_DISCLAIMER=yes
 
 if [[ $platform == 'macos' ]]; then
     export VAGRANT_DEFAULT_PROVIDER='vmware_desktop'
@@ -36,7 +37,7 @@ if [[ $platform == 'macos' ]]; then
     export RUBY_CFLAGS="-Os -march=native"
 
     export NEOVIM_LISTEN_ADDRESS=/tmp/neovim.sock
-    export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-14.0.1.jdk/Contents/Home
+    export JAVA_HOME=`/usr/libexec/java_home`
     export GOPATH=/usr/local/lib/go
 
     export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
@@ -123,6 +124,7 @@ alias mux="tmuxinator"
 alias redis-master="redis-cli -h qa-db -p 26379 SENTINEL get-master-addr-by-name eflex-redis"
 alias vim='nvim'
 alias vi='nvim'
+alias x=~/.dotnet/tools/x
 
 function clean-eflex() {
     tmux kill-server
@@ -235,6 +237,9 @@ function update() {
 
    echo "upgrade dotnet tools"
    dotnet tool list -g | tail -n +3 | tr -s ' ' | cut -f 1 -d' ' | xargs -n 1 dotnet tool update -g
+
+   echo "update composer packages"
+   composer g update
 
    echo "update app store apps"
    mas upgrade

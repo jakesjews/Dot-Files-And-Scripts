@@ -43,7 +43,7 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'dense-analysis/ale'
 Plug 'machakann/vim-sandwich'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'nixprime/cpsm', { 'do': 'PY3=ON env ./install.sh' }
+Plug 'raghur/fruzzy', {'do': { -> fruzzy#install()}}
 Plug 'editorconfig/editorconfig-vim'
 Plug 'pearofducks/ansible-vim'
 Plug 'tpope/vim-repeat'
@@ -51,7 +51,6 @@ Plug 'majutsushi/tagbar'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'scrooloose/nerdtree'
 Plug 'mhinz/vim-grepper'
-Plug 'racer-rust/vim-racer'
 Plug 'rizzatti/dash.vim'
 Plug 'junegunn/vim-easy-align', { 'on': '<Plug>(EasyAlign)' }
 Plug 'junegunn/rainbow_parentheses.vim', { 'for': ['lisp', 'clojure', 'scheme'] }
@@ -63,7 +62,6 @@ Plug 'sukima/vim-javascript-imports'
 Plug 'AndrewRadev/ember_tools.vim'
 Plug 'sukima/vim-ember-imports'
 Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
-Plug 'yegappan/mru'
 Plug 'tpope/vim-dadbod'
 Plug 'tpope/vim-fugitive'
 Plug 'eraserhd/parinfer-rust', {'do': 'cargo build --release'}
@@ -72,6 +70,7 @@ Plug 'tpope/vim-projectionist'
 Plug 'tpope/vim-sleuth'
 Plug 'OmniSharp/omnisharp-vim'
 Plug 'metakirby5/codi.vim'
+Plug 'Yggdroot/indentLine'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 Plug 'ngn/vim-apl'
@@ -87,11 +86,14 @@ Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 
 call plug#end()
 
+let g:coc_global_extensions = [
+  \ 'coc-ember'
+\ ]
+
 let g:test#strategy = 'neovim'
 
-let g:racer_cmd = '/Users/jacob/.cargo/bin/racer'
-
-let g:ctrlp_match_func = { 'match': 'cpsm#CtrlPMatch' }
+let g:fruzzy#usenative = 1
+let g:ctrlp_match_func = { 'match': 'fruzzy#ctrlp#matcher' }
 
 let g:vim_javascript_imports_use_semicolons = 0
 let g:vim_ember_imports_multiline_max_col = 120
@@ -109,7 +111,13 @@ let g:ale_linter_aliases = {'coffee': ['javascript']}
 
 let g:ale_linters = {
 \ 'coffee': ['eslint'],
+\ 'javascript': ['eslint'],
 \ 'cs': ['OmniSharp']
+\}
+
+let g:ale_fixers = {
+\ 'coffee': ['eslint'],
+\ 'javascript': ['eslint']
 \}
 
 let g:OmniSharp_server_stdio = 1
@@ -145,7 +153,7 @@ let g:NERDTreeIgnore = [
 \ 'npm-debug.log',     '\.swp$',         '\.tmp$',        '\.reh$', 
 \ '.DS_Store',         '\.iml$',         '\~$',           '.sublime-workspace', 
 \ '\.userprefs$',      '.tm_properties', '\.jar$',        '\.pfx$', 
-\ '\.sublime-project', '\.DotSettings',  'TestResult.xml', 'target'
+\ '\.sublime-project', '\.DotSettings',  'TestResult.xml'
 \ ]
 
 let g:NERDTreeAutoDeleteBuffer = 1
