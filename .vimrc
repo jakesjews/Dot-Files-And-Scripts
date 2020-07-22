@@ -46,33 +46,32 @@ Plug 'machakann/vim-sandwich'
 Plug 'lotabout/skim', { 'dir': '~/.skim', 'do': './install' }
 Plug 'lotabout/skim.vim'
 Plug 'editorconfig/editorconfig-vim'
-Plug 'pearofducks/ansible-vim'
-Plug 'tpope/vim-repeat'
 Plug 'majutsushi/tagbar'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'scrooloose/nerdtree'
 Plug 'rizzatti/dash.vim'
 Plug 'junegunn/vim-easy-align', { 'on': '<Plug>(EasyAlign)' }
 Plug 'junegunn/rainbow_parentheses.vim', { 'for': ['lisp', 'clojure', 'scheme'] }
-Plug 'tpope/vim-rails', { 'for': 'ruby' } 
-Plug 'moll/vim-node'
 Plug 'Konfekt/FastFold'
 Plug 'janko-m/vim-test'
 Plug 'sukima/vim-javascript-imports'
 Plug 'AndrewRadev/ember_tools.vim'
 Plug 'sukima/vim-ember-imports'
-Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
 Plug 'tpope/vim-dadbod'
 Plug 'tpope/vim-fugitive'
 Plug 'eraserhd/parinfer-rust', {'do': 'cargo build --release'}
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'tpope/vim-projectionist'
 Plug 'tpope/vim-sleuth'
-Plug 'OmniSharp/omnisharp-vim'
 Plug 'metakirby5/codi.vim'
 Plug 'Yggdroot/indentLine'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
+Plug 'tpope/vim-rails', { 'for': 'ruby' } 
+Plug 'moll/vim-node'
+Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
+Plug 'OmniSharp/omnisharp-vim'
+Plug 'pearofducks/ansible-vim'
 Plug 'ngn/vim-apl'
 Plug 'brandonbloom/vim-factor'
 Plug 'alunny/pegjs-vim'
