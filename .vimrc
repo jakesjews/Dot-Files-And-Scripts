@@ -6,6 +6,7 @@ map <C-c> <leader>c<space>
 map <C-f> <leader><leader>w
 map <C-t> :TestNearest<CR>
 map <C-q> :Dash<CR>
+map <C-p> :Files<CR>
 vmap <Enter> <Plug>(EasyAlign)
 vnoremap . :normal .<CR>
 nnoremap <C-e> :e.<CR>
@@ -42,15 +43,14 @@ Plug 'tpope/vim-dispatch'
 Plug 'scrooloose/nerdcommenter'
 Plug 'dense-analysis/ale'
 Plug 'machakann/vim-sandwich'
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'raghur/fruzzy', {'do': { -> fruzzy#install()}}
+Plug 'lotabout/skim', { 'dir': '~/.skim', 'do': './install' }
+Plug 'lotabout/skim.vim'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'pearofducks/ansible-vim'
 Plug 'tpope/vim-repeat'
 Plug 'majutsushi/tagbar'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'scrooloose/nerdtree'
-Plug 'mhinz/vim-grepper'
 Plug 'rizzatti/dash.vim'
 Plug 'junegunn/vim-easy-align', { 'on': '<Plug>(EasyAlign)' }
 Plug 'junegunn/rainbow_parentheses.vim', { 'for': ['lisp', 'clojure', 'scheme'] }
@@ -91,9 +91,6 @@ let g:coc_global_extensions = [
 \ ]
 
 let g:test#strategy = 'neovim'
-
-let g:fruzzy#usenative = 1
-let g:ctrlp_match_func = { 'match': 'fruzzy#ctrlp#matcher' }
 
 let g:vim_javascript_imports_use_semicolons = 0
 let g:vim_ember_imports_multiline_max_col = 120
@@ -200,22 +197,9 @@ if &term =~? '^screen'
   set ttymouse=xterm2
 endif
 
-let g:grepper = {
-    \ 'prompt': 0,
-    \ 'rg': {
-    \   'grepprg': 'rg -H --no-heading --vimgrep --smart-case --auto-hybrid-regex'
-    \ }}
-
-if executable('rg')
-  cnoreabbrev rg GrepperRg
-  cnoreabbrev rG GrepperRg
-  cnoreabbrev Rg GrepperRg
-  cnoreabbrev RG GrepperRg
-
-  let g:ctrlp_user_command_async = 1
-  let g:ctrlp_user_command = 'rg %s -S -l --auto-hybrid-regex --files -g ""'
-  let g:ctrlp_use_caching = 0
-endif
+cnoreabbrev rg Rg
+cnoreabbrev rG Rg
+cnoreabbrev RG Rg
 
 set background=dark
 colorscheme dracula
