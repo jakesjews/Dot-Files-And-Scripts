@@ -45,6 +45,7 @@ Plug 'dense-analysis/ale'
 Plug 'machakann/vim-sandwich'
 Plug 'lotabout/skim', { 'dir': '~/.skim', 'do': './install' }
 Plug 'lotabout/skim.vim'
+Plug 'jesseleite/vim-agriculture'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'majutsushi/tagbar'
 Plug 'dracula/vim', { 'as': 'dracula' }
@@ -81,7 +82,6 @@ Plug 'rhysd/vim-wasm'
 Plug 'jakesjews/vim-emblem'
 Plug 'wlangstroth/vim-racket'
 Plug 'sheerun/vim-polyglot'
-Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 
 call plug#end()
 
@@ -108,16 +108,20 @@ let g:ale_linter_aliases = {'coffee': ['javascript']}
 let g:ale_linters = {
 \ 'coffee': ['eslint'],
 \ 'javascript': ['eslint'],
-\ 'cs': ['OmniSharp']
+\ 'cs': ['OmniSharp'],
+\ 'html': { 'handlebars': ['ember-template-lint'] }
 \}
 
 let g:ale_fixers = {
 \ 'coffee': ['eslint'],
-\ 'javascript': ['eslint']
+\ 'javascript': ['eslint'],
+\ 'html': { 'handlebars': ['ember-template-lint'] }
 \}
 
 let g:OmniSharp_server_stdio = 1
 let g:OmniSharp_highlight_types = 3
+
+let g:agriculture#disable_smart_quoting = 1
 
 inoremap <expr><Down> pumvisible() ? "\<C-n>" : "\<Down>"
 inoremap <expr><Up>   pumvisible() ? "\<C-p>" : "\<Up>"
@@ -196,9 +200,10 @@ if &term =~? '^screen'
   set ttymouse=xterm2
 endif
 
-cnoreabbrev rg Rg
-cnoreabbrev rG Rg
-cnoreabbrev RG Rg
+cnoreabbrev rg RgRaw
+cnoreabbrev rG RgRaw
+cnoreabbrev RG RgRaw
+cnoreabbrev Rg RgRaw
 
 set background=dark
 colorscheme dracula

@@ -62,8 +62,9 @@ if [[ $platform == 'macos' ]]; then
     export NIM_ROOT=~/.nimble/bin
     export DOTNET_TOOLS_ROOT=/Users/jacob/.dotnet/tools
     export COMPOSER_ROOT=/Users/jacob/.composer/vendor/bin
+    export SML_ROOT=/usr/local/smlnj/bin
 
-    export PATH=/usr/local/sbin:$PATH:$GO_ROOT:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$PYTHON_USER_PATH:$NIM_ROOT:$DOTNET_TOOLS_ROOT:$COMPOSER_ROOT
+    export PATH=/usr/local/sbin:$PATH:$GO_ROOT:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$PYTHON_USER_PATH:$NIM_ROOT:$DOTNET_TOOLS_ROOT:$COMPOSER_ROOT:$SML_ROOT
 fi
 
 plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli heroku mercurial vagrant coffee golang bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip cargo httpie jira redis-cli ng rbenv)
@@ -125,6 +126,7 @@ alias redis-master="redis-cli -h qa-db -p 26379 SENTINEL get-master-addr-by-name
 alias vim='nvim'
 alias vi='nvim'
 alias x=~/.dotnet/tools/x
+alias git-graph="git commit-graph write --reachable --changed-paths"
 
 function clean-eflex() {
     tmux kill-server
@@ -190,6 +192,7 @@ function rustMode() {
    alias license=licensor
    alias cloc=tokei
    alias mutt=meli
+   alias cut=choose
 }
 
 function update() {
