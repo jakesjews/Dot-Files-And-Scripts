@@ -3,9 +3,9 @@
 platform='unknown'
 unamestr=$(uname)
 if [[ "$unamestr" == 'Darwin' ]]; then
-   platform='macos'
+    platform='macos'
 elif [[ "$unamestr" == 'Linux' ]]; then
-   platform='linux'
+    platform='linux'
 fi
 
 export ZSH=$HOME/.oh-my-zsh
@@ -30,7 +30,7 @@ export TEZOS_CLIENT_UNSAFE_DISABLE_DISCLAIMER=yes
 if [[ $platform == 'macos' ]]; then
     export VAGRANT_DEFAULT_PROVIDER='vmware_desktop'
 
-    source ~/.homebrew.token
+    source "$HOME/.homebrew.token"
     export HOMEBREW_NO_AUTO_UPDATE=1
     export HOMEBREW_NO_INSTALL_CLEANUP=1
 
@@ -43,28 +43,28 @@ if [[ $platform == 'macos' ]]; then
     export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
     export GO_ROOT=$GOPATH/bin
     export BREW_ROOT=/usr/local/bin:/usr/local/sbin
-    export CARGO_ROOT=~/.cargo/bin
+    export CARGO_ROOT="$HOME/.cargo/bin"
     export OPENSSL_INCLUDE_DIR=/usr/local/opt/openssl/include
     export OPENSSL_LIB_DIR=/usr/local/opt/openssl/lib
     export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/usr/local/opt/openssl@1.1"
-    export AIRFLOW_HOME=~/.airflow
+    export AIRFLOW_HOME="$HOME/.airflow"
 
-    export COFFEELINT_CONFIG=/Users/jacob/.coffeelintrc
     export FACTOR_ROOT=/Applications/factor
-    export DENO_ROOT=/Users/jacob/.deno/bin
-    export TPM_ROOT=~/.tmux/plugins/tpm
-    export DART_ROOT=~/.pub-cache/bin
+    export DENO_ROOT="$HOME/.deno/bin"
+    export TPM_ROOT="$HOME/.tmux/plugins/tpm"
+    export DART_ROOT="$HOME/.pub-cache/bin"
     export WASMER_DIR="$HOME/.wasmer"
     export CABAL_DIR="$HOME/.cabal/bin"
     export QHOME="$HOME/.q"
     export PLAN9=/usr/local/plan9
-    export PYTHON_USER_PATH=/Users/jacob/Library/Python/3.7/bin
-    export NIM_ROOT=~/.nimble/bin
-    export DOTNET_TOOLS_ROOT=/Users/jacob/.dotnet/tools
-    export COMPOSER_ROOT=/Users/jacob/.composer/vendor/bin
+    export PYTHON_USER_PATH="$HOME/Library/Python/3.7/bin"
+    export NIM_ROOT="$HOME/.nimble/bin"
+    export DOTNET_TOOLS_ROOT="$HOME/.dotnet/tools"
+    export COMPOSER_ROOT=$HOME/.composer/vendor/bin
     export SML_ROOT=/usr/local/smlnj/bin
+    export WASMTIME_HOME="$HOME/.wasmtime"
 
-    export PATH=/usr/local/sbin:$PATH:$GO_ROOT:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$PYTHON_USER_PATH:$NIM_ROOT:$DOTNET_TOOLS_ROOT:$COMPOSER_ROOT:$SML_ROOT
+    export PATH=/usr/local/sbin:$PATH:$GO_ROOT:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$PYTHON_USER_PATH:$NIM_ROOT:$DOTNET_TOOLS_ROOT:$COMPOSER_ROOT:$SML_ROOT:$WASMTIME_HOME/bin
 fi
 
 plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli heroku mercurial vagrant coffee golang bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip cargo httpie jira redis-cli ng rbenv)
@@ -125,7 +125,7 @@ alias mux="tmuxinator"
 alias redis-master="redis-cli -h qa-db -p 26379 SENTINEL get-master-addr-by-name eflex-redis"
 alias vim='nvim'
 alias vi='nvim'
-alias x=~/.dotnet/tools/x
+alias x="$HOME/.dotnet/tools/x"
 alias git-graph="git commit-graph write --reachable --changed-paths"
 
 function clean-eflex() {
@@ -137,21 +137,15 @@ function restart-eflex() {
     mux eflex
 }
 
-function countInstances() {
+function count-instances() {
     rg $1 -c | sort -k 2 -t ":" -n
 }
 
-function flacToMp3() {
+function flac-to-mp3() {
     for a in ./*.flac; do
       < /dev/null ffmpeg -i "$a" -qscale:a 0 "${a[@]/%flac/mp3}"
     done
     rm *.flac
-}
-
-function wavToMp3() {
-    for a in ./*.wav; do
-      < /dev/null ffmpeg -i "$a" "${a[@]/%wav/mp3}"
-    done
 }
 
 function update-servers() {
@@ -167,97 +161,107 @@ function pwdx {
     lsof -a -d cwd -p $1 -n -Fn | awk '/^n/ {print substr($0,2)}'
 }
 
-function rustMode() {
-   alias cat=bat
-   alias ps=procs
-   alias xargs=rargs
-   alias ls=exa
-   alias find=fd
-   alias sed=sd
-   alias uniq=runiq
-   alias du=dust
-   alias cp=xcp
-   alias hexdump=hexyl
-   alias ascii=chars
-   alias tree=broot
-   alias bc=eva
-   alias rm=rip
-   alias dd=bcp
-   alias wc=cw
-   alias less=peep
-   alias nano=kibi
-   alias top=ytop
-   alias objdump=bingrep
-   alias http-server=miniserve
-   alias license=licensor
-   alias cloc=tokei
-   alias mutt=meli
-   alias cut=choose
+function remove-trailing-whitespace {
+    rename 's/ *$//' *
+}
+
+function docker-clean {
+    docker-sync-stack clean
+    docker-compose down --volumes
+    docker system prune --volumes -f
+}
+
+function rust-mode() {
+    alias cat=bat
+    alias ps=procs
+    alias xargs=rargs
+    alias ls=exa
+    alias find=fd
+    alias sed=sd
+    alias uniq=runiq
+    alias du=dust
+    alias cp=xcp
+    alias hexdump=hexyl
+    alias ascii=chars
+    alias tree=broot
+    alias bc=eva
+    alias rm=rip
+    alias dd=bcp
+    alias wc=cw
+    alias less=peep
+    alias nano=kibi
+    alias top=ytop
+    alias objdump=bingrep
+    alias http-server=miniserve
+    alias license=licensor
+    alias cloc=tokei
+    alias mutt=meli
+    alias cut=choose
 }
 
 function update() {
-   setopt localoptions rmstarsilent
-   unsetopt nomatch
+    setopt localoptions rmstarsilent
+    unsetopt nomatch
+ 
+    echo "updating homebrew packages"
+    brew update
+    brew upgrade
+    brew cleanup -s
+    brew tap --repair
+    rm -rf "$(brew --cache)"
+ 
+    echo "updating node packages"
+    npm update -g
+ 
+    echo "updating vim plugins"
+    vim +PlugUpdate +PlugUpgrade +UpdateRemotePlugins +qa
+ 
+    echo "updating ruby gems"
+    gem update
+    gem cleanup
 
-   echo "updating homebrew packages"
-   brew update
-   brew upgrade
-   brew cleanup -s
-   brew tap --repair
-   rm -rf "$(brew --cache)"
-
-   echo "updating node packages"
-   npm update -g
-
-   echo "updating vim plugins"
-   vim +PlugUpdate +PlugUpgrade +UpdateRemotePlugins +qa
-
-   echo "updating ruby gems"
-   gem update
-   gem cleanup
-
-   echo "updating phoenix and mix"
-   mix local.hex --force
-   mix local.rebar --force
-   mix archive.install hex phx_new --force
-
-   echo "update tex packages"
-   tlmgr update --self --all
-
-   echo "update rust packages"
-   rustup update
-   cargo install-update -a
-   cargo cache --autoclean
-
-   echo "update quicklisp"
-   sbcl --eval "(ql:update-client)" --quit
-
-   echo "update pipx packages"
-   pipx upgrade-all
-
-   echo "upgrade oh-my-zsh"
-   upgrade_oh_my_zsh
-
-   echo "upgrade dotnet tools"
-   dotnet tool list -g | tail -n +3 | tr -s ' ' | cut -f 1 -d' ' | xargs -n 1 dotnet tool update -g
-
-   echo "update composer packages"
-   composer g update
-
-   echo "update app store apps"
-   mas upgrade
-
-   echo "update gcloud"
-   gcloud components update --quiet
-
-   echo "upgrade cask packages"
-   brew cu --all -q -y --no-brew-update
-   rm -rf /usr/local/Caskroom/**/*.pkg
-
-   echo "outdated python packages"
-   pip3 list --user --outdated --not-required
-
-   npm outdated -g
+    echo "updating phoenix and mix"
+    mix local.hex --force
+    mix local.rebar --force
+    mix archive.install hex phx_new --force
+ 
+    echo "update tex packages"
+    tlmgr update --self --all --reinstall-forcibly-removed
+ 
+    echo "update rust packages"
+    rustup update
+    cargo install-update -a
+    cargo cache --autoclean
+ 
+    echo "update quicklisp"
+    sbcl --eval "(ql:update-client)" --quit
+ 
+    echo "update pipx packages"
+    pipx upgrade-all
+ 
+    echo "upgrade dotnet tools"
+    dotnet tool list -g | tail -n +3 | tr -s ' ' | cut -f 1 -d' ' | xargs -n 1 dotnet tool update -g
+ 
+    echo "update composer packages"
+    composer g update
+ 
+    echo "update app store apps"
+    mas upgrade
+ 
+    echo "update gcloud"
+    gcloud components update --quiet
+ 
+    echo "upgrade cask packages"
+    brew cu --all -q -y --no-brew-update
+    rm -rf /usr/local/Caskroom/**/*.pkg
+ 
+    echo "upgrade oh-my-zsh"
+    omz update
+ 
+    echo "outdated python packages"
+    pip3 list --user --outdated --not-required
+ 
+    npm outdated -g
 }
 
 if [[ $platform == 'macos' ]]; then
@@ -265,6 +269,4 @@ if [[ $platform == 'macos' ]]; then
 fi
 
 [ -s $HOME/.opan ] && source $HOME/.opam/opam-init/init.zsh > /dev/null 2> /dev/null
-
 [ -s "$WASMER_DIR/wasmer.sh" ] && source "$WASMER_DIR/wasmer.sh"
-

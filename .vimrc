@@ -92,7 +92,8 @@ let g:coc_global_extensions = [
 let g:test#strategy = 'neovim'
 
 let g:vim_javascript_imports_use_semicolons = 0
-let g:vim_ember_imports_multiline_max_col = 120
+let g:vim_javascript_imports_multiline_max_col = 120
+let g:vim_javascript_imports_multiline_max_vars = 100
 let g:ember_imports_ember_data_next = 1
 
 let g:ansible_template_syntaxes = { 
@@ -122,6 +123,7 @@ let g:OmniSharp_server_stdio = 1
 let g:OmniSharp_highlight_types = 3
 
 let g:agriculture#disable_smart_quoting = 1
+let g:agriculture#rg_options = '--smart-case'
 
 inoremap <expr><Down> pumvisible() ? "\<C-n>" : "\<Down>"
 inoremap <expr><Up>   pumvisible() ? "\<C-p>" : "\<Up>"
