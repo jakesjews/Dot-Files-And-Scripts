@@ -100,9 +100,9 @@ source "$ZSH/oh-my-zsh.sh"
 if [[ $platform == 'macos' ]]; then
     alias q='rlwrap -r $QHOME/m64/q'
     alias 9="/usr/local/plan9/bin/9"
-    alias autojump=$CARGO_ROOT/autojump
     alias sqlplus="DYLD_LIBRARY_PATH=/usr/local/lib /usr/local/bin/sqlplus"
     alias jsc="/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/Helpers/jsc"
+    alias j=z
 
     source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
     source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -199,6 +199,8 @@ function rust-mode() {
     alias cloc=tokei
     alias mutt=meli
     alias cut=choose
+    alias dmesg=rmesg
+    alias cd=z
 }
 
 function update() {
@@ -279,7 +281,7 @@ function graal() {
 }
 
 if [[ $platform == 'macos' ]]; then
-    source /usr/local/etc/profile.d/autojump.sh
+    eval "$(zoxide init zsh)"
 fi
 
 [ -s $HOME/.opan ] && source $HOME/.opam/opam-init/init.zsh > /dev/null 2> /dev/null
