@@ -34,8 +34,6 @@ if [[ $platform == 'macos' ]]; then
     export HOMEBREW_NO_AUTO_UPDATE=1
     export HOMEBREW_NO_INSTALL_CLEANUP=1
 
-    export RUBY_CFLAGS="-Os -march=native"
-
     export NEOVIM_LISTEN_ADDRESS=/tmp/neovim.sock
     export JAVA_HOME=`/usr/libexec/java_home`
     export GOPATH=/usr/local/lib/go
@@ -46,7 +44,8 @@ if [[ $platform == 'macos' ]]; then
     export CARGO_ROOT="$HOME/.cargo/bin"
     export OPENSSL_INCLUDE_DIR=/usr/local/opt/openssl/include
     export OPENSSL_LIB_DIR=/usr/local/opt/openssl/lib
-    export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/usr/local/opt/openssl@1.1"
+    export RUBY_CFLAGS="-Os -march=native"
+    export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/usr/local/opt/openssl"
     export AIRFLOW_HOME="$HOME/.airflow"
 
     export FACTOR_ROOT=/Applications/factor
@@ -63,11 +62,13 @@ if [[ $platform == 'macos' ]]; then
     export COMPOSER_ROOT=$HOME/.composer/vendor/bin
     export SML_ROOT=/usr/local/smlnj/bin
     export WASMTIME_HOME="$HOME/.wasmtime"
+    export ESVU_ROOT="$HOME/.esvu/bin"
+    export SDKMAN_DIR="/Users/jacob/.sdkman"
 
-    export PATH=/usr/local/sbin:$PATH:$GO_ROOT:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$PYTHON_USER_PATH:$NIM_ROOT:$DOTNET_TOOLS_ROOT:$COMPOSER_ROOT:$SML_ROOT:$WASMTIME_HOME/bin
+    export PATH=/usr/local/sbin:$PATH:$GO_ROOT:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$PYTHON_USER_PATH:$NIM_ROOT:$DOTNET_TOOLS_ROOT:$COMPOSER_ROOT:$SML_ROOT:$WASMTIME_HOME/bin:$ESVU_ROOT:$SDKMAN_DIR/bin
 fi
 
-plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli heroku mercurial vagrant coffee golang bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip cargo httpie jira redis-cli ng rbenv)
+plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli heroku mercurial vagrant coffee golang bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip cargo httpie jira redis-cli ng sdk rbenv)
 
 if [[ $platform == 'macos' ]]; then
     plugins+=(brew osx)
@@ -101,6 +102,7 @@ if [[ $platform == 'macos' ]]; then
     alias 9="/usr/local/plan9/bin/9"
     alias autojump=$CARGO_ROOT/autojump
     alias sqlplus="DYLD_LIBRARY_PATH=/usr/local/lib /usr/local/bin/sqlplus"
+    alias jsc="/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/Helpers/jsc"
 
     source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
     source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -219,7 +221,7 @@ function update() {
     echo "updating ruby gems"
     gem update
     gem cleanup
-
+ 
     echo "updating phoenix and mix"
     mix local.hex --force
     mix local.rebar --force
@@ -257,11 +259,23 @@ function update() {
  
     echo "upgrade oh-my-zsh"
     omz update
+
+    echo "update ecmascript runtimes"
+    esvu
+
+    echo "update jdks"
+    sdk selfupdate
+    sdk upgrade
  
     echo "outdated python packages"
     pip3 list --user --outdated --not-required
  
     npm outdated -g
+}
+
+function graal() {
+    sdk use java 20.2.0.r11-grl
+    export PATH=$HOME/.sdkman/candidates/java/20.2.0.r11-grl/bin:$PATH
 }
 
 if [[ $platform == 'macos' ]]; then
@@ -270,3 +284,5 @@ fi
 
 [ -s $HOME/.opan ] && source $HOME/.opam/opam-init/init.zsh > /dev/null 2> /dev/null
 [ -s "$WASMER_DIR/wasmer.sh" ] && source "$WASMER_DIR/wasmer.sh"
+
+[[ -s "/Users/jacob/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/jacob/.sdkman/bin/sdkman-init.sh"

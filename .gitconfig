@@ -28,12 +28,12 @@
   bc3 = trustExitCode
 
 [difftool "sourcetree"]
-  cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\"
-  path = -ro
+	cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\"
+	path = -ro
 
 [mergetool "sourcetree"]
-  cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
-  trustExitCode = true
+	cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
+	trustExitCode = true
 
 [filter "media"]
   required = true
