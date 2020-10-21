@@ -44,7 +44,7 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'dense-analysis/ale'
 Plug 'machakann/vim-sandwich'
 Plug 'lotabout/skim', { 'dir': '~/.skim', 'do': './install' }
-Plug 'lotabout/skim.vim'
+Plug 'lotabout/skim.vim', { 'commit': '75798afff51e764ada87149b16bb56a6ef971042' }
 Plug 'jesseleite/vim-agriculture'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'majutsushi/tagbar'
@@ -80,13 +80,39 @@ Plug 'robbles/logstash.vim'
 Plug 'kchmck/vim-coffee-script'
 Plug 'rhysd/vim-wasm'
 Plug 'jakesjews/vim-emblem'
-Plug 'wlangstroth/vim-racket'
 Plug 'sheerun/vim-polyglot'
 
 call plug#end()
 
 let g:coc_global_extensions = [
-  \ 'coc-ember'
+\ 'coc-actions',
+\ 'coc-clangd',
+\ 'coc-cmake',
+\ 'coc-css',
+\ 'coc-elixir',
+\ 'coc-ember',
+\ 'coc-erlang_ls',
+\ 'coc-fsharp',
+\ 'coc-go',
+\ 'coc-html',
+\ 'coc-java',
+\ 'coc-json',
+\ 'coc-julia',
+\ 'coc-metals',
+\ 'coc-omnisharp',
+\ 'coc-perl',
+\ 'coc-phpactor',
+\ 'coc-powershell',
+\ 'coc-python',
+\ 'coc-r-lsp',
+\ 'coc-rls',
+\ 'coc-sh',
+\ 'coc-solargraph',
+\ 'coc-sourcekit',
+\ 'coc-sql',
+\ 'coc-svg',
+\ 'coc-vimlsp',
+\ 'coc-yaml'
 \ ]
 
 let g:test#strategy = 'neovim'
@@ -129,20 +155,20 @@ inoremap <expr><Down> pumvisible() ? "\<C-n>" : "\<Down>"
 inoremap <expr><Up>   pumvisible() ? "\<C-p>" : "\<Up>"
 
 augroup rainbow_lisp
-    autocmd!
-    autocmd FileType lisp,clojure,scheme RainbowParentheses
+  autocmd!
+  autocmd FileType lisp,clojure,scheme RainbowParentheses
 augroup END
 
 augroup filetypedetect
-    au! BufRead,BufNewFile *.m setfiletype objc
-    au BufRead,BufNewFile *.AWL setfiletype asm
-    au BufRead,BufNewFile *.razor setfiletype razor
-    au FileType cs setl sw=4 sts=4 ts=4 et
-    au FileType c setl sw=4 sts=4 ts=4 et
-    au FileType cpp setl sw=4 sts=4 ts=4 et
-    au FileType zsh setl sw=4 sts=4 ts=4 et
-    au FileType sh setl sw=4 sts=4 ts=4 et
-    au FileType make setl noexpandtab sw=4 sts=0 ts=4
+  au! BufRead,BufNewFile *.m setfiletype objc
+  au BufRead,BufNewFile *.AWL setfiletype asm
+  au BufRead,BufNewFile *.razor setfiletype razor
+  au FileType cs setl sw=4 sts=4 ts=4 et
+  au FileType c setl sw=4 sts=4 ts=4 et
+  au FileType cpp setl sw=4 sts=4 ts=4 et
+  au FileType zsh setl sw=4 sts=4 ts=4 et
+  au FileType sh setl sw=4 sts=4 ts=4 et
+  au FileType make setl noexpandtab sw=4 sts=0 ts=4
 augroup END
 
 let g:NERDTreeIgnore = [

@@ -26,6 +26,7 @@ export ZSH_AUTOSUGGEST_USE_ASYNC=true
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 export TEZOS_CLIENT_UNSAFE_DISABLE_DISCLAIMER=yes
+export SKIM_DEFAULT_COMMAND="fd --type f"
 
 if [[ $platform == 'macos' ]]; then
     export VAGRANT_DEFAULT_PROVIDER='vmware_desktop'
@@ -47,7 +48,10 @@ if [[ $platform == 'macos' ]]; then
     export RUBY_CFLAGS="-Os -march=native"
     export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/usr/local/opt/openssl"
     export AIRFLOW_HOME="$HOME/.airflow"
+    export LLVM_SYS_90_PREFIX=/usr/local/opt/llvm@9/
 
+    export ADOBE_AIR_HOME="/usr/local/share/adobe-air-sdk"
+    export NODE_PATH=/usr/local/lib/node_modules
     export FACTOR_ROOT=/Applications/factor
     export DENO_ROOT="$HOME/.deno/bin"
     export TPM_ROOT="$HOME/.tmux/plugins/tpm"
@@ -64,6 +68,7 @@ if [[ $platform == 'macos' ]]; then
     export WASMTIME_HOME="$HOME/.wasmtime"
     export ESVU_ROOT="$HOME/.esvu/bin"
     export SDKMAN_DIR="/Users/jacob/.sdkman"
+    export PERLBREW_ROOT="$HOME/.perlbrew"
 
     export PATH=/usr/local/sbin:$PATH:$GO_ROOT:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$PYTHON_USER_PATH:$NIM_ROOT:$DOTNET_TOOLS_ROOT:$COMPOSER_ROOT:$SML_ROOT:$WASMTIME_HOME/bin:$ESVU_ROOT:$SDKMAN_DIR/bin
 fi
@@ -79,7 +84,6 @@ fi
 autoload zargs
 autoload zmv
 autoload tcp_open
-autoload calendar
 
 zmodload zsh/datetime
 zmodload zsh/stat
@@ -201,6 +205,12 @@ function rust-mode() {
     alias cut=choose
     alias dmesg=rmesg
     alias cd=z
+    alias sudo=yas
+    alias awk=frawk
+    alias cowsay=fsays
+    alias markdown=comrak
+    alias git=gix
+    alias time=hyperfine
 }
 
 function update() {
@@ -245,20 +255,16 @@ function update() {
  
     echo "upgrade dotnet tools"
     dotnet tool list -g | tail -n +3 | tr -s ' ' | cut -f 1 -d' ' | xargs -n 1 dotnet tool update -g
- 
+
     echo "update composer packages"
     composer g update
- 
+
     echo "update app store apps"
     mas upgrade
  
     echo "update gcloud"
     gcloud components update --quiet
- 
-    echo "upgrade cask packages"
-    brew cu --all -q -y --no-brew-update
-    rm -rf /usr/local/Caskroom/**/*.pkg
- 
+
     echo "upgrade oh-my-zsh"
     omz update
 
@@ -268,10 +274,19 @@ function update() {
     echo "update jdks"
     sdk selfupdate
     sdk upgrade
+
+    echo "update perl packages"
+    perlbrew install-cpanm --force
+    cpan-outdated -p | cpanm
+
+    echo "upgrade cask packages"
+    brew cu --all -q -y --no-brew-update
+    rm -rf /usr/local/Caskroom/**/*.pkg
  
     echo "outdated python packages"
     pip3 list --user --outdated --not-required
  
+    echo "outdated npm packages"
     npm outdated -g
 }
 
@@ -286,5 +301,5 @@ fi
 
 [ -s $HOME/.opan ] && source $HOME/.opam/opam-init/init.zsh > /dev/null 2> /dev/null
 [ -s "$WASMER_DIR/wasmer.sh" ] && source "$WASMER_DIR/wasmer.sh"
-
 [[ -s "/Users/jacob/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/jacob/.sdkman/bin/sdkman-init.sh"
+source $HOME/.perlbrew/etc/bashrc
