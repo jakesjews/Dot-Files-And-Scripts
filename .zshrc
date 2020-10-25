@@ -8,27 +8,30 @@ elif [[ "$unamestr" == 'Linux' ]]; then
     platform='linux'
 fi
 
-export ZSH=$HOME/.oh-my-zsh
-export LANG=en_US.UTF-8
-export DISABLE_AUTO_UPDATE="true"
-export ZSH_THEME="dracula"
-export EDITOR='nvim'
-export SHELL='zsh'
-export LC_CTYPE=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
-export DISABLE_AUTO_TITLE=true
-export ANSIBLE_HOST_KEY_CHECKING=False
-export KEYTIMEOUT=1
-export LISTMAX=9998
-export REPORTER=spec
-export ZSH_DISABLE_COMPFIX=true
-export ZSH_AUTOSUGGEST_USE_ASYNC=true
-export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
-export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-export TEZOS_CLIENT_UNSAFE_DISABLE_DISCLAIMER=yes
-export SKIM_DEFAULT_COMMAND="fd --type f"
+if [[ -z $TMUX ]]; then
+    export ZSH=$HOME/.oh-my-zsh
+    export LANG=en_US.UTF-8
+    export DISABLE_AUTO_UPDATE="true"
+    export ZSH_THEME="dracula"
+    export EDITOR='nvim'
+    export SHELL='zsh'
+    export LC_CTYPE=en_US.UTF-8
+    export LC_ALL=en_US.UTF-8
+    export DISABLE_AUTO_TITLE=true
+    export ANSIBLE_HOST_KEY_CHECKING=False
+    export KEYTIMEOUT=1
+    export LISTMAX=9998
+    export REPORTER=spec
+    export ZSH_DISABLE_COMPFIX=true
+    export ZSH_AUTOSUGGEST_USE_ASYNC=true
+    export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+    export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+    export TEZOS_CLIENT_UNSAFE_DISABLE_DISCLAIMER=yes
+    export SKIM_DEFAULT_COMMAND="fd --type f"
+fi
 
-if [[ $platform == 'macos' ]]; then
+
+if [[ -z $TMUX ]] && [[ $platform == 'macos' ]]; then
     export VAGRANT_DEFAULT_PROVIDER='vmware_desktop'
 
     source "$HOME/.homebrew.token"
@@ -49,6 +52,7 @@ if [[ $platform == 'macos' ]]; then
     export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/usr/local/opt/openssl"
     export AIRFLOW_HOME="$HOME/.airflow"
     export LLVM_SYS_90_PREFIX=/usr/local/opt/llvm@9/
+    export JIP_HOME="$HOME/.jip"
 
     export ADOBE_AIR_HOME="/usr/local/share/adobe-air-sdk"
     export NODE_PATH=/usr/local/lib/node_modules
@@ -69,8 +73,10 @@ if [[ $platform == 'macos' ]]; then
     export ESVU_ROOT="$HOME/.esvu/bin"
     export SDKMAN_DIR="/Users/jacob/.sdkman"
     export PERLBREW_ROOT="$HOME/.perlbrew"
+    export KHOME="/usr/local/bin"
+    export CARP_DIR=~/.carp
 
-    export PATH=/usr/local/sbin:$PATH:$GO_ROOT:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$PYTHON_USER_PATH:$NIM_ROOT:$DOTNET_TOOLS_ROOT:$COMPOSER_ROOT:$SML_ROOT:$WASMTIME_HOME/bin:$ESVU_ROOT:$SDKMAN_DIR/bin
+    export PATH=/usr/local/sbin:$PATH:$GO_ROOT:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$PYTHON_USER_PATH:$NIM_ROOT:$DOTNET_TOOLS_ROOT:$COMPOSER_ROOT:$SML_ROOT:$WASMTIME_HOME/bin:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin
 fi
 
 plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli heroku mercurial vagrant coffee golang bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip cargo httpie jira redis-cli ng sdk rbenv)
@@ -98,6 +104,7 @@ zmodload zsh/regex
 zmodload zsh/system
 
 unsetopt listambiguous
+setopt inc_append_history
 
 source "$ZSH/oh-my-zsh.sh"
 
@@ -184,7 +191,7 @@ function rust-mode() {
     alias ls=exa
     alias find=fd
     alias sed=sd
-    alias uniq=runiq
+    alias uniq=huniq
     alias du=dust
     alias cp=xcp
     alias hexdump=hexyl
@@ -196,7 +203,7 @@ function rust-mode() {
     alias wc=cw
     alias less=peep
     alias nano=kibi
-    alias top=ytop
+    alias top=btm
     alias objdump=bingrep
     alias http-server=miniserve
     alias license=licensor
@@ -273,6 +280,7 @@ function update() {
 
     echo "update jdks"
     sdk selfupdate
+    sdk update
     sdk upgrade
 
     echo "update perl packages"

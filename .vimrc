@@ -34,7 +34,7 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   augroup end
 endif
 
-let g:polyglot_disabled = ['coffee-script', 'emblem', 'yaml', 'cs', 'jinja', 'ansible']
+let g:polyglot_disabled = ['coffee-script', 'emblem', 'yaml', 'cs', 'jinja', 'ansible', 'handlebars']
 
 "" Plugins
 call plug#begin('~/.vim/plugged')
@@ -80,6 +80,8 @@ Plug 'robbles/logstash.vim'
 Plug 'kchmck/vim-coffee-script'
 Plug 'rhysd/vim-wasm'
 Plug 'jakesjews/vim-emblem'
+Plug 'katusk/vim-qkdb-syntax'
+Plug 'joukevandermaas/vim-ember-hbs'
 Plug 'sheerun/vim-polyglot'
 
 call plug#end()
