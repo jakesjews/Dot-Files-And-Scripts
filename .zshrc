@@ -21,6 +21,8 @@ if [[ -z $TMUX ]]; then
     export ANSIBLE_HOST_KEY_CHECKING=False
     export KEYTIMEOUT=1
     export LISTMAX=9998
+    export HISTSIZE=1000000000
+    export HISTFILESIZE=1000000000
     export REPORTER=spec
     export ZSH_DISABLE_COMPFIX=true
     export ZSH_AUTOSUGGEST_USE_ASYNC=true
@@ -29,7 +31,6 @@ if [[ -z $TMUX ]]; then
     export TEZOS_CLIENT_UNSAFE_DISABLE_DISCLAIMER=yes
     export SKIM_DEFAULT_COMMAND="fd --type f"
 fi
-
 
 if [[ -z $TMUX ]] && [[ $platform == 'macos' ]]; then
     export VAGRANT_DEFAULT_PROVIDER='vmware_desktop'
@@ -71,18 +72,19 @@ if [[ -z $TMUX ]] && [[ $platform == 'macos' ]]; then
     export SML_ROOT=/usr/local/smlnj/bin
     export WASMTIME_HOME="$HOME/.wasmtime"
     export ESVU_ROOT="$HOME/.esvu/bin"
-    export SDKMAN_DIR="/Users/jacob/.sdkman"
-    export PERLBREW_ROOT="$HOME/.perlbrew"
+    export SDKMAN_DIR="$HOME/.sdkman"
     export KHOME="/usr/local/bin"
-    export CARP_DIR=~/.carp
+    export CARP_DIR="$HOME/.carp"
+    export ARC_DIR="$HOME/.arc"
+    export CURL_HOME="/usr/local/opt/curl/bin"
 
-    export PATH=/usr/local/sbin:$PATH:$GO_ROOT:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$PYTHON_USER_PATH:$NIM_ROOT:$DOTNET_TOOLS_ROOT:$COMPOSER_ROOT:$SML_ROOT:$WASMTIME_HOME/bin:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin
+    export PATH=/usr/local/sbin:$CURL_HOME:$PATH:$GO_ROOT:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$PYTHON_USER_PATH:$NIM_ROOT:$DOTNET_TOOLS_ROOT:$COMPOSER_ROOT:$SML_ROOT:$WASMTIME_HOME/bin:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin
 fi
 
 plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli heroku mercurial vagrant coffee golang bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip cargo httpie jira redis-cli ng sdk rbenv)
 
 if [[ $platform == 'macos' ]]; then
-    plugins+=(brew osx)
+    plugins+=(brew)
 else
     plugins+=(debian command-not-found)
 fi
@@ -117,14 +119,12 @@ if [[ $platform == 'macos' ]]; then
 
     source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
     source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-    source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
-    source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
-
-    bindkey '^[[A' history-substring-search-up
-    bindkey '^[[B' history-substring-search-down
-    bindkey -M vicmd 'k' history-substring-search-up
-    bindkey -M vicmd 'j' history-substring-search-down
 fi
+
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+bindkey -M vicmd 'k' history-substring-search-up
+bindkey -M vicmd 'j' history-substring-search-down
 
 alias space="du -hs * | gsort -h"
 alias rg='rg -S --engine auto'
@@ -184,6 +184,22 @@ function docker-clean {
     docker system prune --volumes -f
 }
 
+function graal() {
+    sdk use java 20.2.0.r11-grl
+    export PATH=$HOME/.sdkman/candidates/java/20.2.0.r11-grl/bin:$PATH
+}
+
+function sdkman-start() {
+    source "$HOME/.sdkman/bin/sdkman-init.sh"
+}
+
+function sdkman-update() {
+    echo "update jdks"
+    sdk selfupdate
+    sdk update
+    sdk upgrade
+}
+
 function rust-mode() {
     alias cat=bat
     alias ps=procs
@@ -202,9 +218,10 @@ function rust-mode() {
     alias dd=bcp
     alias wc=cw
     alias less=peep
-    alias nano=kibi
+    alias nano=amp
     alias top=btm
     alias objdump=bingrep
+    alias cksum=checkasum
     alias http-server=miniserve
     alias license=licensor
     alias cloc=tokei
@@ -218,6 +235,15 @@ function rust-mode() {
     alias markdown=comrak
     alias git=gix
     alias time=hyperfine
+    alias locate=lolcate
+    alias sleep=snore
+    alias mv=pmv
+    alias cksum=checkasum
+    alias wait=stare
+}
+
+function liq() {
+    clj -Sdeps '{:deps {mogenslund/liquid {:mvn/version "2.0.4"}}}' -m liq.core
 }
 
 function update() {
@@ -266,30 +292,20 @@ function update() {
     echo "update composer packages"
     composer g update
 
+    echo "update perl packages"
+    cpan-outdated -p | cpanm
+
     echo "update app store apps"
     mas upgrade
  
-    echo "update gcloud"
-    gcloud components update --quiet
-
     echo "upgrade oh-my-zsh"
     omz update
 
     echo "update ecmascript runtimes"
     esvu
 
-    echo "update jdks"
-    sdk selfupdate
-    sdk update
-    sdk upgrade
-
-    echo "update perl packages"
-    perlbrew install-cpanm --force
-    cpan-outdated -p | cpanm
-
     echo "upgrade cask packages"
     brew cu --all -q -y --no-brew-update
-    rm -rf /usr/local/Caskroom/**/*.pkg
  
     echo "outdated python packages"
     pip3 list --user --outdated --not-required
@@ -298,16 +314,10 @@ function update() {
     npm outdated -g
 }
 
-function graal() {
-    sdk use java 20.2.0.r11-grl
-    export PATH=$HOME/.sdkman/candidates/java/20.2.0.r11-grl/bin:$PATH
-}
-
 if [[ $platform == 'macos' ]]; then
     eval "$(zoxide init zsh)"
+    source "$HOME/.opam/opam-init/init.zsh"
+    source "$WASMER_DIR/wasmer.sh"
+    eval $(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib=$HOME/.perl5)
+    sdkman-start
 fi
-
-[ -s $HOME/.opan ] && source $HOME/.opam/opam-init/init.zsh > /dev/null 2> /dev/null
-[ -s "$WASMER_DIR/wasmer.sh" ] && source "$WASMER_DIR/wasmer.sh"
-[[ -s "/Users/jacob/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/jacob/.sdkman/bin/sdkman-init.sh"
-source $HOME/.perlbrew/etc/bashrc

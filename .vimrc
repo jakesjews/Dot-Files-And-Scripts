@@ -34,7 +34,7 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   augroup end
 endif
 
-let g:polyglot_disabled = ['coffee-script', 'emblem', 'yaml', 'cs', 'jinja', 'ansible', 'handlebars']
+let g:polyglot_disabled = ['clojure', 'coffee-script', 'emblem', 'yaml', 'cs', 'jinja', 'ansible', 'handlebars']
 
 "" Plugins
 call plug#begin('~/.vim/plugged')
@@ -53,35 +53,37 @@ Plug 'scrooloose/nerdtree'
 Plug 'rizzatti/dash.vim'
 Plug 'junegunn/vim-easy-align', { 'on': '<Plug>(EasyAlign)' }
 Plug 'junegunn/rainbow_parentheses.vim', { 'for': ['lisp', 'clojure', 'scheme'] }
-Plug 'Konfekt/FastFold'
+Plug 'Konfekt/FastFold', { 'for': 'coffee' }
 Plug 'janko-m/vim-test'
-Plug 'sukima/vim-javascript-imports'
-Plug 'AndrewRadev/ember_tools.vim'
-Plug 'sukima/vim-ember-imports'
+Plug 'sukima/vim-javascript-imports', { 'for': ['coffee', 'javascript', 'typescript'] }
+Plug 'AndrewRadev/ember_tools.vim', { 'for': ['coffee', 'javascript', 'typescript'] }
+Plug 'sukima/vim-ember-imports', { 'for': ['coffee', 'javascript', 'typescript'] }
 Plug 'tpope/vim-dadbod'
 Plug 'tpope/vim-fugitive'
-Plug 'eraserhd/parinfer-rust', {'do': 'cargo build --release'}
+Plug 'eraserhd/parinfer-rust', { 'do': 'cargo build --release' }
 Plug 'tmux-plugins/vim-tmux-focus-events'
-Plug 'tpope/vim-projectionist'
 Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-projectionist'
 Plug 'metakirby5/codi.vim'
 Plug 'Yggdroot/indentLine'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
 Plug 'tpope/vim-rails', { 'for': 'ruby' } 
-Plug 'moll/vim-node'
+Plug 'moll/vim-node', { 'for': ['coffee', 'javascript', 'typescript'] }
 Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
-Plug 'OmniSharp/omnisharp-vim'
-Plug 'pearofducks/ansible-vim'
+Plug 'OmniSharp/omnisharp-vim', { 'for': ['cs', 'fsharp', 'vbnet'] }
+Plug 'pearofducks/ansible-vim', { 'for': 'ansible' }
 Plug 'ngn/vim-apl'
-Plug 'brandonbloom/vim-factor'
-Plug 'alunny/pegjs-vim'
-Plug 'robbles/logstash.vim'
-Plug 'kchmck/vim-coffee-script'
-Plug 'rhysd/vim-wasm'
-Plug 'jakesjews/vim-emblem'
-Plug 'katusk/vim-qkdb-syntax'
-Plug 'joukevandermaas/vim-ember-hbs'
+Plug 'brandonbloom/vim-factor', { 'for': 'factor' }
+Plug 'alunny/pegjs-vim', { 'for': 'pegjs' }
+Plug 'robbles/logstash.vim', { 'for': 'logstash' }
+Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
+Plug 'rhysd/vim-wasm', { 'for': 'wast' }
+Plug 'jakesjews/vim-emblem', { 'for': 'emblem' }
+Plug 'katusk/vim-qkdb-syntax', { 'for': ['q', 'k'] }
+Plug 'joukevandermaas/vim-ember-hbs', { 'for': 'handlebars' }
+Plug 'tpope/vim-salve', { 'for': 'clojure' }
+Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 Plug 'sheerun/vim-polyglot'
 
 call plug#end()
@@ -123,6 +125,8 @@ let g:vim_javascript_imports_use_semicolons = 0
 let g:vim_javascript_imports_multiline_max_col = 120
 let g:vim_javascript_imports_multiline_max_vars = 100
 let g:ember_imports_ember_data_next = 1
+
+let g:salve_auto_start_repl = 1
 
 let g:ansible_template_syntaxes = { 
 \ '*.sh.j2': 'sh', 
