@@ -52,7 +52,7 @@ if [[ -z $TMUX ]] && [[ $platform == 'macos' ]]; then
     export RUBY_CFLAGS="-Os -march=native"
     export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/usr/local/opt/openssl"
     export AIRFLOW_HOME="$HOME/.airflow"
-    export LLVM_SYS_90_PREFIX=/usr/local/opt/llvm@9/
+    export LLVM_SYS_100_PREFIX=/usr/local/opt/llvm/
     export JIP_HOME="$HOME/.jip"
 
     export ADOBE_AIR_HOME="/usr/local/share/adobe-air-sdk"
@@ -77,11 +77,12 @@ if [[ -z $TMUX ]] && [[ $platform == 'macos' ]]; then
     export CARP_DIR="$HOME/.carp"
     export ARC_DIR="$HOME/.arc"
     export CURL_HOME="/usr/local/opt/curl/bin"
+    export EMACS_HOME="$HOME/.emacs.d/bin"
 
-    export PATH=/usr/local/sbin:$CURL_HOME:$PATH:$GO_ROOT:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$PYTHON_USER_PATH:$NIM_ROOT:$DOTNET_TOOLS_ROOT:$COMPOSER_ROOT:$SML_ROOT:$WASMTIME_HOME/bin:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin
+    export PATH=/usr/local/sbin:$CURL_HOME:$PATH:$GO_ROOT:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$PYTHON_USER_PATH:$NIM_ROOT:$DOTNET_TOOLS_ROOT:$COMPOSER_ROOT:$SML_ROOT:$WASMTIME_HOME/bin:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME
 fi
 
-plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli heroku mercurial vagrant coffee golang bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip cargo httpie jira redis-cli ng sdk rbenv)
+plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli heroku mercurial coffee golang bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip cargo httpie jira redis-cli ng sdk rbenv)
 
 if [[ $platform == 'macos' ]]; then
     plugins+=(brew)
@@ -100,7 +101,7 @@ zmodload zsh/mathfunc
 zmodload zsh/net/socket
 zmodload zsh/net/tcp
 zmodload zsh/curses
-zmodload zsh/pcre
+#zmodload zsh/pcre
 zmodload zsh/zftp
 zmodload zsh/regex
 zmodload zsh/system
@@ -127,7 +128,7 @@ bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 
 alias space="du -hs * | gsort -h"
-alias rg='rg -S --engine auto'
+alias rg='rg --smart-case --engine auto'
 alias l="ls"
 alias xsp="MONO_OPTIONS=--arch=64 xsp4 --port 8080"
 alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
@@ -162,8 +163,8 @@ function flac-to-mp3() {
 }
 
 function update-servers() {
-    ansible all -i /usr/local/etc/ansible/hosts -f 10 -m "apt" -a "upgrade=dist update_cache=true" -b
-    ansible all -i /usr/local/etc/ansible/hosts -f 10 -m "apt" -a "autoremove=true" -b
+    ansible all -i /usr/local/etc/ansible/hosts -f 9 -m "apt" -a "upgrade=dist update_cache=true" -b
+    ansible all -i /usr/local/etc/ansible/hosts -f 9 -m "apt" -a "autoremove=true" -b
 
     ansible integration -i /usr/local/etc/ansible/hosts -f 3 -m "shell" -a "docker pull selenium/standalone-chrome" -b
     ansible integration -i /usr/local/etc/ansible/hosts -f 3 -m "shell" -a "docker stop selenium && docker rm selenium" -b
@@ -187,17 +188,6 @@ function docker-clean {
 function graal() {
     sdk use java 20.2.0.r11-grl
     export PATH=$HOME/.sdkman/candidates/java/20.2.0.r11-grl/bin:$PATH
-}
-
-function sdkman-start() {
-    source "$HOME/.sdkman/bin/sdkman-init.sh"
-}
-
-function sdkman-update() {
-    echo "update jdks"
-    sdk selfupdate
-    sdk update
-    sdk upgrade
 }
 
 function rust-mode() {
@@ -240,6 +230,9 @@ function rust-mode() {
     alias mv=pmv
     alias cksum=checkasum
     alias wait=stare
+    alias dig=dog
+    alias ping=gping
+    alias curl=qurl
 }
 
 function liq() {
@@ -252,7 +245,7 @@ function update() {
  
     echo "updating homebrew packages"
     brew update
-    brew upgrade
+    brew upgrade --greedy
     brew cleanup -s
     brew tap --repair
     rm -rf "$(brew --cache)"
@@ -271,6 +264,7 @@ function update() {
     mix local.hex --force
     mix local.rebar --force
     mix archive.install hex phx_new --force
+    mix archive.install hex nerves_bootstrap --force
  
     echo "update tex packages"
     tlmgr update --self --all --reinstall-forcibly-removed
@@ -298,11 +292,19 @@ function update() {
     echo "update app store apps"
     mas upgrade
  
-    echo "upgrade oh-my-zsh"
+    echo "update oh-my-zsh"
     omz update
+
+    echo "ugrade tmux plugins"
+    "$HOME/.tmux/plugins/tpm/bin/update_plugins" all
 
     echo "update ecmascript runtimes"
     esvu
+
+    echo "update jdks"
+    sdk selfupdate
+    sdk update
+    sdk upgrade
 
     echo "upgrade cask packages"
     brew cu --all -q -y --no-brew-update
@@ -319,5 +321,5 @@ if [[ $platform == 'macos' ]]; then
     source "$HOME/.opam/opam-init/init.zsh"
     source "$WASMER_DIR/wasmer.sh"
     eval $(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib=$HOME/.perl5)
-    sdkman-start
+    source "$HOME/.sdkman/bin/sdkman-init.sh"
 fi

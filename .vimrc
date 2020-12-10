@@ -34,7 +34,7 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   augroup end
 endif
 
-let g:polyglot_disabled = ['clojure', 'coffee-script', 'emblem', 'yaml', 'cs', 'jinja', 'ansible', 'handlebars']
+let g:polyglot_disabled = ['coffee-script', 'emblem', 'yaml', 'cs', 'jinja', 'ansible', 'handlebars']
 
 "" Plugins
 call plug#begin('~/.vim/plugged')
@@ -66,6 +66,7 @@ Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-projectionist'
 Plug 'metakirby5/codi.vim'
 Plug 'Yggdroot/indentLine'
+Plug 'puremourning/vimspector'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
 Plug 'tpope/vim-rails', { 'for': 'ruby' } 
@@ -140,6 +141,7 @@ let g:ale_linter_aliases = {'coffee': ['javascript']}
 
 let g:ale_linters = {
 \ 'coffee': ['eslint'],
+\ 'elixir': ['elixir-ls'],
 \ 'javascript': ['eslint'],
 \ 'cs': ['OmniSharp'],
 \ 'html': { 'handlebars': ['ember-template-lint'] }
@@ -151,11 +153,15 @@ let g:ale_fixers = {
 \ 'html': { 'handlebars': ['ember-template-lint'] }
 \}
 
+let g:ale_elixir_elixir_ls_release = expand("~/.config/coc/extensions/node_modules/coc-elixir/els-release")
+
 let g:OmniSharp_server_stdio = 1
 let g:OmniSharp_highlight_types = 3
 
 let g:agriculture#disable_smart_quoting = 1
 let g:agriculture#rg_options = '--smart-case'
+
+let g:vimspector_enable_mappings = 'HUMAN'
 
 inoremap <expr><Down> pumvisible() ? "\<C-n>" : "\<Down>"
 inoremap <expr><Up>   pumvisible() ? "\<C-p>" : "\<Up>"
@@ -248,4 +254,3 @@ hi! def link coffeeSpecialIdent DraculaOrange
 hi! def link coffeeKeyword DraculaRed
 hi! def link coffeeStatement DraculaRed
 hi Normal guibg=NONE ctermbg=NONE
-
