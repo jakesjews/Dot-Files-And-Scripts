@@ -97,16 +97,16 @@ let g:coc_global_extensions = [
 \ 'coc-elixir',
 \ 'coc-ember',
 \ 'coc-erlang_ls',
+\ 'coc-flutter',
 \ 'coc-fsharp',
 \ 'coc-go',
 \ 'coc-html',
 \ 'coc-java',
 \ 'coc-json',
-\ 'coc-julia',
 \ 'coc-metals',
 \ 'coc-omnisharp',
 \ 'coc-perl',
-\ 'coc-phpactor',
+\ 'coc-phpls',
 \ 'coc-powershell',
 \ 'coc-python',
 \ 'coc-r-lsp',
@@ -116,7 +116,10 @@ let g:coc_global_extensions = [
 \ 'coc-sourcekit',
 \ 'coc-sql',
 \ 'coc-svg',
+\ 'coc-texlab',
+\ 'coc-tsserver',
 \ 'coc-vimlsp',
+\ 'coc-xml',
 \ 'coc-yaml'
 \ ]
 
@@ -175,6 +178,7 @@ augroup filetypedetect
   au! BufRead,BufNewFile *.m setfiletype objc
   au BufRead,BufNewFile *.AWL setfiletype asm
   au BufRead,BufNewFile *.razor setfiletype razor
+  au! BufRead,BufNewFile *.fs setfiletype fsharp
   au FileType cs setl sw=4 sts=4 ts=4 et
   au FileType c setl sw=4 sts=4 ts=4 et
   au FileType cpp setl sw=4 sts=4 ts=4 et
@@ -182,6 +186,8 @@ augroup filetypedetect
   au FileType sh setl sw=4 sts=4 ts=4 et
   au FileType make setl noexpandtab sw=4 sts=0 ts=4
 augroup END
+
+autocmd FileType scss setl iskeyword+=@-@
 
 let g:NERDTreeIgnore = [
 \ '\.hgcheck',    '\.hglf', '\.nuget', 'publish',

@@ -30,6 +30,7 @@ if [[ -z $TMUX ]]; then
     export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
     export TEZOS_CLIENT_UNSAFE_DISABLE_DISCLAIMER=yes
     export SKIM_DEFAULT_COMMAND="fd --type f"
+    export CLICOLOR=1
 fi
 
 if [[ -z $TMUX ]] && [[ $platform == 'macos' ]]; then
@@ -101,7 +102,7 @@ zmodload zsh/mathfunc
 zmodload zsh/net/socket
 zmodload zsh/net/tcp
 zmodload zsh/curses
-#zmodload zsh/pcre
+zmodload zsh/pcre
 zmodload zsh/zftp
 zmodload zsh/regex
 zmodload zsh/system
@@ -217,9 +218,7 @@ function rust-mode() {
     alias cloc=tokei
     alias mutt=meli
     alias cut=choose
-    alias dmesg=rmesg
     alias cd=z
-    alias sudo=yas
     alias awk=frawk
     alias cowsay=fsays
     alias markdown=comrak
@@ -239,13 +238,17 @@ function liq() {
     clj -Sdeps '{:deps {mogenslund/liquid {:mvn/version "2.0.4"}}}' -m liq.core
 }
 
+function update-repos() {
+    mr -j8 update
+}
+
 function update() {
     setopt localoptions rmstarsilent
     unsetopt nomatch
  
     echo "updating homebrew packages"
     brew update
-    brew upgrade --greedy
+    brew upgrade
     brew cleanup -s
     brew tap --repair
     rm -rf "$(brew --cache)"
@@ -293,7 +296,7 @@ function update() {
     mas upgrade
  
     echo "update oh-my-zsh"
-    omz update
+    omz update --unattended
 
     echo "ugrade tmux plugins"
     "$HOME/.tmux/plugins/tpm/bin/update_plugins" all
