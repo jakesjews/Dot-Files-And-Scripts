@@ -73,8 +73,8 @@ Plug 'tpope/vim-rails', { 'for': 'ruby' }
 Plug 'moll/vim-node', { 'for': ['coffee', 'javascript', 'typescript'] }
 Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
 Plug 'OmniSharp/omnisharp-vim', { 'for': ['cs', 'fsharp', 'vbnet'] }
-Plug 'pearofducks/ansible-vim', { 'for': 'ansible' }
 Plug 'ngn/vim-apl'
+Plug 'pearofducks/ansible-vim', { 'for': 'ansible' }
 Plug 'brandonbloom/vim-factor', { 'for': 'factor' }
 Plug 'alunny/pegjs-vim', { 'for': 'pegjs' }
 Plug 'robbles/logstash.vim', { 'for': 'logstash' }
@@ -82,9 +82,11 @@ Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
 Plug 'rhysd/vim-wasm', { 'for': 'wast' }
 Plug 'jakesjews/vim-emblem', { 'for': 'emblem' }
 Plug 'katusk/vim-qkdb-syntax', { 'for': ['q', 'k'] }
+Plug 'leanprover/lean.vim'
 Plug 'joukevandermaas/vim-ember-hbs', { 'for': 'handlebars' }
 Plug 'tpope/vim-salve', { 'for': 'clojure' }
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
+Plug 'thyrgle/vim-dyon', { 'for': 'dyon' }
 Plug 'sheerun/vim-polyglot'
 
 call plug#end()
@@ -193,8 +195,7 @@ let g:NERDTreeIgnore = [
 \ '\.hgcheck',    '\.hglf', '\.nuget', 'publish',
 \ '.\vagrant$',   '\.idea', 'eflex.bbprojectd', 'tmp',
 \ 'test-results', 'TestResults', 'compiled',
-\ 'node_modules', 'bin', 'obj', 'Properties', 'coverage',
-\
+\ 'node_modules', 'bin', 'obj', 'Properties', 'coverage', 'dist',
 \ '\.suo$',            '\.hgtabs$',      '\.orig$',       '\.userconfig$', 
 \ 'npm-debug.log',     '\.swp$',         '\.tmp$',        '\.reh$', 
 \ '.DS_Store',         '\.iml$',         '\~$',           '.sublime-workspace', 

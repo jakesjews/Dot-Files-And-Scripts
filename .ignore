@@ -1,8 +1,7 @@
 bower_components
-node_modules
+/*node_modules*/
 /*packages*/
 public
-assets
 *.mdb
 *.dll
 eFlexI18n.js
@@ -18,6 +17,7 @@ dist
 yarn.lock
 Cargo.lock
 license.txt
+devLicense.js
 **/handScannerApp/vendor/**
 **/test/resources/**
 **/deviceComm/src/packets/**

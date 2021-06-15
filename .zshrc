@@ -39,6 +39,7 @@ if [[ -z $TMUX ]] && [[ $platform == 'macos' ]]; then
     source "$HOME/.homebrew.token"
     export HOMEBREW_NO_AUTO_UPDATE=1
     export HOMEBREW_NO_INSTALL_CLEANUP=1
+    export HOMEBREW_BOOTSNAP=1
 
     export NEOVIM_LISTEN_ADDRESS=/tmp/neovim.sock
     export JAVA_HOME=`/usr/libexec/java_home`
@@ -62,7 +63,6 @@ if [[ -z $TMUX ]] && [[ $platform == 'macos' ]]; then
     export DENO_ROOT="$HOME/.deno/bin"
     export TPM_ROOT="$HOME/.tmux/plugins/tpm"
     export DART_ROOT="$HOME/.pub-cache/bin"
-    export WASMER_DIR="$HOME/.wasmer"
     export CABAL_DIR="$HOME/.cabal/bin"
     export QHOME="$HOME/.q"
     export PLAN9=/usr/local/plan9
@@ -79,8 +79,11 @@ if [[ -z $TMUX ]] && [[ $platform == 'macos' ]]; then
     export ARC_DIR="$HOME/.arc"
     export CURL_HOME="/usr/local/opt/curl/bin"
     export EMACS_HOME="$HOME/.emacs.d/bin"
+    export WOLFRAM_ROOT="/Applications/Wolfram Engine.app/Contents/Resources/Wolfram Player.app/Contents/MacOS"
+    export RADICLE_ROOT="$HOME/.radicle/bin"
+    export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 
-    export PATH=/usr/local/sbin:$CURL_HOME:$PATH:$GO_ROOT:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$PYTHON_USER_PATH:$NIM_ROOT:$DOTNET_TOOLS_ROOT:$COMPOSER_ROOT:$SML_ROOT:$WASMTIME_HOME/bin:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME
+    export PATH=/usr/local/sbin:$CURL_HOME:$PATH:$GO_ROOT:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$PYTHON_USER_PATH:$NIM_ROOT:$DOTNET_TOOLS_ROOT:$COMPOSER_ROOT:$SML_ROOT:$WASMTIME_HOME/bin:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT:$RADICLE_ROOT
 fi
 
 plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli heroku mercurial coffee golang bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip cargo httpie jira redis-cli ng sdk rbenv)
@@ -113,14 +116,11 @@ setopt inc_append_history
 source "$ZSH/oh-my-zsh.sh"
 
 if [[ $platform == 'macos' ]]; then
-    alias q='rlwrap -r $QHOME/m64/q'
+    alias q='rlwrap --remember $QHOME/m64/q'
     alias 9="/usr/local/plan9/bin/9"
     alias sqlplus="DYLD_LIBRARY_PATH=/usr/local/lib /usr/local/bin/sqlplus"
     alias jsc="/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/Helpers/jsc"
     alias j=z
-
-    source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-    source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 fi
 
 bindkey '^[[A' history-substring-search-up
@@ -128,10 +128,8 @@ bindkey '^[[B' history-substring-search-down
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 
-alias space="du -hs * | gsort -h"
-alias rg='rg --smart-case --engine auto'
+alias space="du -hs * | gsort --human-numeric-sort"
 alias l="ls"
-alias xsp="MONO_OPTIONS=--arch=64 xsp4 --port 8080"
 alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
 alias git-oops="git reset --soft HEAD~"
 alias sl="ls"
@@ -153,23 +151,30 @@ function restart-eflex() {
 }
 
 function count-instances() {
-    rg $1 -c | sort -k 2 -t ":" -n
+    rg $1 --count | sort --key=2 --field-separator=":" --numeric-sort
 }
 
 function flac-to-mp3() {
     for a in ./*.flac; do
       < /dev/null ffmpeg -i "$a" -qscale:a 0 "${a[@]/%flac/mp3}"
-    done
+    done;
     rm *.flac
 }
 
 function update-servers() {
-    ansible all -i /usr/local/etc/ansible/hosts -f 9 -m "apt" -a "upgrade=dist update_cache=true" -b
-    ansible all -i /usr/local/etc/ansible/hosts -f 9 -m "apt" -a "autoremove=true" -b
-
-    ansible integration -i /usr/local/etc/ansible/hosts -f 3 -m "shell" -a "docker pull selenium/standalone-chrome" -b
-    ansible integration -i /usr/local/etc/ansible/hosts -f 3 -m "shell" -a "docker stop selenium && docker rm selenium" -b
-    ansible integration -i /usr/local/etc/ansible/hosts -f 3 -m "shell" -a "docker run --name selenium --net=host --restart=always -v /dev/shm:/dev/shm -d selenium/standalone-chrome" -b
+    ansible all --inventory /usr/local/etc/ansible/hosts --forks 9 --module-name "apt" --args "upgrade=dist update_cache=true autoremove=true"
+    ansible integration --inventory /usr/local/etc/ansible/hosts --forks 3 --module-name "shell" --args \
+        "docker pull selenium/standalone-chrome && \
+        docker stop selenium && docker rm selenium && \
+        docker run \
+            --name selenium \
+            -e START_XVFB=false \
+            --tmpfs /tmp \
+            --ipc=host \
+            --net=host \
+            --restart=always \
+            -v /dev/shm:/dev/shm \
+            -d selenium/standalone-chrome"
 }
 
 function pwdx {
@@ -183,7 +188,7 @@ function remove-trailing-whitespace {
 function docker-clean {
     docker-sync-stack clean
     docker-compose down --volumes
-    docker system prune --volumes -f
+    docker system prune --volumes --force
 }
 
 function graal() {
@@ -199,7 +204,7 @@ function rust-mode() {
     alias find=fd
     alias sed=sd
     alias uniq=huniq
-    alias du=dust
+    alias du=dua
     alias cp=xcp
     alias hexdump=hexyl
     alias ascii=chars
@@ -208,7 +213,7 @@ function rust-mode() {
     alias rm=rip
     alias dd=bcp
     alias wc=cw
-    alias less=peep
+    alias less=sp
     alias nano=amp
     alias top=btm
     alias objdump=bingrep
@@ -220,7 +225,6 @@ function rust-mode() {
     alias cut=choose
     alias cd=z
     alias awk=frawk
-    alias cowsay=fsays
     alias markdown=comrak
     alias git=gix
     alias time=hyperfine
@@ -232,14 +236,11 @@ function rust-mode() {
     alias dig=dog
     alias ping=gping
     alias curl=qurl
+    alias col=xcol
 }
 
 function liq() {
-    clj -Sdeps '{:deps {mogenslund/liquid {:mvn/version "2.0.4"}}}' -m liq.core
-}
-
-function update-repos() {
-    mr -j8 update
+    clj -Sdeps '{:deps {mogenslund/liquid {:mvn/version "2.0.4"}}}' -main liq.core
 }
 
 function update() {
@@ -253,8 +254,8 @@ function update() {
     brew tap --repair
     rm -rf "$(brew --cache)"
  
-    echo "updating node packages"
-    npm update -g
+    #echo "updating node packages"
+    #npm update -g
  
     echo "updating vim plugins"
     vim +PlugUpdate +PlugUpgrade +UpdateRemotePlugins +qa
@@ -274,7 +275,7 @@ function update() {
  
     echo "update rust packages"
     rustup update
-    cargo install-update -a
+    cargo install-update --all
     cargo cache --autoclean
  
     echo "update quicklisp"
@@ -310,19 +311,20 @@ function update() {
     sdk upgrade
 
     echo "upgrade cask packages"
-    brew cu --all -q -y --no-brew-update
+    brew cu --all --quiet --yes --no-brew-update
  
     echo "outdated python packages"
     pip3 list --user --outdated --not-required
  
     echo "outdated npm packages"
-    npm outdated -g
+    npm outdated --global
 }
 
 if [[ $platform == 'macos' ]]; then
     eval "$(zoxide init zsh)"
     source "$HOME/.opam/opam-init/init.zsh"
-    source "$WASMER_DIR/wasmer.sh"
     eval $(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib=$HOME/.perl5)
     source "$HOME/.sdkman/bin/sdkman-init.sh"
+    source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 fi

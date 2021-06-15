@@ -1,9 +1,9 @@
 [user]
-  name = Jacob Jewell
-  email = jacobjewell@eflexsystems.com
+	name = Jacob Jewell
+	email = jacobjewell@eflexsystems.com
 
 [core]
-  excludesfile = /Users/jacob/.gitignore_global
+	excludesfile = /Users/jacob/.gitignore_global
   editor = nvim
   pager = delta --dark 
 
