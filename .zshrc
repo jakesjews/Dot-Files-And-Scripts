@@ -42,12 +42,10 @@ if [[ -z $TMUX ]] && [[ $platform == 'macos' ]]; then
     export HOMEBREW_BOOTSNAP=1
 
     export NEOVIM_LISTEN_ADDRESS=/tmp/neovim.sock
-    export JAVA_HOME=`/usr/libexec/java_home`
     export GOPATH=/usr/local/lib/go
 
     export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
     export GO_ROOT=$GOPATH/bin
-    export BREW_ROOT=/usr/local/bin:/usr/local/sbin
     export CARGO_ROOT="$HOME/.cargo/bin"
     export OPENSSL_INCLUDE_DIR=/usr/local/opt/openssl/include
     export OPENSSL_LIB_DIR=/usr/local/opt/openssl/lib
@@ -55,20 +53,14 @@ if [[ -z $TMUX ]] && [[ $platform == 'macos' ]]; then
     export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/usr/local/opt/openssl"
     export AIRFLOW_HOME="$HOME/.airflow"
     export LLVM_SYS_100_PREFIX=/usr/local/opt/llvm/
-    export JIP_HOME="$HOME/.jip"
 
-    export ADOBE_AIR_HOME="/usr/local/share/adobe-air-sdk"
     export NODE_PATH=/usr/local/lib/node_modules
-    export FACTOR_ROOT=/Applications/factor
-    export DENO_ROOT="$HOME/.deno/bin"
     export TPM_ROOT="$HOME/.tmux/plugins/tpm"
     export DART_ROOT="$HOME/.pub-cache/bin"
     export CABAL_DIR="$HOME/.cabal/bin"
     export QHOME="$HOME/.q"
     export PLAN9=/usr/local/plan9
-    export PYTHON_USER_PATH="$HOME/Library/Python/3.7/bin"
     export NIM_ROOT="$HOME/.nimble/bin"
-    export DOTNET_TOOLS_ROOT="$HOME/.dotnet/tools"
     export COMPOSER_ROOT=$HOME/.composer/vendor/bin
     export SML_ROOT=/usr/local/smlnj/bin
     export WASMTIME_HOME="$HOME/.wasmtime"
@@ -83,7 +75,7 @@ if [[ -z $TMUX ]] && [[ $platform == 'macos' ]]; then
     export RADICLE_ROOT="$HOME/.radicle/bin"
     export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 
-    export PATH=/usr/local/sbin:$CURL_HOME:$PATH:$GO_ROOT:$JAVA_HOME/bin:$CARGO_ROOT:$FACTOR_ROOT:$DENO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$PYTHON_USER_PATH:$NIM_ROOT:$DOTNET_TOOLS_ROOT:$COMPOSER_ROOT:$SML_ROOT:$WASMTIME_HOME/bin:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT:$RADICLE_ROOT
+    export PATH=/usr/local/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$NIM_ROOT:$COMPOSER_ROOT:$SML_ROOT:$WASMTIME_HOME/bin:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT:$RADICLE_ROOT
 fi
 
 plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli heroku mercurial coffee golang bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip cargo httpie jira redis-cli ng sdk rbenv)
@@ -121,6 +113,7 @@ if [[ $platform == 'macos' ]]; then
     alias sqlplus="DYLD_LIBRARY_PATH=/usr/local/lib /usr/local/bin/sqlplus"
     alias jsc="/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/Helpers/jsc"
     alias j=z
+    alias factor="/Applications/factor/factor"
 fi
 
 bindkey '^[[A' history-substring-search-up
@@ -197,6 +190,7 @@ function graal() {
 }
 
 function rust-mode() {
+    alias grep=rg
     alias cat=bat
     alias ps=procs
     alias xargs=rargs
@@ -205,7 +199,7 @@ function rust-mode() {
     alias sed=sd
     alias uniq=huniq
     alias du=dua
-    alias cp=xcp
+    alias cp=fcp
     alias hexdump=hexyl
     alias ascii=chars
     alias tree=broot
@@ -237,6 +231,7 @@ function rust-mode() {
     alias ping=gping
     alias curl=qurl
     alias col=xcol
+    alias tmux=zellij
 }
 
 function liq() {

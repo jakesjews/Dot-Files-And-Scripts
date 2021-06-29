@@ -44,7 +44,7 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'dense-analysis/ale'
 Plug 'machakann/vim-sandwich'
 Plug 'lotabout/skim', { 'dir': '~/.skim', 'do': './install' }
-Plug 'lotabout/skim.vim'
+Plug 'lotabout/skim.vim', { 'commit': '75798afff51e764ada87149b16bb56a6ef971042' }
 Plug 'jesseleite/vim-agriculture'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'majutsushi/tagbar'
