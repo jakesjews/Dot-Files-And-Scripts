@@ -10,12 +10,9 @@ map <C-p> :Files<CR>
 vmap <Enter> <Plug>(EasyAlign)
 vnoremap . :normal .<CR>
 nnoremap <C-e> :e.<CR>
+tnoremap <C-w> <C-\><C-n> 
 
-if has('nvim')
-  tnoremap <C-w> <C-\><C-n> 
-  set termguicolors
-endif
-
+set termguicolors
 set backspace=indent,eol,start
 set backupdir=$HOME/.vim/backup//
 set directory=$HOME/.vim/swap//
@@ -39,6 +36,7 @@ let g:polyglot_disabled = ['coffee-script', 'emblem', 'yaml', 'cs', 'jinja', 'an
 "" Plugins
 call plug#begin('~/.vim/plugged')
 
+Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'tpope/vim-dispatch'
 Plug 'scrooloose/nerdcommenter'
 Plug 'dense-analysis/ale'
@@ -53,10 +51,9 @@ Plug 'scrooloose/nerdtree'
 Plug 'rizzatti/dash.vim'
 Plug 'junegunn/vim-easy-align', { 'on': '<Plug>(EasyAlign)' }
 Plug 'junegunn/rainbow_parentheses.vim', { 'for': ['lisp', 'clojure', 'scheme'] }
-Plug 'Konfekt/FastFold', { 'for': 'coffee' }
 Plug 'janko-m/vim-test'
 Plug 'sukima/vim-javascript-imports', { 'for': ['coffee', 'javascript', 'typescript'] }
-Plug 'AndrewRadev/ember_tools.vim', { 'for': ['coffee', 'javascript', 'typescript'] }
+Plug 'Quramy/vim-js-pretty-template'
 Plug 'sukima/vim-ember-imports', { 'for': ['coffee', 'javascript', 'typescript'] }
 Plug 'tpope/vim-dadbod'
 Plug 'tpope/vim-fugitive'
@@ -97,10 +94,8 @@ let g:coc_global_extensions = [
 \ 'coc-cmake',
 \ 'coc-css',
 \ 'coc-elixir',
-\ 'coc-ember',
 \ 'coc-erlang_ls',
 \ 'coc-flutter',
-\ 'coc-fsharp',
 \ 'coc-go',
 \ 'coc-html',
 \ 'coc-java',
@@ -122,12 +117,12 @@ let g:coc_global_extensions = [
 \ 'coc-tsserver',
 \ 'coc-vimlsp',
 \ 'coc-xml',
-\ 'coc-yaml'
+\ 'coc-yaml',
+\ 'coc-ember'
 \ ]
 
 let g:test#strategy = 'neovim'
 
-let g:vim_javascript_imports_use_semicolons = 0
 let g:vim_javascript_imports_multiline_max_col = 120
 let g:vim_javascript_imports_multiline_max_vars = 100
 let g:ember_imports_ember_data_next = 1
@@ -170,6 +165,15 @@ let g:vimspector_enable_mappings = 'HUMAN'
 
 inoremap <expr><Down> pumvisible() ? "\<C-n>" : "\<Down>"
 inoremap <expr><Up>   pumvisible() ? "\<C-p>" : "\<Up>"
+
+nmap <silent> ga <Plug>(coc-codeaction)
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 augroup rainbow_lisp
   autocmd!
@@ -224,7 +228,6 @@ set autowrite
 set pastetoggle=<F2>
 set mouse=a
 set clipboard=unnamed
-set foldmethod=indent
 set foldlevel=99
 set splitright
 set ruler
@@ -232,6 +235,8 @@ set wildmenu
 set formatoptions+=j " Delete comment character when joining commented lines
 set autoread
 set fileformats+=mac
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
 
 setglobal tags-=./tags tags-=./tags; tags^=./tags;
 
@@ -261,3 +266,38 @@ hi! def link coffeeSpecialIdent DraculaOrange
 hi! def link coffeeKeyword DraculaRed
 hi! def link coffeeStatement DraculaRed
 hi Normal guibg=NONE ctermbg=NONE
+
+function EnableTemplateLiteralColors()
+  " list of named template literal tags and their syntax here
+  call jspretmpl#register_tag('hbs', 'handlebars')
+
+  autocmd FileType javascript JsPreTmpl
+  autocmd FileType typescript JsPreTmpl
+
+  " compat with leafgarland/typescript-vim
+  autocmd FileType typescript syn clear foldBraces
+endfunction
+
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "all",
+  ignore_install = { "haskell" },
+  highlight = {
+    enable = true,
+  },
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = "gnn",
+      node_incremental = "grn",
+      scope_incremental = "grc",
+      node_decremental = "grm",
+    },
+  },
+  indent = {
+    enable = true
+  },
+}
+EOF
+
+call EnableTemplateLiteralColors()
