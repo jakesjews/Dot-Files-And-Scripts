@@ -193,6 +193,8 @@ augroup filetypedetect
   au FileType make setl noexpandtab sw=4 sts=0 ts=4
 augroup END
 
+au TextYankPost * lua vim.highlight.on_yank {higroup="IncSearch", timeout=150, on_visual=true}
+
 autocmd FileType scss setl iskeyword+=@-@
 
 let g:NERDTreeIgnore = [
