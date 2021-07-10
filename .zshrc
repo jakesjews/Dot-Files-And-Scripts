@@ -216,7 +216,7 @@ function rust-mode() {
     alias license=licensor
     alias cloc=tokei
     alias mutt=meli
-    alias cut=choose
+    alias cut=hck
     alias cd=z
     alias awk=frawk
     alias markdown=comrak
@@ -236,6 +236,25 @@ function rust-mode() {
 
 function liq() {
     clj -Sdeps '{:deps {mogenslund/liquid {:mvn/version "2.0.4"}}}' -main liq.core
+}
+
+function clean-eflex-dir() {
+    rm -rf ${TMPDIR}v8-compile-cache*
+    rm -rf ${TMPDIR}broccoli-*
+    rm -rf ${TMPDIR}*Before*
+    rm -rf ${TMPDIR}*After*
+    rm -rf ${TMPDIR}*After*
+    watchman watch-del-all
+    cd ${HOME}/dev/eflexsystems/eflex
+    git remote prune origin
+    git gc --force
+    git lfs prune
+    make clean
+    cd ${HOME}/dev/eflexsystems/eflex2
+    git remote prune origin
+    git gc --force
+    git lfs prune
+    make clean
 }
 
 function update() {

@@ -12,14 +12,41 @@ vnoremap . :normal .<CR>
 nnoremap <C-e> :e.<CR>
 tnoremap <C-w> <C-\><C-n> 
 
+set hidden
 set termguicolors
 set backspace=indent,eol,start
-set backupdir=$HOME/.vim/backup//
-set directory=$HOME/.vim/swap//
-set undodir=~/.vim/undo//
-
+set nobackup
+set nowritebackup
+set directory=$HOME/.vim/swap/
+set undofile
+set undodir=~/.vim/undo/
 set hlsearch
 set autoread
+set updatetime=300
+set shortmess+=c
+set signcolumn=number
+set completeopt=longest,menuone,preview "don't autoselect first item in omnicomplete, show if only one item (for preview)
+set showcmd
+set tabstop=2
+set shiftwidth=2
+set autoindent
+set expandtab
+set smarttab
+set ignorecase
+set smartcase
+set number
+set incsearch
+set pastetoggle=<F2>
+set mouse=a
+set clipboard=unnamed
+set foldlevel=99
+set splitright
+set ruler
+set wildmenu
+set formatoptions+=j "Delete comment character when joining commented lines
+set fileformats+=mac
+set foldmethod=indent
+
 syntax on
 filetype plugin indent on
 
@@ -58,7 +85,6 @@ Plug 'sukima/vim-ember-imports', { 'for': ['coffee', 'javascript', 'typescript']
 Plug 'tpope/vim-dadbod'
 Plug 'tpope/vim-fugitive'
 Plug 'eraserhd/parinfer-rust', { 'do': 'cargo build --release' }
-Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-projectionist'
 Plug 'metakirby5/codi.vim'
@@ -118,6 +144,7 @@ let g:coc_global_extensions = [
 \ 'coc-vimlsp',
 \ 'coc-xml',
 \ 'coc-yaml',
+\ 'coc-highlight',
 \ 'coc-ember'
 \ ]
 
@@ -137,10 +164,8 @@ let g:ansible_template_syntaxes = {
 \ }
 
 let g:ale_echo_msg_format = '%linter% says %s'
-let g:ale_linter_aliases = {'coffee': ['javascript']}
 
 let g:ale_linters = {
-\ 'coffee': ['eslint'],
 \ 'elixir': ['elixir-ls'],
 \ 'javascript': ['eslint'],
 \ 'cs': ['OmniSharp'],
@@ -148,7 +173,6 @@ let g:ale_linters = {
 \}
 
 let g:ale_fixers = {
-\ 'coffee': ['eslint'],
 \ 'javascript': ['eslint'],
 \ 'html': { 'handlebars': ['ember-template-lint'] }
 \}
@@ -163,14 +187,13 @@ let g:agriculture#rg_options = '--smart-case'
 
 let g:vimspector_enable_mappings = 'HUMAN'
 
-inoremap <expr><Down> pumvisible() ? "\<C-n>" : "\<Down>"
-inoremap <expr><Up>   pumvisible() ? "\<C-p>" : "\<Up>"
-
 nmap <silent> ga <Plug>(coc-codeaction)
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+inoremap <expr><Down> pumvisible() ? "\<C-n>" : "\<Down>"
+inoremap <expr><Up> pumvisible() ? "\<C-p>" : "\<Up>"
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
@@ -212,33 +235,6 @@ let g:NERDTreeIgnore = [
 let g:NERDTreeAutoDeleteBuffer = 1
 let g:NERDTreeMinimalUI = 1
 let g:NERDTreeCascadeSingleChildDir = 0
-
-"don't autoselect first item in omnicomplete, show if only one item (for preview)
-set completeopt=longest,menuone,preview
-
-set showcmd
-set tabstop=2
-set shiftwidth=2
-set autoindent
-set expandtab
-set smarttab
-set ignorecase
-set smartcase
-set number
-set incsearch
-set autowrite
-set pastetoggle=<F2>
-set mouse=a
-set clipboard=unnamed
-set foldlevel=99
-set splitright
-set ruler
-set wildmenu
-set formatoptions+=j " Delete comment character when joining commented lines
-set autoread
-set fileformats+=mac
-set foldmethod=expr
-set foldexpr=nvim_treesitter#foldexpr()
 
 setglobal tags-=./tags tags-=./tags; tags^=./tags;
 
@@ -295,9 +291,6 @@ require'nvim-treesitter.configs'.setup {
       scope_incremental = "grc",
       node_decremental = "grm",
     },
-  },
-  indent = {
-    enable = true
   },
 }
 EOF
