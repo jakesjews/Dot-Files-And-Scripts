@@ -133,6 +133,7 @@ alias vim='nvim'
 alias vi='nvim'
 alias x="$HOME/.dotnet/tools/x"
 alias git-graph="git commit-graph write --reachable --changed-paths"
+alias mongo=mongosh
 
 function clean-eflex() {
     tmux kill-server
@@ -241,6 +242,7 @@ function liq() {
 function clean-eflex-dir() {
     rm -rf ${TMPDIR}v8-compile-cache*
     rm -rf ${TMPDIR}broccoli-*
+    rm -rf ${TMPDIR}jacob/if-you-need-to-delete-this-open-an-issue-async-disk-cache-*
     rm -rf ${TMPDIR}*Before*
     rm -rf ${TMPDIR}*After*
     rm -rf ${TMPDIR}*After*
@@ -305,9 +307,6 @@ function update() {
     echo "update composer packages"
     composer g update
 
-    echo "update perl packages"
-    cpan-outdated -p | cpanm
-
     echo "update app store apps"
     mas upgrade
  
@@ -326,7 +325,7 @@ function update() {
     sdk upgrade
 
     echo "upgrade cask packages"
-    brew cu --all --quiet --yes --no-brew-update
+    brew cu --all --quiet --yes --no-brew-update --no-quarantine
  
     echo "outdated python packages"
     pip3 list --user --outdated --not-required
@@ -337,8 +336,8 @@ function update() {
 
 if [[ $platform == 'macos' ]]; then
     eval "$(zoxide init zsh)"
-    source "$HOME/.opam/opam-init/init.zsh"
     eval $(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib=$HOME/.perl5)
+    source "$HOME/.opam/opam-init/init.zsh"
     source "$HOME/.sdkman/bin/sdkman-init.sh"
     source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
     source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
