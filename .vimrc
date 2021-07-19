@@ -310,6 +310,7 @@ endfunction
 lua <<EOF
 vim.g.kommentary_create_default_mappings = false
 vim.api.nvim_set_keymap("n", "<C-c>", "<Plug>kommentary_line_default", {})
+vim.api.nvim_set_keymap("x", "<C-c>", "<Plug>kommentary_visual_default", {})
 
 require'nvim-treesitter.configs'.setup {
   ensure_installed = "all",
