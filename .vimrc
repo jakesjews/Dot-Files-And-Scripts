@@ -8,7 +8,6 @@ map <C-p> :Files<CR>
 vmap <Enter> <Plug>(EasyAlign)
 vnoremap . :normal .<CR>
 nnoremap <C-n> :NvimTreeToggle<CR>
-nnoremap <C-r> :NvimTreeRefresh<CR>
 
 set hidden
 set autowrite
@@ -65,11 +64,10 @@ Plug 'tpope/vim-dispatch'
 Plug 'b3nj5m1n/kommentary'
 Plug 'dense-analysis/ale'
 Plug 'machakann/vim-sandwich'
-Plug 'lotabout/skim', { 'dir': '~/.skim', 'do': './install' }
-Plug 'lotabout/skim.vim', { 'commit': '75798afff51e764ada87149b16bb56a6ef971042' }
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 Plug 'jesseleite/vim-agriculture'
 Plug 'editorconfig/editorconfig-vim'
-Plug 'majutsushi/tagbar'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'
@@ -85,9 +83,10 @@ Plug 'tpope/vim-fugitive'
 Plug 'eraserhd/parinfer-rust', { 'do': 'cargo build --release' }
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-projectionist'
-Plug 'metakirby5/codi.vim'
-Plug 'Yggdroot/indentLine'
-Plug 'puremourning/vimspector'
+Plug 'michaelb/sniprun', {'do': 'bash install.sh'}
+Plug 'lukas-reineke/indent-blankline.nvim'
+Plug 'mfussenegger/nvim-dap'
+Plug 'Pocco81/DAPInstall.nvim'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
 Plug 'tpope/vim-rails', { 'for': 'ruby' } 
@@ -181,9 +180,6 @@ let g:ale_fixers = {
 
 let g:ale_elixir_elixir_ls_release = expand("~/.config/coc/extensions/node_modules/coc-elixir/els-release")
 
-let g:agriculture#disable_smart_quoting = 1
-let g:agriculture#rg_options = '--smart-case'
-
 let g:vimspector_enable_mappings = 'HUMAN'
 
 nmap <silent> ga <Plug>(coc-codeaction)
@@ -276,10 +272,9 @@ if &term =~? '^screen'
   set ttymouse=xterm2
 endif
 
-cnoreabbrev rg RgRaw
-cnoreabbrev rG RgRaw
-cnoreabbrev RG RgRaw
-cnoreabbrev Rg RgRaw
+cnoreabbrev rg Rg
+cnoreabbrev rgr RgRaw
+cnoreabbrev Rgr RgRaw
 
 set background=dark
 colorscheme dracula
@@ -311,17 +306,14 @@ require('kommentary.config').configure_language("default", {
 })
 
 require'nvim-treesitter.configs'.setup {
-  rainbow = {
-    enable = true,
-    extended_mode = true, -- Highlight also non-parentheses delimiters, boolean or table: lang -> boolean
-  }
-}
-
-require'nvim-treesitter.configs'.setup {
   ensure_installed = "all",
   ignore_install = { "haskell" },
   highlight = {
     enable = true,
+  },
+  rainbow = {
+    enable = true,
+    extended_mode = true, -- Highlight also non-parentheses delimiters, boolean or table: lang -> boolean
   },
   incremental_selection = {
     enable = true,
