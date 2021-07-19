@@ -2,7 +2,6 @@
 nnoremap Q <nop>
 nnoremap x "_x
 
-map <C-c> <leader>c<space>
 map <C-t> :TestNearest<CR>
 map <C-q> :Dash<CR>
 map <C-p> :Files<CR>
@@ -63,7 +62,7 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdateSync' }
 Plug 'tpope/vim-dispatch'
-Plug 'scrooloose/nerdcommenter'
+Plug 'b3nj5m1n/kommentary'
 Plug 'dense-analysis/ale'
 Plug 'machakann/vim-sandwich'
 Plug 'lotabout/skim', { 'dir': '~/.skim', 'do': './install' }
@@ -309,6 +308,9 @@ function EnableTemplateLiteralColors()
 endfunction
 
 lua <<EOF
+vim.g.kommentary_create_default_mappings = false
+vim.api.nvim_set_keymap("n", "<C-c>", "<Plug>kommentary_line_default", {})
+
 require'nvim-treesitter.configs'.setup {
   ensure_installed = "all",
   ignore_install = { "haskell" },
