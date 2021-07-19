@@ -261,6 +261,8 @@ let g:nvim_tree_indent_markers = 1
 let g:nvim_tree_git_hl = 1
 let g:nvim_tree_highlight_opened_files = 1
 
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8 } }
+
 setglobal tags-=./tags tags-=./tags; tags^=./tags;
 
 if !&scrolloff
@@ -275,9 +277,7 @@ if &term =~? '^screen'
   set ttymouse=xterm2
 endif
 
-cnoreabbrev rg Rg
-cnoreabbrev rgr RgRaw
-cnoreabbrev Rgr RgRaw
+cnoreabbrev rg RgRaw
 
 set background=dark
 colorscheme dracula

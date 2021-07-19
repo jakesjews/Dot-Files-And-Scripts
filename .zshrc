@@ -30,6 +30,7 @@ if [[ -z $TMUX ]]; then
     export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
     export TEZOS_CLIENT_UNSAFE_DISABLE_DISCLAIMER=yes
     export SKIM_DEFAULT_COMMAND="fd --type f"
+    export FZF_DEFAULT_COMMAND='fd --type f'
     export CLICOLOR=1
 fi
 
