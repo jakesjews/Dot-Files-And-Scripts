@@ -5,6 +5,7 @@ nnoremap x "_x
 map <C-t> :TestNearest<CR>
 map <C-q> :Dash<CR>
 map <C-p> :Files<CR>
+map <C-g> :Rg<CR>
 vmap <Enter> <Plug>(EasyAlign)
 vnoremap . :normal .<CR>
 nnoremap <C-n> :NvimTreeToggle<CR>
@@ -150,6 +151,8 @@ let g:coc_global_extensions = [
 \ ]
 
 let g:test#strategy = 'neovim'
+
+let g:agriculture#disable_smart_quoting = 1
 
 let g:vim_javascript_imports_multiline_max_col = 120
 let g:vim_javascript_imports_multiline_max_vars = 100
