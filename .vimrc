@@ -75,7 +75,7 @@ Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'rizzatti/dash.vim'
 Plug 'junegunn/vim-easy-align', { 'on': '<Plug>(EasyAlign)' }
-Plug 'junegunn/rainbow_parentheses.vim', { 'for': ['lisp', 'clojure', 'scheme'] }
+Plug 'p00f/nvim-ts-rainbow'
 Plug 'janko-m/vim-test'
 Plug 'sukima/vim-javascript-imports', { 'for': ['coffee', 'javascript', 'typescript'] }
 Plug 'Quramy/vim-js-pretty-template'
@@ -227,11 +227,6 @@ augroup mygroup
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
 
-augroup rainbow_lisp
-  autocmd!
-  autocmd FileType lisp,clojure,scheme RainbowParentheses
-augroup END
-
 augroup filetypedetect
   au! BufRead,BufNewFile *.m setfiletype objc
   au BufRead,BufNewFile *.AWL setfiletype asm
@@ -312,8 +307,15 @@ vim.g.kommentary_create_default_mappings = false
 vim.api.nvim_set_keymap("n", "<C-c>", "<Plug>kommentary_line_default", {})
 vim.api.nvim_set_keymap("x", "<C-c>", "<Plug>kommentary_visual_default", {})
 require('kommentary.config').configure_language("default", {
-    prefer_single_line_comments = true,
+  prefer_single_line_comments = true,
 })
+
+require'nvim-treesitter.configs'.setup {
+  rainbow = {
+    enable = true,
+    extended_mode = true, -- Highlight also non-parentheses delimiters, boolean or table: lang -> boolean
+  }
+}
 
 require'nvim-treesitter.configs'.setup {
   ensure_installed = "all",
