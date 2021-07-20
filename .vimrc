@@ -9,6 +9,7 @@ map <C-g> :Rg<CR>
 vmap <Enter> <Plug>(EasyAlign)
 vnoremap . :normal .<CR>
 nnoremap <C-n> :NvimTreeToggle<CR>
+nnoremap <C-f> :NvimTreeFindFile<CR>
 
 set hidden
 set autowrite
@@ -55,8 +56,6 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   augroup end
 endif
 
-let g:polyglot_disabled = ['coffee-script', 'emblem', 'yaml', 'cs', 'jinja', 'ansible', 'handlebars']
-
 "" Plugins
 call plug#begin('~/.vim/plugged')
 
@@ -64,7 +63,7 @@ Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdateSync' }
 Plug 'tpope/vim-dispatch'
 Plug 'b3nj5m1n/kommentary'
 Plug 'dense-analysis/ale'
-Plug 'machakann/vim-sandwich'
+Plug 'blackCauldron7/surround.nvim'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'jesseleite/vim-agriculture'
@@ -75,9 +74,9 @@ Plug 'kyazdani42/nvim-tree.lua'
 Plug 'rizzatti/dash.vim'
 Plug 'junegunn/vim-easy-align', { 'on': '<Plug>(EasyAlign)' }
 Plug 'p00f/nvim-ts-rainbow'
-Plug 'janko-m/vim-test'
+Plug 'vim-test/vim-test'
+Plug 'rcarriga/vim-ultest', { 'do': ':UpdateRemotePlugins' }
 Plug 'sukima/vim-javascript-imports', { 'for': ['coffee', 'javascript', 'typescript'] }
-Plug 'Quramy/vim-js-pretty-template'
 Plug 'sukima/vim-ember-imports', { 'for': ['coffee', 'javascript', 'typescript'] }
 Plug 'tpope/vim-dadbod'
 Plug 'tpope/vim-fugitive'
@@ -90,24 +89,59 @@ Plug 'mfussenegger/nvim-dap'
 Plug 'Pocco81/DAPInstall.nvim'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
-Plug 'tpope/vim-rails', { 'for': 'ruby' } 
-Plug 'moll/vim-node', { 'for': ['coffee', 'javascript', 'typescript'] }
-Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
+Plug 'tpope/vim-rails'
+Plug 'moll/vim-node'
 Plug 'ngn/vim-apl'
-Plug 'pearofducks/ansible-vim', { 'for': 'ansible' }
-Plug 'brandonbloom/vim-factor', { 'for': 'factor' }
-Plug 'alunny/pegjs-vim', { 'for': 'pegjs' }
-Plug 'robbles/logstash.vim', { 'for': 'logstash' }
-Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
-Plug 'rhysd/vim-wasm', { 'for': 'wast' }
-Plug 'jakesjews/vim-emblem', { 'for': 'emblem' }
-Plug 'katusk/vim-qkdb-syntax', { 'for': ['q', 'k'] }
+Plug 'pearofducks/ansible-vim'
+Plug 'brandonbloom/vim-factor'
+Plug 'alunny/pegjs-vim'
+Plug 'robbles/logstash.vim'
+Plug 'kchmck/vim-coffee-script'
+Plug 'jakesjews/vim-emblem'
+Plug 'katusk/vim-qkdb-syntax'
 Plug 'leanprover/lean.vim'
-Plug 'joukevandermaas/vim-ember-hbs', { 'for': 'handlebars' }
 Plug 'tpope/vim-salve', { 'for': 'clojure' }
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
-Plug 'thyrgle/vim-dyon', { 'for': 'dyon' }
-Plug 'sheerun/vim-polyglot'
+Plug 'thyrgle/vim-dyon'
+Plug 'mityu/vim-applescript', { 'for': 'applescript' }
+Plug 'hellerve/carp-vim'
+Plug 'elubow/cql-vim'
+Plug 'vim-crystal/vim-crystal'
+Plug 'calviken/vim-gdscript3'
+Plug 'gleam-lang/gleam.vim'
+Plug 'tikhomirov/vim-glsl'
+Plug 'CH-DanReif/haproxy.vim'
+Plug 'neovimhaskell/haskell-vim', { 'for': ['haskell', 'lhaskell', 'chaskell', 'cabalproject', 'cabalconfig'] }
+Plug 'jdonaldson/vaxe'
+Plug 'zebradil/hive.vim'
+Plug 'edwinb/idris2-vim'
+Plug 'vmchale/ion-vim'
+Plug 'gkz/vim-ls'
+Plug 'rhysd/vim-llvm'
+Plug 'MTDL9/vim-log-highlighting'
+Plug 'IrenejMarc/vim-mint'
+Plug 'leafo/moonscript-vim'
+Plug 'chr4/nginx.vim'
+Plug 'zah/nim.vim'
+Plug 'McSinyx/vim-octave'
+Plug 'petRUShka/vim-opencl'
+Plug 'lifepillar/pgsql.vim'
+Plug 'jakwings/vim-pony'
+Plug 'digitaltoad/vim-pug'
+Plug 'purescript-contrib/purescript-vim'
+Plug 'peterhoeg/vim-qml'
+Plug 'wlangstroth/vim-racket'
+Plug 'adamclerk/vim-razor'
+Plug 'reasonml-editor/vim-reason-plus'
+Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
+Plug 'TovarishFin/vim-solidity'
+Plug 'wavded/vim-stylus'
+Plug 'keith/swift.vim', { 'for': ['swift', 'swiftgyb'] }
+Plug 'hashivim/vim-terraform'
+Plug 'solarnz/thrift.vim'
+Plug 'ollykel/v-vim'
+Plug 'arrufat/vala.vim'
+" Plug 'joukevandermaas/vim-ember-hbs', { 'for': 'handlebars' }
 
 call plug#end()
 
@@ -172,7 +206,6 @@ let g:ale_echo_msg_format = '%linter% says %s'
 let g:ale_linters = {
 \ 'elixir': ['elixir-ls'],
 \ 'javascript': ['eslint'],
-\ 'cs': ['OmniSharp'],
 \ 'html': { 'handlebars': ['ember-template-lint'] }
 \}
 
@@ -180,8 +213,6 @@ let g:ale_fixers = {
 \ 'javascript': ['eslint'],
 \ 'html': { 'handlebars': ['ember-template-lint'] }
 \}
-
-let g:ale_elixir_elixir_ls_release = expand("~/.config/coc/extensions/node_modules/coc-elixir/els-release")
 
 let g:vimspector_enable_mappings = 'HUMAN'
 
@@ -227,10 +258,9 @@ augroup mygroup
 augroup end
 
 augroup filetypedetect
-  au! BufRead,BufNewFile *.m setfiletype objc
   au BufRead,BufNewFile *.AWL setfiletype asm
   au BufRead,BufNewFile *.razor setfiletype razor
-  au! BufRead,BufNewFile *.fs setfiletype fsharp
+  au BufRead,BufNewFile *.hbs setfiletype handlebars
   au FileType cs setl sw=4 sts=4 ts=4 et
   au FileType c setl sw=4 sts=4 ts=4 et
   au FileType cpp setl sw=4 sts=4 ts=4 et
@@ -283,22 +313,7 @@ set background=dark
 colorscheme dracula
 hi! link SpecialComment DraculaCyan
 hi! link Type DraculaCyan
-hi! def link coffeeObjAssign Function
-hi! def link coffeeSpecialIdent DraculaOrange
-hi! def link coffeeKeyword DraculaRed
-hi! def link coffeeStatement DraculaRed
 hi Normal guibg=NONE ctermbg=NONE
-
-function EnableTemplateLiteralColors()
-  " list of named template literal tags and their syntax here
-  call jspretmpl#register_tag('hbs', 'handlebars')
-
-  autocmd FileType javascript JsPreTmpl
-  autocmd FileType typescript JsPreTmpl
-
-  " compat with leafgarland/typescript-vim
-  autocmd FileType typescript syn clear foldBraces
-endfunction
 
 lua <<EOF
 vim.g.kommentary_create_default_mappings = false
@@ -308,9 +323,11 @@ require('kommentary.config').configure_language("default", {
   prefer_single_line_comments = true,
 })
 
+require'surround'.setup {}
+
 require'nvim-treesitter.configs'.setup {
   ensure_installed = "all",
-  ignore_install = { "haskell" },
+  ignore_install = { "haskell", "swift" },
   highlight = {
     enable = true,
   },
@@ -329,5 +346,3 @@ require'nvim-treesitter.configs'.setup {
   },
 }
 EOF
-
-call EnableTemplateLiteralColors()

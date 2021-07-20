@@ -277,6 +277,7 @@ function update() {
     echo "updating vim plugins"
     vim +PlugUpdate +PlugUpgrade +UpdateRemotePlugins +qa
     vim -c 'CocUpdateSync|q'
+    vim +TSUpdateSync +qa
  
     echo "updating ruby gems"
     gem update
