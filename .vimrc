@@ -5,7 +5,6 @@ nnoremap x "_x
 map <C-t> :TestNearest<CR>
 map <C-q> :Dash<CR>
 map <C-p> :Files<CR>
-map <C-g> :Rg<CR>
 vmap <Enter> <Plug>(EasyAlign)
 vnoremap . :normal .<CR>
 nnoremap <C-n> :NvimTreeToggle<CR>
@@ -141,7 +140,6 @@ Plug 'hashivim/vim-terraform'
 Plug 'solarnz/thrift.vim'
 Plug 'ollykel/v-vim'
 Plug 'arrufat/vala.vim'
-" Plug 'joukevandermaas/vim-ember-hbs', { 'for': 'handlebars' }
 
 call plug#end()
 
@@ -308,6 +306,8 @@ if &term =~? '^screen'
 endif
 
 cnoreabbrev rg RgRaw
+cnoreabbrev Rg RgRaw
+cnoreabbrev RG RgRaw
 
 set background=dark
 colorscheme dracula

@@ -79,7 +79,7 @@ if [[ -z $TMUX ]] && [[ $platform == 'macos' ]]; then
     export PATH=/usr/local/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$NIM_ROOT:$COMPOSER_ROOT:$SML_ROOT:$WASMTIME_HOME/bin:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT:$RADICLE_ROOT
 fi
 
-plugins=(vi-mode gitfast cake gem lein mvn node npm redis-cli heroku mercurial coffee golang bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip cargo httpie jira redis-cli ng sdk rbenv)
+plugins=(gitfast cake gem lein mvn node npm redis-cli heroku mercurial coffee golang bower scala rebar colorize cabal cpanm sbt mix tmux tmuxinator pod docker docker-compose rsync extract encode64 history-substring-search copyfile zsh_reload jsontools grunt adb terraform ember-cli colored-man-pages rust react-native yarn cp pip cargo httpie jira redis-cli ng sdk rbenv)
 
 if [[ $platform == 'macos' ]]; then
     plugins+=(brew)
@@ -122,7 +122,6 @@ bindkey '^[[B' history-substring-search-down
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 
-alias space="du -hs * | gsort --human-numeric-sort"
 alias l="ls"
 alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
 alias git-oops="git reset --soft HEAD~"
@@ -343,4 +342,5 @@ if [[ $platform == 'macos' ]]; then
     source "$HOME/.sdkman/bin/sdkman-init.sh"
     source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
     source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+    source /usr/local/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 fi
