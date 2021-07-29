@@ -43,6 +43,7 @@ set wildmenu
 set formatoptions+=j "Delete comment character when joining commented lines
 set fileformats+=mac
 set foldmethod=indent
+set noswapfile
 
 syntax on
 filetype plugin indent on

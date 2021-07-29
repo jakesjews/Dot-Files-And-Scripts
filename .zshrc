@@ -32,6 +32,7 @@ if [[ -z $TMUX ]]; then
     export SKIM_DEFAULT_COMMAND="fd --type f"
     export FZF_DEFAULT_COMMAND='fd --type f'
     export CLICOLOR=1
+    export MCFLY_KEY_SCHEME=vim
 fi
 
 if [[ -z $TMUX ]] && [[ $platform == 'macos' ]]; then
@@ -116,11 +117,6 @@ if [[ $platform == 'macos' ]]; then
     alias j=z
     alias factor="/Applications/factor/factor"
 fi
-
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
-bindkey -M vicmd 'k' history-substring-search-up
-bindkey -M vicmd 'j' history-substring-search-down
 
 alias l="ls"
 alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
@@ -208,7 +204,6 @@ function rust-mode() {
     alias rm=rip
     alias dd=bcp
     alias wc=cw
-    alias less=sp
     alias nano=amp
     alias top=btm
     alias objdump=bingrep
@@ -226,7 +221,6 @@ function rust-mode() {
     alias locate=lolcate
     alias sleep=snore
     alias mv=pmv
-    alias cksum=checkasum
     alias wait=stare
     alias dig=dog
     alias ping=gping
@@ -333,6 +327,17 @@ function update() {
  
     echo "outdated npm packages"
     npm outdated --global
+}
+
+function zvm_before_init() {
+  zvm_bindkey viins '^[[A' history-beginning-search-backward
+  zvm_bindkey viins '^[[B' history-beginning-search-forward
+  zvm_bindkey vicmd '^[[A' history-beginning-search-backward
+  zvm_bindkey vicmd '^[[B' history-beginning-search-forward
+}
+
+function zvm_after_init() {
+  eval "$(mcfly init zsh)"
 }
 
 if [[ $platform == 'macos' ]]; then
