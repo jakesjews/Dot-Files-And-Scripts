@@ -257,20 +257,16 @@ augroup mygroup
 augroup end
 
 augroup filetypedetect
-  au BufRead,BufNewFile *.AWL setfiletype asm
-  au BufRead,BufNewFile *.razor setfiletype razor
   au BufRead,BufNewFile *.hbs setfiletype handlebars
   au FileType cs setl sw=4 sts=4 ts=4 et
   au FileType c setl sw=4 sts=4 ts=4 et
   au FileType cpp setl sw=4 sts=4 ts=4 et
-  au FileType zsh setl sw=4 sts=4 ts=4 et
-  au FileType sh setl sw=4 sts=4 ts=4 et
   au FileType make setl noexpandtab sw=4 sts=0 ts=4
+  au FileType scss setl iskeyword+=@-@
 augroup END
 
 au TextYankPost * lua vim.highlight.on_yank {higroup="IncSearch", timeout=150, on_visual=true}
 
-autocmd FileType scss setl iskeyword+=@-@
 
 let g:nvim_tree_ignore = [
 \ '.hgcheck', '.hglf', '.nuget', 'publish',
