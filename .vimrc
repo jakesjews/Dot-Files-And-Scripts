@@ -149,38 +149,47 @@ let g:coc_global_extensions = [
 \ 'coc-clangd',
 \ 'coc-cmake',
 \ 'coc-css',
+\ 'coc-dictionary',
+\ 'coc-dlang',
+\ 'coc-docker',
 \ 'coc-elixir',
+\ 'coc-ember',
 \ 'coc-erlang_ls',
-\ 'coc-fsharp',
 \ 'coc-flutter',
+\ 'coc-fsharp',
 \ 'coc-go',
+\ 'coc-highlight',
 \ 'coc-html',
 \ 'coc-java',
 \ 'coc-jedi',
 \ 'coc-json',
 \ 'coc-julia',
+\ 'coc-kotlin',
 \ 'coc-lists',
+\ 'coc-lsp-wl',
+\ 'coc-marketplace',
+\ 'coc-marketplace',
 \ 'coc-metals',
 \ 'coc-omnisharp',
 \ 'coc-perl',
 \ 'coc-phpls',
 \ 'coc-powershell',
 \ 'coc-r-lsp',
-\ 'coc-rls',
+\ 'coc-rust-analyzer',
 \ 'coc-sh',
 \ 'coc-solargraph',
 \ 'coc-sourcekit',
-\ 'coc-sumneko-lua',
 \ 'coc-sql',
+\ 'coc-sumneko-lua',
 \ 'coc-svg',
+\ 'coc-syntax',
 \ 'coc-texlab',
+\ 'coc-toml',
 \ 'coc-tsserver',
 \ 'coc-vimlsp',
-\ 'coc-lsp-wl',
+\ 'coc-webpack',
 \ 'coc-xml',
 \ 'coc-yaml',
-\ 'coc-highlight',
-\ 'coc-ember'
 \ ]
 
 let g:test#strategy = 'neovim'
@@ -212,8 +221,6 @@ let g:ale_fixers = {
 \ 'javascript': ['eslint'],
 \ 'html': { 'handlebars': ['ember-template-lint'] }
 \}
-
-let g:vimspector_enable_mappings = 'HUMAN'
 
 nmap <silent> ga <Plug>(coc-codeaction)
 nmap <silent> gd <Plug>(coc-definition)
@@ -266,7 +273,6 @@ augroup filetypedetect
 augroup END
 
 au TextYankPost * lua vim.highlight.on_yank {higroup="IncSearch", timeout=150, on_visual=true}
-
 
 let g:nvim_tree_ignore = [
 \ '.hgcheck', '.hglf', '.nuget', 'publish',

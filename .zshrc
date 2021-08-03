@@ -80,7 +80,7 @@ if [[ -z $TMUX ]] && [[ $platform == 'macos' ]]; then
   export PATH=/usr/local/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$NIM_ROOT:$COMPOSER_ROOT:$SML_ROOT:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT:$RADICLE_ROOT
 fi
 
-plugins=(cargo copyfile cpanm dash dotnet encode64 extract golang grunt httpie ipfs jira jsontools mix ng npm pip gitfast pod rails rbenv react-native redis-cli rsync rust rustup sbt scala sdk supervisor terraform tmux tmuxinator vagrant yarn)
+plugins=(cargo copyfile cpanm dash dotnet encode64 extract golang grunt httpie ipfs jira jsontools mix ng npm pip gitfast pod rbenv react-native redis-cli rsync rust rustup sbt scala sdk supervisor terraform tmux tmuxinator vagrant yarn)
 
 autoload zargs
 autoload zmv
