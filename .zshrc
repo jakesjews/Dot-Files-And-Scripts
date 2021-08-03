@@ -80,7 +80,7 @@ if [[ -z $TMUX ]] && [[ $platform == 'macos' ]]; then
   export PATH=/usr/local/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$NIM_ROOT:$COMPOSER_ROOT:$SML_ROOT:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT:$RADICLE_ROOT
 fi
 
-plugins=(cargo copyfile cpanm dash dotnet encode64 extract golang grunt httpie ipfs jira jsontools mix ng npm pip gitfast pod rbenv react-native redis-cli rsync rust rustup sbt scala sdk supervisor terraform tmux tmuxinator vagrant yarn)
+plugins=(cargo coffee colored-man-pages copyfile cpanm dash dotnet encode64 extract fast-syntax-highlighting golang grunt history-substring-search httpie ipfs jira jsontools mix ng npm pip gitfast pod rbenv react-native redis-cli rsync rust rustup sbt scala sdk supervisor terraform tmux tmuxinator vagrant yarn zoxide)
 
 autoload zargs
 autoload zmv
@@ -100,22 +100,6 @@ zmodload zsh/system
 
 unsetopt listambiguous
 setopt inc_append_history
-
-source "$HOME/.zinit/bin/zinit.zsh"
-
-zinit ice depth=1
-zinit light jeffreytse/zsh-vi-mode
-zinit light zsh-users/zsh-history-substring-search
-zinit light ajeetdsouza/zoxide
-
-zinit wait lucid for \
-  atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
-    OMZP::colored-man-pages \
-    zdharma/fast-syntax-highlighting \
-  as"completion" \
-    OMZP::coffee/_coffee \
-  atload"!_zsh_autosuggest_start" \
-    zsh-users/zsh-autosuggestions
 
 source "$ZSH/oh-my-zsh.sh"
 
@@ -314,7 +298,8 @@ function update() {
 
   echo "update zsh plugins"
   omz update --unattended
-  zinit update --all
+  git -C "$HOME/.oh-my-zsh/custom/plugins/fast-syntax-highlighting" pull
+  git -C "$HOME/.oh-my-zsh/custom/themes/dracula" pull
 
   echo "ugrade tmux plugins"
   "$HOME/.tmux/plugins/tpm/bin/update_plugins" all
@@ -352,4 +337,6 @@ if [[ $platform == 'macos' ]]; then
   eval $(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib=$HOME/.perl5)
   source "$HOME/.opam/opam-init/init.zsh"
   source "$HOME/.sdkman/bin/sdkman-init.sh"
+  source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+  source /usr/local/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 fi
