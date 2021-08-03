@@ -61,7 +61,7 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdateSync' }
 Plug 'tpope/vim-dispatch'
-Plug 'b3nj5m1n/kommentary'
+Plug 'b3nj5m1n/kommentary', { 'branch': 'main' }
 Plug 'dense-analysis/ale'
 Plug 'blackCauldron7/surround.nvim'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -85,8 +85,10 @@ Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-projectionist'
 Plug 'michaelb/sniprun', {'do': 'bash install.sh'}
 Plug 'lukas-reineke/indent-blankline.nvim'
+Plug 'andymass/vim-matchup'
+Plug 'tversteeg/registers.nvim', { 'branch': 'main' }
 Plug 'mfussenegger/nvim-dap'
-Plug 'Pocco81/DAPInstall.nvim'
+Plug 'Pocco81/DAPInstall.nvim', { 'branch': 'main' }
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
 Plug 'tpope/vim-rails'
@@ -107,7 +109,6 @@ Plug 'mityu/vim-applescript', { 'for': 'applescript' }
 Plug 'hellerve/carp-vim'
 Plug 'elubow/cql-vim'
 Plug 'vim-crystal/vim-crystal'
-Plug 'calviken/vim-gdscript3'
 Plug 'gleam-lang/gleam.vim'
 Plug 'tikhomirov/vim-glsl'
 Plug 'CH-DanReif/haproxy.vim'
@@ -128,7 +129,7 @@ Plug 'petRUShka/vim-opencl'
 Plug 'lifepillar/pgsql.vim'
 Plug 'jakwings/vim-pony'
 Plug 'digitaltoad/vim-pug'
-Plug 'purescript-contrib/purescript-vim'
+Plug 'purescript-contrib/purescript-vim', { 'branch': 'main' }
 Plug 'peterhoeg/vim-qml'
 Plug 'wlangstroth/vim-racket'
 Plug 'adamclerk/vim-razor'
@@ -337,6 +338,9 @@ require'nvim-treesitter.configs'.setup {
   rainbow = {
     enable = true,
     extended_mode = true, -- Highlight also non-parentheses delimiters, boolean or table: lang -> boolean
+  },
+  matchup = {
+    enable = true,
   },
   incremental_selection = {
     enable = true,
