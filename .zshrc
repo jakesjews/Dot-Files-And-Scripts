@@ -27,7 +27,6 @@ if [[ -z $TMUX ]]; then
   export HISTFILESIZE=1000000000
   export REPORTER=spec
   export ZSH_DISABLE_COMPFIX=true
-  export ZSH_AUTOSUGGEST_USE_ASYNC=true
   export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
   export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
   export SKIM_DEFAULT_COMMAND="fd --type f"
