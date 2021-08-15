@@ -73,10 +73,9 @@ if [[ -z $TMUX ]] && [[ $platform == 'macos' ]]; then
   export CURL_HOME="/usr/local/opt/curl/bin"
   export EMACS_HOME="$HOME/.emacs.d/bin"
   export WOLFRAM_ROOT="/Applications/Wolfram Engine.app/Contents/Resources/Wolfram Player.app/Contents/MacOS"
-  export RADICLE_ROOT="$HOME/.radicle/bin"
   export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 
-  export PATH=/usr/local/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$NIM_ROOT:$COMPOSER_ROOT:$SML_ROOT:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT:$RADICLE_ROOT
+  export PATH=/usr/local/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$NIM_ROOT:$COMPOSER_ROOT:$SML_ROOT:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT
 fi
 
 plugins=(cargo coffee colored-man-pages copyfile cpanm dash dotnet encode64 extract fast-syntax-highlighting golang grunt history-substring-search httpie ipfs jira jsontools mix ng npm pip gitfast pod rbenv react-native redis-cli rsync rust rustup sbt scala sdk supervisor terraform tmux tmuxinator vagrant yarn zoxide)
@@ -226,7 +225,7 @@ function liq() {
 function clean-eflex-dir() {
   rm -rf ${TMPDIR}v8-compile-cache*
   rm -rf ${TMPDIR}broccoli-*
-  rm -rf ${TMPDIR}jacob/if-you-need-to-delete-this-open-an-issue-async-disk-cache-*
+  rm -rf ${TMPDIR}jacob/if-you-need-to-delete-this-open-an-issue-async-disk-cache
   rm -rf ${TMPDIR}*Before*
   rm -rf ${TMPDIR}*After*
   rm -rf ${TMPDIR}*After*
@@ -312,7 +311,7 @@ function update() {
   sdk upgrade
 
   echo "upgrade cask packages"
-  brew cu --all --quiet --yes --no-brew-update --no-quarantine
+  brew cu --all --quiet --yes --no-brew-update
 
   echo "outdated python packages"
   pip3 list --user --outdated --not-required

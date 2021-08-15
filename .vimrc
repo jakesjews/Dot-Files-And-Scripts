@@ -63,7 +63,7 @@ Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdateSync' }
 Plug 'tpope/vim-dispatch'
 Plug 'b3nj5m1n/kommentary', { 'branch': 'main' }
 Plug 'dense-analysis/ale'
-Plug 'blackCauldron7/surround.nvim'
+Plug 'machakann/vim-sandwich'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'jesseleite/vim-agriculture'
@@ -142,6 +142,7 @@ Plug 'hashivim/vim-terraform'
 Plug 'solarnz/thrift.vim'
 Plug 'ollykel/v-vim'
 Plug 'arrufat/vala.vim'
+Plug 'fladson/vim-kitty'
 
 call plug#end()
 
@@ -228,6 +229,7 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+nmap gm <Plug>(coc-rename)
 
 " Make <CR> auto-select the first completion item
 inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
@@ -254,9 +256,6 @@ endfunction
 
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
-
-" Symbol renaming.
-nmap <leader>rn <Plug>(coc-rename)
 
 augroup mygroup
   autocmd!
@@ -326,8 +325,6 @@ vim.api.nvim_set_keymap("x", "<C-c>", "<Plug>kommentary_visual_default", {})
 require('kommentary.config').configure_language("default", {
   prefer_single_line_comments = true,
 })
-
-require'surround'.setup {}
 
 require'nvim-treesitter.configs'.setup {
   ensure_installed = "all",
