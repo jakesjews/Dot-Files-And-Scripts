@@ -321,10 +321,10 @@ function update() {
 }
 
 function zvm_before_init() {
-  zvm_bindkey viins '^[[A' history-beginning-search-backward
-  zvm_bindkey viins '^[[B' history-beginning-search-forward
-  zvm_bindkey vicmd '^[[A' history-beginning-search-backward
-  zvm_bindkey vicmd '^[[B' history-beginning-search-forward
+  zvm_bindkey viins '^[[A' history-substring-search-up
+  zvm_bindkey viins '^[[B' history-substring-search-down
+  zvm_bindkey vicmd '^[[A' history-substring-search-up
+  zvm_bindkey vicmd '^[[B' history-substring-search-down
 }
 
 function zvm_after_init() {
