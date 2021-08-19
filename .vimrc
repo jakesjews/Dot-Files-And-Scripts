@@ -9,6 +9,8 @@ vmap <Enter> <Plug>(EasyAlign)
 vnoremap . :normal .<CR>
 nnoremap <C-n> :NvimTreeToggle<CR>
 nnoremap <C-f> :NvimTreeFindFile<CR>
+nnoremap <silent>[ :BufferLineCycleNext<CR>
+nnoremap <silent>] :BufferLineCyclePrev<CR>
 
 set hidden
 set autowrite
@@ -56,6 +58,8 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   augroup end
 endif
 
+let g:ale_disable_lsp = 1 " must be before plugin load
+
 "" Plugins
 call plug#begin('~/.vim/plugged')
 
@@ -92,58 +96,59 @@ Plug 'mfussenegger/nvim-dap'
 Plug 'Pocco81/DAPInstall.nvim', { 'branch': 'main' }
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
-Plug 'tpope/vim-rails'
-Plug 'moll/vim-node'
-Plug 'ngn/vim-apl'
-Plug 'pearofducks/ansible-vim'
-Plug 'brandonbloom/vim-factor'
-Plug 'alunny/pegjs-vim'
-Plug 'robbles/logstash.vim'
-Plug 'kchmck/vim-coffee-script'
-Plug 'jakesjews/vim-emblem'
-Plug 'katusk/vim-qkdb-syntax'
-Plug 'leanprover/lean.vim'
-Plug 'tpope/vim-salve', { 'for': 'clojure' }
-Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
-Plug 'thyrgle/vim-dyon'
-Plug 'mityu/vim-applescript', { 'for': 'applescript' }
-Plug 'hellerve/carp-vim'
-Plug 'elubow/cql-vim'
-Plug 'vim-crystal/vim-crystal'
-Plug 'gleam-lang/gleam.vim'
-Plug 'tikhomirov/vim-glsl'
 Plug 'CH-DanReif/haproxy.vim'
-Plug 'neovimhaskell/haskell-vim', { 'for': ['haskell', 'lhaskell', 'chaskell', 'cabalproject', 'cabalconfig'] }
-Plug 'jdonaldson/vaxe'
-Plug 'zebradil/hive.vim'
-Plug 'edwinb/idris2-vim'
-Plug 'vmchale/ion-vim'
-Plug 'gkz/vim-ls'
-Plug 'rhysd/vim-llvm'
-Plug 'MTDL9/vim-log-highlighting'
+Plug 'ElmCast/elm-vim'
 Plug 'IrenejMarc/vim-mint'
-Plug 'leafo/moonscript-vim'
-Plug 'chr4/nginx.vim'
-Plug 'zah/nim.vim'
+Plug 'MTDL9/vim-log-highlighting'
 Plug 'McSinyx/vim-octave'
-Plug 'petRUShka/vim-opencl'
-Plug 'lifepillar/pgsql.vim'
-Plug 'jakwings/vim-pony'
-Plug 'digitaltoad/vim-pug'
-Plug 'purescript-contrib/purescript-vim', { 'branch': 'main' }
-Plug 'peterhoeg/vim-qml'
-Plug 'wlangstroth/vim-racket'
-Plug 'adamclerk/vim-razor'
-Plug 'reasonml-editor/vim-reason-plus'
-Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
 Plug 'TovarishFin/vim-solidity'
-Plug 'wavded/vim-stylus'
-Plug 'keith/swift.vim', { 'for': ['swift', 'swiftgyb'] }
-Plug 'hashivim/vim-terraform'
-Plug 'solarnz/thrift.vim'
-Plug 'ollykel/v-vim'
+Plug 'adamclerk/vim-razor'
+Plug 'alunny/pegjs-vim'
 Plug 'arrufat/vala.vim'
+Plug 'brandonbloom/vim-factor'
+Plug 'chr4/nginx.vim'
+Plug 'digitaltoad/vim-pug'
+Plug 'edwinb/idris2-vim'
+Plug 'elubow/cql-vim'
 Plug 'fladson/vim-kitty'
+Plug 'gkz/vim-ls'
+Plug 'gleam-lang/gleam.vim'
+Plug 'hashivim/vim-terraform'
+Plug 'hellerve/carp-vim'
+Plug 'jakesjews/vim-emblem'
+Plug 'jakwings/vim-pony'
+Plug 'jdonaldson/vaxe'
+Plug 'katusk/vim-qkdb-syntax'
+Plug 'kchmck/vim-coffee-script'
+Plug 'keith/swift.vim', { 'for': ['swift', 'swiftgyb'] }
+Plug 'leafo/moonscript-vim'
+Plug 'leanprover/lean.vim'
+Plug 'lifepillar/pgsql.vim'
+Plug 'mityu/vim-applescript', { 'for': 'applescript' }
+Plug 'moll/vim-node'
+Plug 'neovimhaskell/haskell-vim', { 'for': ['haskell', 'lhaskell', 'chaskell', 'cabalproject', 'cabalconfig'] }
+Plug 'ngn/vim-apl'
+Plug 'ollykel/v-vim'
+Plug 'pearofducks/ansible-vim'
+Plug 'petRUShka/vim-opencl'
+Plug 'peterhoeg/vim-qml'
+Plug 'purescript-contrib/purescript-vim', { 'branch': 'main' }
+Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
+Plug 'reasonml-editor/vim-reason-plus'
+Plug 'rhysd/vim-llvm'
+Plug 'robbles/logstash.vim'
+Plug 'solarnz/thrift.vim'
+Plug 'thyrgle/vim-dyon'
+Plug 'tikhomirov/vim-glsl'
+Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
+Plug 'tpope/vim-rails'
+Plug 'tpope/vim-salve', { 'for': 'clojure' }
+Plug 'vim-crystal/vim-crystal'
+Plug 'vmchale/ion-vim'
+Plug 'wavded/vim-stylus'
+Plug 'wlangstroth/vim-racket'
+Plug 'zah/nim.vim'
+Plug 'zebradil/hive.vim'
 
 call plug#end()
 

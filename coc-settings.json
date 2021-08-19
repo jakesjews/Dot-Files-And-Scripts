@@ -1,4 +1,5 @@
 {
+  "diagnostic.displayByAle": true,
   "javascript.validate.enable": false,
   "javascript.updateImportsOnFileMove.enable": false,
   "languageserver": {
