@@ -71,6 +71,7 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'
+Plug 'akinsho/nvim-bufferline.lua'
 Plug 'rizzatti/dash.vim'
 Plug 'junegunn/vim-easy-align', { 'on': '<Plug>(EasyAlign)' }
 Plug 'p00f/nvim-ts-rainbow'
@@ -326,9 +327,10 @@ require('kommentary.config').configure_language("default", {
   prefer_single_line_comments = true,
 })
 
+require("bufferline").setup{}
+
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = "all",
-  ignore_install = { "haskell", "swift" },
+  ensure_installed = "maintained",
   highlight = {
     enable = true,
   },
