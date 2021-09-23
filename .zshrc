@@ -236,9 +236,6 @@ function clean-eflex-dir() {
   git lfs prune
   make clean
   cd ${HOME}/dev/eflexsystems/eflex2
-  git remote prune origin
-  git gc --force
-  git lfs prune
   make clean
 }
 
