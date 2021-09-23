@@ -9,46 +9,32 @@ vmap <Enter> <Plug>(EasyAlign)
 vnoremap . :normal .<CR>
 nnoremap <C-n> :NvimTreeToggle<CR>
 nnoremap <C-f> :NvimTreeFindFile<CR>
-nnoremap <silent>[ :BufferLineCycleNext<CR>
-nnoremap <silent>] :BufferLineCyclePrev<CR>
+nnoremap <silent>] :BufferLineCycleNext<CR>
+nnoremap <silent>[ :BufferLineCyclePrev<CR>
 
 set hidden
 set autowrite
 set termguicolors
-set backspace=indent,eol,start
 set nobackup
 set nowritebackup
-set directory=$HOME/.vim/swap/
-set hlsearch
-set autoread
 set updatetime=300
 set shortmess+=c
 set signcolumn=number
 set completeopt=longest,menuone,preview "don't autoselect first item in omnicomplete, show if only one item (for preview)
-set showcmd
 set tabstop=2
 set shiftwidth=2
-set autoindent
 set expandtab
-set smarttab
 set ignorecase
 set smartcase
 set number
-set incsearch
 set pastetoggle=<F2>
 set mouse=a
 set clipboard=unnamed
 set foldlevel=99
 set splitright
-set ruler
-set wildmenu
-set formatoptions+=j "Delete comment character when joining commented lines
 set fileformats+=mac
 set foldmethod=indent
 set noswapfile
-
-syntax on
-filetype plugin indent on
 
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
@@ -75,14 +61,12 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'
-Plug 'akinsho/nvim-bufferline.lua'
 Plug 'rizzatti/dash.vim'
 Plug 'junegunn/vim-easy-align', { 'on': '<Plug>(EasyAlign)' }
-Plug 'p00f/nvim-ts-rainbow'
 Plug 'vim-test/vim-test'
 Plug 'rcarriga/vim-ultest', { 'do': ':UpdateRemotePlugins' }
 Plug 'sukima/vim-javascript-imports', { 'for': ['coffee', 'javascript', 'typescript'] }
-Plug 'sukima/vim-ember-imports', { 'for': ['coffee', 'javascript', 'typescript'] }
+Plug 'jakesjews/vim-ember-imports', { 'for': ['coffee', 'javascript', 'typescript'] }
 Plug 'tpope/vim-dadbod'
 Plug 'tpope/vim-fugitive'
 Plug 'eraserhd/parinfer-rust', { 'do': 'cargo build --release' }
@@ -127,7 +111,6 @@ Plug 'lifepillar/pgsql.vim'
 Plug 'mityu/vim-applescript', { 'for': 'applescript' }
 Plug 'moll/vim-node'
 Plug 'neovimhaskell/haskell-vim', { 'for': ['haskell', 'lhaskell', 'chaskell', 'cabalproject', 'cabalconfig'] }
-Plug 'ngn/vim-apl'
 Plug 'ollykel/v-vim'
 Plug 'pearofducks/ansible-vim'
 Plug 'petRUShka/vim-opencl'
@@ -176,7 +159,6 @@ let g:coc_global_extensions = [
 \ 'coc-lists',
 \ 'coc-lsp-wl',
 \ 'coc-marketplace',
-\ 'coc-marketplace',
 \ 'coc-metals',
 \ 'coc-omnisharp',
 \ 'coc-perl',
@@ -198,6 +180,7 @@ let g:coc_global_extensions = [
 \ 'coc-webpack',
 \ 'coc-xml',
 \ 'coc-yaml',
+\ 'coc-zig',
 \ ]
 
 let g:test#strategy = 'neovim'
@@ -206,7 +189,6 @@ let g:agriculture#disable_smart_quoting = 1
 
 let g:vim_javascript_imports_multiline_max_col = 120
 let g:vim_javascript_imports_multiline_max_vars = 100
-let g:ember_imports_ember_data_next = 1
 
 let g:salve_auto_start_repl = 1
 
@@ -300,15 +282,12 @@ let g:nvim_tree_highlight_opened_files = 1
 
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8 } }
 
-setglobal tags-=./tags tags-=./tags; tags^=./tags;
-
 if !&scrolloff
   set scrolloff=1
 endif
 if !&sidescrolloff
   set sidescrolloff=5
 endif
-set display+=lastline
 
 if &term =~? '^screen'
   set ttymouse=xterm2
@@ -318,7 +297,6 @@ cnoreabbrev rg RgRaw
 cnoreabbrev Rg RgRaw
 cnoreabbrev RG RgRaw
 
-set background=dark
 colorscheme dracula
 hi! link SpecialComment DraculaCyan
 hi! link Type DraculaCyan
@@ -332,16 +310,10 @@ require('kommentary.config').configure_language("default", {
   prefer_single_line_comments = true,
 })
 
-require("bufferline").setup{}
-
 require'nvim-treesitter.configs'.setup {
   ensure_installed = "maintained",
   highlight = {
     enable = true,
-  },
-  rainbow = {
-    enable = true,
-    extended_mode = true, -- Highlight also non-parentheses delimiters, boolean or table: lang -> boolean
   },
   matchup = {
     enable = true,
