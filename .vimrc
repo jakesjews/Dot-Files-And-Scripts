@@ -75,6 +75,7 @@ Plug 'tpope/vim-projectionist'
 Plug 'michaelb/sniprun', {'do': 'bash install.sh'}
 Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'andymass/vim-matchup'
+Plug 'norcalli/nvim-colorizer.lua'
 Plug 'tversteeg/registers.nvim', { 'branch': 'main' }
 Plug 'mfussenegger/nvim-dap'
 Plug 'Pocco81/DAPInstall.nvim', { 'branch': 'main' }
@@ -136,6 +137,7 @@ Plug 'zebradil/hive.vim'
 call plug#end()
 
 let g:coc_global_extensions = [
+\ '@yaegassy/coc-ansible',
 \ 'coc-actions',
 \ 'coc-clangd',
 \ 'coc-cmake',
@@ -149,7 +151,6 @@ let g:coc_global_extensions = [
 \ 'coc-flutter',
 \ 'coc-fsharp',
 \ 'coc-go',
-\ 'coc-highlight',
 \ 'coc-html',
 \ 'coc-java',
 \ 'coc-jedi',
@@ -262,19 +263,6 @@ augroup END
 
 au TextYankPost * lua vim.highlight.on_yank {higroup="IncSearch", timeout=150, on_visual=true}
 
-let g:nvim_tree_ignore = [
-\ '.hgcheck', '.hglf', '.nuget', 'publish',
-\ '.vagrant', '.idea', 'eflex.bbprojectd', 'tmp',
-\ 'test-results', 'TestResults', 'compiled',
-\ 'node_modules', 'bin', 'obj', 'Properties', 'coverage', 'dist',
-\ '.suo$', '.hgtabs$', '.orig$', '.userconfig$', 
-\ 'npm-debug.log', '.swp$', '.tmp$', '.reh$', 
-\ '.DS_Store', '.iml$', '.sublime-workspace', 
-\ '.userprefs$', '.tm_properties', '.jar$', '.pfx$', 
-\ '.sublime-project', '.DotSettings', 'TestResult.xml',
-\ '.git', '.github',
-\ ]
-
 let g:nvim_tree_gitignore = 1
 let g:nvim_tree_indent_markers = 1
 let g:nvim_tree_git_hl = 1
@@ -326,6 +314,52 @@ require'nvim-treesitter.configs'.setup {
       scope_incremental = "grc",
       node_decremental = "grm",
     },
+  },
+}
+
+require'colorizer'.setup()
+
+require'nvim-tree'.setup {
+  filters = {
+    custom = {
+      '.hgcheck', 
+      '.hglf', 
+      '.nuget', 
+      'publish',
+      '.vagrant', 
+      '.idea', 
+      'eflex.bbprojectd', 
+      'tmp',
+      'test-results', 
+      'TestResults', 
+      'compiled',
+      'node_modules', 
+      'bin', 
+      'obj', 
+      'Properties', 
+      'coverage', 
+      'dist',
+      '.suo$', 
+      '.hgtabs$', 
+      '.orig$', 
+      '.userconfig$', 
+      'npm-debug.log', 
+      '.swp$', 
+      '.tmp$', 
+      '.reh$', 
+      '.DS_Store', 
+      '.iml$', 
+      '.sublime-workspace', 
+      '.userprefs$', 
+      '.tm_properties', 
+      '.jar$', 
+      '.pfx$', 
+      '.sublime-project', 
+      '.DotSettings', 
+      'TestResult.xml',
+      '.git', 
+      '.github',
+    }
   },
 }
 EOF

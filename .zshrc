@@ -54,7 +54,7 @@ if [[ -z $TMUX ]] && [[ $platform == 'macos' ]]; then
   export RUBY_CFLAGS="-Os -march=native"
   export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/usr/local/opt/openssl"
   export AIRFLOW_HOME="$HOME/.airflow"
-  export LLVM_SYS_120_PREFIX=/usr/local/opt/llvm/
+  export LLVM_SYS_130_PREFIX=/usr/local/opt/llvm/
 
   export NODE_PATH=/usr/local/lib/node_modules
   export TPM_ROOT="$HOME/.tmux/plugins/tpm"
@@ -142,18 +142,6 @@ function flac-to-mp3() {
 
 function update-servers() {
   ansible all --inventory /usr/local/etc/ansible/hosts --forks 8 --module-name "apt" --args "upgrade=dist update_cache=true autoremove=true"
-  ansible integration --inventory /usr/local/etc/ansible/hosts --forks 2 --module-name "shell" --args \
-    "docker pull selenium/standalone-chrome && \
-    docker stop selenium && docker rm selenium && \
-    docker run \
-      --name selenium \
-      -e START_XVFB=false \
-      --tmpfs /tmp \
-      --ipc=host \
-      --net=host \
-      --restart=always \
-      -v /dev/shm:/dev/shm \
-      -d selenium/standalone-chrome"
 }
 
 function pwdx {
@@ -216,6 +204,7 @@ function rust-mode() {
   alias curl=qurl
   alias col=xcol
   alias tmux=zellij
+  alias pigz=crabz
 }
 
 function liq() {
@@ -294,6 +283,7 @@ function update() {
   echo "update zsh plugins"
   omz update --unattended
   git -C "$HOME/.oh-my-zsh/custom/plugins/fast-syntax-highlighting" pull
+  git -C "$HOME/.oh-my-zsh/custom/plugins/zsh-autocomplete" pull
   git -C "$HOME/.oh-my-zsh/custom/themes/dracula" pull
 
   echo "ugrade tmux plugins"
