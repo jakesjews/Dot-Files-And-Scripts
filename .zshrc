@@ -74,6 +74,8 @@ if [[ -z $TMUX ]] && [[ $platform == 'macos' ]]; then
   export EMACS_HOME="$HOME/.emacs.d/bin"
   export WOLFRAM_ROOT="/Applications/Wolfram Engine.app/Contents/Resources/Wolfram Player.app/Contents/MacOS"
   export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+  export LDFLAGS="-L /opt/homebrew/lib"
+  export CPPFLAGS="-I /opt/homebrew/include"
 
   export PATH=/usr/local/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$NIM_ROOT:$COMPOSER_ROOT:$SML_ROOT:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT
 fi
