@@ -1,4 +1,4 @@
-#!/usr/local/bin/zsh
+#!/opt/homebrew/bin/zsh
 
 platform='unknown'
 unamestr=$(uname)
@@ -22,7 +22,7 @@ if [[ -z $TMUX ]]; then
   export DISABLE_AUTO_TITLE=true
   export ANSIBLE_HOST_KEY_CHECKING=False
   export KEYTIMEOUT=1
-  export LISTMAX=9998
+  export LISTMAX=10000
   export HISTSIZE=1000000000
   export HISTFILESIZE=1000000000
   export REPORTER=spec
@@ -36,48 +36,53 @@ if [[ -z $TMUX ]]; then
 fi
 
 if [[ -z $TMUX ]] && [[ $platform == 'macos' ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+
   export VAGRANT_DEFAULT_PROVIDER='vmware_desktop'
 
-  source "$HOME/.homebrew.token"
+  # source "$HOME/.homebrew.token"
   export HOMEBREW_NO_AUTO_UPDATE=1
   export HOMEBREW_NO_INSTALL_CLEANUP=1
   export HOMEBREW_BOOTSNAP=1
 
   export NEOVIM_LISTEN_ADDRESS=/tmp/neovim.sock
-  export GOPATH=/usr/local/lib/go
+  export GOPATH=/opt/homebrew/lib/go
 
-  export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
+  export ANDROID_SDK_ROOT="/opt/homebrew/share/android-sdk"
   export GO_ROOT=$GOPATH/bin
   export CARGO_ROOT="$HOME/.cargo/bin"
-  export OPENSSL_INCLUDE_DIR=/usr/local/opt/openssl/include
-  export OPENSSL_LIB_DIR=/usr/local/opt/openssl/lib
+  export OPENSSL_INCLUDE_DIR=/opt/homebrew/opt/openssl/include
+  export OPENSSL_LIB_DIR=/opt/homebrew/opt/openssl/lib
   export RUBY_CFLAGS="-Os -march=native"
-  export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/usr/local/opt/openssl"
+  export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/opt/homebrew/opt/openssl"
   export AIRFLOW_HOME="$HOME/.airflow"
-  export LLVM_SYS_130_PREFIX=/usr/local/opt/llvm/
+  export LLVM_SYS_130_PREFIX=/opt/homebrew/opt/llvm/
 
-  export NODE_PATH=/usr/local/lib/node_modules
+  export NODE_PATH=/opt/homebrew/lib/node_modules
   export TPM_ROOT="$HOME/.tmux/plugins/tpm"
   export DART_ROOT="$HOME/.pub-cache/bin"
   export CABAL_DIR="$HOME/.cabal/bin"
   export QHOME="$HOME/.q"
-  export PLAN9=/usr/local/plan9
+  export PLAN9=/opt/homebrew/plan9
   export NIM_ROOT="$HOME/.nimble/bin"
   export COMPOSER_ROOT=$HOME/.composer/vendor/bin
-  export SML_ROOT=/usr/local/smlnj/bin
+  export SML_ROOT=/opt/homebrew/smlnj/bin
   export ESVU_ROOT="$HOME/.esvu/bin"
   export SDKMAN_DIR="$HOME/.sdkman"
-  export KHOME="/usr/local/bin"
+  export KHOME="/opt/homebrew/bin"
   export CARP_DIR="$HOME/.carp"
   export ARC_DIR="$HOME/.arc"
-  export CURL_HOME="/usr/local/opt/curl/bin"
+  export CURL_HOME="/opt/homebrew/opt/curl/bin"
   export EMACS_HOME="$HOME/.emacs.d/bin"
   export WOLFRAM_ROOT="/Applications/Wolfram Engine.app/Contents/Resources/Wolfram Player.app/Contents/MacOS"
   export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
-  export LDFLAGS="-L /opt/homebrew/lib"
-  export CPPFLAGS="-I /opt/homebrew/include"
+  export LDFLAGS="-L/opt/homebrew/lib"
+  export CPPFLAGS="-I/opt/homebrew/include"
+  export LLVM_ROOT="/opt/homebrew/opt/llvm/bin"
+  export LOCAL_BIN_ROOT="$HOME/.local/bin"
+  export DOTNET_TOOLS_ROOT="$HOME/.dotnet/tools"
 
-  export PATH=/usr/local/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$NIM_ROOT:$COMPOSER_ROOT:$SML_ROOT:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT
+  export PATH=/opt/homebrew/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$NIM_ROOT:$COMPOSER_ROOT:$SML_ROOT:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT:$LOCAL_BIN_ROOT:$DOTNET_TOOLS_ROOT:$LLVM_ROOT
 fi
 
 plugins=(cargo coffee colored-man-pages copyfile cpanm dash dotnet encode64 extract fast-syntax-highlighting golang grunt history-substring-search httpie ipfs jira jsontools mix ng npm pip gitfast pod rbenv react-native redis-cli rsync rust rustup sbt scala sdk supervisor terraform tmux tmuxinator vagrant yarn zoxide)
@@ -104,8 +109,8 @@ setopt inc_append_history
 source "$ZSH/oh-my-zsh.sh"
 
 alias q='rlwrap --remember $QHOME/m64/q'
-alias 9="/usr/local/plan9/bin/9"
-alias sqlplus="DYLD_LIBRARY_PATH=/usr/local/lib /usr/local/bin/sqlplus"
+alias 9="/opt/homebrew/plan9/bin/9"
+alias sqlplus="DYLD_LIBRARY_PATH=/opt/homebrew/lib /opt/homebrew/bin/sqlplus"
 alias jsc="/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/Helpers/jsc"
 alias j=z
 alias factor="/Applications/factor/factor"
@@ -143,7 +148,7 @@ function flac-to-mp3() {
 }
 
 function update-servers() {
-  ansible all --inventory /usr/local/etc/ansible/hosts --forks 8 --module-name "apt" --args "upgrade=dist update_cache=true autoremove=true"
+  ansible all --inventory /opt/homebrew/etc/ansible/hosts --forks 8 --module-name "apt" --args "upgrade=dist update_cache=true autoremove=true"
 }
 
 function pwdx {
@@ -324,6 +329,6 @@ if [[ $platform == 'macos' ]]; then
   eval $(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib=$HOME/.perl5)
   source "$HOME/.opam/opam-init/init.zsh"
   source "$HOME/.sdkman/bin/sdkman-init.sh"
-  source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-  source /usr/local/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+  source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+  source /opt/homebrew/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 fi
