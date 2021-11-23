@@ -1,5 +1,19 @@
 {
   "diagnostic.displayByAle": true,
   "javascript.validate.enable": false,
-  "javascript.updateImportsOnFileMove.enable": false
+  "javascript.updateImportsOnFileMove.enable": false,
+  "languageserver": {
+    "hdlChecker": {
+      "command": "hdl_checker",
+      "args": [
+        "--lsp"
+      ],
+      "filetypes": [
+        "vhdl",
+        "verilog",
+        "systemverilog"
+      ]
+    }
+  },
+  "clangd.path": "~/.config/coc/extensions/coc-clangd-data/install/12.0.1/clangd_12.0.1/bin/clangd"
 }

@@ -8,81 +8,72 @@ elif [[ "$unamestr" == 'Linux' ]]; then
   platform='linux'
 fi
 
-if [[ -z $TMUX ]]; then
-  export ZSH=$HOME/.oh-my-zsh
-  export LANG=en_US.UTF-8
-  export DISABLE_AUTO_UPDATE=true
-  export HYPHEN_INSENSITIVE=true
-  export COMPLETION_WAITING_DOTS=true
-  export ZSH_THEME="dracula"
-  export EDITOR='nvim'
-  export SHELL='zsh'
-  export LC_CTYPE=en_US.UTF-8
-  export LC_ALL=en_US.UTF-8
-  export DISABLE_AUTO_TITLE=true
-  export ANSIBLE_HOST_KEY_CHECKING=False
-  export KEYTIMEOUT=1
-  export LISTMAX=10000
-  export HISTSIZE=1000000000
-  export HISTFILESIZE=1000000000
-  export REPORTER=spec
-  export ZSH_DISABLE_COMPFIX=true
-  export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
-  export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-  export SKIM_DEFAULT_COMMAND="fd --type f"
-  export FZF_DEFAULT_COMMAND='fd --type f'
-  export CLICOLOR=1
-  export MCFLY_KEY_SCHEME=vim
-fi
+export ZSH=$HOME/.oh-my-zsh
+export LANG=en_US.UTF-8
+export DISABLE_AUTO_UPDATE=true
+export HYPHEN_INSENSITIVE=true
+export COMPLETION_WAITING_DOTS=true
+export ZSH_THEME="dracula"
+export EDITOR='nvim'
+export SHELL='zsh'
+export LC_CTYPE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+export DISABLE_AUTO_TITLE=true
+export ANSIBLE_HOST_KEY_CHECKING=False
+export KEYTIMEOUT=1
+export LISTMAX=10000
+export HISTSIZE=1000000000
+export HISTFILESIZE=1000000000
+export REPORTER=spec
+export ZSH_DISABLE_COMPFIX=true
+export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+export SKIM_DEFAULT_COMMAND="fd --type f"
+export FZF_DEFAULT_COMMAND='fd --type f'
+export CLICOLOR=1
+export MCFLY_KEY_SCHEME=vim
 
-if [[ -z $TMUX ]] && [[ $platform == 'macos' ]]; then
+if [[ $platform == 'macos' ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 
   export VAGRANT_DEFAULT_PROVIDER='vmware_desktop'
 
-  # source "$HOME/.homebrew.token"
   export HOMEBREW_NO_AUTO_UPDATE=1
   export HOMEBREW_NO_INSTALL_CLEANUP=1
   export HOMEBREW_BOOTSNAP=1
 
-  export NEOVIM_LISTEN_ADDRESS=/tmp/neovim.sock
   export GOPATH=/opt/homebrew/lib/go
-
-  export ANDROID_SDK_ROOT="/opt/homebrew/share/android-sdk"
-  export GO_ROOT=$GOPATH/bin
-  export CARGO_ROOT="$HOME/.cargo/bin"
   export OPENSSL_INCLUDE_DIR=/opt/homebrew/opt/openssl/include
   export OPENSSL_LIB_DIR=/opt/homebrew/opt/openssl/lib
   export RUBY_CFLAGS="-Os -march=native"
   export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/opt/homebrew/opt/openssl"
-  export AIRFLOW_HOME="$HOME/.airflow"
   export LLVM_SYS_130_PREFIX=/opt/homebrew/opt/llvm/
-
+  export LDFLAGS="-L/opt/homebrew/lib"
+  export CPPFLAGS="-I/opt/homebrew/include"
+  export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
   export NODE_PATH=/opt/homebrew/lib/node_modules
+
+  export CARGO_ROOT="$HOME/.cargo/bin"
+  export ANDROID_SDK_ROOT="/opt/homebrew/share/android-sdk"
+  export GO_ROOT=$GOPATH/bin
   export TPM_ROOT="$HOME/.tmux/plugins/tpm"
   export DART_ROOT="$HOME/.pub-cache/bin"
   export CABAL_DIR="$HOME/.cabal/bin"
   export QHOME="$HOME/.q"
-  export PLAN9=/opt/homebrew/plan9
+  export PLAN9_HOME=/opt/plan9
   export NIM_ROOT="$HOME/.nimble/bin"
-  export COMPOSER_ROOT=$HOME/.composer/vendor/bin
-  export SML_ROOT=/opt/homebrew/smlnj/bin
+  export SML_ROOT=/usr/local/smlnj/bin
   export ESVU_ROOT="$HOME/.esvu/bin"
   export SDKMAN_DIR="$HOME/.sdkman"
-  export KHOME="/opt/homebrew/bin"
-  export CARP_DIR="$HOME/.carp"
   export ARC_DIR="$HOME/.arc"
   export CURL_HOME="/opt/homebrew/opt/curl/bin"
   export EMACS_HOME="$HOME/.emacs.d/bin"
   export WOLFRAM_ROOT="/Applications/Wolfram Engine.app/Contents/Resources/Wolfram Player.app/Contents/MacOS"
-  export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
-  export LDFLAGS="-L/opt/homebrew/lib"
-  export CPPFLAGS="-I/opt/homebrew/include"
   export LLVM_ROOT="/opt/homebrew/opt/llvm/bin"
   export LOCAL_BIN_ROOT="$HOME/.local/bin"
   export DOTNET_TOOLS_ROOT="$HOME/.dotnet/tools"
 
-  export PATH=/opt/homebrew/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9/bin:$NIM_ROOT:$COMPOSER_ROOT:$SML_ROOT:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT:$LOCAL_BIN_ROOT:$DOTNET_TOOLS_ROOT:$LLVM_ROOT
+  export PATH=/opt/homebrew/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9_HOME/bin:$NIM_ROOT:$SML_ROOT:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT:$LOCAL_BIN_ROOT:$DOTNET_TOOLS_ROOT:$LLVM_ROOT:$CABAL_DIR
 fi
 
 plugins=(cargo coffee colored-man-pages copyfile cpanm dash dotnet encode64 extract fast-syntax-highlighting golang grunt history-substring-search httpie ipfs jira jsontools mix ng npm pip gitfast pod rbenv react-native redis-cli rsync rust rustup sbt scala sdk supervisor terraform tmux tmuxinator vagrant yarn zoxide)
@@ -108,8 +99,9 @@ setopt inc_append_history
 
 source "$ZSH/oh-my-zsh.sh"
 
+alias arc="$HOME/.arc/arc.sh"
 alias q='rlwrap --remember $QHOME/m64/q'
-alias 9="/opt/homebrew/plan9/bin/9"
+alias 9="/opt/plan9/bin/9"
 alias sqlplus="DYLD_LIBRARY_PATH=/opt/homebrew/lib /opt/homebrew/bin/sqlplus"
 alias jsc="/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/Helpers/jsc"
 alias j=z
@@ -126,6 +118,8 @@ alias vi='nvim'
 alias x="$HOME/.dotnet/tools/x"
 alias git-graph="git commit-graph write --reachable --changed-paths"
 alias mongo=mongosh
+alias bash="/opt/homebrew/bin/bash"
+alias make="/opt/homebrew/opt/make/libexec/gnubin/make"
 
 function clean-eflex() {
   tmux kill-server
@@ -272,8 +266,8 @@ function update() {
   cargo install-update --all
   cargo cache --autoclean
 
-  echo "update quicklisp"
-  sbcl --eval "(ql:update-client)" --quit
+  # echo "update quicklisp"
+  # sbcl --eval "(ql:update-client)" --quit
 
   echo "update pipx packages"
   pipx upgrade-all
@@ -283,6 +277,9 @@ function update() {
 
   echo "update composer packages"
   composer g update
+
+  echo "update racket packages"
+  raco pkg update
 
   echo "update app store apps"
   mas upgrade
@@ -298,6 +295,9 @@ function update() {
 
   echo "update ecmascript runtimes"
   esvu
+
+  echo "update anarki"
+  git -C "$HOME/.arc" pull
 
   echo "update jdks"
   sdk selfupdate
