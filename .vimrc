@@ -12,7 +12,6 @@ nnoremap <C-f> :NvimTreeFindFile<CR>
 nnoremap <silent>] :BufferLineCycleNext<CR>
 nnoremap <silent>[ :BufferLineCyclePrev<CR>
 
-set hidden
 set autowrite
 set termguicolors
 set nobackup
@@ -79,6 +78,7 @@ Plug 'norcalli/nvim-colorizer.lua'
 Plug 'tversteeg/registers.nvim', { 'branch': 'main' }
 Plug 'mfussenegger/nvim-dap'
 Plug 'Pocco81/DAPInstall.nvim', { 'branch': 'main' }
+Plug 'github/copilot.vim'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
 Plug 'CH-DanReif/haproxy.vim'
@@ -263,7 +263,6 @@ augroup END
 
 au TextYankPost * lua vim.highlight.on_yank {higroup="IncSearch", timeout=150, on_visual=true}
 
-let g:nvim_tree_gitignore = 1
 let g:nvim_tree_indent_markers = 1
 let g:nvim_tree_git_hl = 1
 let g:nvim_tree_highlight_opened_files = 1
@@ -320,6 +319,10 @@ require'nvim-treesitter.configs'.setup {
 require'colorizer'.setup()
 
 require'nvim-tree'.setup {
+  git = {
+    enable = true,
+    ignore = true,
+  },
   filters = {
     custom = {
       '.hgcheck', 

@@ -279,7 +279,7 @@ function update() {
   composer g update
 
   echo "update racket packages"
-  raco pkg update
+  raco pkg update --all
 
   echo "update app store apps"
   mas upgrade
