@@ -245,7 +245,6 @@ function update() {
 
   echo "updating vim plugins"
   vim +PlugUpdate +PlugUpgrade +UpdateRemotePlugins +qa
-  vim -c 'CocUpdateSync|q'
   vim +TSUpdateSync +qa
 
   echo "updating ruby gems"
@@ -279,7 +278,7 @@ function update() {
   composer g update
 
   echo "update racket packages"
-  raco pkg update --all
+  raco pkg update --all -j 8 --batch --no-trash
 
   echo "update app store apps"
   mas upgrade

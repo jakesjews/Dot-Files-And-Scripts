@@ -19,7 +19,7 @@ set nowritebackup
 set updatetime=300
 set shortmess+=c
 set signcolumn=number
-set completeopt=longest,menuone,preview "don't autoselect first item in omnicomplete, show if only one item (for preview)
+set completeopt=menu,menuone,noselect
 set tabstop=2
 set shiftwidth=2
 set expandtab
@@ -45,7 +45,6 @@ endif
 
 let g:ale_disable_lsp = 1 " must be before plugin load
 
-"" Plugins
 call plug#begin('~/.vim/plugged')
 
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdateSync' }
@@ -78,8 +77,11 @@ Plug 'norcalli/nvim-colorizer.lua'
 Plug 'tversteeg/registers.nvim', { 'branch': 'main' }
 Plug 'mfussenegger/nvim-dap'
 Plug 'Pocco81/DAPInstall.nvim', { 'branch': 'main' }
-Plug 'github/copilot.vim'
-Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+Plug 'neovim/nvim-lspconfig'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-vsnip'
+Plug 'hrsh7th/vim-vsnip'
+Plug 'hrsh7th/cmp-nvim-lsp'
 
 Plug 'CH-DanReif/haproxy.vim'
 Plug 'ElmCast/elm-vim'
@@ -136,54 +138,6 @@ Plug 'zebradil/hive.vim'
 
 call plug#end()
 
-let g:coc_global_extensions = [
-\ '@yaegassy/coc-ansible',
-\ 'coc-actions',
-\ 'coc-clangd',
-\ 'coc-cmake',
-\ 'coc-css',
-\ 'coc-dictionary',
-\ 'coc-dlang',
-\ 'coc-docker',
-\ 'coc-elixir',
-\ 'coc-ember',
-\ 'coc-erlang_ls',
-\ 'coc-flutter',
-\ 'coc-fsharp',
-\ 'coc-go',
-\ 'coc-html',
-\ 'coc-java',
-\ 'coc-jedi',
-\ 'coc-json',
-\ 'coc-julia',
-\ 'coc-kotlin',
-\ 'coc-lists',
-\ 'coc-lsp-wl',
-\ 'coc-marketplace',
-\ 'coc-metals',
-\ 'coc-omnisharp',
-\ 'coc-perl',
-\ 'coc-phpls',
-\ 'coc-powershell',
-\ 'coc-r-lsp',
-\ 'coc-rust-analyzer',
-\ 'coc-sh',
-\ 'coc-solargraph',
-\ 'coc-sourcekit',
-\ 'coc-sql',
-\ 'coc-sumneko-lua',
-\ 'coc-svg',
-\ 'coc-syntax',
-\ 'coc-texlab',
-\ 'coc-toml',
-\ 'coc-tsserver',
-\ 'coc-vimlsp',
-\ 'coc-webpack',
-\ 'coc-xml',
-\ 'coc-yaml',
-\ 'coc-zig',
-\ ]
-
 let g:test#strategy = 'neovim'
 
 let g:agriculture#disable_smart_quoting = 1
@@ -213,44 +167,11 @@ let g:ale_fixers = {
 \ 'html': { 'handlebars': ['ember-template-lint'] }
 \}
 
-nmap <silent> ga <Plug>(coc-codeaction)
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-nmap gm <Plug>(coc-rename)
+let g:nvim_tree_indent_markers = 1
+let g:nvim_tree_git_hl = 1
+let g:nvim_tree_highlight_opened_files = 1
 
-" Make <CR> auto-select the first completion item
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
-
-" completions
-inoremap <expr><Down> pumvisible() ? "\<C-n>" : "\<Down>"
-inoremap <expr><Up> pumvisible() ? "\<C-p>" : "\<Up>"
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-
-" Use K to show documentation in preview window.
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
-  else
-    execute '!' . &keywordprg . " " . expand('<cword>')
-  endif
-endfunction
-
-" Highlight the symbol and its references when holding the cursor.
-autocmd CursorHold * silent call CocActionAsync('highlight')
-
-augroup mygroup
-  autocmd!
-  " Update signature help on jump placeholder.
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-augroup end
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8 } }
 
 augroup filetypedetect
   au BufRead,BufNewFile *.hbs setfiletype handlebars
@@ -262,12 +183,6 @@ augroup filetypedetect
 augroup END
 
 au TextYankPost * lua vim.highlight.on_yank {higroup="IncSearch", timeout=150, on_visual=true}
-
-let g:nvim_tree_indent_markers = 1
-let g:nvim_tree_git_hl = 1
-let g:nvim_tree_highlight_opened_files = 1
-
-let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8 } }
 
 if !&scrolloff
   set scrolloff=1
@@ -313,6 +228,100 @@ require'nvim-treesitter.configs'.setup {
       scope_incremental = "grc",
       node_decremental = "grm",
     },
+  },
+}
+
+local servers = {
+  "ansiblels",
+  "bashls",
+  "cmake",
+  "cssls",
+  "clojure_lsp",
+  "dartls",
+  "dockerls",
+  "dotls",
+  "elmls",
+  "ember",
+  "fsautocomplete",
+  "fortls",
+  "gopls",
+  "graphql",
+  "html",
+  "hls",
+  "jsonls",
+  "kotlin_language_server",
+  "texlab",
+  "ocamllsp",
+  "purescriptls",
+  "solargraph",
+  "sorbet",
+  "terraformls",
+  "vala_ls",
+  "vimls",
+  "vuels",
+  "yamlls",
+}
+
+local lspconfig = require('lspconfig')
+
+for _, lsp in ipairs(servers) do
+  lspconfig[lsp].setup {}
+end
+
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local enhanced_servers = { 
+  'clangd', 
+  'rust_analyzer', 
+  'pyright', 
+  'tsserver' 
+}
+
+for _, lsp in ipairs(enhanced_servers) do
+  lspconfig[lsp].setup {
+    capabilities = capabilities,
+  }
+end
+
+local has_words_before = function()
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+end
+
+local feedkey = function(key, mode)
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
+end
+
+local cmp = require('cmp')
+cmp.setup {
+  snippet = {
+    expand = function(args)
+      vim.fn["vsnip#anonymous"](args.body)
+    end,
+  },
+  mapping = {
+    ["<Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif vim.fn["vsnip#available"](1) == 1 then
+        feedkey("<Plug>(vsnip-expand-or-jump)", "")
+      elseif has_words_before() then
+        cmp.complete()
+      else
+        fallback()
+      end
+    end, { "i", "s" }),
+    ["<S-Tab>"] = cmp.mapping(function()
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif vim.fn["vsnip#jumpable"](-1) == 1 then
+        feedkey("<Plug>(vsnip-jump-prev)", "")
+      end
+    end, { "i", "s" }),
+    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+  },
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'vsnip' },
   },
 }
 
