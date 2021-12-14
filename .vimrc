@@ -78,10 +78,9 @@ Plug 'tversteeg/registers.nvim', { 'branch': 'main' }
 Plug 'mfussenegger/nvim-dap'
 Plug 'Pocco81/DAPInstall.nvim', { 'branch': 'main' }
 Plug 'neovim/nvim-lspconfig'
-Plug 'hrsh7th/nvim-cmp'
-Plug 'hrsh7th/cmp-vsnip'
-Plug 'hrsh7th/vim-vsnip'
-Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'ms-jpq/coq_nvim', { 'branch': 'coq' }
+Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
+Plug 'ms-jpq/coq.thirdparty', { 'branch': '3p' }
 
 Plug 'CH-DanReif/haproxy.vim'
 Plug 'ElmCast/elm-vim'
@@ -173,6 +172,8 @@ let g:nvim_tree_highlight_opened_files = 1
 
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8 } }
 
+let g:coq_settings = { 'auto_start': v:true }
+
 augroup filetypedetect
   au BufRead,BufNewFile *.hbs setfiletype handlebars
   au FileType cs setl sw=4 sts=4 ts=4 et
@@ -234,95 +235,47 @@ require'nvim-treesitter.configs'.setup {
 local servers = {
   "ansiblels",
   "bashls",
+  "clojure_lsp",
   "cmake",
   "cssls",
-  "clojure_lsp",
   "dartls",
   "dockerls",
   "dotls",
   "elmls",
   "ember",
-  "fsautocomplete",
   "fortls",
+  "fsautocomplete",
   "gopls",
   "graphql",
-  "html",
   "hls",
+  "html",
   "jsonls",
   "kotlin_language_server",
-  "texlab",
   "ocamllsp",
   "purescriptls",
   "solargraph",
   "sorbet",
   "terraformls",
+  "texlab",
   "vala_ls",
   "vimls",
   "vuels",
   "yamlls",
-}
-
-local lspconfig = require('lspconfig')
-
-for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup {}
-end
-
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-local enhanced_servers = { 
   'clangd', 
-  'rust_analyzer', 
   'pyright', 
+  'rust_analyzer', 
   'tsserver' 
 }
 
-for _, lsp in ipairs(enhanced_servers) do
-  lspconfig[lsp].setup {
-    capabilities = capabilities,
-  }
+local lspconfig = require('lspconfig')
+local coq = require "coq"
+
+for _, lsp in ipairs(servers) do
+  lspconfig[lsp].setup(coq.lsp_ensure_capabilities()) 
 end
 
-local has_words_before = function()
-  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-end
-
-local feedkey = function(key, mode)
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
-end
-
-local cmp = require('cmp')
-cmp.setup {
-  snippet = {
-    expand = function(args)
-      vim.fn["vsnip#anonymous"](args.body)
-    end,
-  },
-  mapping = {
-    ["<Tab>"] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif vim.fn["vsnip#available"](1) == 1 then
-        feedkey("<Plug>(vsnip-expand-or-jump)", "")
-      elseif has_words_before() then
-        cmp.complete()
-      else
-        fallback()
-      end
-    end, { "i", "s" }),
-    ["<S-Tab>"] = cmp.mapping(function()
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif vim.fn["vsnip#jumpable"](-1) == 1 then
-        feedkey("<Plug>(vsnip-jump-prev)", "")
-      end
-    end, { "i", "s" }),
-    ['<CR>'] = cmp.mapping.confirm({ select = true }),
-  },
-  sources = {
-    { name = 'nvim_lsp' },
-    { name = 'vsnip' },
-  },
+require("coq_3p") {
+  { src = "nvimlua", short_name = "nLUA", conf_only = true },
 }
 
 require'colorizer'.setup()
