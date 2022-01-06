@@ -43,14 +43,11 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   augroup end
 endif
 
-let g:ale_disable_lsp = 1 " must be before plugin load
-
 call plug#begin('~/.vim/plugged')
 
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdateSync' }
 Plug 'tpope/vim-dispatch'
 Plug 'b3nj5m1n/kommentary', { 'branch': 'main' }
-Plug 'dense-analysis/ale'
 Plug 'machakann/vim-sandwich'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -153,26 +150,13 @@ let g:ansible_template_syntaxes = {
 \ '*.conf.j2': 'dosini', 
 \ }
 
-let g:ale_echo_msg_format = '%linter% says %s'
-
-let g:ale_linters = {
-\ 'elixir': ['elixir-ls'],
-\ 'javascript': ['eslint'],
-\ 'html': { 'handlebars': ['ember-template-lint'] }
-\}
-
-let g:ale_fixers = {
-\ 'javascript': ['eslint'],
-\ 'html': { 'handlebars': ['ember-template-lint'] }
-\}
-
 let g:nvim_tree_indent_markers = 1
 let g:nvim_tree_git_hl = 1
 let g:nvim_tree_highlight_opened_files = 1
 
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8 } }
 
-let g:coq_settings = { 'auto_start': v:true }
+let g:coq_settings = { 'auto_start': 'shut-up' }
 
 augroup filetypedetect
   au BufRead,BufNewFile *.hbs setfiletype handlebars
@@ -213,7 +197,7 @@ require('kommentary.config').configure_language("default", {
   prefer_single_line_comments = true,
 })
 
-require'nvim-treesitter.configs'.setup {
+require('nvim-treesitter.configs').setup {
   ensure_installed = "maintained",
   highlight = {
     enable = true,
@@ -243,6 +227,7 @@ local servers = {
   "dotls",
   "elmls",
   "ember",
+  "eslint",
   "fortls",
   "fsautocomplete",
   "gopls",

@@ -45,8 +45,6 @@ if [[ $platform == 'macos' ]]; then
   export GOPATH=/opt/homebrew/lib/go
   export OPENSSL_INCLUDE_DIR=/opt/homebrew/opt/openssl/include
   export OPENSSL_LIB_DIR=/opt/homebrew/opt/openssl/lib
-  export RUBY_CFLAGS="-Os -march=native"
-  export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/opt/homebrew/opt/openssl"
   export LLVM_SYS_130_PREFIX=/opt/homebrew/opt/llvm/
   export LDFLAGS="-L/opt/homebrew/lib"
   export CPPFLAGS="-I/opt/homebrew/include"
@@ -72,11 +70,12 @@ if [[ $platform == 'macos' ]]; then
   export LLVM_ROOT="/opt/homebrew/opt/llvm/bin"
   export LOCAL_BIN_ROOT="$HOME/.local/bin"
   export DOTNET_TOOLS_ROOT="$HOME/.dotnet/tools"
+  export BINGO_ROOT="$HOME/.bingo/bin/"
 
-  export PATH=/opt/homebrew/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9_HOME/bin:$NIM_ROOT:$SML_ROOT:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT:$LOCAL_BIN_ROOT:$DOTNET_TOOLS_ROOT:$LLVM_ROOT:$CABAL_DIR
+  export PATH=/opt/homebrew/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9_HOME/bin:$NIM_ROOT:$SML_ROOT:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT:$LOCAL_BIN_ROOT:$DOTNET_TOOLS_ROOT:$LLVM_ROOT:$CABAL_DIR:$BINGO_ROOT
 fi
 
-plugins=(cargo coffee colored-man-pages copyfile cpanm dash dotnet encode64 extract fast-syntax-highlighting golang grunt history-substring-search httpie ipfs jira jsontools mix ng npm pip gitfast pod rbenv react-native redis-cli rsync rust rustup sbt scala sdk supervisor terraform tmux tmuxinator vagrant yarn zoxide)
+plugins=(coffee colored-man-pages copyfile cpanm dash dotnet encode64 extract fast-syntax-highlighting golang grunt history-substring-search httpie ipfs jira jsontools mix ng npm pip gitfast pod rbenv react-native redis-cli rsync rust sbt scala sdk supervisor terraform tmux tmuxinator yarn zoxide)
 
 autoload zargs
 autoload zmv
@@ -120,6 +119,7 @@ alias git-graph="git commit-graph write --reachable --changed-paths"
 alias mongo=mongosh
 alias bash="/opt/homebrew/bin/bash"
 alias make="/opt/homebrew/opt/make/libexec/gnubin/make"
+alias ssh="kitty +kitten ssh"
 
 function clean-eflex() {
   tmux kill-server
@@ -279,9 +279,6 @@ function update() {
 
   echo "update racket packages"
   raco pkg update --all -j 8 --batch --no-trash
-
-  echo "update app store apps"
-  mas upgrade
 
   echo "update zsh plugins"
   omz update --unattended
