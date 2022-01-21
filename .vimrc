@@ -83,6 +83,7 @@ Plug 'ms-jpq/coq_nvim', { 'branch': 'coq' }
 Plug 'ms-jpq/coq.artifacts', { 'branch': 'artifacts' }
 Plug 'ms-jpq/coq.thirdparty', { 'branch': '3p' }
 
+Plug 'scalameta/nvim-metals'
 Plug 'CH-DanReif/haproxy.vim'
 Plug 'ElmCast/elm-vim'
 Plug 'IrenejMarc/vim-mint'
@@ -221,6 +222,7 @@ local servers = {
   "bashls",
   "clojure_lsp",
   "cmake",
+  "crystalline",
   "cssls",
   "dartls",
   "dockerls",
@@ -236,9 +238,15 @@ local servers = {
   "html",
   "kotlin_language_server",
   "ocamllsp",
+  "perlpls",
   "purescriptls",
+  "r_language_server",
+  "racket_langserver",
   "solargraph",
-  "stylelint_lsp",
+  "sourcekit",
+  "sqls",
+  "sumneko_lua",
+  "svls",
   "terraformls",
   "texlab",
   "vala_ls",
@@ -246,13 +254,15 @@ local servers = {
   "vuels",
   "yamlls",
   'clangd', 
+  'mint',
   'pyright', 
   'rust_analyzer', 
+  'solidity_ls',
   'tsserver',
 }
 
 local lspconfig = require('lspconfig')
-local coq = require "coq"
+local coq = require('coq')
 
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup(coq.lsp_ensure_capabilities()) 
@@ -270,6 +280,21 @@ lspconfig.jsonls.setup(coq.lsp_ensure_capabilities({
     },
   },
 })) 
+
+lspconfig.arduino_language_server.setup({
+  cmd =  {
+    "arduino-language-server",
+    "-cli-config", "/Users/jacob/Library/Arduino15/arduino-cli.yaml",
+  }
+})
+
+lspconfig.stylelint_lsp.setup({
+  filetypes = { "css", "less", "scss", "sugarss", "wxss" },
+})
+
+lspconfig.elixirls.setup({
+  cmd = { "elixir-ls" },
+})
 
 local null_ls = require("null-ls")
 local null_ls_helpers = require("null-ls.helpers")
@@ -328,9 +353,9 @@ require("coq_3p") {
   { src = "nvimlua", short_name = "nLUA", conf_only = true },
 }
 
-require'colorizer'.setup()
+require('colorizer').setup()
 
-require'nvim-tree'.setup {
+require('nvim-tree').setup {
   git = {
     enable = true,
     ignore = true,
