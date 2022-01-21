@@ -43,11 +43,11 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   augroup end
 endif
 
-call plug#begin('~/.vim/plugged')
+call plug#begin()
 
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdateSync' }
 Plug 'tpope/vim-dispatch'
-Plug 'b3nj5m1n/kommentary', { 'branch': 'main' }
+Plug 'b3nj5m1n/kommentary'
 Plug 'machakann/vim-sandwich'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -67,16 +67,20 @@ Plug 'tpope/vim-fugitive'
 Plug 'eraserhd/parinfer-rust', { 'do': 'cargo build --release' }
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-projectionist'
-Plug 'michaelb/sniprun', {'do': 'bash install.sh'}
+Plug 'michaelb/sniprun', { 'do': 'bash install.sh' }
 Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'andymass/vim-matchup'
 Plug 'norcalli/nvim-colorizer.lua'
-Plug 'tversteeg/registers.nvim', { 'branch': 'main' }
+Plug 'tversteeg/registers.nvim'
 Plug 'mfussenegger/nvim-dap'
-Plug 'Pocco81/DAPInstall.nvim', { 'branch': 'main' }
+Plug 'Pocco81/DAPInstall.nvim'
 Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'jose-elias-alvarez/null-ls.nvim'
+Plug 'b0o/schemastore.nvim'
+Plug 'simrat39/rust-tools.nvim'
 Plug 'ms-jpq/coq_nvim', { 'branch': 'coq' }
-Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
+Plug 'ms-jpq/coq.artifacts', { 'branch': 'artifacts' }
 Plug 'ms-jpq/coq.thirdparty', { 'branch': '3p' }
 
 Plug 'CH-DanReif/haproxy.vim'
@@ -90,7 +94,6 @@ Plug 'alunny/pegjs-vim'
 Plug 'arrufat/vala.vim'
 Plug 'brandonbloom/vim-factor'
 Plug 'chr4/nginx.vim'
-Plug 'digitaltoad/vim-pug'
 Plug 'edwinb/idris2-vim'
 Plug 'elubow/cql-vim'
 Plug 'fladson/vim-kitty'
@@ -108,22 +111,18 @@ Plug 'leafo/moonscript-vim'
 Plug 'leanprover/lean.vim'
 Plug 'lifepillar/pgsql.vim'
 Plug 'mityu/vim-applescript', { 'for': 'applescript' }
-Plug 'moll/vim-node'
-Plug 'neovimhaskell/haskell-vim', { 'for': ['haskell', 'lhaskell', 'chaskell', 'cabalproject', 'cabalconfig'] }
 Plug 'ollykel/v-vim'
 Plug 'pearofducks/ansible-vim'
 Plug 'petRUShka/vim-opencl'
 Plug 'peterhoeg/vim-qml'
-Plug 'purescript-contrib/purescript-vim', { 'branch': 'main' }
-Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
+Plug 'purescript-contrib/purescript-vim'
+Plug 'raimon49/requirements.txt.vim', { 'for': 'requirements' }
 Plug 'reasonml-editor/vim-reason-plus'
-Plug 'rhysd/vim-llvm'
 Plug 'robbles/logstash.vim'
 Plug 'solarnz/thrift.vim'
 Plug 'thyrgle/vim-dyon'
-Plug 'tikhomirov/vim-glsl'
-Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 Plug 'tpope/vim-rails'
+Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 Plug 'tpope/vim-salve', { 'for': 'clojure' }
 Plug 'vim-crystal/vim-crystal'
 Plug 'vmchale/ion-vim'
@@ -157,6 +156,8 @@ let g:nvim_tree_highlight_opened_files = 1
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8 } }
 
 let g:coq_settings = { 'auto_start': 'shut-up' }
+
+let g:matchup_matchparen_offscreen = {'method': 'popup'}
 
 augroup filetypedetect
   au BufRead,BufNewFile *.hbs setfiletype handlebars
@@ -217,7 +218,6 @@ require('nvim-treesitter.configs').setup {
 }
 
 local servers = {
-  "ansiblels",
   "bashls",
   "clojure_lsp",
   "cmake",
@@ -234,12 +234,11 @@ local servers = {
   "graphql",
   "hls",
   "html",
-  "jsonls",
   "kotlin_language_server",
   "ocamllsp",
   "purescriptls",
   "solargraph",
-  "sorbet",
+  "stylelint_lsp",
   "terraformls",
   "texlab",
   "vala_ls",
@@ -249,7 +248,7 @@ local servers = {
   'clangd', 
   'pyright', 
   'rust_analyzer', 
-  'tsserver' 
+  'tsserver',
 }
 
 local lspconfig = require('lspconfig')
@@ -258,6 +257,72 @@ local coq = require "coq"
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup(coq.lsp_ensure_capabilities()) 
 end
+
+lspconfig.ansiblels.setup(coq.lsp_ensure_capabilities({
+  root_dir = lspconfig.util.root_pattern('playbook.yml'),
+  single_file_support = false
+})) 
+
+lspconfig.jsonls.setup(coq.lsp_ensure_capabilities({
+  settings = {
+    json = {
+      schemas = require('schemastore').json.schemas(),
+    },
+  },
+})) 
+
+local null_ls = require("null-ls")
+local null_ls_helpers = require("null-ls.helpers")
+
+null_ls.setup({
+  sources = {
+    null_ls.builtins.diagnostics.cppcheck,
+    null_ls.builtins.diagnostics.credo,
+    null_ls.builtins.diagnostics.hadolint,
+    null_ls.builtins.diagnostics.selene,
+    null_ls.builtins.diagnostics.markdownlint,
+    null_ls.builtins.diagnostics.phpstan,
+    null_ls.builtins.diagnostics.pylint,
+    null_ls.builtins.diagnostics.mypy,
+    null_ls.builtins.diagnostics.shellcheck,
+    null_ls.builtins.diagnostics.statix,
+    null_ls.builtins.diagnostics.vint,
+    null_ls.builtins.diagnostics.revive,
+    {
+      name = "ember-template-lint",
+      method = null_ls.methods.DIAGNOSTICS,
+      filetypes = { "handlebars" },
+      generator = null_ls.generator({
+        command = "ember-template-lint",
+        args = { "--format", "json", "--filename", "result" },
+        to_stdin = true,
+        format = "json_raw",
+        check_exit_code = function(code)
+          return code <= 1
+        end,
+        on_output = function(params)
+          params.messages = params.output and params.output.result and params.output.result or {}
+          if params.err then
+            table.insert(params.messages, { message = params.err })
+          end
+
+          local parser = null_ls_helpers.diagnostics.from_json({
+            attributes = {
+              severity = "severity",
+              code = "rule",
+            },
+            severities = {
+              null_ls_helpers.diagnostics.severities.warning,
+              null_ls_helpers.diagnostics.severities.error,
+            },
+          })
+
+          return parser({ output = params.messages })
+        end,
+      }),
+    }
+  },
+})
 
 require("coq_3p") {
   { src = "nvimlua", short_name = "nLUA", conf_only = true },
@@ -312,4 +377,6 @@ require'nvim-tree'.setup {
     }
   },
 }
+
+require('rust-tools').setup({})
 EOF
