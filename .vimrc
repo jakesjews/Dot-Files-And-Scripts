@@ -204,6 +204,7 @@ require('nvim-treesitter.configs').setup {
   highlight = {
     enable = true,
   },
+  ignore_install = { "norg" },
   matchup = {
     enable = true,
   },
@@ -313,6 +314,7 @@ null_ls.setup({
     null_ls.builtins.diagnostics.statix,
     null_ls.builtins.diagnostics.vint,
     null_ls.builtins.diagnostics.revive,
+    null_ls.builtins.diagnostics.zsh,
     {
       name = "ember-template-lint",
       method = null_ls.methods.DIAGNOSTICS,

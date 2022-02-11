@@ -4,28 +4,28 @@
 
 [core]
 	excludesfile = /Users/jacob/.gitignore_global
-  editor = nvim
-  pager = delta --dark 
+editor = nvim
+pager = delta --dark 
 
 [color]
-  ui = auto
+ui = auto
 
 [push]
-  default = simple
+default = simple
 
 [diff]
-  tool = bc3
-  colorMoved = default
+tool = bc3
+colorMoved = default
 
 [difftool]
-  bc3 = trustExitCode
-  prompt = false
+bc3 = trustExitCode
+prompt = false
 
 [merge]
-  tool = bc3
+tool = bc3
 
 [mergetool]
-  bc3 = trustExitCode
+bc3 = trustExitCode
 
 [difftool "sourcetree"]
 	cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\"
@@ -36,26 +36,26 @@
 	trustExitCode = true
 
 [filter "media"]
-  required = true
-  clean = git media clean %f
-  smudge = git media smudge %f
+required = true
+clean = git media clean %f
+smudge = git media smudge %f
 
 [filter "hawser"]
-  clean = git hawser clean %f
-  smudge = git hawser smudge %f
-  required = true
+clean = git hawser clean %f
+smudge = git hawser smudge %f
+required = true
 
 [filter "lfs"]
-  required = true
-  process = git-lfs filter-process
-  clean = git-lfs clean -- %f
-  smudge = git-lfs smudge -- %f
+required = true
+process = git-lfs filter-process
+clean = git-lfs clean -- %f
+smudge = git-lfs smudge -- %f
 
 [commit]
 	template = /Users/jacob/.stCommitMsg
 
 [pull]
-  rebase = false
+rebase = false
 
 [delta]
-  side-by-side = true
+side-by-side = true

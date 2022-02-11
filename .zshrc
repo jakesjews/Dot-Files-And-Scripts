@@ -32,6 +32,7 @@ export SKIM_DEFAULT_COMMAND="fd --type f"
 export FZF_DEFAULT_COMMAND='fd --type f'
 export CLICOLOR=1
 export MCFLY_KEY_SCHEME=vim
+export BROCCOLI_ENABLED_MEMOIZE=true
 
 if [[ $platform == 'macos' ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -42,7 +43,6 @@ if [[ $platform == 'macos' ]]; then
   export HOMEBREW_NO_INSTALL_CLEANUP=1
   export HOMEBREW_BOOTSNAP=1
 
-  export GOPATH=/opt/homebrew/lib/go
   export OPENSSL_INCLUDE_DIR=/opt/homebrew/opt/openssl/include
   export OPENSSL_LIB_DIR=/opt/homebrew/opt/openssl/lib
   export LLVM_SYS_130_PREFIX=/opt/homebrew/opt/llvm/
@@ -53,7 +53,6 @@ if [[ $platform == 'macos' ]]; then
 
   export CARGO_ROOT="$HOME/.cargo/bin"
   export ANDROID_SDK_ROOT="/opt/homebrew/share/android-sdk"
-  export GO_ROOT=$GOPATH/bin
   export TPM_ROOT="$HOME/.tmux/plugins/tpm"
   export DART_ROOT="$HOME/.pub-cache/bin"
   export CABAL_DIR="$HOME/.cabal/bin"
@@ -73,7 +72,7 @@ if [[ $platform == 'macos' ]]; then
   export BINGO_ROOT="$HOME/.bingo/bin/"
   export ESCRIPTS_ROOT="$HOME/.mix/escripts/"
 
-  export PATH=/opt/homebrew/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9_HOME/bin:$NIM_ROOT:$SML_ROOT:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT:$LOCAL_BIN_ROOT:$DOTNET_TOOLS_ROOT:$LLVM_ROOT:$CABAL_DIR:$BINGO_ROOT:$ESCRIPTS_ROOT
+  export PATH=/opt/homebrew/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9_HOME/bin:$NIM_ROOT:$SML_ROOT:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT:$LOCAL_BIN_ROOT:$DOTNET_TOOLS_ROOT:$LLVM_ROOT:$CABAL_DIR:$BINGO_ROOT:$ESCRIPTS_ROOT:$HOME/.bin
 fi
 
 plugins=(coffee colored-man-pages copyfile cpanm dash dotnet encode64 extract fast-syntax-highlighting golang grunt history-substring-search httpie ipfs jira jsontools mix ng npm pip gitfast pod rbenv react-native redis-cli rsync rust sbt scala sdk supervisor terraform tmux tmuxinator yarn zoxide)
@@ -311,6 +310,16 @@ function update() {
 
   echo "outdated npm packages"
   npm outdated --global
+}
+
+function alphabetize_files() {
+  unsetopt CASE_GLOB
+
+  for x in {0..9} {a..z}
+  do
+    mkdir -p "${x}"
+    mv -- "${x}"*(.) "${x}"/
+  done
 }
 
 function zvm_before_init() {
