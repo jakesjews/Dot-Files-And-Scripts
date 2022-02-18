@@ -156,8 +156,6 @@ let g:nvim_tree_highlight_opened_files = 1
 
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8 } }
 
-let g:coq_settings = { 'auto_start': 'shut-up' }
-
 let g:matchup_matchparen_offscreen = {'method': 'popup'}
 
 augroup filetypedetect
@@ -215,6 +213,16 @@ require('nvim-treesitter.configs').setup {
       node_incremental = "grn",
       scope_incremental = "grc",
       node_decremental = "grm",
+    },
+  },
+}
+
+vim.g.coq_settings = { 
+  auto_start = 'shut-up',
+  xdg = true,
+  clients = {
+    paths = {
+      resolution = { "file" },
     },
   },
 }
