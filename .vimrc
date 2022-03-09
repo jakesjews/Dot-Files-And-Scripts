@@ -45,6 +45,7 @@ endif
 
 call plug#begin()
 
+Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdateSync' }
 Plug 'tpope/vim-dispatch'
 Plug 'b3nj5m1n/kommentary'
@@ -75,10 +76,11 @@ Plug 'tversteeg/registers.nvim'
 Plug 'mfussenegger/nvim-dap'
 Plug 'Pocco81/DAPInstall.nvim'
 Plug 'neovim/nvim-lspconfig'
-Plug 'nvim-lua/plenary.nvim'
 Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'b0o/schemastore.nvim'
 Plug 'simrat39/rust-tools.nvim'
+Plug 'kosayoda/nvim-lightbulb'
+Plug 'weilbith/nvim-code-action-menu'
 Plug 'ms-jpq/coq_nvim', { 'branch': 'coq' }
 Plug 'ms-jpq/coq.artifacts', { 'branch': 'artifacts' }
 Plug 'ms-jpq/coq.thirdparty', { 'branch': '3p' }
@@ -267,16 +269,33 @@ local servers = {
 local lspconfig = require('lspconfig')
 local coq = require('coq')
 
+local lsp_key_opts = { noremap = true, silent = true }
+
+local on_attach = function(client, bufnr)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', lsp_key_opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', lsp_key_opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', lsp_key_opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', lsp_key_opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', lsp_key_opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', lsp_key_opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', lsp_key_opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', lsp_key_opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', lsp_key_opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', lsp_key_opts)
+end
+
 for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup(coq.lsp_ensure_capabilities()) 
+  lspconfig[lsp].setup(coq.lsp_ensure_capabilities({ on_attach = on_attach })) 
 end
 
 lspconfig.ansiblels.setup(coq.lsp_ensure_capabilities({
+  on_attach = on_attach,
   root_dir = lspconfig.util.root_pattern('playbook.yml'),
   single_file_support = false
 })) 
 
 lspconfig.jsonls.setup(coq.lsp_ensure_capabilities({
+  on_attach = on_attach,
   settings = {
     json = {
       schemas = require('schemastore').json.schemas(),
@@ -285,6 +304,7 @@ lspconfig.jsonls.setup(coq.lsp_ensure_capabilities({
 })) 
 
 lspconfig.arduino_language_server.setup({
+  on_attach = on_attach,
   cmd =  {
     "arduino-language-server",
     "-cli-config", "/Users/jacob/Library/Arduino15/arduino-cli.yaml",
@@ -292,10 +312,12 @@ lspconfig.arduino_language_server.setup({
 })
 
 lspconfig.stylelint_lsp.setup({
+  on_attach = on_attach,
   filetypes = { "css", "less", "scss", "sugarss", "wxss" },
 })
 
 lspconfig.elixirls.setup({
+  on_attach = on_attach,
   cmd = { "elixir-ls" },
 })
 
@@ -408,4 +430,6 @@ require('nvim-tree').setup {
 }
 
 require('rust-tools').setup({})
+
+vim.cmd [[autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()]]
 EOF
