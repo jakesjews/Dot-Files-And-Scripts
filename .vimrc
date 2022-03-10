@@ -352,6 +352,10 @@ null_ls.setup({
           return code <= 1
         end,
         on_output = function(params)
+          if params.output == "\n" then
+            return
+          end
+
           params.messages = params.output and params.output.result and params.output.result or {}
           if params.err then
             table.insert(params.messages, { message = params.err })
