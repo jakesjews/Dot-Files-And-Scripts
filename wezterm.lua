@@ -8,7 +8,7 @@ return {
   audible_bell = "Disabled",
   colors = dracula,
   exit_behavior = "Close",
-  font = wezterm.font_with_fallback({ "Fira Code Retina", "Zapf Dingbats" }),
+  font = wezterm.font_with_fallback({ { family = "Fira Code", weight = 450 }, "Zapf Dingbats" }),
   font_size = 14,
   freetype_load_target = "Light",
   hide_tab_bar_if_only_one_tab = true,
@@ -21,28 +21,4 @@ return {
     { key = "w", mods = "CMD", action = wezterm.action { CloseCurrentTab = { confirm = false } } },
     { key = "k", mods = "CMD", action = wezterm.action { ClearScrollback = "ScrollbackAndViewport" } },
   },
-  font_rules = {
-    {
-      italic = true,
-      font = wezterm.font_with_fallback({
-        { family="Fira Code", italic = true },
-        { family="Zapf Dingbats", italic = true }
-      }),
-    },
-    {
-      intensity = "Bold",
-      font = wezterm.font_with_fallback({
-        { family="Fira Code", weight = "Bold" },
-        { family="Zapf Dingbats", weight = "Bold" }
-      }),
-    },
-    {
-      intensity = "Bold",
-      italic = true,
-      font = wezterm.font_with_fallback({
-        { family = "Fira Code", italic = true, weight = "Bold" },
-        { family = "Zapf Dingbats", italic = true, weight = "Bold" }
-      }),
-    },
-  }
 }
