@@ -52,7 +52,7 @@ Plug 'b3nj5m1n/kommentary'
 Plug 'machakann/vim-sandwich'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-Plug 'jesseleite/vim-agriculture'
+Plug 'jesseleite/vim-agriculture', { 'commit': 'd8f0aec03fdec53c61d40fd92cd825f097f4ac78' }
 Plug 'editorconfig/editorconfig-vim'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'kyazdani42/nvim-web-devicons'
@@ -114,7 +114,6 @@ Plug 'petRUShka/vim-opencl'
 Plug 'peterhoeg/vim-qml'
 Plug 'purescript-contrib/purescript-vim'
 Plug 'raimon49/requirements.txt.vim', { 'for': 'requirements' }
-Plug 'reasonml-editor/vim-reason-plus'
 Plug 'robbles/logstash.vim'
 Plug 'solarnz/thrift.vim'
 Plug 'thyrgle/vim-dyon'
@@ -127,6 +126,8 @@ Plug 'wavded/vim-stylus'
 Plug 'wlangstroth/vim-racket'
 Plug 'zah/nim.vim'
 Plug 'zebradil/hive.vim'
+Plug 'rescript-lang/vim-rescript'
+Plug 'reasonml-editor/vim-reason-plus'
 
 call plug#end()
 
@@ -146,7 +147,6 @@ let g:ansible_template_syntaxes = {
 \ '*.conf.j2': 'dosini', 
 \ }
 
-let g:nvim_tree_indent_markers = 1
 let g:nvim_tree_git_hl = 1
 let g:nvim_tree_highlight_opened_files = 1
 
@@ -194,11 +194,11 @@ require('kommentary.config').configure_language("default", {
 })
 
 require('nvim-treesitter.configs').setup {
-  ensure_installed = "maintained",
+  ensure_installed = "all",
   highlight = {
     enable = true,
   },
-  ignore_install = { "norg" },
+  ignore_install = { "norg", "phpdoc" },
   matchup = {
     enable = true,
   },
@@ -227,7 +227,6 @@ local servers = {
   "bashls",
   "clojure_lsp",
   "cmake",
-  "crystalline",
   "cssls",
   "dartls",
   "dockerls",
@@ -243,6 +242,7 @@ local servers = {
   "html",
   "kotlin_language_server",
   "ocamllsp",
+  "openscad_ls",
   "perlpls",
   "purescriptls",
   "r_language_server",
@@ -321,6 +321,15 @@ lspconfig.elixirls.setup({
   cmd = { "elixir-ls" },
 })
 
+lspconfig.rescriptls.setup({
+  on_attach = on_attach,
+  cmd = {
+    'node',
+    '/Users/jacob/.local/share/nvim/plugged/vim-rescript/server/out/server.js',
+    '--stdio'
+  },
+})
+
 local null_ls = require("null-ls")
 local null_ls_helpers = require("null-ls.helpers")
 
@@ -390,6 +399,11 @@ require('nvim-tree').setup {
     enable = true,
     ignore = true,
   },
+  renderer = {
+    indent_markers = {
+      enable = true,
+    }
+  },
   filters = {
     custom = {
       '.hgcheck', 
@@ -436,4 +450,5 @@ require('nvim-tree').setup {
 require('rust-tools').setup({})
 
 vim.cmd [[autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()]]
+vim.cmd [[autocmd BufRead,BufNewFile *.scad set filetype=openscad]]
 EOF

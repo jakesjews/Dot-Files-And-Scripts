@@ -1,11 +1,13 @@
 [user]
-	name = Jacob Jewell
-	email = jacobjewell@eflexsystems.com
+name = Jacob Jewell
+email = jacobjewell@eflexsystems.com
+
+[pager]
+difftool = true
 
 [core]
-	excludesfile = /Users/jacob/.gitignore_global
+excludesfile = /Users/jacob/.gitignore_global
 editor = nvim
-pager = delta --dark 
 
 [color]
 ui = auto
@@ -14,36 +16,18 @@ ui = auto
 default = simple
 
 [diff]
-tool = bc3
-colorMoved = default
+external = difft
 
 [difftool]
-bc3 = trustExitCode
 prompt = false
 
-[merge]
-tool = bc3
-
-[mergetool]
-bc3 = trustExitCode
-
 [difftool "sourcetree"]
-	cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\"
-	path = -ro
+cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\"
+path = -ro
 
 [mergetool "sourcetree"]
-	cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
-	trustExitCode = true
-
-[filter "media"]
-required = true
-clean = git media clean %f
-smudge = git media smudge %f
-
-[filter "hawser"]
-clean = git hawser clean %f
-smudge = git hawser smudge %f
-required = true
+cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
+trustExitCode = true
 
 [filter "lfs"]
 required = true
@@ -52,10 +36,7 @@ clean = git-lfs clean -- %f
 smudge = git-lfs smudge -- %f
 
 [commit]
-	template = /Users/jacob/.stCommitMsg
+template = /Users/jacob/.stCommitMsg
 
-[pull]
-rebase = false
-
-[delta]
-side-by-side = true
+[init]
+defaultBranch = main

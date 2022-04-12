@@ -10,14 +10,13 @@ fi
 
 export ZSH=$HOME/.oh-my-zsh
 export LANG=en_US.UTF-8
+export LC_COLLATE=C
 export DISABLE_AUTO_UPDATE=true
 export HYPHEN_INSENSITIVE=true
 export COMPLETION_WAITING_DOTS=true
 export ZSH_THEME="dracula"
 export EDITOR='nvim'
 export SHELL='zsh'
-export LC_CTYPE=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
 export DISABLE_AUTO_TITLE=true
 export ANSIBLE_HOST_KEY_CHECKING=False
 export KEYTIMEOUT=1
@@ -32,7 +31,6 @@ export SKIM_DEFAULT_COMMAND="fd --type f"
 export FZF_DEFAULT_COMMAND='fd --type f'
 export CLICOLOR=1
 export MCFLY_KEY_SCHEME=vim
-export BROCCOLI_ENABLED_MEMOIZE=true
 
 if [[ $platform == 'macos' ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -118,7 +116,7 @@ alias git-graph="git commit-graph write --reachable --changed-paths"
 alias mongo=mongosh
 alias bash="/opt/homebrew/bin/bash"
 alias make="/opt/homebrew/opt/make/libexec/gnubin/make"
-alias ssh="kitty +kitten ssh"
+alias ssh='kitty +kitten ssh'
 
 function clean-eflex() {
   tmux kill-server
@@ -224,8 +222,10 @@ function clean-eflex-dir() {
   git gc --force
   git lfs prune
   make clean
+  rm -rf tools/node_modules
   cd ${HOME}/dev/eflexsystems/eflex2
   make clean
+  rm -rf tools/node_modules
 }
 
 function update() {
@@ -275,9 +275,6 @@ function update() {
   echo "upgrade dotnet tools"
   dotnet tool list -g | tail -n +3 | tr -s ' ' | cut -f 1 -d' ' | xargs -n 1 dotnet tool update -g
 
-  echo "update composer packages"
-  composer g update
-
   echo "update racket packages"
   raco pkg update --all -j 8 --batch --no-trash
 
@@ -286,6 +283,7 @@ function update() {
   git -C "$HOME/.oh-my-zsh/custom/plugins/fast-syntax-highlighting" pull
   git -C "$HOME/.oh-my-zsh/custom/plugins/zsh-autocomplete" pull
   git -C "$HOME/.oh-my-zsh/custom/themes/dracula" pull
+  git -C "$HOME/.config/wezterm/dracula/" pull
 
   echo "ugrade tmux plugins"
   "$HOME/.tmux/plugins/tpm/bin/update_plugins" all
