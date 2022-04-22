@@ -155,7 +155,6 @@ let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8 } }
 let g:matchup_matchparen_offscreen = {'method': 'popup'}
 
 augroup filetypedetect
-  au BufRead,BufNewFile *.hbs setfiletype handlebars
   au FileType cs setl sw=4 sts=4 ts=4 et
   au FileType c setl sw=4 sts=4 ts=4 et
   au FileType cpp setl sw=4 sts=4 ts=4 et
@@ -331,7 +330,7 @@ lspconfig.rescriptls.setup({
 })
 
 local null_ls = require("null-ls")
-local null_ls_helpers = require("null-ls.helpers")
+require("null-ls.helpers")
 
 null_ls.setup({
   sources = {
@@ -348,43 +347,6 @@ null_ls.setup({
     null_ls.builtins.diagnostics.vint,
     null_ls.builtins.diagnostics.revive,
     null_ls.builtins.diagnostics.zsh,
-    {
-      name = "ember-template-lint",
-      method = null_ls.methods.DIAGNOSTICS,
-      filetypes = { "handlebars" },
-      generator = null_ls.generator({
-        command = "ember-template-lint",
-        args = { "--format", "json", "--filename", "result" },
-        to_stdin = true,
-        format = "json_raw",
-        check_exit_code = function(code)
-          return code <= 1
-        end,
-        on_output = function(params)
-          if params.output == "\n" then
-            return
-          end
-
-          params.messages = params.output and params.output.result and params.output.result or {}
-          if params.err then
-            table.insert(params.messages, { message = params.err })
-          end
-
-          local parser = null_ls_helpers.diagnostics.from_json({
-            attributes = {
-              severity = "severity",
-              code = "rule",
-            },
-            severities = {
-              null_ls_helpers.diagnostics.severities.warning,
-              null_ls_helpers.diagnostics.severities.error,
-            },
-          })
-
-          return parser({ output = params.messages })
-        end,
-      }),
-    }
   },
 })
 
@@ -420,7 +382,6 @@ require('nvim-tree').setup {
       'node_modules', 
       'bin', 
       'obj', 
-      'Properties', 
       'coverage', 
       'dist',
       '.suo$', 
@@ -449,6 +410,10 @@ require('nvim-tree').setup {
 
 require('rust-tools').setup({})
 
-vim.cmd [[autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()]]
-vim.cmd [[autocmd BufRead,BufNewFile *.scad set filetype=openscad]]
+vim.api.nvim_create_autocmd("BufEnter", {
+  pattern = "CursorHold,CursorHoldI *",
+  callback = function(args)
+    require('nvim-lightbulb').update_lightbulb()
+  end,
+})
 EOF

@@ -1,12 +1,12 @@
 [user]
-name = Jacob Jewell
-email = jacobjewell@eflexsystems.com
+	name = Jacob Jewell
+	email = jacobjewell@eflexsystems.com
 
 [pager]
 difftool = true
 
 [core]
-excludesfile = /Users/jacob/.gitignore_global
+	excludesfile = /Users/jacob/.gitignore_global
 editor = nvim
 
 [color]
@@ -22,12 +22,12 @@ external = difft
 prompt = false
 
 [difftool "sourcetree"]
-cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\"
-path = -ro
+	cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\"
+	path = -ro
 
 [mergetool "sourcetree"]
-cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
-trustExitCode = true
+	cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
+	trustExitCode = true
 
 [filter "lfs"]
 required = true
@@ -36,7 +36,7 @@ clean = git-lfs clean -- %f
 smudge = git-lfs smudge -- %f
 
 [commit]
-template = /Users/jacob/.stCommitMsg
+	template = /Users/jacob/.stCommitMsg
 
 [init]
 defaultBranch = main

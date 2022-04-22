@@ -116,7 +116,6 @@ alias git-graph="git commit-graph write --reachable --changed-paths"
 alias mongo=mongosh
 alias bash="/opt/homebrew/bin/bash"
 alias make="/opt/homebrew/opt/make/libexec/gnubin/make"
-alias ssh='kitty +kitten ssh'
 
 function clean-eflex() {
   tmux kill-server
