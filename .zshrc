@@ -41,6 +41,7 @@ if [[ $platform == 'macos' ]]; then
   export HOMEBREW_NO_INSTALL_CLEANUP=1
   export HOMEBREW_BOOTSNAP=1
 
+  export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
   export OPENSSL_INCLUDE_DIR=/opt/homebrew/opt/openssl/include
   export OPENSSL_LIB_DIR=/opt/homebrew/opt/openssl/lib
   export LLVM_SYS_130_PREFIX=/opt/homebrew/opt/llvm/
@@ -48,6 +49,7 @@ if [[ $platform == 'macos' ]]; then
   export CPPFLAGS="-I/opt/homebrew/include"
   export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
   export NODE_PATH=/opt/homebrew/lib/node_modules
+  export LOGTALKHOME=/opt/homebrew/opt/logtalk/share/logtalk
 
   export CARGO_ROOT="$HOME/.cargo/bin"
   export ANDROID_SDK_ROOT="/opt/homebrew/share/android-sdk"
@@ -124,6 +126,23 @@ function clean-eflex() {
 function restart-eflex() {
   clean-eflex
   mux eflex
+}
+
+function clean-eflex-dir() {
+  rm -rf ${TMPDIR}v8-compile-cache*
+  rm -rf ${TMPDIR}broccoli-*
+  rm -rf ${TMPDIR}jacob/if-you-need-to-delete-this-open-an-issue-async-disk-cache
+  rm -rf ${TMPDIR}*Before*
+  rm -rf ${TMPDIR}*After*
+  rm -rf ${TMPDIR}*After*
+  watchman watch-del-all
+  cd ${HOME}/dev/eflexsystems/eflex
+  git remote prune origin
+  git gc --force
+  git lfs prune
+  make clean
+  cd ${HOME}/dev/eflexsystems/eflex2
+  make clean
 }
 
 function count-instances() {
@@ -208,25 +227,6 @@ function liq() {
   clj -Sdeps '{:deps {mogenslund/liquid {:mvn/version "2.0.4"}}}' -main liq.core
 }
 
-function clean-eflex-dir() {
-  rm -rf ${TMPDIR}v8-compile-cache*
-  rm -rf ${TMPDIR}broccoli-*
-  rm -rf ${TMPDIR}jacob/if-you-need-to-delete-this-open-an-issue-async-disk-cache
-  rm -rf ${TMPDIR}*Before*
-  rm -rf ${TMPDIR}*After*
-  rm -rf ${TMPDIR}*After*
-  watchman watch-del-all
-  cd ${HOME}/dev/eflexsystems/eflex
-  git remote prune origin
-  git gc --force
-  git lfs prune
-  make clean
-  rm -rf tools/node_modules
-  cd ${HOME}/dev/eflexsystems/eflex2
-  make clean
-  rm -rf tools/node_modules
-}
-
 function update() {
   setopt localoptions rmstarsilent
   unsetopt nomatch
@@ -242,7 +242,7 @@ function update() {
   #npm update -g
 
   echo "updating vim plugins"
-  vim +PlugUpdate +PlugUpgrade +UpdateRemotePlugins +qa
+  nvim -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
   vim +TSUpdateSync +qa
 
   echo "updating ruby gems"

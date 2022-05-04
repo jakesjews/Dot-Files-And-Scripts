@@ -1,16 +1,3 @@
--- Disable ex mode
-vim.keymap.set('n', 'Q', '<nop>')
-vim.keymap.set('n', 'x', '"_x')
-vim.keymap.set('', '<C-t>', ':TestNearest<CR>')
-vim.keymap.set('', '<C-q>', ':Dash<CR>')
-vim.keymap.set('', '<C-p>', ':Files<CR>')
-vim.keymap.set('v', '<Enter>', '<Plug>(EasyAlign)')
-vim.keymap.set('v', '.', ':normal .<CR>')
-vim.keymap.set('n', '<C-n>', ':NvimTreeToggle<CR>')
-vim.keymap.set('n', '<C-f>', ':NvimTreeFindFile<CR>')
-vim.keymap.set('n', '[', ':BufferLineCyclePrev<CR>', { silent = true })
-vim.keymap.set('n', ']', ':BufferLineCycleNext<CR>', { silent = true })
-
 vim.opt.number = true
 vim.opt.autowrite = true
 vim.opt.termguicolors = true
@@ -36,6 +23,19 @@ vim.opt.swapfile = false
 vim.opt.scrolloff = 1
 vim.opt.sidescrolloff = 5
 
+vim.keymap.set('n', 'x', '"_x') -- prevent character delete from writing to the clipboard
+vim.keymap.set('', '<C-t>', ':TestNearest<CR>')
+vim.keymap.set('', '<C-q>', ':Dash<CR>')
+vim.keymap.set('', '<C-p>', ':Files<CR>')
+vim.keymap.set('v', '<Enter>', '<Plug>(EasyAlign)')
+vim.keymap.set('v', '.', ':normal .<CR>')
+vim.keymap.set('n', '<C-n>', ':NvimTreeToggle<CR>')
+vim.keymap.set('n', '<C-f>', ':NvimTreeFindFile<CR>')
+vim.keymap.set('n', '[', ':BufferLineCyclePrev<CR>', { silent = true })
+vim.keymap.set('n', ']', ':BufferLineCycleNext<CR>', { silent = true })
+vim.keymap.set("n", "<C-c>", "<Plug>kommentary_line_default")
+vim.keymap.set("x", "<C-c>", "<Plug>kommentary_visual_default")
+
 local install_path = vim.fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
 local packer_bootstrap = false
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
@@ -60,8 +60,7 @@ require('packer').startup(function(use)
   use 'junegunn/vim-easy-align'
   use 'vim-test/vim-test'
   use { 'rcarriga/vim-ultest', run = ':UpdateRemotePlugins' }
-  use { 'sukima/vim-javascript-imports', ft = {'coffee', 'javascript', 'typescript'} }
-  use { 'jakesjews/vim-ember-imports', ft = {'coffee', 'javascript', 'typescript'} }
+  use { 'jakesjews/vim-ember-imports', ft = {'coffee', 'javascript', 'typescript'}, requires = { "sukima/vim-javascript-imports" } }
   use 'tpope/vim-dadbod'
   use 'tpope/vim-fugitive'
   use { 'eraserhd/parinfer-rust', run = 'cargo build --release' }
@@ -80,7 +79,7 @@ require('packer').startup(function(use)
   use 'simrat39/rust-tools.nvim'
   use 'kosayoda/nvim-lightbulb'
   use 'weilbith/nvim-code-action-menu'
-  use { 'ms-jpq/coq_nvim', branch = 'coq' }
+  use { 'ms-jpq/coq_nvim', branch = 'coq', run = ":COQdeps" }
   use { 'ms-jpq/coq.artifacts', branch = 'artifacts' }
   use { 'ms-jpq/coq.thirdparty', branch = '3p' }
 
@@ -165,6 +164,11 @@ vim.api.nvim_create_autocmd("TextYankPost", { callback = function()
   vim.highlight.on_yank({ higroup="IncSearch", timeout=150, on_visual=true })
 end })
 
+vim.api.nvim_create_autocmd("BufEnter", {
+  pattern = "CursorHold,CursorHoldI *",
+  callback = require('nvim-lightbulb').update_lightbulb
+})
+
 vim.cmd('cnoreabbrev rg RgRaw')
 vim.cmd('cnoreabbrev Rg RgRaw')
 vim.cmd('cnoreabbrev RG RgRaw')
@@ -175,8 +179,6 @@ vim.cmd('hi! link Type DraculaCyan')
 vim.cmd('hi Normal guibg=NONE ctermbg=NONE')
 
 vim.g.kommentary_create_default_mappings = false
-vim.api.nvim_set_keymap("n", "<C-c>", "<Plug>kommentary_line_default", {})
-vim.api.nvim_set_keymap("x", "<C-c>", "<Plug>kommentary_visual_default", {})
 require('kommentary.config').configure_language("default", {
   prefer_single_line_comments = true,
 })
@@ -256,19 +258,23 @@ local servers = {
 local lspconfig = require('lspconfig')
 local coq = require('coq')
 
-local lsp_key_opts = { noremap = true, silent = true }
+local on_attach = function(client, bufferNum)
+  local lsp_key_opts = {
+    noremap = true,
+    silent = true,
+    buffer = bufferNum,
+  }
 
-local on_attach = function(client, bufnr)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', lsp_key_opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', lsp_key_opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', lsp_key_opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', lsp_key_opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', lsp_key_opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', lsp_key_opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', lsp_key_opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', lsp_key_opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', lsp_key_opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', lsp_key_opts)
+  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, lsp_key_opts)
+  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, lsp_key_opts)
+  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, lsp_key_opts)
+  vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, lsp_key_opts)
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, lsp_key_opts)
+  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, lsp_key_opts)
+  vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, lsp_key_opts)
+  vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, lsp_key_opts)
+  vim.keymap.set('n', 'gr', vim.lsp.buf.references, lsp_key_opts)
+  vim.keymap.set('n', '<space>f', vim.lsp.buf.formatting, lsp_key_opts)
 end
 
 for _, lsp in ipairs(servers) do
@@ -397,10 +403,3 @@ require('nvim-tree').setup {
 }
 
 require('rust-tools').setup({})
-
-vim.api.nvim_create_autocmd("BufEnter", {
-  pattern = "CursorHold,CursorHoldI *",
-  callback = function()
-    require('nvim-lightbulb').update_lightbulb()
-  end,
-})
