@@ -54,8 +54,7 @@ require('packer').startup(function(use)
   use { 'jesseleite/vim-agriculture', commit = 'd8f0aec03fdec53c61d40fd92cd825f097f4ac78' }
   use 'editorconfig/editorconfig-vim'
   use { 'dracula/vim', as = 'dracula' }
-  use 'kyazdani42/nvim-web-devicons'
-  use 'kyazdani42/nvim-tree.lua'
+  use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons' }
   use 'rizzatti/dash.vim'
   use 'junegunn/vim-easy-align'
   use 'vim-test/vim-test'
@@ -80,8 +79,8 @@ require('packer').startup(function(use)
   use 'kosayoda/nvim-lightbulb'
   use 'weilbith/nvim-code-action-menu'
   use { 'ms-jpq/coq_nvim', branch = 'coq', run = ":COQdeps" }
-  use { 'ms-jpq/coq.artifacts', branch = 'artifacts' }
-  use { 'ms-jpq/coq.thirdparty', branch = '3p' }
+  use { 'ms-jpq/coq.artifacts', branch = 'artifacts', run = ":COQdeps" }
+  use { 'ms-jpq/coq.thirdparty', branch = '3p', run = ":COQdeps"  }
 
   use 'scalameta/nvim-metals'
   use 'CH-DanReif/haproxy.vim'
@@ -148,6 +147,12 @@ vim.g.ansible_template_syntaxes['*.conf.j2'] = 'dosini'
 
 vim.g.nvim_tree_git_hl = 1
 vim.g.nvim_tree_highlight_opened_files = 1
+vim.g.nvim_tree_show_icons = {
+  git = 1,
+  folders = 1,
+  files = 1,
+  folder_arrows = 1,
+}
 
 vim.g.fzf_layout = { window = { width = 0.9, height = 0.8 } }
 
