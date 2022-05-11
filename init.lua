@@ -139,11 +139,12 @@ vim.g.vim_javascript_imports_multiline_max_vars = 100
 
 vim.g.salve_auto_start_repl = 1
 
-vim.g.ansible_template_syntaxes = {}
-vim.g.ansible_template_syntaxes['*.sh.j2'] = 'sh'
-vim.g.ansible_template_syntaxes['*.json.j2'] = 'json'
-vim.g.ansible_template_syntaxes['*.js.j2'] = 'javascript'
-vim.g.ansible_template_syntaxes['*.conf.j2'] = 'dosini'
+vim.g.ansible_template_syntaxes = {
+  ['*.sh.j2'] = 'bash',
+  ['*.json.j2'] = 'json',
+  ['*.js.j2'] = 'javascript',
+  ['*.conf.j2'] = 'dosini',
+}
 
 vim.g.nvim_tree_git_hl = 1
 vim.g.nvim_tree_highlight_opened_files = 1
