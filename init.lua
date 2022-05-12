@@ -42,7 +42,9 @@ if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
   packer_bootstrap = vim.fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
 end
 
-require('packer').startup(function(use)
+local packer = require('packer')
+
+packer.startup(function(use)
   use 'wbthomason/packer.nvim'
   use 'nvim-lua/plenary.nvim'
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
@@ -79,15 +81,14 @@ require('packer').startup(function(use)
   use 'kosayoda/nvim-lightbulb'
   use 'weilbith/nvim-code-action-menu'
   use { 'ms-jpq/coq_nvim', branch = 'coq', run = ":COQdeps" }
-  use { 'ms-jpq/coq.artifacts', branch = 'artifacts', run = ":COQdeps" }
-  use { 'ms-jpq/coq.thirdparty', branch = '3p', run = ":COQdeps"  }
+  use { 'ms-jpq/coq.artifacts', branch = 'artifacts' }
+  use { 'ms-jpq/coq.thirdparty', branch = '3p' }
 
-  use 'scalameta/nvim-metals'
+  use { 'scalameta/nvim-metals', requires = { "nvim-lua/plenary.nvim" } }
   use 'CH-DanReif/haproxy.vim'
   use 'IrenejMarc/vim-mint'
   use 'MTDL9/vim-log-highlighting'
   use 'McSinyx/vim-octave'
-  use 'TovarishFin/vim-solidity'
   use 'adamclerk/vim-razor'
   use 'alunny/pegjs-vim'
   use 'brandonbloom/vim-factor'
@@ -125,14 +126,18 @@ require('packer').startup(function(use)
   use 'zebradil/hive.vim'
   use 'rescript-lang/vim-rescript'
   use 'reasonml-editor/vim-reason-plus'
+  use 'mfussenegger/nvim-jdtls'
+  use 'ionide/Ionide-vim'
 
   if packer_bootstrap then
-    require('packer').sync()
+    packer.sync()
   end
 end)
 
 vim.g['test#strategy'] = 'neovim'
 vim.g['agriculture#disable_smart_quoting'] = 1
+
+vim.g.crystal_enable_completion = 0
 
 vim.g.vim_javascript_imports_multiline_max_col = 120
 vim.g.vim_javascript_imports_multiline_max_vars = 100
@@ -165,6 +170,30 @@ vim.api.nvim_create_autocmd("FileType", { pattern = "c", group = fileTypeDetectI
 vim.api.nvim_create_autocmd("FileType", { pattern = "cpp", group = fileTypeDetectId, command = "setl sw=4 sts=4 ts=4 et" })
 vim.api.nvim_create_autocmd("FileType", { pattern = "make", group = fileTypeDetectId, command = "setl noexpandtab sw=4 sts=0 ts=4" })
 vim.api.nvim_create_autocmd("FileType", { pattern = "scss", group = fileTypeDetectId, command = "setl iskeyword+=@-@" })
+
+vim.api.nvim_create_autocmd("FileType", { pattern = "java", group = fileTypeDetectId, callback = function()
+  local root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'})
+
+  require('jdtls').start_or_attach({
+    root_dir = root_dir,
+    cmd = {
+      'java',
+      '-Declipse.application=org.eclipse.jdt.ls.core.id1',
+      '-Dosgi.bundles.defaultStartLevel=4',
+      '-Declipse.product=org.eclipse.jdt.ls.core.product',
+      '-Dlog.protocol=true',
+      '-Dlog.level=ALL',
+      '-Xms1g',
+      '--add-modules=ALL-SYSTEM',
+      '--add-opens', 'java.base/java.util=ALL-UNNAMED',
+      '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
+
+      '-jar', '/opt/homebrew/opt/jdtls/libexec/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar',
+      '-configuration', '/opt/homebrew/opt/jdtls/libexec/config_mac',
+      '-data', root_dir,
+    },
+  })
+end})
 
 vim.api.nvim_create_autocmd("TextYankPost", { callback = function()
   vim.highlight.on_yank({ higroup="IncSearch", timeout=150, on_visual=true })
@@ -220,45 +249,50 @@ vim.g.coq_settings = {
 }
 
 local servers = {
+  "awk_ls",
   "bashls",
   "clojure_lsp",
   "cmake",
+  "crystalline",
   "cssls",
   "dartls",
   "dockerls",
   "dotls",
   "elmls",
   "ember",
+  "erlangls",
   "eslint",
   "fortls",
-  "fsautocomplete",
+  "gdscript",
   "gopls",
   "graphql",
+  "hdl_checker",
   "hls",
   "html",
+  "julials",
   "kotlin_language_server",
+  "mint",
   "ocamllsp",
   "openscad_ls",
   "perlpls",
   "purescriptls",
+  "pyright",
   "r_language_server",
   "racket_langserver",
+  "salt_ls",
   "solargraph",
+  "solc",
   "sourcekit",
   "sqls",
   "svls",
   "terraformls",
   "texlab",
+  "tsserver",
   "vala_ls",
   "vimls",
   "vuels",
   "yamlls",
-  'clangd',
-  'mint',
-  'pyright',
-  'rust_analyzer',
-  'solidity_ls',
-  'tsserver',
+  "zls",
 }
 
 local lspconfig = require('lspconfig')
@@ -302,25 +336,26 @@ lspconfig.jsonls.setup(coq.lsp_ensure_capabilities({
   },
 }))
 
-lspconfig.arduino_language_server.setup({
+lspconfig.arduino_language_server.setup(coq.lsp_ensure_capabilities({
   on_attach = on_attach,
   cmd =  {
     "arduino-language-server",
     "-cli-config", "/Users/jacob/Library/Arduino15/arduino-cli.yaml",
   }
-})
+}))
 
-lspconfig.stylelint_lsp.setup({
+lspconfig.stylelint_lsp.setup(coq.lsp_ensure_capabilities({
   on_attach = on_attach,
   filetypes = { "css", "less", "scss", "sugarss", "wxss" },
-})
+}))
 
-lspconfig.elixirls.setup({
+lspconfig.elixirls.setup(coq.lsp_ensure_capabilities({
   on_attach = on_attach,
   cmd = { "elixir-ls" },
-})
+}))
 
-lspconfig.sumneko_lua.setup({
+lspconfig.sumneko_lua.setup(coq.lsp_ensure_capabilities({
+  on_attach = on_attach,
   settings = {
     Lua = {
       diagnostics = {
@@ -328,12 +363,27 @@ lspconfig.sumneko_lua.setup({
       }
     }
   }
-})
+}))
+
+lspconfig.omnisharp.setup(coq.lsp_ensure_capabilities({
+  on_attach = on_attach,
+  cmd = {
+    "/Users/jacob/.omnisharp/OmniSharp",
+    "--languageserver",
+    "--hostPID",
+    tostring(vim.fn.getpid()),
+  },
+}))
+
+lspconfig.powershell_es.setup(coq.lsp_ensure_capabilities({
+  on_attach = on_attach,
+  bundle_path = '/Users/jacob/.powershell',
+}))
 
 local null_ls = require("null-ls")
 require("null-ls.helpers")
 
-null_ls.setup({
+null_ls.setup(coq.lsp_ensure_capabilities({
   sources = {
     null_ls.builtins.diagnostics.cppcheck,
     null_ls.builtins.diagnostics.credo,
@@ -348,11 +398,13 @@ null_ls.setup({
     null_ls.builtins.diagnostics.revive,
     null_ls.builtins.diagnostics.zsh,
   },
-})
+}))
 
 require("coq_3p") {
   { src = "nvimlua", short_name = "nLUA", conf_only = true },
 }
+
+require('rust-tools').setup(coq.lsp_ensure_capabilities({}))
 
 require('colorizer').setup()
 
@@ -407,5 +459,3 @@ require('nvim-tree').setup {
     }
   },
 }
-
-require('rust-tools').setup({})
