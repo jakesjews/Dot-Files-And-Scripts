@@ -71,8 +71,10 @@ if [[ $platform == 'macos' ]]; then
   export BINGO_ROOT="$HOME/.bingo/bin"
   export ESCRIPTS_ROOT="$HOME/.mix/escripts"
   export DOTNET_TOOLS_ROOT="$HOME/.dotnet/tools"
+  export DENO_ROOT="$HOME/.deno/bin"
+  export PORTER_ROOT="$HOME/.porter"
 
-  export PATH=/opt/homebrew/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9_HOME/bin:$NIM_ROOT:$SML_ROOT:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT:$LOCAL_BIN_ROOT:$LLVM_ROOT:$CABAL_DIR:$BINGO_ROOT:$ESCRIPTS_ROOT:$DOTNET_TOOLS_ROOT:$HOME/.bin
+  export PATH=/opt/homebrew/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9_HOME/bin:$NIM_ROOT:$SML_ROOT:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT:$LOCAL_BIN_ROOT:$LLVM_ROOT:$CABAL_DIR:$BINGO_ROOT:$ESCRIPTS_ROOT:$DOTNET_TOOLS_ROOT:$DENO_ROOT:$HOME/.bin
 fi
 
 plugins=(coffee colored-man-pages copyfile cpanm dash dotnet encode64 extract fast-syntax-highlighting golang grunt history-substring-search httpie ipfs jira jsontools mix ng npm pip gitfast pod rbenv react-native redis-cli rsync rust sbt scala sdk supervisor terraform tmux tmuxinator yarn zoxide)
@@ -118,7 +120,6 @@ alias git-graph="git commit-graph write --reachable --changed-paths"
 alias mongo=mongosh
 alias bash="/opt/homebrew/bin/bash"
 alias make="/opt/homebrew/opt/make/libexec/gnubin/make"
-alias ssh="kitty +kitten ssh"
 
 function clean-eflex() {
   tmux kill-server
@@ -235,12 +236,9 @@ function update() {
   echo "updating homebrew packages"
   brew update
   brew upgrade
-  brew cleanup -s
-  brew tap --repair
-  rm -rf "$(brew --cache)"
 
-  #echo "updating node packages"
-  #npm update -g
+  echo "update deno packages"
+  trex upgrade
 
   echo "updating vim plugins"
   nvim -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
@@ -315,11 +313,16 @@ function update() {
   echo "upgrade cask packages"
   brew cu --all --quiet --yes --no-brew-update
 
+  echo "cleanup homebrew"
+  brew cleanup -s
+  brew tap --repair
+  rm -rf "$(brew --cache)"
+
   echo "outdated python packages"
   pip3 list --user --outdated --not-required
 
   echo "outdated npm packages"
-  npm outdated --global
+  npm outdated --location=global
 }
 
 function alphabetize_files() {

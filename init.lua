@@ -128,6 +128,7 @@ packer.startup(function(use)
   use 'reasonml-editor/vim-reason-plus'
   use 'mfussenegger/nvim-jdtls'
   use 'ionide/Ionide-vim'
+  use 'stevearc/vim-arduino'
 
   if packer_bootstrap then
     packer.sync()
@@ -149,15 +150,6 @@ vim.g.ansible_template_syntaxes = {
   ['*.json.j2'] = 'json',
   ['*.js.j2'] = 'javascript',
   ['*.conf.j2'] = 'dosini',
-}
-
-vim.g.nvim_tree_git_hl = 1
-vim.g.nvim_tree_highlight_opened_files = 1
-vim.g.nvim_tree_show_icons = {
-  git = 1,
-  folders = 1,
-  files = 1,
-  folder_arrows = 1,
 }
 
 vim.g.fzf_layout = { window = { width = 0.9, height = 0.8 } }
@@ -287,7 +279,6 @@ local servers = {
   "svls",
   "terraformls",
   "texlab",
-  "tsserver",
   "vala_ls",
   "vimls",
   "vuels",
@@ -380,6 +371,17 @@ lspconfig.powershell_es.setup(coq.lsp_ensure_capabilities({
   bundle_path = '/Users/jacob/.powershell',
 }))
 
+lspconfig.tsserver.setup(coq.lsp_ensure_capabilities({
+  on_attach = on_attach,
+  init_options = {
+    hostInfo = 'neovim',
+    npmLocation = '/opt/homebrew/bin/npm',
+    preferences = {
+      disableSuggestions = true,
+    },
+  }
+}))
+
 local null_ls = require("null-ls")
 require("null-ls.helpers")
 
@@ -414,9 +416,19 @@ require('nvim-tree').setup {
     ignore = true,
   },
   renderer = {
+    highlight_git = true,
+    highlight_opened_files = 'all',
+    icons = {
+      show = {
+        git = true,
+        folder = true,
+        file = true,
+        folder_arrow = true,
+      },
+    },
     indent_markers = {
       enable = true,
-    }
+    },
   },
   filters = {
     custom = {
