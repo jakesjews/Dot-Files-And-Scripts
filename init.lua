@@ -1,3 +1,4 @@
+-- luacheck: globals vim
 vim.opt.number = true
 vim.opt.autowrite = true
 vim.opt.termguicolors = true
@@ -40,7 +41,9 @@ vim.keymap.set("x", "<C-c>", "<Plug>kommentary_visual_default")
 local install_path = vim.fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
 local packer_bootstrap = false
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-  packer_bootstrap = vim.fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+  packer_bootstrap = vim.fn.system({
+    'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path
+  })
 end
 
 local packer = require('packer')
@@ -62,7 +65,10 @@ packer.startup(function(use)
   use 'junegunn/vim-easy-align'
   use 'vim-test/vim-test'
   use { 'rcarriga/vim-ultest', run = ':UpdateRemotePlugins' }
-  use { 'jakesjews/vim-ember-imports', ft = {'coffee', 'javascript', 'typescript'}, requires = { "sukima/vim-javascript-imports" } }
+  use { 'jakesjews/vim-ember-imports',
+    ft = {'coffee', 'javascript', 'typescript'},
+    requires = { "sukima/vim-javascript-imports" }
+  }
   use 'tpope/vim-dadbod'
   use 'tpope/vim-fugitive'
   use { 'eraserhd/parinfer-rust', run = 'cargo build --release' }
@@ -158,11 +164,21 @@ vim.g.fzf_layout = { window = { width = 0.9, height = 0.8 } }
 vim.g.matchup_matchparen_offscreen = { method = 'popup' }
 
 local fileTypeDetectId = vim.api.nvim_create_augroup("filetypedetect", { clear = true })
-vim.api.nvim_create_autocmd("FileType", { pattern = "cs", group = fileTypeDetectId, command = "setl sw=4 sts=4 ts=4 et" })
-vim.api.nvim_create_autocmd("FileType", { pattern = "c", group = fileTypeDetectId, command = "setl sw=4 sts=4 ts=4 et" })
-vim.api.nvim_create_autocmd("FileType", { pattern = "cpp", group = fileTypeDetectId, command = "setl sw=4 sts=4 ts=4 et" })
-vim.api.nvim_create_autocmd("FileType", { pattern = "make", group = fileTypeDetectId, command = "setl noexpandtab sw=4 sts=0 ts=4" })
-vim.api.nvim_create_autocmd("FileType", { pattern = "scss", group = fileTypeDetectId, command = "setl iskeyword+=@-@" })
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "cs", group = fileTypeDetectId, command = "setl sw=4 sts=4 ts=4 et"
+})
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "c", group = fileTypeDetectId, command = "setl sw=4 sts=4 ts=4 et"
+})
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "cpp", group = fileTypeDetectId, command = "setl sw=4 sts=4 ts=4 et"
+})
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "make", group = fileTypeDetectId, command = "setl noexpandtab sw=4 sts=0 ts=4"
+})
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "scss", group = fileTypeDetectId, command = "setl iskeyword+=@-@"
+})
 
 vim.api.nvim_create_autocmd("FileType", { pattern = "java", group = fileTypeDetectId, callback = function()
   local root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'})
@@ -290,7 +306,7 @@ local servers = {
 local lspconfig = require('lspconfig')
 local coq = require('coq')
 
-local on_attach = function(client, bufferNum)
+local on_attach = function(_client, bufferNum)
   local lsp_key_opts = {
     noremap = true,
     silent = true,
@@ -395,20 +411,24 @@ lspconfig.tsserver.setup(coq.lsp_ensure_capabilities({
 local null_ls = require("null-ls")
 require("null-ls.helpers")
 
+local diagnostics = null_ls.builtins.diagnostics
+
 null_ls.setup(coq.lsp_ensure_capabilities({
   sources = {
-    null_ls.builtins.diagnostics.cppcheck,
-    null_ls.builtins.diagnostics.credo,
-    null_ls.builtins.diagnostics.hadolint,
-    null_ls.builtins.diagnostics.markdownlint,
-    null_ls.builtins.diagnostics.phpstan,
-    null_ls.builtins.diagnostics.pylint,
-    null_ls.builtins.diagnostics.mypy,
-    null_ls.builtins.diagnostics.shellcheck,
-    null_ls.builtins.diagnostics.statix,
-    null_ls.builtins.diagnostics.vint,
-    null_ls.builtins.diagnostics.revive,
-    null_ls.builtins.diagnostics.zsh,
+    diagnostics.checkmake,
+    diagnostics.cppcheck,
+    diagnostics.credo,
+    diagnostics.hadolint,
+    diagnostics.luacheck,
+    diagnostics.markdownlint,
+    diagnostics.mypy,
+    diagnostics.phpstan,
+    diagnostics.pylint,
+    diagnostics.revive,
+    diagnostics.shellcheck,
+    diagnostics.statix,
+    diagnostics.vint,
+    diagnostics.zsh,
   },
 }))
 
