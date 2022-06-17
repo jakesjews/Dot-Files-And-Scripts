@@ -22,6 +22,7 @@ vim.opt.foldmethod = 'indent'
 vim.opt.swapfile = false
 vim.opt.scrolloff = 1
 vim.opt.sidescrolloff = 5
+vim.opt.hidden = false
 
 vim.keymap.set('n', 'x', '"_x') -- prevent character delete from writing to the clipboard
 vim.keymap.set('', '<C-t>', ':TestNearest<CR>')
@@ -349,9 +350,18 @@ lspconfig.sumneko_lua.setup(coq.lsp_ensure_capabilities({
   on_attach = on_attach,
   settings = {
     Lua = {
+      runtime = {
+        version = 'LuaJIT',
+      },
       diagnostics = {
         globals = { 'vim' }
-      }
+      },
+      workspace = {
+        library = vim.api.nvim_get_runtime_file("", true),
+      },
+      telemetry = {
+        enable = false,
+      },
     }
   }
 }))

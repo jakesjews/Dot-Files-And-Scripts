@@ -31,6 +31,7 @@ export SKIM_DEFAULT_COMMAND="fd --type f"
 export FZF_DEFAULT_COMMAND='fd --type f'
 export CLICOLOR=1
 export MCFLY_KEY_SCHEME=vim
+export MCFLY_FUZZY=2
 
 if [[ $platform == 'macos' ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -40,6 +41,7 @@ if [[ $platform == 'macos' ]]; then
   export HOMEBREW_NO_AUTO_UPDATE=1
   export HOMEBREW_NO_INSTALL_CLEANUP=1
   export HOMEBREW_BOOTSNAP=1
+  export HOMEBREW_UPDATE_REPORT_ALL_FORMULAE
 
   export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
   export OPENSSL_INCLUDE_DIR=/opt/homebrew/opt/openssl/include
@@ -77,7 +79,7 @@ if [[ $platform == 'macos' ]]; then
   export PATH=/opt/homebrew/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9_HOME/bin:$NIM_ROOT:$SML_ROOT:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT:$LOCAL_BIN_ROOT:$LLVM_ROOT:$CABAL_DIR:$BINGO_ROOT:$ESCRIPTS_ROOT:$DOTNET_TOOLS_ROOT:$DENO_ROOT:$HOME/.bin
 fi
 
-plugins=(coffee colored-man-pages copyfile cpanm dash dotnet encode64 extract fast-syntax-highlighting golang grunt history-substring-search httpie ipfs jira jsontools mix ng npm pip gitfast pod rbenv react-native redis-cli rsync rust sbt scala sdk supervisor terraform tmux tmuxinator yarn zoxide)
+plugins=(coffee colored-man-pages copyfile cpanm dash dotnet encode64 extract golang grunt history-substring-search httpie ipfs jira jsontools mix ng npm pip gitfast pod rbenv react-native redis-cli rsync rust sbt scala sdk supervisor terraform tmux tmuxinator yarn zoxide)
 
 autoload zargs
 autoload zmv
@@ -112,7 +114,6 @@ alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
 alias git-oops="git reset --soft HEAD~"
 alias sl="ls"
 alias flush-cache="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
-alias mux="tmuxinator"
 alias redis-master="redis-cli -h qa-db -p 26379 SENTINEL get-master-addr-by-name eflex-redis"
 alias vim='nvim'
 alias vi='nvim'
@@ -120,6 +121,10 @@ alias git-graph="git commit-graph write --reachable --changed-paths"
 alias mongo=mongosh
 alias bash="/opt/homebrew/bin/bash"
 alias make="/opt/homebrew/opt/make/libexec/gnubin/make"
+
+mux() {
+  tmuxinator start $1 --suppress-tmux-version-warning
+}
 
 function clean-eflex() {
   tmux kill-server
@@ -144,6 +149,9 @@ function clean-eflex-dir() {
   git lfs prune
   make clean
   cd ${HOME}/dev/eflexsystems/eflex2
+  git remote prune origin
+  git gc --force
+  git lfs prune
   make clean
 }
 
@@ -207,7 +215,7 @@ function rust-mode() {
   alias license=licensor
   alias cloc=tokei
   alias mutt=meli
-  alias cut=hck
+  alias cut=tuc
   alias cd=z
   alias awk=frawk
   alias markdown=comrak
@@ -291,10 +299,7 @@ function update() {
 
   echo "update zsh plugins"
   omz update --unattended
-  git -C "$HOME/.oh-my-zsh/custom/plugins/fast-syntax-highlighting" pull
-  git -C "$HOME/.oh-my-zsh/custom/plugins/zsh-autocomplete" pull
-  git -C "$HOME/.oh-my-zsh/custom/themes/dracula" pull
-  git -C "$HOME/.config/wezterm/dracula/" pull
+  # git -C "$HOME/.oh-my-zsh/custom/themes/dracula" pull
 
   echo "ugrade tmux plugins"
   "$HOME/.tmux/plugins/tpm/bin/update_plugins" all
@@ -352,4 +357,5 @@ if [[ $platform == 'macos' ]]; then
   source "$HOME/.sdkman/bin/sdkman-init.sh"
   source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
   source /opt/homebrew/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+  source /opt/homebrew/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 fi
