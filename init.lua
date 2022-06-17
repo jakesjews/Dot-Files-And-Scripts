@@ -35,8 +35,6 @@ vim.keymap.set('n', '<C-n>', ':NvimTreeToggle<CR>')
 vim.keymap.set('n', '<C-f>', ':NvimTreeFindFile<CR>')
 vim.keymap.set('n', '[', ':BufferLineCyclePrev<CR>', { silent = true })
 vim.keymap.set('n', ']', ':BufferLineCycleNext<CR>', { silent = true })
-vim.keymap.set("n", "<C-c>", "<Plug>kommentary_line_default")
-vim.keymap.set("x", "<C-c>", "<Plug>kommentary_visual_default")
 
 local install_path = vim.fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
 local packer_bootstrap = false
@@ -50,15 +48,13 @@ local packer = require('packer')
 
 packer.startup(function(use)
   use 'wbthomason/packer.nvim'
-  use 'nvim-lua/plenary.nvim'
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
-  use 'tpope/vim-dispatch'
-  use 'b3nj5m1n/kommentary'
+  use 'p00f/nvim-ts-rainbow'
+  use 'numToStr/Comment.nvim'
   use 'machakann/vim-sandwich'
   use { 'junegunn/fzf', run = function() vim.fn['fzf#install']() end }
   use 'junegunn/fzf.vim'
   use { 'jesseleite/vim-agriculture', commit = 'd8f0aec03fdec53c61d40fd92cd825f097f4ac78' }
-  use 'editorconfig/editorconfig-vim'
   use { 'dracula/vim', as = 'dracula' }
   use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons' }
   use 'rizzatti/dash.vim'
@@ -70,28 +66,26 @@ packer.startup(function(use)
     requires = { "sukima/vim-javascript-imports" }
   }
   use 'tpope/vim-dadbod'
-  use 'tpope/vim-fugitive'
+  use { 'tpope/vim-fugitive', requires = 'tpope/vim-dispatch' }
   use { 'eraserhd/parinfer-rust', run = 'cargo build --release' }
   use 'tpope/vim-sleuth'
-  use 'tpope/vim-projectionist'
+  use 'editorconfig/editorconfig-vim'
   use { 'michaelb/sniprun', run = 'bash install.sh' }
   use 'lukas-reineke/indent-blankline.nvim'
   use 'andymass/vim-matchup'
   use 'norcalli/nvim-colorizer.lua'
-  use 'tversteeg/registers.nvim'
   use 'mfussenegger/nvim-dap'
   use 'Pocco81/DAPInstall.nvim'
   use 'neovim/nvim-lspconfig'
-  use 'jose-elias-alvarez/null-ls.nvim'
+  use { 'jose-elias-alvarez/null-ls.nvim', requires = 'nvim-lua/plenary.nvim' }
   use 'b0o/schemastore.nvim'
-  use 'simrat39/rust-tools.nvim'
-  use 'kosayoda/nvim-lightbulb'
-  use 'weilbith/nvim-code-action-menu'
+  use { 'simrat39/rust-tools.nvim', requires = 'nvim-lua/plenary.nvim' }
+  use { 'kosayoda/nvim-lightbulb', requires = 'antoinemadec/FixCursorHold.nvim' }
+  use { 'weilbith/nvim-code-action-menu', cmd = 'CodeActionMenu' }
   use { 'ms-jpq/coq_nvim', branch = 'coq', run = ":COQdeps" }
-  use { 'ms-jpq/coq.artifacts', branch = 'artifacts' }
   use { 'ms-jpq/coq.thirdparty', branch = '3p' }
 
-  use { 'scalameta/nvim-metals', requires = { "nvim-lua/plenary.nvim" } }
+  use { 'scalameta/nvim-metals', requires = 'nvim-lua/plenary.nvim' }
   use 'CH-DanReif/haproxy.vim'
   use 'IrenejMarc/vim-mint'
   use 'MTDL9/vim-log-highlighting'
@@ -122,9 +116,9 @@ packer.startup(function(use)
   use 'robbles/logstash.vim'
   use 'solarnz/thrift.vim'
   use 'thyrgle/vim-dyon'
-  use 'tpope/vim-rails'
+  use { 'tpope/vim-rails', requires = 'tpope/vim-dispatch' }
   use { 'tpope/vim-fireplace', ft = 'clojure' }
-  use { 'tpope/vim-salve', ft = 'clojure' }
+  use { 'tpope/vim-salve', ft = 'clojure', requires = 'tpope/vim-dispatch' }
   use 'vim-crystal/vim-crystal'
   use 'vmchale/ion-vim'
   use 'wavded/vim-stylus'
@@ -208,10 +202,7 @@ vim.api.nvim_create_autocmd("TextYankPost", { callback = function()
   vim.highlight.on_yank({ higroup="IncSearch", timeout=150, on_visual=true })
 end })
 
-vim.api.nvim_create_autocmd("BufEnter", {
-  pattern = "CursorHold,CursorHoldI *",
-  callback = require('nvim-lightbulb').update_lightbulb
-})
+require('nvim-lightbulb').setup({ autocmd = { enabled = true } })
 
 vim.cmd('cnoreabbrev rg RgRaw')
 vim.cmd('cnoreabbrev Rg RgRaw')
@@ -222,10 +213,18 @@ vim.cmd('hi! link SpecialComment DraculaCyan')
 vim.cmd('hi! link Type DraculaCyan')
 vim.cmd('hi Normal guibg=NONE ctermbg=NONE')
 
-vim.g.kommentary_create_default_mappings = false
-require('kommentary.config').configure_language("default", {
-  prefer_single_line_comments = true,
+require('Comment').setup({
+  mappings = {
+    basic = false,
+    extra = false,
+    extended = false,
+  }
 })
+
+require('Comment.ft').set('handlebars', '{{!-- %s --}}')
+
+vim.keymap.set("n", "<C-c>", "<Plug>(comment_toggle_current_linewise)")
+vim.keymap.set("x", "<C-c>", "<Plug>(comment_toggle_linewise_visual)")
 
 require('nvim-treesitter.configs').setup {
   ensure_installed = "all",
@@ -235,6 +234,10 @@ require('nvim-treesitter.configs').setup {
   ignore_install = { "norg", "phpdoc" },
   matchup = {
     enable = true,
+  },
+  rainbow = {
+    enable = true,
+    extended_mode = true,
   },
   incremental_selection = {
     enable = true,
@@ -250,9 +253,21 @@ require('nvim-treesitter.configs').setup {
 vim.g.coq_settings = {
   auto_start = 'shut-up',
   xdg = true,
+  match = {
+    unifying_chars = { "-", "_", "." }, -- fix completions after .
+  },
   clients = {
+    tags = {
+      enabled = false,
+    },
+    tmux = {
+      enabled = false,
+    },
     paths = {
       resolution = { "file" },
+    },
+    snippets = {
+      warn = {},
     },
   },
 }
@@ -340,6 +355,7 @@ lspconfig.jsonls.setup(coq.lsp_ensure_capabilities({
   settings = {
     json = {
       schemas = require('schemastore').json.schemas(),
+      validate = { enable = true },
     },
   },
 }))
