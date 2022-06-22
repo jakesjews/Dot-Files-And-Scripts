@@ -75,8 +75,9 @@ if [[ $platform == 'macos' ]]; then
   export DOTNET_TOOLS_ROOT="$HOME/.dotnet/tools"
   export DENO_ROOT="$HOME/.deno/bin"
   export PORTER_ROOT="$HOME/.porter"
+  export FOUNDRY_ROOT="$HOME/.foundry/.bin"
 
-  export PATH=/opt/homebrew/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9_HOME/bin:$NIM_ROOT:$SML_ROOT:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT:$LOCAL_BIN_ROOT:$LLVM_ROOT:$CABAL_DIR:$BINGO_ROOT:$ESCRIPTS_ROOT:$DOTNET_TOOLS_ROOT:$DENO_ROOT:$HOME/.bin
+  export PATH=/opt/homebrew/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9_HOME/bin:$NIM_ROOT:$SML_ROOT:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT:$LOCAL_BIN_ROOT:$LLVM_ROOT:$CABAL_DIR:$BINGO_ROOT:$ESCRIPTS_ROOT:$DOTNET_TOOLS_ROOT:$DENO_ROOT:$FOUNDRY_ROOT:$HOME/.bin
 fi
 
 plugins=(coffee colored-man-pages copyfile cpanm dash dotnet encode64 extract golang grunt history-substring-search httpie ipfs jira jsontools mix ng npm pip gitfast pod rbenv react-native redis-cli rsync rust sbt scala sdk supervisor terraform tmux tmuxinator yarn zoxide)
@@ -122,7 +123,7 @@ alias mongo=mongosh
 alias bash="/opt/homebrew/bin/bash"
 alias make="/opt/homebrew/opt/make/libexec/gnubin/make"
 
-mux() {
+function mux() {
   tmuxinator start $1 --suppress-tmux-version-warning
 }
 

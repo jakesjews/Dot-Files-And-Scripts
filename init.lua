@@ -1,7 +1,6 @@
 -- luacheck: globals vim
 vim.opt.number = true
 vim.opt.autowrite = true
-vim.opt.termguicolors = true
 vim.opt.backup = false
 vim.opt.writebackup = false
 vim.opt.updatetime = 300
@@ -54,45 +53,43 @@ packer.startup(function(use)
   use 'machakann/vim-sandwich'
   use { 'junegunn/fzf', run = function() vim.fn['fzf#install']() end }
   use 'junegunn/fzf.vim'
-  use { 'jesseleite/vim-agriculture', commit = 'd8f0aec03fdec53c61d40fd92cd825f097f4ac78' }
-  use { 'dracula/vim', as = 'dracula' }
+  use 'jesseleite/vim-agriculture'
+  use 'Mofiqul/dracula.nvim'
   use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons' }
   use 'rizzatti/dash.vim'
   use 'junegunn/vim-easy-align'
-  use 'vim-test/vim-test'
-  use { 'rcarriga/vim-ultest', run = ':UpdateRemotePlugins' }
   use { 'jakesjews/vim-ember-imports',
     ft = {'coffee', 'javascript', 'typescript'},
-    requires = { "sukima/vim-javascript-imports" }
+    requires = "sukima/vim-javascript-imports"
   }
   use 'tpope/vim-dadbod'
   use { 'tpope/vim-fugitive', requires = 'tpope/vim-dispatch' }
   use { 'eraserhd/parinfer-rust', run = 'cargo build --release' }
   use 'tpope/vim-sleuth'
-  use 'editorconfig/editorconfig-vim'
+  use 'gpanders/editorconfig.nvim'
   use { 'michaelb/sniprun', run = 'bash install.sh' }
   use 'lukas-reineke/indent-blankline.nvim'
   use 'andymass/vim-matchup'
-  use 'norcalli/nvim-colorizer.lua'
+  use 'NvChad/nvim-colorizer.lua'
   use 'mfussenegger/nvim-dap'
-  use 'Pocco81/DAPInstall.nvim'
+  use 'Pocco81/dap-buddy.nvim'
   use 'neovim/nvim-lspconfig'
   use { 'jose-elias-alvarez/null-ls.nvim', requires = 'nvim-lua/plenary.nvim' }
   use 'b0o/schemastore.nvim'
-  use { 'simrat39/rust-tools.nvim', requires = 'nvim-lua/plenary.nvim' }
-  use { 'kosayoda/nvim-lightbulb', requires = 'antoinemadec/FixCursorHold.nvim' }
   use { 'weilbith/nvim-code-action-menu', cmd = 'CodeActionMenu' }
+  use { 'kosayoda/nvim-lightbulb', requires = 'antoinemadec/FixCursorHold.nvim' }
   use { 'ms-jpq/coq_nvim', branch = 'coq', run = ":COQdeps" }
   use { 'ms-jpq/coq.thirdparty', branch = '3p' }
 
   use { 'scalameta/nvim-metals', requires = 'nvim-lua/plenary.nvim' }
+  use { 'simrat39/rust-tools.nvim', requires = 'nvim-lua/plenary.nvim' }
+  use 'mfussenegger/nvim-jdtls'
+  use 'ionide/Ionide-vim'
   use 'CH-DanReif/haproxy.vim'
   use 'IrenejMarc/vim-mint'
   use 'MTDL9/vim-log-highlighting'
-  use 'McSinyx/vim-octave'
   use 'adamclerk/vim-razor'
   use 'alunny/pegjs-vim'
-  use 'brandonbloom/vim-factor'
   use 'edwinb/idris2-vim'
   use 'elubow/cql-vim'
   use 'fladson/vim-kitty'
@@ -106,8 +103,6 @@ packer.startup(function(use)
   use 'leafo/moonscript-vim'
   use 'leanprover/lean.vim'
   use 'lifepillar/pgsql.vim'
-  use { 'mityu/vim-applescript', ft = 'applescript' }
-  use 'ollykel/v-vim'
   use 'pearofducks/ansible-vim'
   use 'petRUShka/vim-opencl'
   use 'peterhoeg/vim-qml'
@@ -122,13 +117,10 @@ packer.startup(function(use)
   use 'vim-crystal/vim-crystal'
   use 'vmchale/ion-vim'
   use 'wavded/vim-stylus'
-  use 'wlangstroth/vim-racket'
+  use 'benknoble/vim-racket'
   use 'zah/nim.vim'
   use 'zebradil/hive.vim'
-  use 'rescript-lang/vim-rescript'
   use 'reasonml-editor/vim-reason-plus'
-  use 'mfussenegger/nvim-jdtls'
-  use 'ionide/Ionide-vim'
   use 'stevearc/vim-arduino'
 
   if packer_bootstrap then
@@ -136,7 +128,6 @@ packer.startup(function(use)
   end
 end)
 
-vim.g['test#strategy'] = 'neovim'
 vim.g['agriculture#disable_smart_quoting'] = 1
 
 vim.g.crystal_enable_completion = 0
@@ -208,10 +199,8 @@ vim.cmd('cnoreabbrev rg RgRaw')
 vim.cmd('cnoreabbrev Rg RgRaw')
 vim.cmd('cnoreabbrev RG RgRaw')
 
+vim.g.dracula_transparent_bg = true
 vim.cmd('colorscheme dracula')
-vim.cmd('hi! link SpecialComment DraculaCyan')
-vim.cmd('hi! link Type DraculaCyan')
-vim.cmd('hi Normal guibg=NONE ctermbg=NONE')
 
 require('Comment').setup({
   mappings = {
@@ -253,9 +242,6 @@ require('nvim-treesitter.configs').setup {
 vim.g.coq_settings = {
   auto_start = 'shut-up',
   xdg = true,
-  match = {
-    unifying_chars = { "-", "_", "." }, -- fix completions after .
-  },
   clients = {
     tags = {
       enabled = false,
@@ -267,6 +253,7 @@ vim.g.coq_settings = {
       resolution = { "file" },
     },
     snippets = {
+      enabled = false,
       warn = {},
     },
   },
@@ -358,6 +345,10 @@ lspconfig.jsonls.setup(coq.lsp_ensure_capabilities({
       validate = { enable = true },
     },
   },
+}))
+
+lspconfig.ember.setup(coq.lsp_ensure_capabilities({
+  root_dir = lspconfig.util.root_pattern('ember-cli-build.js'),
 }))
 
 lspconfig.arduino_language_server.setup(coq.lsp_ensure_capabilities({
