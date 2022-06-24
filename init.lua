@@ -27,7 +27,6 @@ vim.opt.hidden = false
 vim.keymap.set('n', 'x', '"_x') -- prevent character delete from writing to the clipboard
 vim.keymap.set('', '<C-t>', ':TestNearest<CR>')
 vim.keymap.set('', '<C-q>', ':Dash<CR>')
-vim.keymap.set('', '<C-p>', ':Files<CR>')
 vim.keymap.set('v', '<Enter>', '<Plug>(EasyAlign)')
 vim.keymap.set('v', '.', ':normal .<CR>')
 vim.keymap.set('n', '<C-n>', ':NvimTreeToggle<CR>')
@@ -51,9 +50,16 @@ packer.startup(function(use)
   use 'p00f/nvim-ts-rainbow'
   use 'numToStr/Comment.nvim'
   use 'machakann/vim-sandwich'
-  use { 'junegunn/fzf', run = function() vim.fn['fzf#install']() end }
-  use 'junegunn/fzf.vim'
-  use 'jesseleite/vim-agriculture'
+  use { 'nvim-telescope/telescope.nvim',
+    requires = {
+        { 'nvim-lua/plenary.nvim' },
+        { 'nvim-telescope/telescope-live-grep-args.nvim' }
+    }
+  }
+  use {
+    'nvim-telescope/telescope-fzf-native.nvim',
+    run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
+  }
   use 'Mofiqul/dracula.nvim'
   use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons' }
   use 'rizzatti/dash.vim'
@@ -128,7 +134,7 @@ packer.startup(function(use)
   end
 end)
 
-vim.g['agriculture#disable_smart_quoting'] = 1
+-- vim.g['agriculture#disable_smart_quoting'] = 1
 
 vim.g.crystal_enable_completion = 0
 
@@ -144,7 +150,7 @@ vim.g.ansible_template_syntaxes = {
   ['*.conf.j2'] = 'dosini',
 }
 
-vim.g.fzf_layout = { window = { width = 0.9, height = 0.8 } }
+-- vim.g.fzf_layout = { window = { width = 0.9, height = 0.8 } }
 
 vim.g.matchup_matchparen_offscreen = { method = 'popup' }
 
@@ -194,10 +200,6 @@ vim.api.nvim_create_autocmd("TextYankPost", { callback = function()
 end })
 
 require('nvim-lightbulb').setup({ autocmd = { enabled = true } })
-
-vim.cmd('cnoreabbrev rg RgRaw')
-vim.cmd('cnoreabbrev Rg RgRaw')
-vim.cmd('cnoreabbrev RG RgRaw')
 
 vim.g.dracula_transparent_bg = true
 vim.cmd('colorscheme dracula')
@@ -473,3 +475,38 @@ require('nvim-tree').setup {
     }
   },
 }
+
+local telescope = require('telescope')
+local telescope_actions = require("telescope.actions")
+local telescope_builtin = require('telescope.builtin')
+local telescope_state = require('telescope.actions.state')
+
+local function multi_select(prompt_bufnr)
+  local picker = telescope_state.get_current_picker(prompt_bufnr)
+  local multi = picker:get_multi_selection()
+  if #multi > 1 then
+    telescope_actions.send_selected_to_qflist(prompt_bufnr)
+    telescope_actions.open_qflist(prompt_bufnr)
+  else
+    telescope_actions.select_default(prompt_bufnr)
+  end
+end
+
+telescope.setup({
+  defaults = {
+    sorting_strategy = 'ascending',
+    mappings = {
+      i = {
+        ['<CR>'] = multi_select
+      },
+      n = {
+        ['<CR>'] = multi_select
+      },
+    }
+  },
+})
+telescope.load_extension('fzf')
+telescope.load_extension('live_grep_args')
+
+vim.keymap.set('', '<C-p>', telescope_builtin.find_files)
+vim.keymap.set('', '<C-e>', telescope.extensions.live_grep_args.live_grep_args)
