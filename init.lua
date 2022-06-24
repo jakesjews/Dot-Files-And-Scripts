@@ -85,7 +85,7 @@ packer.startup(function(use)
   use { 'simrat39/rust-tools.nvim', requires = 'nvim-lua/plenary.nvim' }
   use 'mfussenegger/nvim-jdtls'
   use 'ionide/Ionide-vim'
-  use 'CH-DanReif/haproxy.vim'
+  use 'Joorem/vim-haproxy'
   use 'IrenejMarc/vim-mint'
   use 'MTDL9/vim-log-highlighting'
   use 'adamclerk/vim-razor'
@@ -101,7 +101,7 @@ packer.startup(function(use)
   use 'katusk/vim-qkdb-syntax'
   use 'kchmck/vim-coffee-script'
   use 'leafo/moonscript-vim'
-  use 'leanprover/lean.vim'
+  use 'Julian/lean.nvim'
   use 'lifepillar/pgsql.vim'
   use 'pearofducks/ansible-vim'
   use 'petRUShka/vim-opencl'
