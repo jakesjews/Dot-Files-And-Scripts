@@ -134,8 +134,6 @@ packer.startup(function(use)
   end
 end)
 
--- vim.g['agriculture#disable_smart_quoting'] = 1
-
 vim.g.crystal_enable_completion = 0
 
 vim.g.vim_javascript_imports_multiline_max_col = 120
@@ -149,8 +147,6 @@ vim.g.ansible_template_syntaxes = {
   ['*.js.j2'] = 'javascript',
   ['*.conf.j2'] = 'dosini',
 }
-
--- vim.g.fzf_layout = { window = { width = 0.9, height = 0.8 } }
 
 vim.g.matchup_matchparen_offscreen = { method = 'popup' }
 
@@ -497,9 +493,13 @@ telescope.setup({
     sorting_strategy = 'ascending',
     mappings = {
       i = {
+        ['<esc>'] = telescope_actions.close,
+        ['<C-a>'] = telescope_actions.toggle_all,
         ['<CR>'] = multi_select
       },
       n = {
+        ['<esc>'] = telescope_actions.close,
+        ['<C-a>'] = telescope_actions.toggle_all,
         ['<CR>'] = multi_select
       },
     }
