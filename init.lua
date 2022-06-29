@@ -270,7 +270,6 @@ local servers = {
   "elmls",
   "ember",
   "erlangls",
-  "eslint",
   "fortls",
   "gdscript",
   "gopls",
@@ -280,6 +279,7 @@ local servers = {
   "html",
   "julials",
   "kotlin_language_server",
+  "m68k",
   "mint",
   "ocamllsp",
   "openscad_ls",
@@ -328,6 +328,10 @@ end
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup(coq.lsp_ensure_capabilities({ on_attach = on_attach }))
 end
+
+lspconfig.eslint.setup(coq.lsp_ensure_capabilities({
+  useESLintClass = true,
+}))
 
 lspconfig.ansiblels.setup(coq.lsp_ensure_capabilities({
   on_attach = on_attach,
