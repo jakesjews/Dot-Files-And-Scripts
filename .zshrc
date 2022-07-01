@@ -122,6 +122,7 @@ alias git-graph="git commit-graph write --reachable --changed-paths"
 alias mongo=mongosh
 alias bash="/opt/homebrew/bin/bash"
 alias make="/opt/homebrew/opt/make/libexec/gnubin/make"
+alias rg-all="rg -uuuu"
 
 function mux() {
   tmuxinator start $1 --suppress-tmux-version-warning
