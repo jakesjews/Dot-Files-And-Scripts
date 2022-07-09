@@ -76,8 +76,9 @@ if [[ $platform == 'macos' ]]; then
   export DENO_ROOT="$HOME/.deno/bin"
   export PORTER_ROOT="$HOME/.porter"
   export FOUNDRY_ROOT="$HOME/.foundry/.bin"
+  export BUN_INSTALL="$HOME/.bun"
 
-  export PATH=/opt/homebrew/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9_HOME/bin:$NIM_ROOT:$SML_ROOT:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT:$LOCAL_BIN_ROOT:$LLVM_ROOT:$CABAL_DIR:$BINGO_ROOT:$ESCRIPTS_ROOT:$DOTNET_TOOLS_ROOT:$DENO_ROOT:$FOUNDRY_ROOT:$HOME/.bin
+  export PATH=/opt/homebrew/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9_HOME/bin:$NIM_ROOT:$SML_ROOT:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT:$LOCAL_BIN_ROOT:$LLVM_ROOT:$CABAL_DIR:$BINGO_ROOT:$ESCRIPTS_ROOT:$DOTNET_TOOLS_ROOT:$DENO_ROOT:$FOUNDRY_ROOT:$BUN_INSTALL/bin:$HOME/.bin
 fi
 
 plugins=(coffee colored-man-pages copyfile cpanm dash dotnet encode64 extract golang grunt history-substring-search httpie ipfs jira jsontools mix ng npm pip gitfast pod rbenv react-native redis-cli rsync rust sbt scala sdk supervisor terraform tmux tmuxinator yarn zoxide)
@@ -361,3 +362,7 @@ if [[ $platform == 'macos' ]]; then
   source /opt/homebrew/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
   source /opt/homebrew/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 fi
+
+
+# bun completions
+[ -s "/Users/jacob/.bun/_bun" ] && source "/Users/jacob/.bun/_bun"

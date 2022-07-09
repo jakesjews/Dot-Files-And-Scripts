@@ -111,7 +111,6 @@ packer.startup(function(use)
   use 'lifepillar/pgsql.vim'
   use 'pearofducks/ansible-vim'
   use 'petRUShka/vim-opencl'
-  use 'peterhoeg/vim-qml'
   use 'purescript-contrib/purescript-vim'
   use { 'raimon49/requirements.txt.vim', ft = 'requirements' }
   use 'robbles/logstash.vim'
@@ -214,6 +213,7 @@ vim.keymap.set("n", "<C-c>", "<Plug>(comment_toggle_current_linewise)")
 vim.keymap.set("x", "<C-c>", "<Plug>(comment_toggle_linewise_visual)")
 
 require('nvim-treesitter.configs').setup {
+  auto_install = true,
   ensure_installed = "all",
   highlight = {
     enable = true,
@@ -258,7 +258,6 @@ vim.g.coq_settings = {
 }
 
 local servers = {
-  "awk_ls",
   "bashls",
   "clojure_lsp",
   "cmake",
@@ -330,6 +329,7 @@ for _, lsp in ipairs(servers) do
 end
 
 lspconfig.eslint.setup(coq.lsp_ensure_capabilities({
+  on_attach = on_attach,
   useESLintClass = true,
 }))
 
@@ -350,6 +350,7 @@ lspconfig.jsonls.setup(coq.lsp_ensure_capabilities({
 }))
 
 lspconfig.ember.setup(coq.lsp_ensure_capabilities({
+  on_attach = on_attach,
   root_dir = lspconfig.util.root_pattern('ember-cli-build.js'),
 }))
 
@@ -417,12 +418,16 @@ lspconfig.tsserver.setup(coq.lsp_ensure_capabilities({
   }
 }))
 
-local null_ls = require("null-ls")
-require("null-ls.helpers")
+lspconfig.awk_ls.setup(coq.lsp_ensure_capabilities({
+  on_attach = on_attach,
+  cmd = { "/opt/homebrew/opt/node@16/bin/node", '/opt/homebrew/bin/awk-language-server', 'start' },
+}))
 
+local null_ls = require("null-ls")
 local diagnostics = null_ls.builtins.diagnostics
 
 null_ls.setup(coq.lsp_ensure_capabilities({
+  on_attach = on_attach,
   sources = {
     diagnostics.checkmake,
     diagnostics.cppcheck,
