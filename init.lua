@@ -54,7 +54,8 @@ packer.startup(function(use)
     requires = {
         { 'nvim-lua/plenary.nvim' },
         { 'nvim-telescope/telescope-live-grep-args.nvim' }
-    }
+    },
+    branch = '0.1.x',
   }
   use {
     'nvim-telescope/telescope-fzf-native.nvim',
@@ -84,7 +85,7 @@ packer.startup(function(use)
   use 'b0o/schemastore.nvim'
   use { 'weilbith/nvim-code-action-menu', cmd = 'CodeActionMenu' }
   use { 'kosayoda/nvim-lightbulb', requires = 'antoinemadec/FixCursorHold.nvim' }
-  use { 'ms-jpq/coq_nvim', branch = 'coq', run = ":COQdeps" }
+  use { 'ms-jpq/coq_nvim', branch = 'coq' }
   use { 'ms-jpq/coq.thirdparty', branch = '3p' }
 
   use { 'scalameta/nvim-metals', requires = 'nvim-lua/plenary.nvim' }
@@ -439,27 +440,29 @@ null_ls.setup(coq.lsp_ensure_capabilities({
     diagnostics.phpstan,
     diagnostics.pylint,
     diagnostics.revive,
-    diagnostics.shellcheck,
     diagnostics.statix,
     diagnostics.vint,
     diagnostics.zsh,
   },
 }))
 
+require('rust-tools').setup(coq.lsp_ensure_capabilities({
+  on_attach = on_attach,
+}))
+
 require("coq_3p") {
   { src = "nvimlua", short_name = "nLUA", conf_only = true },
 }
 
-require('rust-tools').setup(coq.lsp_ensure_capabilities({}))
-
 require('colorizer').setup()
 
-require('nvim-tree').setup {
+require('nvim-tree').setup({
   git = {
     enable = true,
     ignore = true,
   },
   renderer = {
+    add_trailing = true,
     highlight_git = true,
     highlight_opened_files = 'all',
     icons = {
@@ -477,9 +480,9 @@ require('nvim-tree').setup {
   filters = {
     custom = {
       '.git',
-    }
+    },
   },
-}
+})
 
 local telescope = require('telescope')
 local telescope_actions = require("telescope.actions")
