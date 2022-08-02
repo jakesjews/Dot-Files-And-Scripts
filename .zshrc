@@ -63,7 +63,6 @@ if [[ $platform == 'macos' ]]; then
   export NIM_ROOT="$HOME/.nimble/bin"
   export SML_ROOT=/usr/local/smlnj/bin
   export ESVU_ROOT="$HOME/.esvu/bin"
-  export SDKMAN_DIR="$HOME/.sdkman"
   export ARC_DIR="$HOME/.arc"
   export CURL_HOME="/opt/homebrew/opt/curl/bin"
   export EMACS_HOME="$HOME/.emacs.d/bin"
@@ -78,10 +77,10 @@ if [[ $platform == 'macos' ]]; then
   export FOUNDRY_ROOT="$HOME/.foundry/.bin"
   export BUN_INSTALL="$HOME/.bun"
 
-  export PATH=/opt/homebrew/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9_HOME/bin:$NIM_ROOT:$SML_ROOT:$ESVU_ROOT:$SDKMAN_DIR/bin:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT:$LOCAL_BIN_ROOT:$LLVM_ROOT:$CABAL_DIR:$BINGO_ROOT:$ESCRIPTS_ROOT:$DOTNET_TOOLS_ROOT:$DENO_ROOT:$FOUNDRY_ROOT:$BUN_INSTALL/bin:$HOME/.bin
+  export PATH=/opt/homebrew/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9_HOME/bin:$NIM_ROOT:$SML_ROOT:$ESVU_ROOT:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT:$LOCAL_BIN_ROOT:$LLVM_ROOT:$CABAL_DIR:$BINGO_ROOT:$ESCRIPTS_ROOT:$DOTNET_TOOLS_ROOT:$DENO_ROOT:$FOUNDRY_ROOT:$BUN_INSTALL/bin:$HOME/.bin
 fi
 
-plugins=(coffee colored-man-pages copyfile cpanm dash dotnet encode64 extract golang grunt history-substring-search httpie ipfs jira jsontools mix ng npm pip gitfast pod rbenv react-native redis-cli rsync rust sbt scala sdk supervisor terraform tmux tmuxinator yarn zoxide)
+plugins=(coffee colored-man-pages copyfile cpanm dash dotnet encode64 extract golang grunt history-substring-search httpie ipfs jira jsontools mix ng npm pip gitfast pod rbenv react-native redis-cli rsync rust sbt scala supervisor terraform tmux tmuxinator yarn zoxide)
 
 autoload zargs
 autoload zmv
@@ -185,11 +184,6 @@ function docker-clean {
   docker-sync-stack clean
   docker-compose down --volumes
   docker system prune --volumes --force
-}
-
-function graal() {
-  sdk use java 20.2.0.r11-grl
-  export PATH=$HOME/.sdkman/candidates/java/20.2.0.r11-grl/bin:$PATH
 }
 
 function rust-mode() {
@@ -310,11 +304,6 @@ function update() {
   echo "update anarki"
   git -C "$HOME/.arc" pull
 
-  echo "update jdks"
-  sdk selfupdate
-  sdk update
-  sdk upgrade
-
   echo "upgrade cask packages"
   brew cu --all --quiet --yes --no-brew-update
 
@@ -354,9 +343,10 @@ function zvm_after_init() {
 if [[ $platform == 'macos' ]]; then
   eval $(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib=$HOME/.perl5)
   source "$HOME/.opam/opam-init/init.zsh"
-  source "$HOME/.sdkman/bin/sdkman-init.sh"
   source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
   source /opt/homebrew/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
   source /opt/homebrew/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 fi
 
+# Fig post block. Keep at the bottom of this file.
+[[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && . "$HOME/.fig/shell/zshrc.post.zsh"
