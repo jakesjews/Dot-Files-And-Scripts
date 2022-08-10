@@ -123,7 +123,6 @@ packer.startup(function(use)
   use 'vim-crystal/vim-crystal'
   use 'vmchale/ion-vim'
   use 'wavded/vim-stylus'
-  use 'benknoble/vim-racket'
   use 'zah/nim.vim'
   use 'zebradil/hive.vim'
   use 'reasonml-editor/vim-reason-plus'

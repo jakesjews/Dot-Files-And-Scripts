@@ -288,12 +288,18 @@ function update() {
     --directory "$omnisharp_dir"
   rm "$omnisharp_tarball"
 
+  echo "update go packages"
+  for package in $(bingo installed -q)
+  do
+    bingo update "$package" --quiet
+  done
+
   echo "update racket packages"
   raco pkg update --all -j 8 --batch --no-trash
 
   echo "update zsh plugins"
   omz update --unattended
-  # git -C "$HOME/.oh-my-zsh/custom/themes/dracula" pull
+  git -C "$HOME/.oh-my-zsh/custom/themes/dracula" pull
 
   echo "ugrade tmux plugins"
   "$HOME/.tmux/plugins/tpm/bin/update_plugins" all
@@ -303,6 +309,9 @@ function update() {
 
   echo "update anarki"
   git -C "$HOME/.arc" pull
+
+  echo "upgrade bun"
+  bun upgrade
 
   echo "upgrade cask packages"
   brew cu --all --quiet --yes --no-brew-update
@@ -346,7 +355,6 @@ if [[ $platform == 'macos' ]]; then
   source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
   source /opt/homebrew/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
   source /opt/homebrew/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+  source "$HOME/.bun/_bun"
 fi
 
-# Fig post block. Keep at the bottom of this file.
-[[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && . "$HOME/.fig/shell/zshrc.post.zsh"
