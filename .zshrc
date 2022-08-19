@@ -297,6 +297,10 @@ function update() {
   echo "update racket packages"
   raco pkg update --all -j 8 --batch --no-trash
 
+  echo "update arduino"
+  arduino-cli update
+  arduino-cli upgrade
+
   echo "update zsh plugins"
   omz update --unattended
   git -C "$HOME/.oh-my-zsh/custom/themes/dracula" pull
@@ -331,10 +335,10 @@ function update() {
 function alphabetize_files() {
   unsetopt CASE_GLOB
 
-  for x in {0..9} {a..z}
+  for i in {0..9} {a..z}
   do
-    mkdir -p "${x}"
-    mv -- "${x}"*(.) "${x}"/
+    mkdir -p "${i}"
+    mv -- "${i}"*(.) "${i}"/
   done
 }
 
@@ -357,4 +361,3 @@ if [[ $platform == 'macos' ]]; then
   source /opt/homebrew/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
   source "$HOME/.bun/_bun"
 fi
-

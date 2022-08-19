@@ -209,7 +209,9 @@ require('Comment').setup({
 
 require('Comment.ft').set('handlebars', '{{!-- %s --}}')
 
-vim.keymap.set("n", "<C-c>", "<Plug>(comment_toggle_current_linewise)")
+local comment_api = require('Comment.api')
+
+vim.keymap.set("n", "<C-c>", comment_api.toggle.linewise.current)
 vim.keymap.set("x", "<C-c>", "<Plug>(comment_toggle_linewise_visual)")
 
 require('nvim-treesitter.configs').setup {
