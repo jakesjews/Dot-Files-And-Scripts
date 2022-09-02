@@ -95,9 +95,8 @@ packer.startup(function(use)
   use 'Joorem/vim-haproxy'
   use 'IrenejMarc/vim-mint'
   use 'MTDL9/vim-log-highlighting'
-  use 'adamclerk/vim-razor'
+  use 'jlcrochet/vim-razor'
   use 'alunny/pegjs-vim'
-  use 'edwinb/idris2-vim'
   use 'elubow/cql-vim'
   use 'fladson/vim-kitty'
   use 'gkz/vim-ls'
@@ -122,8 +121,8 @@ packer.startup(function(use)
   use { 'tpope/vim-salve', ft = 'clojure', requires = 'tpope/vim-dispatch' }
   use 'vim-crystal/vim-crystal'
   use 'vmchale/ion-vim'
-  use 'wavded/vim-stylus'
-  use 'zah/nim.vim'
+  use 'iloginow/vim-stylus'
+  use 'alaviss/nim.nvim'
   use 'zebradil/hive.vim'
   use 'reasonml-editor/vim-reason-plus'
   use 'stevearc/vim-arduino'
@@ -196,8 +195,11 @@ end })
 
 require('nvim-lightbulb').setup({ autocmd = { enabled = true } })
 
-vim.g.dracula_transparent_bg = true
-vim.cmd('colorscheme dracula')
+require('dracula').setup({
+  transparent_bg = true,
+})
+
+vim.cmd[[colorscheme dracula]]
 
 require('Comment').setup({
   mappings = {
@@ -261,6 +263,7 @@ vim.g.coq_settings = {
 
 local servers = {
   "bashls",
+  "bufls",
   "clojure_lsp",
   "cmake",
   "crystalline",
@@ -282,6 +285,7 @@ local servers = {
   "kotlin_language_server",
   "m68k",
   "mint",
+  "mlir_lsp_server",
   "ocamllsp",
   "openscad_ls",
   "perlpls",

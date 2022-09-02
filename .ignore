@@ -16,6 +16,7 @@ dist
 **/WebApi/Content/**
 yarn.lock
 Cargo.lock
+package-lock.json
 license.txt
 devLicense.js
 **/handScannerApp/vendor/**
@@ -25,3 +26,7 @@ devLicense.js
 **/eVisionTrigger/Source/Components/**
 *.min.*
 *.map
+*.deb
+*.gz
+*.rpm
+*.orig

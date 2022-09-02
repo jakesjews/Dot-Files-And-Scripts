@@ -187,47 +187,48 @@ function docker-clean {
 }
 
 function rust-mode() {
-  alias grep=rg
-  alias cat=bat
-  alias ps=procs
-  alias xargs=rargs
-  alias ls=exa
-  alias find=fd
-  alias sed=sd
-  alias uniq=huniq
-  alias du=dua
-  alias cp=fcp
-  alias hexdump=hexyl
   alias ascii=chars
-  alias tree=broot
+  alias awk=frawk
   alias bc=eva
-  alias rm=rip
-  alias dd=bcp
-  alias wc=cw
-  alias nano=amp
-  alias top=btm
-  alias objdump=bingrep
+  alias cat=bat
+  alias cd=z
   alias cksum=checkasum
+  alias cloc=tokei
+  alias col=xcol
+  alias cp=fcp
+  alias curl=qurl
+  alias cut=tuc
+  alias dd=bcp
+  alias dig=dog
+  alias du=dua
+  alias find=fd
+  alias git=gix
+  alias grep=rg
+  alias hexdump=hexyl
   alias http-server=miniserve
   alias license=licensor
-  alias cloc=tokei
-  alias mutt=meli
-  alias cut=tuc
-  alias cd=z
-  alias awk=frawk
-  alias markdown=comrak
-  alias git=gix
-  alias time=hyperfine
   alias locate=lolcate
-  alias sleep=snore
+  alias ls=exa
+  alias markdown=comrak
+  alias mutt=meli
   alias mv=pmv
-  alias wait=stare
-  alias dig=dog
-  alias ping=gping
-  alias curl=qurl
-  alias col=xcol
-  alias tmux=zellij
+  alias nano=amp
+  alias objdump=bingrep
   alias pigz=crabz
+  alias ping=gping
+  alias ps=procs
+  alias rm=rip
+  alias sed=sd
+  alias sleep=snore
+  alias time=hyperfine
+  alias tmux=zellij
+  alias top=btm
+  alias tree=broot
+  alias uniq=huniq
+  alias wait=stare
+  alias watch=hwatch
+  alias wc=cw
+  alias xargs=rargs
 }
 
 function liq() {
@@ -354,7 +355,7 @@ function zvm_after_init() {
 }
 
 if [[ $platform == 'macos' ]]; then
-  eval $(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib=$HOME/.perl5)
+  eval $(perl -I$HOME/.perl5/lib/perl5 -Mlocal::lib=$HOME/.perl5)
   source "$HOME/.opam/opam-init/init.zsh"
   source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
   source /opt/homebrew/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
