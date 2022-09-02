@@ -14,3 +14,6 @@ windows:
   - webApi:
       panes:
         - cd api && ./run
+  - selenium:
+      panes:
+        - cd integration && ./selenium-start
