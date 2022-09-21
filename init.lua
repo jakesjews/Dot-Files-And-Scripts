@@ -26,8 +26,7 @@ vim.opt.hidden = false
 
 vim.keymap.set('n', 'x', '"_x') -- prevent character delete from writing to the clipboard
 vim.keymap.set('', '<C-t>', ':TestNearest<CR>')
-vim.keymap.set('', '<C-q>', ':Dash<CR>')
-vim.keymap.set('v', '<Enter>', '<Plug>(EasyAlign)')
+vim.keymap.set('', '<C-q>', ':DashWord<CR>')
 vim.keymap.set('v', '.', ':normal .<CR>')
 vim.keymap.set('n', '<C-n>', ':NvimTreeToggle<CR>')
 vim.keymap.set('n', '<C-f>', ':NvimTreeFindFile<CR>')
@@ -49,28 +48,28 @@ packer.startup(function(use)
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
   use 'p00f/nvim-ts-rainbow'
   use 'numToStr/Comment.nvim'
-  use 'machakann/vim-sandwich'
+  use({ "kylechui/nvim-surround", tag = "*" })
   use { 'nvim-telescope/telescope.nvim',
     requires = {
-        { 'nvim-lua/plenary.nvim' },
-        { 'nvim-telescope/telescope-live-grep-args.nvim' }
+      { 'nvim-lua/plenary.nvim' },
+      { 'nvim-telescope/telescope-live-grep-args.nvim' }
     },
     branch = '0.1.x',
   }
   use {
     'nvim-telescope/telescope-fzf-native.nvim',
-    run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
+    run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build',
   }
   use 'Mofiqul/dracula.nvim'
   use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons' }
-  use 'rizzatti/dash.vim'
-  use 'junegunn/vim-easy-align'
+  use { 'mrjones2014/dash.nvim', run = 'make install', requires = 'nvim-telescope/telescope.nvim' }
   use { 'jakesjews/vim-ember-imports',
     ft = {'coffee', 'javascript', 'typescript'},
     requires = "sukima/vim-javascript-imports"
   }
   use 'tpope/vim-dadbod'
   use { 'tpope/vim-fugitive', requires = 'tpope/vim-dispatch' }
+  use { 'lewis6991/gitsigns.nvim', tag = 'release' }
   use { 'eraserhd/parinfer-rust', run = 'cargo build --release' }
   use 'tpope/vim-sleuth'
   use 'gpanders/editorconfig.nvim'
@@ -79,11 +78,9 @@ packer.startup(function(use)
   use 'andymass/vim-matchup'
   use 'NvChad/nvim-colorizer.lua'
   use 'mfussenegger/nvim-dap'
-  use 'Pocco81/dap-buddy.nvim'
   use 'neovim/nvim-lspconfig'
   use { 'jose-elias-alvarez/null-ls.nvim', requires = 'nvim-lua/plenary.nvim' }
   use 'b0o/schemastore.nvim'
-  use { 'weilbith/nvim-code-action-menu', cmd = 'CodeActionMenu' }
   use { 'kosayoda/nvim-lightbulb', requires = 'antoinemadec/FixCursorHold.nvim' }
   use { 'ms-jpq/coq_nvim', branch = 'coq' }
   use { 'ms-jpq/coq.thirdparty', branch = '3p' }
@@ -450,15 +447,15 @@ null_ls.setup(coq.lsp_ensure_capabilities({
   },
 }))
 
-require('rust-tools').setup(coq.lsp_ensure_capabilities({
-  on_attach = on_attach,
-}))
+require('rust-tools').setup(coq.lsp_ensure_capabilities({ on_attach = on_attach }))
 
 require("coq_3p") {
   { src = "nvimlua", short_name = "nLUA", conf_only = true },
 }
 
-require('colorizer').setup()
+require('colorizer').setup({})
+require('nvim-surround').setup({})
+require('gitsigns').setup()
 
 require('nvim-tree').setup({
   git = {
