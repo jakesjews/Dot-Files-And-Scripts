@@ -294,7 +294,7 @@ local servers = {
   "racket_langserver",
   "salt_ls",
   "solargraph",
-  "solc",
+  "solidity_ls",
   "sourcekit",
   "sqls",
   "svlangserver",
