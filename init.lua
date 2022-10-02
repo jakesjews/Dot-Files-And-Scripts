@@ -69,7 +69,6 @@ packer.startup(function(use)
   }
   use 'tpope/vim-dadbod'
   use { 'tpope/vim-fugitive', requires = 'tpope/vim-dispatch' }
-  use { 'lewis6991/gitsigns.nvim', tag = 'release' }
   use { 'eraserhd/parinfer-rust', run = 'cargo build --release' }
   use 'tpope/vim-sleuth'
   use 'gpanders/editorconfig.nvim'
@@ -81,7 +80,6 @@ packer.startup(function(use)
   use 'neovim/nvim-lspconfig'
   use { 'jose-elias-alvarez/null-ls.nvim', requires = 'nvim-lua/plenary.nvim' }
   use 'b0o/schemastore.nvim'
-  use { 'kosayoda/nvim-lightbulb', requires = 'antoinemadec/FixCursorHold.nvim' }
   use { 'ms-jpq/coq_nvim', branch = 'coq' }
   use { 'ms-jpq/coq.thirdparty', branch = '3p' }
 
@@ -190,8 +188,6 @@ vim.api.nvim_create_autocmd("TextYankPost", { callback = function()
   vim.highlight.on_yank({ higroup="IncSearch", timeout=150, on_visual=true })
 end })
 
-require('nvim-lightbulb').setup({ autocmd = { enabled = true } })
-
 require('dracula').setup({
   transparent_bg = true,
 })
@@ -270,6 +266,7 @@ local servers = {
   "dotls",
   "elmls",
   "ember",
+  "erg_language_server",
   "erlangls",
   "fortls",
   "gdscript",
@@ -332,7 +329,10 @@ end
 
 lspconfig.eslint.setup(coq.lsp_ensure_capabilities({
   on_attach = on_attach,
-  useESLintClass = true,
+  settings = {
+    useESLintClass = true,
+    packageManager = 'yarn',
+  },
 }))
 
 lspconfig.ansiblels.setup(coq.lsp_ensure_capabilities({
@@ -411,11 +411,17 @@ lspconfig.powershell_es.setup(coq.lsp_ensure_capabilities({
 
 lspconfig.tsserver.setup(coq.lsp_ensure_capabilities({
   on_attach = on_attach,
+  cmd = { 'typescript-language-server', '--stdio', '--log-level', '1', '--tsserver-log-verbosity', 'off' },
   init_options = {
     hostInfo = 'neovim',
     npmLocation = '/opt/homebrew/bin/npm',
+    tsserver = {
+      trace = 'messages',
+    },
     preferences = {
+      importModuleSpecifierPreference = 'non-relative',
       disableSuggestions = true,
+      includeCompletionsForModuleExports = false,
     },
   }
 }))
@@ -455,7 +461,6 @@ require("coq_3p") {
 
 require('colorizer').setup({})
 require('nvim-surround').setup({})
-require('gitsigns').setup()
 
 require('nvim-tree').setup({
   git = {

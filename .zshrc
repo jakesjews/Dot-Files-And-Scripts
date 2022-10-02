@@ -32,6 +32,7 @@ export FZF_DEFAULT_COMMAND='fd --type f'
 export CLICOLOR=1
 export MCFLY_KEY_SCHEME=vim
 export MCFLY_FUZZY=2
+export PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=true
 
 if [[ $platform == 'macos' ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -362,3 +363,4 @@ if [[ $platform == 'macos' ]]; then
   source /opt/homebrew/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
   source "$HOME/.bun/_bun"
 fi
+
