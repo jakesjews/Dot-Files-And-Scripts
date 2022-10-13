@@ -202,8 +202,6 @@ require('Comment').setup({
   }
 })
 
-require('Comment.ft').set('handlebars', '{{!-- %s --}}')
-
 local comment_api = require('Comment.api')
 
 vim.keymap.set("n", "<C-c>", comment_api.toggle.linewise.current)
