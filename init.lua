@@ -236,6 +236,9 @@ vim.g.coq_settings = {
   auto_start = 'shut-up',
   xdg = true,
   clients = {
+    lsp = {
+      always_on_top = {},
+    },
     tags = {
       enabled = false,
     },
