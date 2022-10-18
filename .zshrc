@@ -363,4 +363,3 @@ if [[ $platform == 'macos' ]]; then
   source /opt/homebrew/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
   source "$HOME/.bun/_bun"
 fi
-
