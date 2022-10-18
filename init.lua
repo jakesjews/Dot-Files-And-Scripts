@@ -60,7 +60,7 @@ packer.startup(function(use)
     'nvim-telescope/telescope-fzf-native.nvim',
     run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build',
   }
-  use 'jakesjews/dracula.nvim'
+  use 'Mofiqul/dracula.nvim'
   use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons' }
   use { 'mrjones2014/dash.nvim', run = 'make install', requires = 'nvim-telescope/telescope.nvim' }
   use { 'jakesjews/vim-ember-imports',
