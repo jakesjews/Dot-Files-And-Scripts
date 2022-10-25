@@ -37,7 +37,7 @@ export PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=true
 if [[ $platform == 'macos' ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 
-  export VAGRANT_DEFAULT_PROVIDER='libvirt'
+  export VAGRANT_DEFAULT_PROVIDER='vmware_desktop'
 
   export HOMEBREW_NO_AUTO_UPDATE=1
   export HOMEBREW_NO_INSTALL_CLEANUP=1
@@ -283,19 +283,6 @@ function update() {
 
   echo "upgrade dotnet tools"
   dotnet tool list -g | tail -n +3 | tr -s ' ' | cut -f 1 -d' ' | xargs -n 1 dotnet tool update -g
-  local omnisharp_dir="$HOME/.omnisharp"
-  local omnisharp_tarball="$omnisharp_dir/omnisharp.tar.gz"
-  rm -rf "${omnisharp_dir:?}/"*
-  curl \
-    --location \
-    --output "$omnisharp_tarball" \
-    'https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-osx-arm64-net6.0.tar.gz'
-  tar \
-    --extract \
-    --gunzip \
-    --file "$omnisharp_tarball" \
-    --directory "$omnisharp_dir"
-  rm "$omnisharp_tarball"
 
   echo "update go packages"
   for package in $(bingo installed -q)
