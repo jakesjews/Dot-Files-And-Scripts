@@ -121,6 +121,7 @@ packer.startup(function(use)
   use 'zebradil/hive.vim'
   use 'reasonml-editor/vim-reason-plus'
   use 'stevearc/vim-arduino'
+  use 'imsnif/kdl.vim'
 
   if packer_bootstrap then
     packer.sync()
@@ -513,12 +514,12 @@ telescope.setup({
     mappings = {
       i = {
         ['<esc>'] = telescope_actions.close,
-        ['<C-a>'] = telescope_actions.toggle_all,
+        ['<C-w>'] = telescope_actions.toggle_all,
         ['<CR>'] = multi_select
       },
       n = {
         ['<esc>'] = telescope_actions.close,
-        ['<C-a>'] = telescope_actions.toggle_all,
+        ['<C-w>'] = telescope_actions.toggle_all,
         ['<CR>'] = multi_select
       },
     }

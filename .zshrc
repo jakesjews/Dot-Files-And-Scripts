@@ -37,7 +37,7 @@ export PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=true
 if [[ $platform == 'macos' ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 
-  export VAGRANT_DEFAULT_PROVIDER='vmware_desktop'
+  export VAGRANT_DEFAULT_PROVIDER='libvirt'
 
   export HOMEBREW_NO_AUTO_UPDATE=1
   export HOMEBREW_NO_INSTALL_CLEANUP=1
@@ -81,7 +81,7 @@ if [[ $platform == 'macos' ]]; then
   export PATH=/opt/homebrew/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9_HOME/bin:$NIM_ROOT:$SML_ROOT:$ESVU_ROOT:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT:$LOCAL_BIN_ROOT:$LLVM_ROOT:$CABAL_DIR:$BINGO_ROOT:$ESCRIPTS_ROOT:$DOTNET_TOOLS_ROOT:$DENO_ROOT:$FOUNDRY_ROOT:$BUN_INSTALL/bin:$HOME/.bin
 fi
 
-plugins=(coffee colored-man-pages copyfile cpanm dash dotnet encode64 extract golang grunt history-substring-search httpie ipfs jira jsontools mix ng npm pip gitfast pod rbenv react-native redis-cli rsync rust sbt scala supervisor terraform tmux tmuxinator yarn zoxide)
+plugins=(1password coffee colored-man-pages copyfile cpanm dash dotnet encode64 extract golang grunt history-substring-search httpie ipfs jira jsontools mix ng npm pip gitfast pod rbenv react-native redis-cli rsync rust sbt scala supervisor terraform tmux tmuxinator yarn zoxide)
 
 autoload zargs
 autoload zmv
@@ -125,33 +125,43 @@ alias bash="/opt/homebrew/bin/bash"
 alias make="/opt/homebrew/opt/make/libexec/gnubin/make"
 alias rg-all="rg -uuuu"
 
-function mux() {
-  tmuxinator start $1 --suppress-tmux-version-warning
+function eflex() {
+  layout="eflex"
+  if [[ $1 != "" ]]
+  then
+    layout="$1"
+  fi
+  session=$(zellij list-sessions)
+  if [[ $session == *'eflex' ]]
+  then
+    zellij attach eflex
+  else
+    zellij --layout="$layout" --session=eflex
+  fi
+}
+
+function eflex2() {
+  eflex 'eflex2'
 }
 
 function clean-eflex() {
-  tmux kill-server
-}
-
-function restart-eflex() {
-  clean-eflex
-  mux eflex
+  zellij kill-session eflex
 }
 
 function clean-eflex-dir() {
-  rm -rf ${TMPDIR}v8-compile-cache*
-  rm -rf ${TMPDIR}broccoli-*
-  rm -rf ${TMPDIR}jacob/if-you-need-to-delete-this-open-an-issue-async-disk-cache
-  rm -rf ${TMPDIR}*Before*
-  rm -rf ${TMPDIR}*After*
-  rm -rf ${TMPDIR}*After*
+  rm -rf "${TMPDIR}"v8-compile-cache*
+  rm -rf "${TMPDIR}"broccoli-*
+  rm -rf "${TMPDIR}"jacob/if-you-need-to-delete-this-open-an-issue-async-disk-cache
+  rm -rf "${TMPDIR}"*Before*
+  rm -rf "${TMPDIR}"*After*
+  rm -rf "${TMPDIR}"*After*
   watchman watch-del-all
-  cd ${HOME}/dev/eflexsystems/eflex
+  cd "${HOME}"/dev/eflexsystems/eflex
   git remote prune origin
   git gc --force
   git lfs prune
   make clean
-  cd ${HOME}/dev/eflexsystems/eflex2
+  cd "${HOME}"/dev/eflexsystems/eflex2
   git remote prune origin
   git gc --force
   git lfs prune
@@ -159,14 +169,14 @@ function clean-eflex-dir() {
 }
 
 function count-instances() {
-  rg $1 --count | sort --key=2 --field-separator=":" --numeric-sort
+  rg "$1" --count | sort --key=2 --field-separator=":" --numeric-sort
 }
 
 function flac-to-mp3() {
   for a in ./*.flac; do
     < /dev/null ffmpeg -i "$a" -qscale:a 0 "${a[@]/%flac/mp3}"
   done;
-  rm *.flac
+  rm ./*.flac
 }
 
 function update-servers() {
@@ -174,11 +184,7 @@ function update-servers() {
 }
 
 function pwdx {
-  lsof -a -d cwd -p $1 -n -Fn | awk '/^n/ {print substr($0,2)}'
-}
-
-function remove-trailing-whitespace {
-  rename 's/ *$//' *
+  lsof -a -d cwd -p "$1" -n -Fn | awk '/^n/ {print substr($0,2)}'
 }
 
 function docker-clean {
@@ -200,7 +206,7 @@ function rust-mode() {
   alias curl=qurl
   alias cut=tuc
   alias dd=bcp
-  alias dig=dog
+  alias dig=doggo
   alias du=dua
   alias find=fd
   alias git=gix
@@ -230,6 +236,7 @@ function rust-mode() {
   alias watch=hwatch
   alias wc=cw
   alias xargs=rargs
+  alias touch=bonk
 }
 
 function liq() {
@@ -278,7 +285,7 @@ function update() {
   dotnet tool list -g | tail -n +3 | tr -s ' ' | cut -f 1 -d' ' | xargs -n 1 dotnet tool update -g
   local omnisharp_dir="$HOME/.omnisharp"
   local omnisharp_tarball="$omnisharp_dir/omnisharp.tar.gz"
-  rm -rf "$omnisharp_dir/"*
+  rm -rf "${omnisharp_dir:?}/"*
   curl \
     --location \
     --output "$omnisharp_tarball" \
