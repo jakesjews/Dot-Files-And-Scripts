@@ -81,7 +81,45 @@ if [[ $platform == 'macos' ]]; then
   export PATH=/opt/homebrew/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9_HOME/bin:$NIM_ROOT:$SML_ROOT:$ESVU_ROOT:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT:$LOCAL_BIN_ROOT:$LLVM_ROOT:$CABAL_DIR:$BINGO_ROOT:$ESCRIPTS_ROOT:$DOTNET_TOOLS_ROOT:$DENO_ROOT:$FOUNDRY_ROOT:$BUN_INSTALL/bin:$HOME/.bin
 fi
 
-plugins=(1password coffee colored-man-pages copyfile cpanm dash dotnet encode64 extract golang grunt history-substring-search httpie ipfs jira jsontools mix ng npm pip gitfast pod rbenv react-native redis-cli rsync rust sbt scala supervisor terraform tmux tmuxinator yarn zoxide)
+plugins=(
+  1password
+  coffee
+  colored-man-pages
+  copyfile
+  cpanm
+  dash
+  dotnet
+  encode64
+  extract
+  golang
+  grunt
+  history-substring-search
+  httpie
+  ipfs
+  jira
+  jsontools
+  mix
+  ng
+  npm
+  pip
+  gitfast
+  pod
+  rbenv
+  react-native
+  redis-cli
+  rsync
+  rust
+  sbt
+  scala
+  supervisor
+  terraform
+  tmux
+  tmuxinator
+  yarn
+  zoxide
+)
+
+echo $plugins
 
 autoload zargs
 autoload zmv
@@ -125,7 +163,15 @@ alias bash="/opt/homebrew/bin/bash"
 alias make="/opt/homebrew/opt/make/libexec/gnubin/make"
 alias rg-all="rg -uuuu"
 
-function eflex() {
+function mux() {
+  tmuxinator start $1 --suppress-tmux-version-warning
+}
+
+function clean-eflex() {
+  tmux kill-server
+}
+
+function zellij-eflex() {
   layout="eflex"
   if [[ $1 != "" ]]
   then
@@ -140,17 +186,18 @@ function eflex() {
   fi
 }
 
-function eflex2() {
+function zellij-eflex2() {
   eflex 'eflex2'
 }
 
-function clean-eflex() {
+function zellij-clean-eflex() {
   zellij kill-session eflex
 }
 
 function clean-eflex-dir() {
   rm -rf "${TMPDIR}"v8-compile-cache*
   rm -rf "${TMPDIR}"broccoli-*
+  rm -rf "${TMPDIR}"embroider
   rm -rf "${TMPDIR}"jacob/if-you-need-to-delete-this-open-an-issue-async-disk-cache
   rm -rf "${TMPDIR}"*Before*
   rm -rf "${TMPDIR}"*After*

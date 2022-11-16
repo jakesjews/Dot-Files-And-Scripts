@@ -1,4 +1,7 @@
 -- luacheck: globals vim
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 vim.opt.number = true
 vim.opt.autowrite = true
 vim.opt.backup = false
@@ -61,7 +64,7 @@ packer.startup(function(use)
     run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build',
   }
   use 'Mofiqul/dracula.nvim'
-  use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons' }
+  use { 'nvim-tree/nvim-tree.lua', requires = 'nvim-tree/nvim-web-devicons' }
   use { 'mrjones2014/dash.nvim', run = 'make install', requires = 'nvim-telescope/telescope.nvim' }
   use { 'jakesjews/vim-ember-imports',
     ft = {'coffee', 'javascript', 'typescript'},
@@ -107,7 +110,6 @@ packer.startup(function(use)
   use 'pearofducks/ansible-vim'
   use 'petRUShka/vim-opencl'
   use 'purescript-contrib/purescript-vim'
-  use { 'raimon49/requirements.txt.vim', ft = 'requirements' }
   use 'robbles/logstash.vim'
   use 'solarnz/thrift.vim'
   use 'thyrgle/vim-dyon'
@@ -237,9 +239,6 @@ vim.g.coq_settings = {
   auto_start = 'shut-up',
   xdg = true,
   clients = {
-    lsp = {
-      always_on_top = {},
-    },
     tags = {
       enabled = false,
     },
@@ -262,6 +261,7 @@ local servers = {
   "clojure_lsp",
   "cmake",
   "crystalline",
+  "csharp_ls",
   "cssls",
   "dartls",
   "dockerls",
@@ -296,6 +296,7 @@ local servers = {
   "svlangserver",
   "terraformls",
   "texlab",
+  "turtle_ls",
   "vala_ls",
   "vimls",
   "vuels",
@@ -388,22 +389,13 @@ lspconfig.sumneko_lua.setup(coq.lsp_ensure_capabilities({
       },
       workspace = {
         library = vim.api.nvim_get_runtime_file("", true),
+        checkThirdParty = false,
       },
       telemetry = {
         enable = false,
       },
     }
   }
-}))
-
-lspconfig.omnisharp.setup(coq.lsp_ensure_capabilities({
-  on_attach = on_attach,
-  cmd = {
-    "/Users/jacob/.omnisharp/OmniSharp",
-    "--languageserver",
-    "--hostPID",
-    tostring(vim.fn.getpid()),
-  },
 }))
 
 lspconfig.powershell_es.setup(coq.lsp_ensure_capabilities({
@@ -514,12 +506,12 @@ telescope.setup({
     mappings = {
       i = {
         ['<esc>'] = telescope_actions.close,
-        ['<C-w>'] = telescope_actions.toggle_all,
+        ['<C-a>'] = telescope_actions.toggle_all,
         ['<CR>'] = multi_select
       },
       n = {
         ['<esc>'] = telescope_actions.close,
-        ['<C-w>'] = telescope_actions.toggle_all,
+        ['<C-a>'] = telescope_actions.toggle_all,
         ['<CR>'] = multi_select
       },
     }
