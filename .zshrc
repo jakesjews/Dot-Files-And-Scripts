@@ -78,7 +78,34 @@ if [[ $platform == 'macos' ]]; then
   export FOUNDRY_ROOT="$HOME/.foundry/.bin"
   export BUN_INSTALL="$HOME/.bun"
 
-  export PATH=/opt/homebrew/sbin:$CURL_HOME:$PATH:$GO_ROOT:$CARGO_ROOT:$TPM_ROOT:$DART_ROOT:$PLAN9_HOME/bin:$NIM_ROOT:$SML_ROOT:$ESVU_ROOT:$CARP_DIR/bin:$EMACS_HOME:$WOLFRAM_ROOT:$LOCAL_BIN_ROOT:$LLVM_ROOT:$CABAL_DIR:$BINGO_ROOT:$ESCRIPTS_ROOT:$DOTNET_TOOLS_ROOT:$DENO_ROOT:$FOUNDRY_ROOT:$BUN_INSTALL/bin:$HOME/.bin
+  typeset -U path
+
+  export path=(
+    /opt/homebrew/sbin
+    $CURL_HOME
+    $path
+    $GO_ROOT
+    $CARGO_ROOT
+    $TPM_ROOT
+    $DART_ROOT
+    $PLAN9_HOME/bin
+    $NIM_ROOT
+    $SML_ROOT
+    $ESVU_ROOT
+    $CARP_DIR/bin
+    $EMACS_HOME
+    $WOLFRAM_ROOT
+    $LOCAL_BIN_ROOT
+    $LLVM_ROOT
+    $CABAL_DIR
+    $BINGO_ROOT
+    $ESCRIPTS_ROOT
+    $DOTNET_TOOLS_ROOT
+    $DENO_ROOT
+    $FOUNDRY_ROOT
+    $BUN_INSTALL/bin
+    $HOME/.bin
+  )
 fi
 
 plugins=(
@@ -118,8 +145,6 @@ plugins=(
   yarn
   zoxide
 )
-
-echo $plugins
 
 autoload zargs
 autoload zmv
