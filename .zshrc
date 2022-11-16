@@ -66,13 +66,11 @@ if [[ $platform == 'macos' ]]; then
   export ESVU_ROOT="$HOME/.esvu/bin"
   export ARC_DIR="$HOME/.arc"
   export CURL_HOME="/opt/homebrew/opt/curl/bin"
-  export EMACS_HOME="$HOME/.emacs.d/bin"
   export WOLFRAM_ROOT="/Applications/Wolfram Engine.app/Contents/Resources/Wolfram Player.app/Contents/MacOS"
   export LLVM_ROOT="/opt/homebrew/opt/llvm/bin"
   export LOCAL_BIN_ROOT="$HOME/.local/bin"
   export BINGO_ROOT="$HOME/.bingo/bin"
   export ESCRIPTS_ROOT="$HOME/.mix/escripts"
-  export DOTNET_TOOLS_ROOT="$HOME/.dotnet/tools"
   export DENO_ROOT="$HOME/.deno/bin"
   export PORTER_ROOT="$HOME/.porter"
   export FOUNDRY_ROOT="$HOME/.foundry/.bin"
@@ -93,14 +91,12 @@ if [[ $platform == 'macos' ]]; then
     $SML_ROOT
     $ESVU_ROOT
     $CARP_DIR/bin
-    $EMACS_HOME
     $WOLFRAM_ROOT
     $LOCAL_BIN_ROOT
     $LLVM_ROOT
     $CABAL_DIR
     $BINGO_ROOT
     $ESCRIPTS_ROOT
-    $DOTNET_TOOLS_ROOT
     $DENO_ROOT
     $FOUNDRY_ROOT
     $BUN_INSTALL/bin
