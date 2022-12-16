@@ -16,7 +16,6 @@ export HYPHEN_INSENSITIVE=true
 export COMPLETION_WAITING_DOTS=true
 export ZSH_THEME="dracula"
 export EDITOR='nvim'
-export SHELL='zsh'
 export DISABLE_AUTO_TITLE=true
 export ANSIBLE_HOST_KEY_CHECKING=False
 export KEYTIMEOUT=1
@@ -47,9 +46,9 @@ if [[ $platform == 'macos' ]]; then
   export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
   export OPENSSL_INCLUDE_DIR=/opt/homebrew/opt/openssl/include
   export OPENSSL_LIB_DIR=/opt/homebrew/opt/openssl/lib
-  export LLVM_SYS_130_PREFIX=/opt/homebrew/opt/llvm/
   export LDFLAGS="-L/opt/homebrew/lib"
   export CPPFLAGS="-I/opt/homebrew/include"
+  export PKG_CONFIG_PATH="/opt/homebrew/opt/openssl/lib/pkgconfig"
   export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
   export NODE_PATH=/opt/homebrew/lib/node_modules
   export LOGTALKHOME=/opt/homebrew/opt/logtalk/share/logtalk
@@ -173,7 +172,6 @@ alias factor="/Applications/factor/factor"
 alias l="ls"
 alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
 alias git-oops="git reset --soft HEAD~"
-alias sl="ls"
 alias flush-cache="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
 alias redis-master="redis-cli -h qa-db -p 26379 SENTINEL get-master-addr-by-name eflex-redis"
 alias vim='nvim'
@@ -359,7 +357,7 @@ function update() {
   done
 
   echo "update racket packages"
-  raco pkg update --all -j 8 --batch --no-trash
+  raco pkg update --all -j 8 --batch --no-trash --deps search-auto
 
   echo "update arduino"
   arduino-cli update
@@ -417,6 +415,10 @@ function zvm_after_init() {
   eval "$(mcfly init zsh)"
 }
 
+function restore_history() {
+  sqlite3 "$HOME/.mcfly/history.db" 'select ": " || id || ":0;" || cmd from commands order by id;' > "$HOME/.zsh_history"
+}
+
 if [[ $platform == 'macos' ]]; then
   eval $(perl -I$HOME/.perl5/lib/perl5 -Mlocal::lib=$HOME/.perl5)
   source "$HOME/.opam/opam-init/init.zsh"
@@ -425,3 +427,6 @@ if [[ $platform == 'macos' ]]; then
   source /opt/homebrew/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
   source "$HOME/.bun/_bun"
 fi
+
+# bun completions
+[ -s "/Users/jacob/.bun/_bun" ] && source "/Users/jacob/.bun/_bun"

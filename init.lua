@@ -1,6 +1,7 @@
 -- luacheck: globals vim
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+vim.g.loaded_perl_provider = 0
 
 vim.opt.number = true
 vim.opt.autowrite = true
@@ -272,6 +273,7 @@ local servers = {
   "erlangls",
   "fortls",
   "gdscript",
+  "gleam",
   "gopls",
   "graphql",
   "hls",
@@ -284,6 +286,7 @@ local servers = {
   "ocamllsp",
   "openscad_ls",
   "perlpls",
+  "prolog_ls",
   "purescriptls",
   "pyright",
   "r_language_server",
@@ -409,9 +412,6 @@ lspconfig.tsserver.setup(coq.lsp_ensure_capabilities({
   init_options = {
     hostInfo = 'neovim',
     npmLocation = '/opt/homebrew/bin/npm',
-    tsserver = {
-      trace = 'messages',
-    },
     preferences = {
       importModuleSpecifierPreference = 'non-relative',
       disableSuggestions = true,
