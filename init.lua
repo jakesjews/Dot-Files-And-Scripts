@@ -131,6 +131,12 @@ packer.startup(function(use)
   end
 end)
 
+vim.filetype.add({
+  extension = {
+    jq = 'jq'
+  }
+})
+
 vim.g.crystal_enable_completion = 0
 
 vim.g.vim_javascript_imports_multiline_max_col = 120
@@ -191,12 +197,6 @@ end})
 vim.api.nvim_create_autocmd("TextYankPost", { callback = function()
   vim.highlight.on_yank({ higroup="IncSearch", timeout=150, on_visual=true })
 end })
-
-require('dracula').setup({
-  transparent_bg = true,
-})
-
-vim.cmd[[colorscheme dracula]]
 
 require('Comment').setup({
   mappings = {
@@ -522,3 +522,9 @@ telescope.load_extension('live_grep_args')
 
 vim.keymap.set('', '<C-p>', telescope_builtin.find_files)
 vim.keymap.set('', '<C-e>', telescope.extensions.live_grep_args.live_grep_args)
+
+require('dracula').setup({
+  transparent_bg = true,
+})
+
+vim.cmd[[colorscheme dracula]]

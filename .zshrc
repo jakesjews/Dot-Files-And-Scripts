@@ -41,7 +41,7 @@ if [[ $platform == 'macos' ]]; then
   export HOMEBREW_NO_AUTO_UPDATE=1
   export HOMEBREW_NO_INSTALL_CLEANUP=1
   export HOMEBREW_BOOTSNAP=1
-  export HOMEBREW_UPDATE_REPORT_ALL_FORMULAE
+  export HOMEBREW_UPDATE_REPORT_ALL_FORMULAE=1
 
   export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
   export OPENSSL_INCLUDE_DIR=/opt/homebrew/opt/openssl/include
@@ -50,7 +50,6 @@ if [[ $platform == 'macos' ]]; then
   export CPPFLAGS="-I/opt/homebrew/include"
   export PKG_CONFIG_PATH="/opt/homebrew/opt/openssl/lib/pkgconfig"
   export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
-  export NODE_PATH=/opt/homebrew/lib/node_modules
   export LOGTALKHOME=/opt/homebrew/opt/logtalk/share/logtalk
 
   export CARGO_ROOT="$HOME/.cargo/bin"
