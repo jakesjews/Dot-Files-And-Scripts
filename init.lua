@@ -35,6 +35,25 @@ vim.keymap.set('n', ']', ':BufferLineCycleNext<CR>', { silent = true })
 
 local fileTypeDetectId = vim.api.nvim_create_augroup("filetypedetect", { clear = true })
 
+local on_attach = function(_client, bufferNum)
+  local lsp_key_opts = {
+    noremap = true,
+    silent = true,
+    buffer = bufferNum,
+  }
+
+  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, lsp_key_opts)
+  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, lsp_key_opts)
+  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, lsp_key_opts)
+  vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, lsp_key_opts)
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, lsp_key_opts)
+  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, lsp_key_opts)
+  vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, lsp_key_opts)
+  vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, lsp_key_opts)
+  vim.keymap.set('n', 'gr', vim.lsp.buf.references, lsp_key_opts)
+  vim.keymap.set('n', '<space>f', vim.lsp.buf.formatting, lsp_key_opts)
+end
+
 local install_path = vim.fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
 local packer_bootstrap = false
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
@@ -87,6 +106,7 @@ packer.startup(function(use)
       }
     end
   }
+
   use {
     'numToStr/Comment.nvim',
     config = function()
@@ -274,7 +294,32 @@ packer.startup(function(use)
 
   use {
     'jose-elias-alvarez/null-ls.nvim',
-    requires = 'nvim-lua/plenary.nvim'
+    requires = 'nvim-lua/plenary.nvim',
+    after = 'coq_nvim',
+    config = function()
+      local coq = require('coq')
+      local null_ls = require("null-ls")
+      local diagnostics = null_ls.builtins.diagnostics
+
+      null_ls.setup(coq.lsp_ensure_capabilities({
+        on_attach = on_attach,
+        sources = {
+          diagnostics.checkmake,
+          diagnostics.cppcheck,
+          diagnostics.credo,
+          diagnostics.hadolint,
+          diagnostics.luacheck,
+          diagnostics.markdownlint,
+          diagnostics.mypy,
+          diagnostics.phpstan,
+          diagnostics.pylint,
+          diagnostics.revive,
+          diagnostics.statix,
+          diagnostics.vint,
+          diagnostics.zsh,
+        },
+      }))
+    end
   }
 
   use 'b0o/schemastore.nvim'
@@ -322,7 +367,12 @@ packer.startup(function(use)
 
   use {
     'simrat39/rust-tools.nvim',
-    requires = 'nvim-lua/plenary.nvim'
+    requires = 'nvim-lua/plenary.nvim',
+    after = 'coq_nvim',
+    config = function()
+      local coq = require('coq')
+      require('rust-tools').setup(coq.lsp_ensure_capabilities({ on_attach = on_attach }))
+    end
   }
 
   use {
@@ -506,25 +556,6 @@ local servers = {
 local lspconfig = require('lspconfig')
 local coq = require('coq')
 
-local on_attach = function(_client, bufferNum)
-  local lsp_key_opts = {
-    noremap = true,
-    silent = true,
-    buffer = bufferNum,
-  }
-
-  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, lsp_key_opts)
-  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, lsp_key_opts)
-  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, lsp_key_opts)
-  vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, lsp_key_opts)
-  vim.keymap.set('n', 'K', vim.lsp.buf.hover, lsp_key_opts)
-  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, lsp_key_opts)
-  vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, lsp_key_opts)
-  vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, lsp_key_opts)
-  vim.keymap.set('n', 'gr', vim.lsp.buf.references, lsp_key_opts)
-  vim.keymap.set('n', '<space>f', vim.lsp.buf.formatting, lsp_key_opts)
-end
-
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup(coq.lsp_ensure_capabilities({ on_attach = on_attach }))
 end
@@ -621,26 +652,3 @@ lspconfig.awk_ls.setup(coq.lsp_ensure_capabilities({
   cmd = { "/opt/homebrew/opt/node@16/bin/node", '/opt/homebrew/bin/awk-language-server', 'start' },
 }))
 
-local null_ls = require("null-ls")
-local diagnostics = null_ls.builtins.diagnostics
-
-null_ls.setup(coq.lsp_ensure_capabilities({
-  on_attach = on_attach,
-  sources = {
-    diagnostics.checkmake,
-    diagnostics.cppcheck,
-    diagnostics.credo,
-    diagnostics.hadolint,
-    diagnostics.luacheck,
-    diagnostics.markdownlint,
-    diagnostics.mypy,
-    diagnostics.phpstan,
-    diagnostics.pylint,
-    diagnostics.revive,
-    diagnostics.statix,
-    diagnostics.vint,
-    diagnostics.zsh,
-  },
-}))
-
-require('rust-tools').setup(coq.lsp_ensure_capabilities({ on_attach = on_attach }))
