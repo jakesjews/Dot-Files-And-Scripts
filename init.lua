@@ -279,35 +279,40 @@ packer.startup(function(use)
 
   use 'b0o/schemastore.nvim'
 
+  vim.g.coq_settings = {
+    auto_start = 'shut-up',
+    xdg = true,
+    clients = {
+      tags = {
+        enabled = false,
+      },
+      tmux = {
+        enabled = false,
+      },
+      paths = {
+        resolution = { "file" },
+      },
+      snippets = {
+        enabled = false,
+        warn = {},
+      },
+    },
+  }
+
   use {
     'ms-jpq/coq_nvim',
     branch = 'coq',
-    config = function()
-      vim.g.coq_settings = {
-        auto_start = 'shut-up',
-        xdg = true,
-        clients = {
-          tags = {
-            enabled = false,
-          },
-          tmux = {
-            enabled = false,
-          },
-          paths = {
-            resolution = { "file" },
-          },
-          snippets = {
-            enabled = false,
-            warn = {},
-          },
-        },
-      }
-    end
   }
 
   use {
     'ms-jpq/coq.thirdparty',
     branch = '3p',
+    requires = 'ms-jpq/coq_nvim',
+    config = function()
+      require("coq_3p") {
+        { src = "nvimlua", short_name = "nLUA", conf_only = true },
+      }
+    end
   }
 
   use {
@@ -639,7 +644,3 @@ null_ls.setup(coq.lsp_ensure_capabilities({
 }))
 
 require('rust-tools').setup(coq.lsp_ensure_capabilities({ on_attach = on_attach }))
-
-require("coq_3p") {
-  { src = "nvimlua", short_name = "nLUA", conf_only = true },
-}
