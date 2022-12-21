@@ -29,13 +29,11 @@ vim.opt.sidescrolloff = 5
 vim.opt.hidden = false
 
 vim.keymap.set('n', 'x', '"_x') -- prevent character delete from writing to the clipboard
-vim.keymap.set('', '<C-t>', ':TestNearest<CR>')
-vim.keymap.set('', '<C-q>', ':DashWord<CR>')
 vim.keymap.set('v', '.', ':normal .<CR>')
-vim.keymap.set('n', '<C-n>', ':NvimTreeToggle<CR>')
-vim.keymap.set('n', '<C-f>', ':NvimTreeFindFile<CR>')
 vim.keymap.set('n', '[', ':BufferLineCyclePrev<CR>', { silent = true })
 vim.keymap.set('n', ']', ':BufferLineCycleNext<CR>', { silent = true })
+
+local fileTypeDetectId = vim.api.nvim_create_augroup("filetypedetect", { clear = true })
 
 local install_path = vim.fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
 local packer_bootstrap = false
@@ -49,47 +47,291 @@ local packer = require('packer')
 
 packer.startup(function(use)
   use 'wbthomason/packer.nvim'
-  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
-  use 'p00f/nvim-ts-rainbow'
-  use 'numToStr/Comment.nvim'
-  use({ "kylechui/nvim-surround", tag = "*" })
-  use { 'nvim-telescope/telescope.nvim',
+
+  use {
+    'nvim-treesitter/nvim-treesitter',
     requires = {
-      { 'nvim-lua/plenary.nvim' },
-      { 'nvim-telescope/telescope-live-grep-args.nvim' }
+      {
+        'andymass/vim-matchup',
+        config = function()
+          vim.g.matchup_matchparen_offscreen = { method = 'popup' }
+        end
+      },
+      { 'p00f/nvim-ts-rainbow' },
     },
-    branch = '0.1.x',
+    run = ':TSUpdate',
+    config = function()
+      require('nvim-treesitter.configs').setup {
+        auto_install = true,
+        ensure_installed = "all",
+        highlight = {
+          enable = true,
+        },
+        ignore_install = { "norg", "phpdoc" },
+        matchup = {
+          enable = true,
+        },
+        rainbow = {
+          enable = true,
+          extended_mode = true,
+        },
+        incremental_selection = {
+          enable = true,
+          keymaps = {
+            init_selection = "gnn",
+            node_incremental = "grn",
+            scope_incremental = "grc",
+            node_decremental = "grm",
+          },
+        },
+      }
+    end
   }
   use {
-    'nvim-telescope/telescope-fzf-native.nvim',
-    run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build',
+    'numToStr/Comment.nvim',
+    config = function()
+      require('Comment').setup({
+        mappings = {
+          basic = false,
+          extra = false,
+          extended = false,
+        }
+      })
+
+      local comment_api = require('Comment.api')
+
+      vim.keymap.set("n", "<C-c>", comment_api.toggle.linewise.current)
+      vim.keymap.set("x", "<C-c>", "<Plug>(comment_toggle_linewise_visual)")
+    end
   }
-  use 'Mofiqul/dracula.nvim'
-  use { 'nvim-tree/nvim-tree.lua', requires = 'nvim-tree/nvim-web-devicons' }
-  use { 'mrjones2014/dash.nvim', run = 'make install', requires = 'nvim-telescope/telescope.nvim' }
+
+  use {
+    "kylechui/nvim-surround",
+    tag = "*",
+    config = function()
+      require('nvim-surround').setup({})
+    end
+  }
+
+  use {
+    'nvim-telescope/telescope.nvim',
+    requires = {
+      { 'nvim-lua/plenary.nvim' },
+      { 'nvim-telescope/telescope-live-grep-args.nvim' },
+      {
+        'nvim-telescope/telescope-fzf-native.nvim',
+        run = 'make',
+      },
+    },
+    branch = '0.1.x',
+    config = function()
+      local telescope = require('telescope')
+      local telescope_actions = require("telescope.actions")
+      local telescope_builtin = require('telescope.builtin')
+      local telescope_state = require('telescope.actions.state')
+
+      local function multi_select(prompt_bufnr)
+        local picker = telescope_state.get_current_picker(prompt_bufnr)
+        local multi = picker:get_multi_selection()
+        if #multi > 1 then
+          telescope_actions.send_selected_to_qflist(prompt_bufnr)
+          telescope_actions.open_qflist(prompt_bufnr)
+        else
+          telescope_actions.select_default(prompt_bufnr)
+        end
+      end
+
+      telescope.setup({
+        defaults = {
+          sorting_strategy = 'ascending',
+          mappings = {
+            i = {
+              ['<esc>'] = telescope_actions.close,
+              ['<C-a>'] = telescope_actions.toggle_all,
+              ['<CR>'] = multi_select
+            },
+            n = {
+              ['<esc>'] = telescope_actions.close,
+              ['<C-a>'] = telescope_actions.toggle_all,
+              ['<CR>'] = multi_select
+            },
+          }
+        },
+      })
+      telescope.load_extension('fzf')
+      telescope.load_extension('live_grep_args')
+
+      vim.keymap.set('', '<C-p>', telescope_builtin.find_files)
+      vim.keymap.set('', '<C-e>', telescope.extensions.live_grep_args.live_grep_args)
+    end
+  }
+
+  use {
+    'nvim-tree/nvim-tree.lua',
+    requires = 'nvim-tree/nvim-web-devicons',
+    config = function()
+      require('nvim-tree').setup({
+        git = {
+          enable = true,
+          ignore = true,
+        },
+        renderer = {
+          add_trailing = true,
+          highlight_git = true,
+          highlight_opened_files = 'all',
+          icons = {
+            show = {
+              git = true,
+              folder = true,
+              file = true,
+              folder_arrow = true,
+            },
+          },
+          indent_markers = {
+            enable = true,
+          },
+        },
+        filters = {
+          custom = {
+            '.git',
+          },
+        },
+      })
+
+      vim.keymap.set('n', '<C-n>', ':NvimTreeToggle<CR>')
+      vim.keymap.set('n', '<C-f>', ':NvimTreeFindFile<CR>')
+    end
+  }
+  use {
+    'mrjones2014/dash.nvim',
+    run = 'make install',
+    requires = 'nvim-telescope/telescope.nvim',
+    config = function()
+      vim.keymap.set('', '<C-q>', ':DashWord<CR>')
+    end
+  }
+
   use { 'jakesjews/vim-ember-imports',
     ft = {'coffee', 'javascript', 'typescript'},
-    requires = "sukima/vim-javascript-imports"
+    requires = {
+      {
+        "sukima/vim-javascript-imports",
+        config = function()
+          vim.g.vim_javascript_imports_multiline_max_col = 120
+          vim.g.vim_javascript_imports_multiline_max_vars = 100
+        end
+      }
+    }
   }
+
   use 'tpope/vim-dadbod'
-  use { 'tpope/vim-fugitive', requires = 'tpope/vim-dispatch' }
-  use { 'eraserhd/parinfer-rust', run = 'cargo build --release' }
+
+  use {
+    'tpope/vim-fugitive',
+    requires = 'tpope/vim-dispatch',
+  }
+
+  use {
+    'eraserhd/parinfer-rust',
+    run = 'cargo build --release',
+  }
+
   use 'tpope/vim-sleuth'
   use 'gpanders/editorconfig.nvim'
-  use { 'michaelb/sniprun', run = 'bash install.sh' }
+
+  use {
+    'michaelb/sniprun',
+    run = 'bash install.sh',
+  }
+
   use 'lukas-reineke/indent-blankline.nvim'
-  use 'andymass/vim-matchup'
-  use 'NvChad/nvim-colorizer.lua'
+
+  use {
+    'NvChad/nvim-colorizer.lua',
+    config = function()
+      require('colorizer').setup({})
+    end
+  }
+
   use 'mfussenegger/nvim-dap'
   use 'neovim/nvim-lspconfig'
-  use { 'jose-elias-alvarez/null-ls.nvim', requires = 'nvim-lua/plenary.nvim' }
-  use 'b0o/schemastore.nvim'
-  use { 'ms-jpq/coq_nvim', branch = 'coq' }
-  use { 'ms-jpq/coq.thirdparty', branch = '3p' }
 
-  use { 'scalameta/nvim-metals', requires = 'nvim-lua/plenary.nvim' }
-  use { 'simrat39/rust-tools.nvim', requires = 'nvim-lua/plenary.nvim' }
-  use 'mfussenegger/nvim-jdtls'
+  use {
+    'klen/nvim-test',
+    config = function()
+      local nvim_test = require('nvim-test')
+      nvim_test.setup({
+        runners = {
+          javascript = "nvim-test.runners.mocha",
+        }
+      })
+
+      vim.keymap.set('', '<C-t>', function()
+        nvim_test.run('nearest')
+      end)
+    end
+  }
+
+  use {
+    'jose-elias-alvarez/null-ls.nvim',
+    requires = 'nvim-lua/plenary.nvim'
+  }
+
+  use 'b0o/schemastore.nvim'
+
+  use {
+    'ms-jpq/coq_nvim',
+    branch = 'coq',
+    config = function()
+      vim.g.coq_settings = {
+        auto_start = 'shut-up',
+        xdg = true,
+        clients = {
+          tags = {
+            enabled = false,
+          },
+          tmux = {
+            enabled = false,
+          },
+          paths = {
+            resolution = { "file" },
+          },
+          snippets = {
+            enabled = false,
+            warn = {},
+          },
+        },
+      }
+    end
+  }
+
+  use {
+    'ms-jpq/coq.thirdparty',
+    branch = '3p',
+  }
+
+  use {
+    'scalameta/nvim-metals',
+    requires = 'nvim-lua/plenary.nvim',
+  }
+
+  use {
+    'simrat39/rust-tools.nvim',
+    requires = 'nvim-lua/plenary.nvim'
+  }
+
+  use {
+    'mfussenegger/nvim-jdtls',
+    config = function()
+      vim.api.nvim_create_autocmd("FileType", { pattern = "java", group = fileTypeDetectId, callback = function()
+        require('jdtls').start_or_attach({
+          cmd = {'/opt/homebrew/opt/jdtls/bin/jdtls'},
+          root_dir = vim.fs.dirname(vim.fs.find({'.gradlew', '.git', 'mvnw'}, { upward = true })[1]),
+        })
+      end})
+    end
+  }
+
   use 'ionide/Ionide-vim'
   use 'Joorem/vim-haproxy'
   use 'IrenejMarc/vim-mint'
@@ -108,16 +350,51 @@ packer.startup(function(use)
   use 'leafo/moonscript-vim'
   use 'Julian/lean.nvim'
   use 'lifepillar/pgsql.vim'
-  use 'pearofducks/ansible-vim'
+
+  use {
+    'pearofducks/ansible-vim',
+    config = function()
+      vim.g.ansible_template_syntaxes = {
+        ['*.sh.j2'] = 'bash',
+        ['*.json.j2'] = 'json',
+        ['*.js.j2'] = 'javascript',
+        ['*.conf.j2'] = 'dosini',
+      }
+    end
+  }
+
   use 'petRUShka/vim-opencl'
   use 'purescript-contrib/purescript-vim'
   use 'robbles/logstash.vim'
   use 'solarnz/thrift.vim'
   use 'thyrgle/vim-dyon'
-  use { 'tpope/vim-rails', requires = 'tpope/vim-dispatch' }
-  use { 'tpope/vim-fireplace', ft = 'clojure' }
-  use { 'tpope/vim-salve', ft = 'clojure', requires = 'tpope/vim-dispatch' }
-  use 'vim-crystal/vim-crystal'
+
+  use {
+    'tpope/vim-rails',
+    requires = 'tpope/vim-dispatch',
+  }
+
+  use {
+    'tpope/vim-fireplace',
+    ft = 'clojure',
+  }
+
+  use {
+    'tpope/vim-salve',
+    ft = 'clojure',
+    requires = 'tpope/vim-dispatch',
+    config = function()
+      vim.g.salve_auto_start_repl = 1
+    end
+  }
+
+  use {
+    'vim-crystal/vim-crystal',
+    config = function()
+      vim.g.crystal_enable_completion = 0
+    end
+  }
+
   use 'vmchale/ion-vim'
   use 'iloginow/vim-stylus'
   use 'alaviss/nim.nvim'
@@ -125,6 +402,17 @@ packer.startup(function(use)
   use 'reasonml-editor/vim-reason-plus'
   use 'stevearc/vim-arduino'
   use 'imsnif/kdl.vim'
+
+  use {
+    'Mofiqul/dracula.nvim',
+    config = function()
+      require('dracula').setup({
+        transparent_bg = true,
+      })
+
+      vim.cmd[[colorscheme dracula]]
+    end
+  }
 
   if packer_bootstrap then
     packer.sync()
@@ -137,23 +425,6 @@ vim.filetype.add({
   }
 })
 
-vim.g.crystal_enable_completion = 0
-
-vim.g.vim_javascript_imports_multiline_max_col = 120
-vim.g.vim_javascript_imports_multiline_max_vars = 100
-
-vim.g.salve_auto_start_repl = 1
-
-vim.g.ansible_template_syntaxes = {
-  ['*.sh.j2'] = 'bash',
-  ['*.json.j2'] = 'json',
-  ['*.js.j2'] = 'javascript',
-  ['*.conf.j2'] = 'dosini',
-}
-
-vim.g.matchup_matchparen_offscreen = { method = 'popup' }
-
-local fileTypeDetectId = vim.api.nvim_create_augroup("filetypedetect", { clear = true })
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "cs", group = fileTypeDetectId, command = "setl sw=4 sts=4 ts=4 et"
 })
@@ -170,91 +441,11 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = "scss", group = fileTypeDetectId, command = "setl iskeyword+=@-@"
 })
 
-vim.api.nvim_create_autocmd("FileType", { pattern = "java", group = fileTypeDetectId, callback = function()
-  local root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'})
-
-  require('jdtls').start_or_attach({
-    root_dir = root_dir,
-    cmd = {
-      'java',
-      '-Declipse.application=org.eclipse.jdt.ls.core.id1',
-      '-Dosgi.bundles.defaultStartLevel=4',
-      '-Declipse.product=org.eclipse.jdt.ls.core.product',
-      '-Dlog.protocol=true',
-      '-Dlog.level=ALL',
-      '-Xms1g',
-      '--add-modules=ALL-SYSTEM',
-      '--add-opens', 'java.base/java.util=ALL-UNNAMED',
-      '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
-
-      '-jar', '/opt/homebrew/opt/jdtls/libexec/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar',
-      '-configuration', '/opt/homebrew/opt/jdtls/libexec/config_mac',
-      '-data', root_dir,
-    },
-  })
-end})
-
-vim.api.nvim_create_autocmd("TextYankPost", { callback = function()
-  vim.highlight.on_yank({ higroup="IncSearch", timeout=150, on_visual=true })
-end })
-
-require('Comment').setup({
-  mappings = {
-    basic = false,
-    extra = false,
-    extended = false,
-  }
+vim.api.nvim_create_autocmd("TextYankPost", {
+  callback = function()
+    vim.highlight.on_yank({ higroup="IncSearch", timeout=150, on_visual=true })
+  end
 })
-
-local comment_api = require('Comment.api')
-
-vim.keymap.set("n", "<C-c>", comment_api.toggle.linewise.current)
-vim.keymap.set("x", "<C-c>", "<Plug>(comment_toggle_linewise_visual)")
-
-require('nvim-treesitter.configs').setup {
-  auto_install = true,
-  ensure_installed = "all",
-  highlight = {
-    enable = true,
-  },
-  ignore_install = { "norg", "phpdoc" },
-  matchup = {
-    enable = true,
-  },
-  rainbow = {
-    enable = true,
-    extended_mode = true,
-  },
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = "gnn",
-      node_incremental = "grn",
-      scope_incremental = "grc",
-      node_decremental = "grm",
-    },
-  },
-}
-
-vim.g.coq_settings = {
-  auto_start = 'shut-up',
-  xdg = true,
-  clients = {
-    tags = {
-      enabled = false,
-    },
-    tmux = {
-      enabled = false,
-    },
-    paths = {
-      resolution = { "file" },
-    },
-    snippets = {
-      enabled = false,
-      warn = {},
-    },
-  },
-}
 
 local servers = {
   "bashls",
@@ -452,79 +643,3 @@ require('rust-tools').setup(coq.lsp_ensure_capabilities({ on_attach = on_attach 
 require("coq_3p") {
   { src = "nvimlua", short_name = "nLUA", conf_only = true },
 }
-
-require('colorizer').setup({})
-require('nvim-surround').setup({})
-
-require('nvim-tree').setup({
-  git = {
-    enable = true,
-    ignore = true,
-  },
-  renderer = {
-    add_trailing = true,
-    highlight_git = true,
-    highlight_opened_files = 'all',
-    icons = {
-      show = {
-        git = true,
-        folder = true,
-        file = true,
-        folder_arrow = true,
-      },
-    },
-    indent_markers = {
-      enable = true,
-    },
-  },
-  filters = {
-    custom = {
-      '.git',
-    },
-  },
-})
-
-local telescope = require('telescope')
-local telescope_actions = require("telescope.actions")
-local telescope_builtin = require('telescope.builtin')
-local telescope_state = require('telescope.actions.state')
-
-local function multi_select(prompt_bufnr)
-  local picker = telescope_state.get_current_picker(prompt_bufnr)
-  local multi = picker:get_multi_selection()
-  if #multi > 1 then
-    telescope_actions.send_selected_to_qflist(prompt_bufnr)
-    telescope_actions.open_qflist(prompt_bufnr)
-  else
-    telescope_actions.select_default(prompt_bufnr)
-  end
-end
-
-telescope.setup({
-  defaults = {
-    sorting_strategy = 'ascending',
-    mappings = {
-      i = {
-        ['<esc>'] = telescope_actions.close,
-        ['<C-a>'] = telescope_actions.toggle_all,
-        ['<CR>'] = multi_select
-      },
-      n = {
-        ['<esc>'] = telescope_actions.close,
-        ['<C-a>'] = telescope_actions.toggle_all,
-        ['<CR>'] = multi_select
-      },
-    }
-  },
-})
-telescope.load_extension('fzf')
-telescope.load_extension('live_grep_args')
-
-vim.keymap.set('', '<C-p>', telescope_builtin.find_files)
-vim.keymap.set('', '<C-e>', telescope.extensions.live_grep_args.live_grep_args)
-
-require('dracula').setup({
-  transparent_bg = true,
-})
-
-vim.cmd[[colorscheme dracula]]
