@@ -115,7 +115,7 @@ packer.startup(function(use)
           basic = false,
           extra = false,
           extended = false,
-        }
+        },
       })
 
       local comment_api = require('Comment.api')
@@ -128,6 +128,7 @@ packer.startup(function(use)
   use {
     "kylechui/nvim-surround",
     tag = "*",
+    after = 'nvim-treesitter',
     config = function()
       require('nvim-surround').setup({})
     end
@@ -222,16 +223,18 @@ packer.startup(function(use)
       vim.keymap.set('n', '<C-f>', ':NvimTreeFindFile<CR>')
     end
   }
+
   use {
     'mrjones2014/dash.nvim',
     run = 'make install',
-    requires = 'nvim-telescope/telescope.nvim',
+    after = 'telescope.nvim',
     config = function()
       vim.keymap.set('', '<C-q>', ':DashWord<CR>')
     end
   }
 
-  use { 'jakesjews/vim-ember-imports',
+  use {
+    'jakesjews/vim-ember-imports',
     ft = {'coffee', 'javascript', 'typescript'},
     requires = {
       {
@@ -274,7 +277,163 @@ packer.startup(function(use)
   }
 
   use 'mfussenegger/nvim-dap'
-  use 'neovim/nvim-lspconfig'
+
+  use {
+    'neovim/nvim-lspconfig',
+    requires = 'b0o/schemastore.nvim',
+    after = 'coq_nvim',
+    config = function()
+      local servers = {
+        "bashls",
+        "bufls",
+        "clojure_lsp",
+        "cmake",
+        "crystalline",
+        "csharp_ls",
+        "cssls",
+        "dartls",
+        "dockerls",
+        "dotls",
+        "elmls",
+        "ember",
+        "erg_language_server",
+        "erlangls",
+        "fortls",
+        "gdscript",
+        "gleam",
+        "gopls",
+        "graphql",
+        "hls",
+        "html",
+        "julials",
+        "kotlin_language_server",
+        "m68k",
+        "mint",
+        "mlir_lsp_server",
+        "ocamllsp",
+        "openscad_ls",
+        "perlpls",
+        "prolog_ls",
+        "purescriptls",
+        "pyright",
+        "r_language_server",
+        "racket_langserver",
+        "salt_ls",
+        "solargraph",
+        "solidity_ls",
+        "sourcekit",
+        "sqls",
+        "svlangserver",
+        "terraformls",
+        "texlab",
+        "turtle_ls",
+        "vala_ls",
+        "vimls",
+        "vuels",
+        "yamlls",
+        "zls",
+      }
+
+      local lspconfig = require('lspconfig')
+      local coq = require('coq')
+
+      for _, lsp in ipairs(servers) do
+        lspconfig[lsp].setup(coq.lsp_ensure_capabilities({ on_attach = on_attach }))
+      end
+
+      lspconfig.eslint.setup(coq.lsp_ensure_capabilities({
+        on_attach = on_attach,
+        settings = {
+          useESLintClass = true,
+          packageManager = 'yarn',
+        },
+      }))
+
+      lspconfig.ansiblels.setup(coq.lsp_ensure_capabilities({
+        on_attach = on_attach,
+        root_dir = lspconfig.util.root_pattern('playbook.yml'),
+        single_file_support = false
+      }))
+
+      lspconfig.jsonls.setup(coq.lsp_ensure_capabilities({
+        on_attach = on_attach,
+        settings = {
+          json = {
+            schemas = require('schemastore').json.schemas(),
+            validate = { enable = true },
+          },
+        },
+      }))
+
+      lspconfig.ember.setup(coq.lsp_ensure_capabilities({
+        on_attach = on_attach,
+        root_dir = lspconfig.util.root_pattern('ember-cli-build.js'),
+      }))
+
+      lspconfig.arduino_language_server.setup(coq.lsp_ensure_capabilities({
+        on_attach = on_attach,
+        cmd =  {
+          "arduino-language-server",
+          "-cli-config", "/Users/jacob/Library/Arduino15/arduino-cli.yaml",
+        }
+      }))
+
+      lspconfig.stylelint_lsp.setup(coq.lsp_ensure_capabilities({
+        on_attach = on_attach,
+        filetypes = { "css", "less", "scss", "sugarss", "wxss" },
+      }))
+
+      lspconfig.elixirls.setup(coq.lsp_ensure_capabilities({
+        on_attach = on_attach,
+        cmd = { "elixir-ls" },
+      }))
+
+      lspconfig.sumneko_lua.setup(coq.lsp_ensure_capabilities({
+        on_attach = on_attach,
+        settings = {
+          Lua = {
+            runtime = {
+              version = 'LuaJIT',
+            },
+            diagnostics = {
+              globals = { 'vim' }
+            },
+            workspace = {
+              library = vim.api.nvim_get_runtime_file("", true),
+              checkThirdParty = false,
+            },
+            telemetry = {
+              enable = false,
+            },
+          }
+        }
+      }))
+
+      lspconfig.powershell_es.setup(coq.lsp_ensure_capabilities({
+        on_attach = on_attach,
+        bundle_path = '/Users/jacob/.powershell',
+      }))
+
+      lspconfig.tsserver.setup(coq.lsp_ensure_capabilities({
+        on_attach = on_attach,
+        cmd = { 'typescript-language-server', '--stdio', '--log-level', '1', '--tsserver-log-verbosity', 'off' },
+        init_options = {
+          hostInfo = 'neovim',
+          npmLocation = '/opt/homebrew/bin/npm',
+          preferences = {
+            importModuleSpecifierPreference = 'non-relative',
+            disableSuggestions = true,
+            includeCompletionsForModuleExports = false,
+          },
+        }
+      }))
+
+      lspconfig.awk_ls.setup(coq.lsp_ensure_capabilities({
+        on_attach = on_attach,
+        cmd = { "/opt/homebrew/opt/node@16/bin/node", '/opt/homebrew/bin/awk-language-server', 'start' },
+      }))
+    end
+  }
 
   use {
     'klen/nvim-test',
@@ -293,9 +452,49 @@ packer.startup(function(use)
   }
 
   use {
+    'ms-jpq/coq_nvim',
+    branch = 'coq',
+    config = function()
+      vim.g.coq_settings = {
+        auto_start = 'shut-up',
+        xdg = true,
+        clients = {
+          tags = {
+            enabled = false,
+          },
+          tmux = {
+            enabled = false,
+          },
+          paths = {
+            resolution = { "file" },
+          },
+          snippets = {
+            enabled = false,
+            warn = {},
+          },
+        },
+      }
+    end
+  }
+
+  use {
+    'ms-jpq/coq.thirdparty',
+    branch = '3p',
+    after = 'coq_nvim',
+    config = function()
+      require("coq_3p") {
+        { src = "nvimlua", short_name = "nLUA", conf_only = true },
+      }
+    end
+  }
+
+  use {
     'jose-elias-alvarez/null-ls.nvim',
     requires = 'nvim-lua/plenary.nvim',
-    after = 'coq_nvim',
+    after = {
+      'nvim-lspconfig',
+      'coq_nvim'
+    },
     config = function()
       local coq = require('coq')
       local null_ls = require("null-ls")
@@ -322,44 +521,6 @@ packer.startup(function(use)
     end
   }
 
-  use 'b0o/schemastore.nvim'
-
-  vim.g.coq_settings = {
-    auto_start = 'shut-up',
-    xdg = true,
-    clients = {
-      tags = {
-        enabled = false,
-      },
-      tmux = {
-        enabled = false,
-      },
-      paths = {
-        resolution = { "file" },
-      },
-      snippets = {
-        enabled = false,
-        warn = {},
-      },
-    },
-  }
-
-  use {
-    'ms-jpq/coq_nvim',
-    branch = 'coq',
-  }
-
-  use {
-    'ms-jpq/coq.thirdparty',
-    branch = '3p',
-    requires = 'ms-jpq/coq_nvim',
-    config = function()
-      require("coq_3p") {
-        { src = "nvimlua", short_name = "nLUA", conf_only = true },
-      }
-    end
-  }
-
   use {
     'scalameta/nvim-metals',
     requires = 'nvim-lua/plenary.nvim',
@@ -368,7 +529,10 @@ packer.startup(function(use)
   use {
     'simrat39/rust-tools.nvim',
     requires = 'nvim-lua/plenary.nvim',
-    after = 'coq_nvim',
+    after = {
+      'nvim-lspconfig',
+      'coq_nvim'
+    },
     config = function()
       local coq = require('coq')
       require('rust-tools').setup(coq.lsp_ensure_capabilities({ on_attach = on_attach }))
@@ -377,12 +541,17 @@ packer.startup(function(use)
 
   use {
     'mfussenegger/nvim-jdtls',
+    after = {
+      'nvim-lspconfig',
+      'coq_nvim'
+    },
     config = function()
       vim.api.nvim_create_autocmd("FileType", { pattern = "java", group = fileTypeDetectId, callback = function()
-        require('jdtls').start_or_attach({
+        local coq = require('coq')
+        require('jdtls').start_or_attach(coq.lsp_ensure_capabilities({
           cmd = {'/opt/homebrew/opt/jdtls/bin/jdtls'},
           root_dir = vim.fs.dirname(vim.fs.find({'.gradlew', '.git', 'mvnw'}, { upward = true })[1]),
-        })
+        }))
       end})
     end
   }
@@ -403,7 +572,12 @@ packer.startup(function(use)
   use 'katusk/vim-qkdb-syntax'
   use 'kchmck/vim-coffee-script'
   use 'leafo/moonscript-vim'
-  use 'Julian/lean.nvim'
+
+  use {
+    'Julian/lean.nvim',
+    after = 'nvim-lspconfig',
+  }
+
   use 'lifepillar/pgsql.vim'
 
   use {
@@ -460,6 +634,7 @@ packer.startup(function(use)
 
   use {
     'Mofiqul/dracula.nvim',
+    after = 'nvim-treesitter',
     config = function()
       require('dracula').setup({
         transparent_bg = true,
@@ -501,154 +676,4 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     vim.highlight.on_yank({ higroup="IncSearch", timeout=150, on_visual=true })
   end
 })
-
-local servers = {
-  "bashls",
-  "bufls",
-  "clojure_lsp",
-  "cmake",
-  "crystalline",
-  "csharp_ls",
-  "cssls",
-  "dartls",
-  "dockerls",
-  "dotls",
-  "elmls",
-  "ember",
-  "erg_language_server",
-  "erlangls",
-  "fortls",
-  "gdscript",
-  "gleam",
-  "gopls",
-  "graphql",
-  "hls",
-  "html",
-  "julials",
-  "kotlin_language_server",
-  "m68k",
-  "mint",
-  "mlir_lsp_server",
-  "ocamllsp",
-  "openscad_ls",
-  "perlpls",
-  "prolog_ls",
-  "purescriptls",
-  "pyright",
-  "r_language_server",
-  "racket_langserver",
-  "salt_ls",
-  "solargraph",
-  "solidity_ls",
-  "sourcekit",
-  "sqls",
-  "svlangserver",
-  "terraformls",
-  "texlab",
-  "turtle_ls",
-  "vala_ls",
-  "vimls",
-  "vuels",
-  "yamlls",
-  "zls",
-}
-
-local lspconfig = require('lspconfig')
-local coq = require('coq')
-
-for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup(coq.lsp_ensure_capabilities({ on_attach = on_attach }))
-end
-
-lspconfig.eslint.setup(coq.lsp_ensure_capabilities({
-  on_attach = on_attach,
-  settings = {
-    useESLintClass = true,
-    packageManager = 'yarn',
-  },
-}))
-
-lspconfig.ansiblels.setup(coq.lsp_ensure_capabilities({
-  on_attach = on_attach,
-  root_dir = lspconfig.util.root_pattern('playbook.yml'),
-  single_file_support = false
-}))
-
-lspconfig.jsonls.setup(coq.lsp_ensure_capabilities({
-  on_attach = on_attach,
-  settings = {
-    json = {
-      schemas = require('schemastore').json.schemas(),
-      validate = { enable = true },
-    },
-  },
-}))
-
-lspconfig.ember.setup(coq.lsp_ensure_capabilities({
-  on_attach = on_attach,
-  root_dir = lspconfig.util.root_pattern('ember-cli-build.js'),
-}))
-
-lspconfig.arduino_language_server.setup(coq.lsp_ensure_capabilities({
-  on_attach = on_attach,
-  cmd =  {
-    "arduino-language-server",
-    "-cli-config", "/Users/jacob/Library/Arduino15/arduino-cli.yaml",
-  }
-}))
-
-lspconfig.stylelint_lsp.setup(coq.lsp_ensure_capabilities({
-  on_attach = on_attach,
-  filetypes = { "css", "less", "scss", "sugarss", "wxss" },
-}))
-
-lspconfig.elixirls.setup(coq.lsp_ensure_capabilities({
-  on_attach = on_attach,
-  cmd = { "elixir-ls" },
-}))
-
-lspconfig.sumneko_lua.setup(coq.lsp_ensure_capabilities({
-  on_attach = on_attach,
-  settings = {
-    Lua = {
-      runtime = {
-        version = 'LuaJIT',
-      },
-      diagnostics = {
-        globals = { 'vim' }
-      },
-      workspace = {
-        library = vim.api.nvim_get_runtime_file("", true),
-        checkThirdParty = false,
-      },
-      telemetry = {
-        enable = false,
-      },
-    }
-  }
-}))
-
-lspconfig.powershell_es.setup(coq.lsp_ensure_capabilities({
-  on_attach = on_attach,
-  bundle_path = '/Users/jacob/.powershell',
-}))
-
-lspconfig.tsserver.setup(coq.lsp_ensure_capabilities({
-  on_attach = on_attach,
-  cmd = { 'typescript-language-server', '--stdio', '--log-level', '1', '--tsserver-log-verbosity', 'off' },
-  init_options = {
-    hostInfo = 'neovim',
-    npmLocation = '/opt/homebrew/bin/npm',
-    preferences = {
-      importModuleSpecifierPreference = 'non-relative',
-      disableSuggestions = true,
-      includeCompletionsForModuleExports = false,
-    },
-  }
-}))
-
-lspconfig.awk_ls.setup(coq.lsp_ensure_capabilities({
-  on_attach = on_attach,
-  cmd = { "/opt/homebrew/opt/node@16/bin/node", '/opt/homebrew/bin/awk-language-server', 'start' },
-}))
 
