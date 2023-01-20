@@ -73,6 +73,7 @@ if [[ $platform == 'macos' ]]; then
   export PORTER_ROOT="$HOME/.porter"
   export FOUNDRY_ROOT="$HOME/.foundry/.bin"
   export BUN_INSTALL="$HOME/.bun"
+  export DOTNET_TOOLS="$HOME/.dotnet/tools"
 
   typeset -U path
 
@@ -98,6 +99,7 @@ if [[ $platform == 'macos' ]]; then
     $DENO_ROOT
     $FOUNDRY_ROOT
     $BUN_INSTALL/bin
+    $DOTNET_TOOLS
     $HOME/.bin
   )
 fi
@@ -218,7 +220,6 @@ function clean-eflex-dir() {
   rm -rf "${TMPDIR}"embroider
   rm -rf "${TMPDIR}"jacob/if-you-need-to-delete-this-open-an-issue-async-disk-cache
   rm -rf "${TMPDIR}"*Before*
-  rm -rf "${TMPDIR}"*After*
   rm -rf "${TMPDIR}"*After*
   watchman watch-del-all
   cd "${HOME}"/dev/eflexsystems/eflex
@@ -424,5 +425,6 @@ if [[ $platform == 'macos' ]]; then
   source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
   source /opt/homebrew/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
   source /opt/homebrew/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+  source "$HOME/.config/op/plugins.sh"
   source "$HOME/.bun/_bun"
 fi
