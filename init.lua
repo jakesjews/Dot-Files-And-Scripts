@@ -1,14 +1,16 @@
 -- luacheck: globals vim
+vim.g.loaded_matchit = 1 -- matchup compatibility
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 vim.g.loaded_perl_provider = 0
+
+vim.opt.shortmess:append({ c = true })
 
 vim.opt.number = true
 vim.opt.autowrite = true
 vim.opt.backup = false
 vim.opt.writebackup = false
 vim.opt.updatetime = 300
-vim.opt.shortmess:append({ c = true })
 vim.opt.signcolumn = 'number'
 vim.opt.completeopt = 'menu,menuone,noselect'
 vim.opt.tabstop = 2
@@ -17,7 +19,6 @@ vim.opt.expandtab = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.pastetoggle = '<F2>'
-vim.opt.mouse = 'a'
 vim.opt.clipboard = 'unnamed'
 vim.opt.foldlevel = 99
 vim.opt.splitright = true
@@ -27,8 +28,6 @@ vim.opt.swapfile = false
 vim.opt.scrolloff = 1
 vim.opt.sidescrolloff = 5
 vim.opt.hidden = false
-vim.opt.timeout = true
-vim.opt.timeoutlen = 300
 
 vim.keymap.set('n', 'x', '"_x') -- prevent character delete from writing to the clipboard
 vim.keymap.set('v', '.', ':normal .<CR>')
@@ -77,12 +76,14 @@ packer.startup(function(use)
         config = function()
           vim.g.matchup_matchparen_offscreen = { method = 'popup' }
           vim.g.matchup_transmute_enabled = 1
+          vim.g.matchup_matchparen_deferred = 1
+          vim.g.matchup_surround_enabled = 0
         end
       },
       'mrjones2014/nvim-ts-rainbow',
       'nvim-treesitter/nvim-treesitter-context',
-      'nvim-treesitter/nvim-treesitter-textobjects',
       'nvim-treesitter/nvim-treesitter-refactor',
+      'RRethy/nvim-treesitter-textsubjects',
     },
     run = ':TSUpdate',
     config = function()
@@ -109,10 +110,12 @@ packer.startup(function(use)
             node_decremental = "grm",
           },
         },
-        textobjects = {
-          select = {
-            enable = true,
-            lookahead = true,
+        textsubjects = {
+          enable = true,
+          keymaps = {
+            ['.'] = 'textsubjects-smart',
+            [';'] = 'textsubjects-container-outer',
+            ['i;'] = 'textsubjects-container-inner',
           },
         },
         refactor = {
@@ -149,6 +152,8 @@ packer.startup(function(use)
     "folke/which-key.nvim",
     after = 'nvim-treesitter',
     config = function()
+      vim.o.timeout = true
+      vim.o.timeoutlen = 300
       require("which-key").setup({})
     end
   }
@@ -158,7 +163,17 @@ packer.startup(function(use)
     tag = "*",
     after = 'nvim-treesitter',
     config = function()
-      require('nvim-surround').setup({})
+      require('nvim-surround').setup({
+        keymaps = {
+          normal = "sa",
+          visual = "sa",
+          delete = "sd",
+          change = "sc",
+        },
+        aliases = {
+          ["s"] = { "}", "]", ")", ">", '"', "'", "`" },
+        },
+      })
     end
   }
 
