@@ -5,7 +5,6 @@ vim.g.loaded_netrwPlugin = 1
 vim.g.loaded_perl_provider = 0
 
 vim.opt.shortmess:append({ c = true })
-
 vim.opt.number = true
 vim.opt.autowrite = true
 vim.opt.backup = false
@@ -132,19 +131,21 @@ packer.startup(function(use)
 
   use {
     'numToStr/Comment.nvim',
+    after = 'nvim-treesitter',
     config = function()
       require('Comment').setup({
         mappings = {
-          basic = false,
+          basic = true,
           extra = false,
           extended = false,
         },
+        toggler = {
+          line = '<C-c>',
+        },
+        opleader = {
+          line = '<C-c>',
+        },
       })
-
-      local comment_api = require('Comment.api')
-
-      vim.keymap.set("n", "<C-c>", comment_api.toggle.linewise.current)
-      vim.keymap.set("x", "<C-c>", "<Plug>(comment_toggle_linewise_visual)")
     end
   }
 
@@ -264,15 +265,6 @@ packer.startup(function(use)
 
       vim.keymap.set('n', '<C-n>', ':NvimTreeToggle<CR>')
       vim.keymap.set('n', '<C-f>', ':NvimTreeFindFile<CR>')
-    end
-  }
-
-  use {
-    'mrjones2014/dash.nvim',
-    run = 'make install',
-    after = 'telescope.nvim',
-    config = function()
-      vim.keymap.set('', '<C-q>', ':DashWord<CR>')
     end
   }
 
