@@ -86,6 +86,16 @@ packer.startup(function(use)
     },
     run = ':TSUpdate',
     config = function()
+      local parsers = require('nvim-treesitter.parsers');
+      local ft_to_lang_original = parsers.ft_to_lang
+
+      parsers.ft_to_lang = function(ft)
+        if ft == 'zsh' then
+          return 'bash'
+        end
+        return ft_to_lang_original(ft)
+      end
+
       require('nvim-treesitter.configs').setup({
         auto_install = true,
         ensure_installed = "all",

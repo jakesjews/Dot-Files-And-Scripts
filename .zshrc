@@ -71,7 +71,6 @@ if [[ $platform == 'macos' ]]; then
   export DENO_ROOT="$HOME/.deno/bin"
   export PORTER_ROOT="$HOME/.porter"
   export FOUNDRY_ROOT="$HOME/.foundry/.bin"
-  export DOTNET_TOOLS="$HOME/.dotnet/tools"
 
   typeset -U path
 
@@ -96,7 +95,6 @@ if [[ $platform == 'macos' ]]; then
     $ESCRIPTS_ROOT
     $DENO_ROOT
     $FOUNDRY_ROOT
-    $DOTNET_TOOLS
     $HOME/.bin
   )
 fi
@@ -304,7 +302,7 @@ function rust-mode() {
 }
 
 function liq() {
-  clj -Sdeps '{:deps {mogenslund/liquid {:mvn/version "2.0.4"}}}' -main liq.core
+  clj -Sdeps '{:deps {mogenslund/liquid {:mvn/version "2.1.2"}}}' -main liq.core
 }
 
 function update() {
