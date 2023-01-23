@@ -317,6 +317,7 @@ packer.startup(function(use)
         'm68k',
         'mint',
         'mlir_lsp_server',
+        'nomad_lsp',
         'ocamllsp',
         'openscad_lsp',
         'perlpls',

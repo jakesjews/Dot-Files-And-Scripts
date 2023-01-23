@@ -10,7 +10,6 @@ fi
 
 export ZSH=$HOME/.oh-my-zsh
 export LANG=en_US.UTF-8
-export LC_COLLATE=C
 export DISABLE_AUTO_UPDATE=true
 export HYPHEN_INSENSITIVE=true
 export COMPLETION_WAITING_DOTS=true
@@ -72,7 +71,6 @@ if [[ $platform == 'macos' ]]; then
   export DENO_ROOT="$HOME/.deno/bin"
   export PORTER_ROOT="$HOME/.porter"
   export FOUNDRY_ROOT="$HOME/.foundry/.bin"
-  export BUN_INSTALL="$HOME/.bun"
   export DOTNET_TOOLS="$HOME/.dotnet/tools"
 
   typeset -U path
@@ -98,7 +96,6 @@ if [[ $platform == 'macos' ]]; then
     $ESCRIPTS_ROOT
     $DENO_ROOT
     $FOUNDRY_ROOT
-    $BUN_INSTALL/bin
     $DOTNET_TOOLS
     $HOME/.bin
   )
@@ -163,6 +160,7 @@ setopt inc_append_history
 
 source "$ZSH/oh-my-zsh.sh"
 
+alias stree='/opt/homebrew/bin/stree'
 alias arc="$HOME/.arc/arc.sh"
 alias q='rlwrap --remember $QHOME/m64/q'
 alias 9="/opt/plan9/bin/9"
@@ -376,9 +374,6 @@ function update() {
   echo "update anarki"
   git -C "$HOME/.arc" pull
 
-  echo "upgrade bun"
-  bun upgrade
-
   echo "upgrade cask packages"
   brew cu --all --quiet --yes --no-brew-update
 
@@ -419,6 +414,10 @@ function restore_history() {
   sqlite3 "$HOME/.mcfly/history.db" 'select ": " || id || ":0;" || cmd from commands order by id;' > "$HOME/.zsh_history"
 }
 
+function brew_check_new_rust() {
+  comm -23 <(brew uses rust --include-build) <(brew uses rust --include-build --installed)
+}
+
 if [[ $platform == 'macos' ]]; then
   eval $(perl -I$HOME/.perl5/lib/perl5 -Mlocal::lib=$HOME/.perl5)
   source "$HOME/.opam/opam-init/init.zsh"
@@ -426,5 +425,4 @@ if [[ $platform == 'macos' ]]; then
   source /opt/homebrew/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
   source /opt/homebrew/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
   source "$HOME/.config/op/plugins.sh"
-  source "$HOME/.bun/_bun"
 fi
