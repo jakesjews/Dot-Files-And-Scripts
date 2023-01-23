@@ -27,6 +27,8 @@ vim.opt.swapfile = false
 vim.opt.scrolloff = 1
 vim.opt.sidescrolloff = 5
 vim.opt.hidden = false
+vim.opt.timeout = true
+vim.opt.timeoutlen = 300
 
 vim.keymap.set('n', 'x', '"_x') -- prevent character delete from writing to the clipboard
 vim.keymap.set('v', '.', ':normal .<CR>')
@@ -77,12 +79,14 @@ packer.startup(function(use)
           vim.g.matchup_transmute_enabled = 1
         end
       },
-      { 'mrjones2014/nvim-ts-rainbow' },
-      { 'nvim-treesitter/nvim-treesitter-context' },
+      'mrjones2014/nvim-ts-rainbow',
+      'nvim-treesitter/nvim-treesitter-context',
+      'nvim-treesitter/nvim-treesitter-textobjects',
+      'nvim-treesitter/nvim-treesitter-refactor',
     },
     run = ':TSUpdate',
     config = function()
-      require('nvim-treesitter.configs').setup {
+      require('nvim-treesitter.configs').setup({
         auto_install = true,
         ensure_installed = "all",
         highlight = {
@@ -105,9 +109,21 @@ packer.startup(function(use)
             node_decremental = "grm",
           },
         },
-      }
+        textobjects = {
+          select = {
+            enable = true,
+            lookahead = true,
+          },
+        },
+        refactor = {
+          highlight_definitions = {
+            enable = true,
+            clear_on_cursor_move = true,
+          },
+        },
+      })
 
-      require'treesitter-context'.setup()
+      require('treesitter-context').setup({})
     end
   }
 
@@ -130,6 +146,14 @@ packer.startup(function(use)
   }
 
   use {
+    "folke/which-key.nvim",
+    after = 'nvim-treesitter',
+    config = function()
+      require("which-key").setup({})
+    end
+  }
+
+  use {
     "kylechui/nvim-surround",
     tag = "*",
     after = 'nvim-treesitter',
@@ -141,8 +165,8 @@ packer.startup(function(use)
   use {
     'nvim-telescope/telescope.nvim',
     requires = {
-      { 'nvim-lua/plenary.nvim' },
-      { 'nvim-telescope/telescope-live-grep-args.nvim' },
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope-live-grep-args.nvim',
       {
         'nvim-telescope/telescope-fzf-native.nvim',
         run = 'make',
@@ -251,7 +275,11 @@ packer.startup(function(use)
     }
   }
 
+  use 'mfussenegger/nvim-dap'
   use 'tpope/vim-dadbod'
+  use 'tpope/vim-sleuth'
+  use 'gpanders/editorconfig.nvim'
+  use 'lukas-reineke/indent-blankline.nvim'
 
   use {
     'tpope/vim-fugitive',
@@ -263,15 +291,10 @@ packer.startup(function(use)
     run = 'cargo build --release',
   }
 
-  use 'tpope/vim-sleuth'
-  use 'gpanders/editorconfig.nvim'
-
   use {
     'michaelb/sniprun',
     run = 'bash install.sh',
   }
-
-  use 'lukas-reineke/indent-blankline.nvim'
 
   use {
     'NvChad/nvim-colorizer.lua',
@@ -279,8 +302,6 @@ packer.startup(function(use)
       require('colorizer').setup({})
     end
   }
-
-  use 'mfussenegger/nvim-dap'
 
   use {
     'neovim/nvim-lspconfig',
@@ -580,13 +601,23 @@ packer.startup(function(use)
   use 'katusk/vim-qkdb-syntax'
   use 'kchmck/vim-coffee-script'
   use 'leafo/moonscript-vim'
+  use 'petRUShka/vim-opencl'
+  use 'purescript-contrib/purescript-vim'
+  use 'robbles/logstash.vim'
+  use 'thyrgle/vim-dyon'
+  use 'lifepillar/pgsql.vim'
+  use 'vmchale/ion-vim'
+  use 'iloginow/vim-stylus'
+  use 'alaviss/nim.nvim'
+  use 'zebradil/hive.vim'
+  use 'reasonml-editor/vim-reason-plus'
+  use 'stevearc/vim-arduino'
+  use 'imsnif/kdl.vim'
 
   use {
     'Julian/lean.nvim',
     after = 'nvim-lspconfig',
   }
-
-  use 'lifepillar/pgsql.vim'
 
   use {
     'pearofducks/ansible-vim',
@@ -599,12 +630,6 @@ packer.startup(function(use)
       }
     end
   }
-
-  use 'petRUShka/vim-opencl'
-  use 'purescript-contrib/purescript-vim'
-  use 'robbles/logstash.vim'
-  use 'solarnz/thrift.vim'
-  use 'thyrgle/vim-dyon'
 
   use {
     'tpope/vim-rails',
@@ -631,14 +656,6 @@ packer.startup(function(use)
       vim.g.crystal_enable_completion = 0
     end
   }
-
-  use 'vmchale/ion-vim'
-  use 'iloginow/vim-stylus'
-  use 'alaviss/nim.nvim'
-  use 'zebradil/hive.vim'
-  use 'reasonml-editor/vim-reason-plus'
-  use 'stevearc/vim-arduino'
-  use 'imsnif/kdl.vim'
 
   use {
     'Mofiqul/dracula.nvim',
