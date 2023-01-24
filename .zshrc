@@ -52,6 +52,7 @@ if [[ $platform == 'macos' ]]; then
   export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
   export LOGTALKHOME=/opt/homebrew/opt/logtalk/share/logtalk
 
+  export GLASSFISH_HOME=/opt/homebrew/opt/glassfish/libexec
   export CARGO_ROOT="$HOME/.cargo/bin"
   export ANDROID_SDK_ROOT="/opt/homebrew/share/android-sdk"
   export TPM_ROOT="$HOME/.tmux/plugins/tpm"

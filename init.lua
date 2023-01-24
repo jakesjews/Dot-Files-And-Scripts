@@ -299,18 +299,14 @@ packer.startup(function(use)
   use 'lukas-reineke/indent-blankline.nvim'
 
   use {
-    'tpope/vim-fugitive',
-    requires = 'tpope/vim-dispatch',
-  }
-
-  use {
-    'eraserhd/parinfer-rust',
-    run = 'cargo build --release',
-  }
-
-  use {
     'michaelb/sniprun',
     run = 'bash install.sh',
+    config = function()
+      require('sniprun').setup({
+        live_mode_toggle='enable',
+        repl_enable = { 'Clojure_fifo' },
+      })
+    end
   }
 
   use {
@@ -644,25 +640,6 @@ packer.startup(function(use)
         ['*.js.j2'] = 'javascript',
         ['*.conf.j2'] = 'dosini',
       }
-    end
-  }
-
-  use {
-    'tpope/vim-rails',
-    requires = 'tpope/vim-dispatch',
-  }
-
-  use {
-    'tpope/vim-fireplace',
-    ft = 'clojure',
-  }
-
-  use {
-    'tpope/vim-salve',
-    ft = 'clojure',
-    requires = 'tpope/vim-dispatch',
-    config = function()
-      vim.g.salve_auto_start_repl = 1
     end
   }
 
