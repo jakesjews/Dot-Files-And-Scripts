@@ -36,6 +36,7 @@ if [[ $platform == 'macos' ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 
   export VAGRANT_DEFAULT_PROVIDER='vmware_desktop'
+  export DOTNET_ROLL_FORWARD=Major
 
   export HOMEBREW_NO_AUTO_UPDATE=1
   export HOMEBREW_NO_INSTALL_CLEANUP=1
@@ -63,7 +64,6 @@ if [[ $platform == 'macos' ]]; then
   export ESVU_ROOT="$HOME/.esvu/bin"
   export ARC_DIR="$HOME/.arc"
   export CURL_HOME="/opt/homebrew/opt/curl/bin"
-  export WOLFRAM_ROOT="/Applications/Wolfram Engine.app/Contents/Resources/Wolfram Player.app/Contents/MacOS"
   export LLVM_ROOT="/opt/homebrew/opt/llvm/bin"
   export LOCAL_BIN_ROOT="$HOME/.local/bin"
   export BINGO_ROOT="$HOME/.bingo/bin"
@@ -71,6 +71,9 @@ if [[ $platform == 'macos' ]]; then
   export DENO_ROOT="$HOME/.deno/bin"
   export PORTER_ROOT="$HOME/.porter"
   export FOUNDRY_ROOT="$HOME/.foundry/.bin"
+  DOTNET_TOOLS="$HOME/.dotnet/tools"
+  JENV_ROOT="$HOME/.jenv/bin"
+  CLOJURE_BIN_ROOT="$HOME/.clojure-bin"
 
   typeset -U path
 
@@ -87,7 +90,6 @@ if [[ $platform == 'macos' ]]; then
     $SML_ROOT
     $ESVU_ROOT
     $CARP_DIR/bin
-    $WOLFRAM_ROOT
     $LOCAL_BIN_ROOT
     $LLVM_ROOT
     $CABAL_DIR
@@ -95,6 +97,9 @@ if [[ $platform == 'macos' ]]; then
     $ESCRIPTS_ROOT
     $DENO_ROOT
     $FOUNDRY_ROOT
+    $DOTNET_TOOLS
+    $JENV_PATH
+    $CLOJURE_BIN_ROOT
     $HOME/.bin
   )
 fi
@@ -301,10 +306,6 @@ function rust-mode() {
   alias touch=bonk
 }
 
-function liq() {
-  clj -Sdeps '{:deps {mogenslund/liquid {:mvn/version "2.1.2"}}}' -main liq.core
-}
-
 function update() {
   setopt localoptions rmstarsilent
   unsetopt nomatch
@@ -423,4 +424,5 @@ if [[ $platform == 'macos' ]]; then
   source /opt/homebrew/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
   source /opt/homebrew/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
   source "$HOME/.config/op/plugins.sh"
+  eval "$(jenv init -)"
 fi
