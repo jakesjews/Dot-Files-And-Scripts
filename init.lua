@@ -549,7 +549,6 @@ packer.startup(function(use)
       null_ls.setup(coq.lsp_ensure_capabilities({
         on_attach = on_attach,
         sources = {
-          diagnostics.checkmake,
           diagnostics.cppcheck,
           diagnostics.credo,
           diagnostics.hadolint,
