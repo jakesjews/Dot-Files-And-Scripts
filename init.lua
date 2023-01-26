@@ -2,7 +2,7 @@
 vim.g.loaded_matchit = 1 -- matchup compatibility
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
-vim.g.loaded_perl_provider = 0
+vim.g.python3_host_prog="/opt/homebrew/bin/python3.11"
 
 vim.opt.shortmess:append({ c = true })
 vim.opt.number = true
@@ -83,6 +83,7 @@ packer.startup(function(use)
       'nvim-treesitter/nvim-treesitter-context',
       'nvim-treesitter/nvim-treesitter-refactor',
       'RRethy/nvim-treesitter-textsubjects',
+      'nvim-treesitter/playground',
     },
     run = ':TSUpdate',
     config = function()
@@ -133,6 +134,14 @@ packer.startup(function(use)
             clear_on_cursor_move = true,
           },
         },
+        playground = {
+          enable = true,
+        },
+        query_linter = {
+          enable = true,
+          use_virtual_text = true,
+          lint_events = { "BufWrite", "CursorHold" },
+        },
       })
 
       require('treesitter-context').setup({})
@@ -164,7 +173,7 @@ packer.startup(function(use)
     after = 'nvim-treesitter',
     config = function()
       vim.o.timeout = true
-      vim.o.timeoutlen = 300
+      vim.o.timeoutlen = 500
       require("which-key").setup({})
     end
   }
@@ -335,7 +344,6 @@ packer.startup(function(use)
         'dotls',
         'elmls',
         'ember',
-        'erg_language_server',
         'erg_language_server',
         'erlangls',
         'fortls',

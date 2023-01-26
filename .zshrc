@@ -10,6 +10,7 @@ fi
 
 export ZSH=$HOME/.oh-my-zsh
 export LANG=en_US.UTF-8
+export LC_COLLATE=C
 export DISABLE_AUTO_UPDATE=true
 export HYPHEN_INSENSITIVE=true
 export COMPLETION_WAITING_DOTS=true
@@ -39,9 +40,11 @@ if [[ $platform == 'macos' ]]; then
   export DOTNET_ROLL_FORWARD=Major
 
   export HOMEBREW_NO_AUTO_UPDATE=1
-  export HOMEBREW_NO_INSTALL_CLEANUP=1
   export HOMEBREW_BOOTSNAP=1
   export HOMEBREW_UPDATE_REPORT_ALL_FORMULAE=1
+  export HOMEBREW_BAT=1
+  export HOMEBREW_NO_INSTALL_CLEANUP=1
+  export HOMEBREW_NO_INSTALL_FROM_API=1
 
   export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
   export OPENSSL_INCLUDE_DIR=/opt/homebrew/opt/openssl/include
@@ -75,6 +78,7 @@ if [[ $platform == 'macos' ]]; then
   DOTNET_TOOLS="$HOME/.dotnet/tools"
   JENV_ROOT="$HOME/.jenv/bin"
   CLOJURE_BIN_ROOT="$HOME/.clojure-bin"
+  PERL_ROOT="$HOME/.perl5"
 
   typeset -U path
 
@@ -357,6 +361,9 @@ function update() {
   echo "update racket packages"
   raco pkg update --all -j 8 --batch --no-trash --deps search-auto
 
+  echo "update perl packages"
+  cpan-outdated -p --exclude-core -l "$PERL_ROOT" -L "$PERL_ROOT" | cpanm --self-contained -l "$PERL_ROOT" -L "$PERL_ROOT"
+
   echo "update arduino"
   arduino-cli update
   arduino-cli upgrade
@@ -378,6 +385,7 @@ function update() {
   brew cu --all --quiet --yes --no-brew-update
 
   echo "cleanup homebrew"
+  brew autoremove
   brew cleanup -s
   brew tap --repair
   rm -rf "$(brew --cache)"
@@ -419,7 +427,7 @@ function brew_check_new_rust() {
 }
 
 if [[ $platform == 'macos' ]]; then
-  eval $(perl -I$HOME/.perl5/lib/perl5 -Mlocal::lib=$HOME/.perl5)
+  eval $(perl -I$HOME/.perl5/lib/perl5 -Mlocal::lib=$PERL_ROOT)
   source "$HOME/.opam/opam-init/init.zsh"
   source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
   source /opt/homebrew/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
