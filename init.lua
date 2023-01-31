@@ -84,7 +84,6 @@ packer.startup(function(use)
       'RRethy/nvim-treesitter-textsubjects',
       'nvim-treesitter/playground',
     },
-    run = ':TSUpdate',
     config = function()
       local parsers = require('nvim-treesitter.parsers');
       local ft_to_lang_original = parsers.ft_to_lang
@@ -309,6 +308,7 @@ packer.startup(function(use)
   use {
     'michaelb/sniprun',
     run = 'bash install.sh',
+    requires = 'rcarriga/nvim-notify',
     config = function()
       require('sniprun').setup({
         live_mode_toggle='enable',
@@ -377,6 +377,7 @@ packer.startup(function(use)
         'texlab',
         'turtle_ls',
         'vala_ls',
+        'veryl_ls',
         'vimls',
         'vuels',
         'yamlls',
@@ -473,6 +474,7 @@ packer.startup(function(use)
             importModuleSpecifierPreference = 'non-relative',
             disableSuggestions = true,
             includeCompletionsForModuleExports = false,
+            ignoreDeprecations = '5.0',
           },
         }
       }))

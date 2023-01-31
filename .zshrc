@@ -9,8 +9,6 @@ elif [[ "$unamestr" == 'Linux' ]]; then
 fi
 
 export ZSH=$HOME/.oh-my-zsh
-export LANG=en_US.UTF-8
-export LC_COLLATE=C
 export DISABLE_AUTO_UPDATE=true
 export HYPHEN_INSENSITIVE=true
 export COMPLETION_WAITING_DOTS=true
@@ -36,8 +34,13 @@ export PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=true
 if [[ $platform == 'macos' ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 
-  export VAGRANT_DEFAULT_PROVIDER='vmware_desktop'
-  export DOTNET_ROLL_FORWARD=Major
+  BREW_OPT="$HOMEBREW_PREFIX/opt"
+  POSTGRES_ROOT="$BREW_OPT/postgresql@15"
+
+  # these flags can cause issues with rbenv
+  export LDFLAGS="-L$HOMEBREW_PREFIX/lib -L$POSTGRES_ROOT/lib"
+  export CPPFLAGS="-I$HOMEBREW_PREFIX/include -I$POSTGRES_ROOT/include"
+  export PKG_CONFIG_PATH="$POSTGRES_ROOT/lib/pkgconfig"
 
   export HOMEBREW_NO_AUTO_UPDATE=1
   export HOMEBREW_BOOTSNAP=1
@@ -45,19 +48,15 @@ if [[ $platform == 'macos' ]]; then
   export HOMEBREW_BAT=1
   export HOMEBREW_NO_INSTALL_CLEANUP=1
   export HOMEBREW_NO_INSTALL_FROM_API=1
-
+  export VAGRANT_DEFAULT_PROVIDER='vmware_desktop'
+  export DOTNET_ROLL_FORWARD=Major
   export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
-  export OPENSSL_INCLUDE_DIR=/opt/homebrew/opt/openssl/include
-  export OPENSSL_LIB_DIR=/opt/homebrew/opt/openssl/lib
-  export LDFLAGS="-L/opt/homebrew/lib"
-  export CPPFLAGS="-I/opt/homebrew/include"
-  export PKG_CONFIG_PATH="/opt/homebrew/opt/openssl/lib/pkgconfig"
   export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
-  export LOGTALKHOME=/opt/homebrew/opt/logtalk/share/logtalk
 
-  export GLASSFISH_HOME=/opt/homebrew/opt/glassfish/libexec
+  export LOGTALKHOME=$BREW_OPT/logtalk/share/logtalk
+  export GLASSFISH_HOME=$BREW_OPT/glassfish/libexec
   export CARGO_ROOT="$HOME/.cargo/bin"
-  export ANDROID_SDK_ROOT="/opt/homebrew/share/android-sdk"
+  export ANDROID_SDK_ROOT="$HOMEBREW_PREFIX/share/android-sdk"
   export TPM_ROOT="$HOME/.tmux/plugins/tpm"
   export DART_ROOT="$HOME/.pub-cache/bin"
   export CABAL_DIR="$HOME/.cabal/bin"
@@ -67,14 +66,12 @@ if [[ $platform == 'macos' ]]; then
   export SML_ROOT=/usr/local/smlnj/bin
   export ESVU_ROOT="$HOME/.esvu/bin"
   export ARC_DIR="$HOME/.arc"
-  export CURL_HOME="/opt/homebrew/opt/curl/bin"
-  export LLVM_ROOT="/opt/homebrew/opt/llvm/bin"
+  export LLVM_ROOT="$BREW_OPT/llvm/bin"
   export LOCAL_BIN_ROOT="$HOME/.local/bin"
   export BINGO_ROOT="$HOME/.bingo/bin"
   export ESCRIPTS_ROOT="$HOME/.mix/escripts"
   export DENO_ROOT="$HOME/.deno/bin"
   export PORTER_ROOT="$HOME/.porter"
-  export FOUNDRY_ROOT="$HOME/.foundry/.bin"
   DOTNET_TOOLS="$HOME/.dotnet/tools"
   JENV_ROOT="$HOME/.jenv/bin"
   CLOJURE_BIN_ROOT="$HOME/.clojure-bin"
@@ -83,8 +80,9 @@ if [[ $platform == 'macos' ]]; then
   typeset -U path
 
   export path=(
-    /opt/homebrew/sbin
-    $CURL_HOME
+    $HOMEBREW_PREFIX/sbin
+    $BREW_OPT/python@3.11/libexec/bin
+    $POSTGRES_ROOT/bin
     $path
     $GO_ROOT
     $CARGO_ROOT
@@ -101,7 +99,7 @@ if [[ $platform == 'macos' ]]; then
     $BINGO_ROOT
     $ESCRIPTS_ROOT
     $DENO_ROOT
-    $FOUNDRY_ROOT
+    $HOME/.foundry/bin
     $DOTNET_TOOLS
     $JENV_PATH
     $CLOJURE_BIN_ROOT
@@ -168,26 +166,29 @@ setopt inc_append_history
 
 source "$ZSH/oh-my-zsh.sh"
 
-alias stree='/opt/homebrew/bin/stree'
-alias arc="$HOME/.arc/arc.sh"
-alias q='rlwrap --remember $QHOME/m64/q'
-alias 9="/opt/plan9/bin/9"
-alias sqlplus="DYLD_LIBRARY_PATH=/opt/homebrew/lib /opt/homebrew/bin/sqlplus"
-alias jsc="/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/Helpers/jsc"
-alias j=z
-alias factor="/Applications/factor/factor"
-alias l="ls"
-alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
-alias git-oops="git reset --soft HEAD~"
-alias flush-cache="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
-alias redis-master="redis-cli -h qa-db -p 26379 SENTINEL get-master-addr-by-name eflex-redis"
-alias vim='nvim'
-alias vi='nvim'
-alias git-graph="git commit-graph write --reachable --changed-paths"
-alias mongo=mongosh
-alias bash="/opt/homebrew/bin/bash"
-alias make="/opt/homebrew/opt/make/libexec/gnubin/make"
-alias rg-all="rg -uuuu"
+if [[ $platform == 'macos' ]]; then
+  alias stree="$HOMEBREW_PREFIX/bin/stree"
+  alias arc="$HOME/.arc/arc.sh"
+  alias q='rlwrap --remember $QHOME/m64/q'
+  alias 9="$PLAN9_HOME/bin/9"
+  alias jsc="/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/Helpers/jsc"
+  alias j=z
+  alias factor="/Applications/factor/factor"
+  alias l="ls"
+  alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
+  alias git-oops="git reset --soft HEAD~"
+  alias flush-cache="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
+  alias redis-master="redis-cli -h qa-db -p 26379 SENTINEL get-master-addr-by-name eflex-redis"
+  alias vim='nvim'
+  alias vi='nvim'
+  alias git-graph="git commit-graph write --reachable --changed-paths"
+  alias mongo=mongosh
+  alias bash="$HOMEBREW_PREFIX/bin/bash"
+  alias make="$BREW_OPT/make/libexec/gnubin/make"
+  alias rg-all="rg -uuuu"
+  alias cpanm="cpanm --self-contained --local-lib='$PERL_ROOT' --local-lib-contained='$PERL_ROOT'"
+  alias cargo-binstall='cargo-binstall --no-confirm'
+fi
 
 function mux() {
   tmuxinator start $1 --suppress-tmux-version-warning
@@ -362,7 +363,7 @@ function update() {
   raco pkg update --all -j 8 --batch --no-trash --deps search-auto
 
   echo "update perl packages"
-  cpan-outdated -p --exclude-core -l "$PERL_ROOT" -L "$PERL_ROOT" | cpanm --self-contained -l "$PERL_ROOT" -L "$PERL_ROOT"
+  cpan-outdated -p --exclude-core -l "$PERL_ROOT" -L "$PERL_ROOT" | cpanm
 
   echo "update arduino"
   arduino-cli update
@@ -419,7 +420,7 @@ function zvm_after_init() {
 }
 
 function restore_history() {
-  sqlite3 "$HOME/.mcfly/history.db" 'select ": " || id || ":0;" || cmd from commands order by id;' > "$HOME/.zsh_history"
+  sqlite3 "$HOME/Library/Application Support/McFly/history.db" 'select ": " || id || ":0;" || cmd from commands order by id;' > "$HOME/.zsh_history"
 }
 
 function brew_check_new_rust() {
@@ -427,11 +428,11 @@ function brew_check_new_rust() {
 }
 
 if [[ $platform == 'macos' ]]; then
-  eval $(perl -I$HOME/.perl5/lib/perl5 -Mlocal::lib=$PERL_ROOT)
+  eval $(perl -I$PERL_ROOT/lib/perl5 -Mlocal::lib=$PERL_ROOT)
   source "$HOME/.opam/opam-init/init.zsh"
-  source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-  source /opt/homebrew/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-  source /opt/homebrew/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+  source $HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+  source $BREW_OPT/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+  source $BREW_OPT/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
   source "$HOME/.config/op/plugins.sh"
   eval "$(jenv init -)"
 fi
