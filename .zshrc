@@ -1,5 +1,7 @@
 #!/opt/homebrew/bin/zsh
 
+ulimit -n 64000 unlimited
+
 platform='unknown'
 unamestr=$(uname)
 if [[ "$unamestr" == 'Darwin' ]]; then
