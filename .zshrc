@@ -17,7 +17,7 @@ export COMPLETION_WAITING_DOTS=true
 export ZSH_THEME="dracula"
 export EDITOR='nvim'
 export DISABLE_AUTO_TITLE=true
-export ANSIBLE_HOST_KEY_CHECKING=False
+export ANSIBLE_HOST_KEY_CHECKING=false
 export KEYTIMEOUT=1
 export LISTMAX=10000
 export HISTSIZE=1000000000
@@ -31,7 +31,6 @@ export FZF_DEFAULT_COMMAND='fd --type f'
 export CLICOLOR=1
 export MCFLY_KEY_SCHEME=vim
 export MCFLY_FUZZY=2
-export PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=true
 
 if [[ $platform == 'macos' ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -39,10 +38,12 @@ if [[ $platform == 'macos' ]]; then
   BREW_OPT="$HOMEBREW_PREFIX/opt"
   POSTGRES_ROOT="$BREW_OPT/postgresql@15"
 
+  #########################################
   # these flags can cause issues with rbenv
   export LDFLAGS="-L$HOMEBREW_PREFIX/lib -L$POSTGRES_ROOT/lib"
   export CPPFLAGS="-I$HOMEBREW_PREFIX/include -I$POSTGRES_ROOT/include"
   export PKG_CONFIG_PATH="$POSTGRES_ROOT/lib/pkgconfig"
+  #########################################
 
   export HOMEBREW_NO_AUTO_UPDATE=1
   export HOMEBREW_BOOTSNAP=1
@@ -54,6 +55,7 @@ if [[ $platform == 'macos' ]]; then
   export DOTNET_ROLL_FORWARD=Major
   export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
   export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+  export PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=true
 
   export LOGTALKHOME=$BREW_OPT/logtalk/share/logtalk
   export GLASSFISH_HOME=$BREW_OPT/glassfish/libexec
@@ -365,7 +367,7 @@ function update() {
   raco pkg update --all -j 8 --batch --no-trash --deps search-auto
 
   echo "update perl packages"
-  cpan-outdated -p --exclude-core -l "$PERL_ROOT" -L "$PERL_ROOT" | cpanm
+  cpan-outdated -p --exclude-core -l "$PERL_ROOT" -L "$PERL_ROOT" | cpanm --force
 
   echo "update arduino"
   arduino-cli update
