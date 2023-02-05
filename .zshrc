@@ -40,8 +40,8 @@ if [[ $platform == 'macos' ]]; then
 
   #########################################
   # these flags can cause issues with rbenv
-  export LDFLAGS="-L$HOMEBREW_PREFIX/lib -L$POSTGRES_ROOT/lib"
-  export CPPFLAGS="-I$HOMEBREW_PREFIX/include -I$POSTGRES_ROOT/include"
+  export LDFLAGS="-L$POSTGRES_ROOT/lib"
+  export CPPFLAGS="-I$POSTGRES_ROOT/include"
   export PKG_CONFIG_PATH="$POSTGRES_ROOT/lib/pkgconfig"
   #########################################
 
@@ -175,16 +175,16 @@ if [[ $platform == 'macos' ]]; then
   alias arc="$HOME/.arc/arc.sh"
   alias q='rlwrap --remember $QHOME/m64/q'
   alias 9="$PLAN9_HOME/bin/9"
-  alias jsc="/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/Helpers/jsc"
+  alias jsc=/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/Helpers/jsc
   alias j=z
-  alias factor="/Applications/factor/factor"
-  alias l="ls"
+  alias factor=/Applications/factor/factor
+  alias l=ls
   alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
   alias git-oops="git reset --soft HEAD~"
   alias flush-cache="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
   alias redis-master="redis-cli -h qa-db -p 26379 SENTINEL get-master-addr-by-name eflex-redis"
-  alias vim='nvim'
-  alias vi='nvim'
+  alias vim=nvim
+  alias vi=nvim
   alias git-graph="git commit-graph write --reachable --changed-paths"
   alias mongo=mongosh
   alias bash="$HOMEBREW_PREFIX/bin/bash"
@@ -192,6 +192,7 @@ if [[ $platform == 'macos' ]]; then
   alias rg-all="rg -uuuu"
   alias cpanm="cpanm --self-contained --local-lib='$PERL_ROOT' --local-lib-contained='$PERL_ROOT'"
   alias cargo-binstall='cargo-binstall --no-confirm'
+  alias UVtoolsCmd=/Applications/UVtools.app/Contents/MacOS/UVtoolsCmd
 fi
 
 function mux() {
@@ -280,7 +281,6 @@ function rust-mode() {
   alias cloc=tokei
   alias col=xcol
   alias cp=fcp
-  alias curl=qurl
   alias cut=tuc
   alias dd=bcp
   alias dig=doggo
@@ -428,7 +428,7 @@ function restore_history() {
 }
 
 function brew_check_new_rust() {
-  comm -23 <(brew uses rust --include-build) <(brew uses rust --include-build --installed)
+  comm -23 <(brew uses rust --include-build --eval-all) <(brew uses rust --include-build --installed)
 }
 
 if [[ $platform == 'macos' ]]; then
