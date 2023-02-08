@@ -21,7 +21,6 @@ vim.opt.pastetoggle = '<F2>'
 vim.opt.clipboard = 'unnamed'
 vim.opt.foldlevel = 99
 vim.opt.splitright = true
-vim.opt.fileformats:append({ mac = true })
 vim.opt.foldmethod = 'indent'
 vim.opt.swapfile = false
 vim.opt.scrolloff = 1
@@ -30,8 +29,8 @@ vim.opt.hidden = false
 
 vim.keymap.set('n', 'x', '"_x') -- prevent character delete from writing to the clipboard
 vim.keymap.set('v', '.', ':normal .<CR>')
-vim.keymap.set('n', '[', ':BufferLineCyclePrev<CR>', { silent = true })
-vim.keymap.set('n', ']', ':BufferLineCycleNext<CR>', { silent = true })
+vim.keymap.set('n', '[', vim.cmd.bprevious, { silent = true })
+vim.keymap.set('n', ']', vim.cmd.bnext, { silent = true })
 
 local fileTypeDetectId = vim.api.nvim_create_augroup("filetypedetect", { clear = true })
 
@@ -209,10 +208,9 @@ packer.startup(function(use)
     config = function()
       local telescope = require('telescope')
       local telescope_actions = require("telescope.actions")
-      local telescope_builtin = require('telescope.builtin')
-      local telescope_state = require('telescope.actions.state')
 
       local function multi_select(prompt_bufnr)
+        local telescope_state = require('telescope.actions.state')
         local picker = telescope_state.get_current_picker(prompt_bufnr)
         local multi = picker:get_multi_selection()
         if #multi > 1 then
@@ -242,6 +240,8 @@ packer.startup(function(use)
       })
       telescope.load_extension('fzf')
       telescope.load_extension('live_grep_args')
+
+      local telescope_builtin = require('telescope.builtin')
 
       vim.keymap.set('', '<C-p>', telescope_builtin.find_files)
       vim.keymap.set('', '<C-e>', telescope.extensions.live_grep_args.live_grep_args)
@@ -280,8 +280,8 @@ packer.startup(function(use)
         },
       })
 
-      vim.keymap.set('n', '<C-n>', ':NvimTreeToggle<CR>')
-      vim.keymap.set('n', '<C-f>', ':NvimTreeFindFile<CR>')
+      vim.keymap.set('n', '<C-n>', vim.cmd.NvimTreeToggle)
+      vim.keymap.set('n', '<C-f>', vim.cmd.NvimTreeFindFile)
     end
   }
 
@@ -308,7 +308,6 @@ packer.startup(function(use)
   use {
     'michaelb/sniprun',
     run = 'bash install.sh',
-    requires = 'rcarriga/nvim-notify',
     config = function()
       require('sniprun').setup({
         live_mode_toggle='enable',
@@ -533,9 +532,9 @@ packer.startup(function(use)
     branch = '3p',
     after = 'coq_nvim',
     config = function()
-      require("coq_3p") {
-        { src = "nvimlua", short_name = "nLUA", conf_only = true },
-      }
+      require("coq_3p")({
+        { src = "nvimlua", short_name = "nLUA" },
+      })
     end
   }
 
@@ -633,7 +632,6 @@ packer.startup(function(use)
   use 'zebradil/hive.vim'
   use 'reasonml-editor/vim-reason-plus'
   use 'stevearc/vim-arduino'
-  use 'imsnif/kdl.vim'
 
   use {
     'Julian/lean.nvim',
@@ -667,7 +665,7 @@ packer.startup(function(use)
         transparent_bg = true,
       })
 
-      vim.cmd[[colorscheme dracula]]
+      vim.cmd.colorscheme('dracula')
     end
   }
 

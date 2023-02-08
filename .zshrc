@@ -412,6 +412,10 @@ function alphabetize_files() {
   done
 }
 
+function quartus_compile() {
+  docker run --platform linux/amd64 -it --rm -v $(pwd):/build mister quartus_sh --flow compile "$1"
+}
+
 function zvm_before_init() {
   zvm_bindkey viins '^[[A' history-substring-search-up
   zvm_bindkey viins '^[[B' history-substring-search-down
@@ -429,6 +433,19 @@ function restore_history() {
 
 function brew_check_new_rust() {
   comm -23 <(brew uses rust --include-build --eval-all) <(brew uses rust --include-build --installed)
+}
+
+function node_list_requires() {
+  rg \
+    --only-matching \
+    --replace '$1' \
+    --engine=auto \
+    --no-fixed-strings \
+    --no-filename \
+    --no-line-number \
+    --no-heading \
+    --regexp "require\('((?!\.)(?!node:)(?!@eflex\/lib).*)'\)" \
+    "$1" | sort -u
 }
 
 if [[ $platform == 'macos' ]]; then
