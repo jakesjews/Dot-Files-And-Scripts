@@ -109,11 +109,19 @@ if [[ $platform == 'macos' ]]; then
     $CLOJURE_BIN_ROOT
     $HOME/.bin
   )
+
+  export fpath=(
+    "$HOMEBREW_PREFIX/share/zsh-completions"
+    $fpath 
+  )
+
+  chmod -R go-w "$HOMEBREW_PREFIX/share/zsh"
+  autoload -Uz compinit
+  compinit -u
 fi
 
 plugins=(
   1password
-  coffee
   colored-man-pages
   copyfile
   cpanm
@@ -121,31 +129,18 @@ plugins=(
   dotnet
   encode64
   extract
-  golang
-  grunt
   history-substring-search
-  httpie
   ipfs
   jira
   jsontools
-  mix
   ng
   npm
   pip
-  gitfast
   pod
   rbenv
   react-native
-  redis-cli
-  rsync
   rust
-  sbt
-  scala
-  supervisor
   terraform
-  tmux
-  tmuxinator
-  yarn
   zoxide
 )
 
@@ -416,17 +411,6 @@ function quartus_compile() {
   docker run --platform linux/amd64 -it --rm -v $(pwd):/build mister quartus_sh --flow compile "$1"
 }
 
-function zvm_before_init() {
-  zvm_bindkey viins '^[[A' history-substring-search-up
-  zvm_bindkey viins '^[[B' history-substring-search-down
-  zvm_bindkey vicmd '^[[A' history-substring-search-up
-  zvm_bindkey vicmd '^[[B' history-substring-search-down
-}
-
-function zvm_after_init() {
-  eval "$(mcfly init zsh)"
-}
-
 function restore_history() {
   sqlite3 "$HOME/Library/Application Support/McFly/history.db" 'select ": " || id || ":0;" || cmd from commands order by id;' > "$HOME/.zsh_history"
 }
@@ -446,6 +430,23 @@ function node_list_requires() {
     --no-heading \
     --regexp "require\('((?!\.)(?!node:)(?!@eflex\/lib).*)'\)" \
     "$1" | sort -u
+}
+
+function zvm_before_init() {
+  zvm_bindkey viins '^[[A' history-substring-search-up
+  zvm_bindkey viins '^[[B' history-substring-search-down
+  zvm_bindkey vicmd '^[[A' history-substring-search-up
+  zvm_bindkey vicmd '^[[B' history-substring-search-down
+}
+
+function zvm_after_init() {
+  eval "$(mcfly init zsh)"
+
+  function zvm_vi_yank() {
+    zvm_yank
+    echo ${CUTBUFFER} | pbcopy
+    zvm_exit_visual_mode
+  }
 }
 
 if [[ $platform == 'macos' ]]; then
