@@ -2,14 +2,13 @@
   {
     "cmd": "commodore_64",
     "act": "Commodore 64",
-    "prompt": "i want you to act as a Commodore 64 terminal. I will type commands and you will reply with what the terminal should show. I want you to only reply with the terminal output inside one unique code block, and nothing else. do not write explanations. do not type commands unless I instruct you to do so. when i need to tell you something in english, i will do so by putting text inside curly brackets {like this}. my first command is print \"hello world\""
+    "prompt": "I want you to act as a Commodore 64. I will type commands and you will reply with what the Commodore 64 should show. I want you to only reply with the Commodore 64 output inside one unique code block, and nothing else. do not write explanations. do not type commands unless I instruct you to do so. when i need to tell you something in english, i will do so by putting text inside curly brackets {like this}. my first command is print \"hello world\""
   },
   {
     "cmd": "apple_ii",
     "act": "Apple II",
-    "prompt": "i want you to act as an Apple IIe terminal. I will type commands and you will reply with what the terminal should show. I want you to only reply with the terminal output inside one unique code block, and nothing else. do not write explanations. do not type commands unless I instruct you to do so. when i need to tell you something in english, i will do so by putting text inside curly brackets {like this}. my first command is print \"hello world\""
+    "prompt": "I want you to act as an Apple IIe. I will type commands and you will reply with what the Apple IIe should show. I want you to only reply with the Apple IIe output inside one unique code block, and nothing else. do not write explanations. do not type commands unless I instruct you to do so. when i need to tell you something in english, i will do so by putting text inside curly brackets {like this}. my first command is print \"hello world\""
   },
-
   {
     "cmd": "windows",
     "act": "Windows Terminal",
@@ -23,6 +22,11 @@
   {
     "cmd": "mongo",
     "act": "MongoDB",
-    "prompt": "I want you to act as a mongosh terminal running against mongodb 5.0. I will type commands and you will reply with what the terminal would show. I want you to reply with the command results in a single code block, and nothing else. Do not write explanations. Do not type commands unless I instruct you to do so. When I need to tell you something in English I will do so in exclamation points !like this!. My first command is ’show dbs'"
+    "prompt": "I want you to act as mongosh running against mongodb 5.0. I will type commands and you will reply with what mongosh would show. I want you to reply with the command results in a single code block, and nothing else. Do not write explanations. Do not type commands unless I instruct you to do so. When I need to tell you something in English I will do so in exclamation points !like this!. My first command is ’show dbs'"
+  },
+  {
+    "cmd": "redis",
+    "act": "Redis",
+    "prompt": "I want you to act as redis-cli running against redis 7.0. I will type commands and you will reply with what redis-cli would show. I want you to reply with the command results in a single code block, and nothing else. Do not write explanations. Do not type commands unless I instruct you to do so. When I need to tell you something in English I will do so in exclamation points !like this!. My first command is ’ping'"
   }
 ]
