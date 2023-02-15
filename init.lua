@@ -370,17 +370,13 @@ require("lazy").setup({
         dependencies = {
           {
             "zbirenbaum/copilot.lua",
-            config = function()
-              require("copilot").setup({
-                suggestion = { enabled = false },
-                panel = { enabled = false },
-              })
-            end,
+            opts = {
+              suggestion = { enabled = false },
+              panel = { enabled = false },
+            },
           },
         },
-        config = function ()
-          require("copilot_cmp").setup()
-        end
+        config = true
       },
     },
     config = function()
