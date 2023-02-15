@@ -53,36 +53,39 @@ local on_attach = function(_client, bufferNum)
   vim.keymap.set('n', '<space>f', vim.lsp.buf.formatting, lsp_key_opts)
 end
 
-local install_path = vim.fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-local packer_bootstrap = false
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-  packer_bootstrap = vim.fn.system({
-    'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path
-  })
+local ensure_packer = function()
+  local fn = vim.fn
+  local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+  if fn.empty(fn.glob(install_path)) > 0 then
+    fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+    vim.cmd [[packadd packer.nvim]]
+    return true
+  end
+  return false
 end
 
-local packer = require('packer')
+local packer_bootstrap = ensure_packer()
 
-packer.startup(function(use)
+return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
+
+  use 'mrjones2014/nvim-ts-rainbow'
+  use 'nvim-treesitter/nvim-treesitter-refactor'
+  use 'RRethy/nvim-treesitter-textsubjects'
+  use 'nvim-treesitter/playground'
+  use 'nvim-treesitter/nvim-treesitter-context'
+
+  use {
+    'andymass/vim-matchup',
+    config = function()
+      vim.g.matchup_matchparen_offscreen = { method = 'popup' }
+      vim.g.matchup_matchparen_deferred = 1
+      vim.g.matchup_surround_enabled = 0
+    end
+  }
 
   use {
     'nvim-treesitter/nvim-treesitter',
-    requires = {
-      {
-        'andymass/vim-matchup',
-        config = function()
-          vim.g.matchup_matchparen_offscreen = { method = 'popup' }
-          vim.g.matchup_matchparen_deferred = 1
-          vim.g.matchup_surround_enabled = 0
-        end
-      },
-      'mrjones2014/nvim-ts-rainbow',
-      'nvim-treesitter/nvim-treesitter-context',
-      'nvim-treesitter/nvim-treesitter-refactor',
-      'RRethy/nvim-treesitter-textsubjects',
-      'nvim-treesitter/playground',
-    },
     config = function()
       local parsers = require('nvim-treesitter.parsers');
       local ft_to_lang_original = parsers.ft_to_lang
@@ -147,7 +150,6 @@ packer.startup(function(use)
 
   use {
     'numToStr/Comment.nvim',
-    after = 'nvim-treesitter',
     config = function()
       require('Comment').setup({
         mappings = {
@@ -167,7 +169,6 @@ packer.startup(function(use)
 
   use {
     "folke/which-key.nvim",
-    after = 'nvim-treesitter',
     config = function()
       vim.o.timeout = true
       vim.o.timeoutlen = 500
@@ -178,7 +179,6 @@ packer.startup(function(use)
   use {
     "kylechui/nvim-surround",
     tag = "*",
-    after = 'nvim-treesitter',
     config = function()
       require('nvim-surround').setup({
         keymaps = {
@@ -194,16 +194,16 @@ packer.startup(function(use)
     end
   }
 
+  use 'nvim-telescope/telescope-live-grep-args.nvim'
+
+  use {
+    'nvim-telescope/telescope-fzf-native.nvim',
+    run = 'make',
+  }
+
   use {
     'nvim-telescope/telescope.nvim',
-    requires = {
-      'nvim-lua/plenary.nvim',
-      'nvim-telescope/telescope-live-grep-args.nvim',
-      {
-        'nvim-telescope/telescope-fzf-native.nvim',
-        run = 'make',
-      },
-    },
+    requires = 'nvim-lua/plenary.nvim',
     branch = '0.1.x',
     config = function()
       local telescope = require('telescope')
@@ -286,17 +286,17 @@ packer.startup(function(use)
   }
 
   use {
+    "sukima/vim-javascript-imports",
+    ft = {'coffee', 'javascript', 'typescript'},
+    config = function()
+      vim.g.vim_javascript_imports_multiline_max_col = 120
+      vim.g.vim_javascript_imports_multiline_max_vars = 100
+    end
+  }
+
+  use {
     'jakesjews/vim-ember-imports',
     ft = {'coffee', 'javascript', 'typescript'},
-    requires = {
-      {
-        "sukima/vim-javascript-imports",
-        config = function()
-          vim.g.vim_javascript_imports_multiline_max_col = 120
-          vim.g.vim_javascript_imports_multiline_max_vars = 100
-        end
-      }
-    }
   }
 
   use 'mfussenegger/nvim-dap'
@@ -323,11 +323,33 @@ packer.startup(function(use)
     end
   }
 
+  use 'neovim/nvim-lspconfig'
+  use 'b0o/schemastore.nvim'
+  use 'hrsh7th/cmp-nvim-lsp'
+  use 'hrsh7th/cmp-buffer'
+  use 'hrsh7th/cmp-path'
+
   use {
-    'neovim/nvim-lspconfig',
-    requires = 'b0o/schemastore.nvim',
-    after = 'coq_nvim',
+    'hrsh7th/nvim-cmp',
     config = function()
+      local cmp = require('cmp')
+
+      cmp.setup({
+        mapping = cmp.mapping.preset.insert({
+          ['<CR>'] = cmp.mapping.confirm({ select = true })
+        }),
+        sources = cmp.config.sources(
+          {
+            { name = 'nvim_lsp' },
+          },
+          {
+            { name = 'buffer' },
+          }
+        )
+      })
+
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
       local servers = {
         'bashls',
         'bufls',
@@ -384,61 +406,71 @@ packer.startup(function(use)
       }
 
       local lspconfig = require('lspconfig')
-      local coq = require('coq')
 
       for _, lsp in ipairs(servers) do
-        lspconfig[lsp].setup(coq.lsp_ensure_capabilities({ on_attach = on_attach }))
+        lspconfig[lsp].setup({
+          on_attach = on_attach,
+          capabilities = capabilities,
+        })
       end
 
-      lspconfig.eslint.setup(coq.lsp_ensure_capabilities({
+      lspconfig.eslint.setup({
         on_attach = on_attach,
+        capabilities = capabilities,
         settings = {
           useESLintClass = true,
           packageManager = 'yarn',
         },
-      }))
+      })
 
-      lspconfig.ansiblels.setup(coq.lsp_ensure_capabilities({
+      lspconfig.ansiblels.setup({
         on_attach = on_attach,
+        capabilities = capabilities,
         root_dir = lspconfig.util.root_pattern('playbook.yml'),
         single_file_support = false
-      }))
+      })
 
-      lspconfig.jsonls.setup(coq.lsp_ensure_capabilities({
+      lspconfig.jsonls.setup({
         on_attach = on_attach,
+        capabilities = capabilities,
         settings = {
           json = {
             schemas = require('schemastore').json.schemas(),
             validate = { enable = true },
           },
         },
-      }))
+      })
 
-      lspconfig.ember.setup(coq.lsp_ensure_capabilities({
+      lspconfig.ember.setup({
         on_attach = on_attach,
+        capabilities = capabilities,
         root_dir = lspconfig.util.root_pattern('ember-cli-build.js'),
-      }))
+      })
 
-      lspconfig.arduino_language_server.setup(coq.lsp_ensure_capabilities({
+      lspconfig.arduino_language_server.setup({
         on_attach = on_attach,
+        capabilities = capabilities,
         cmd =  {
           "arduino-language-server",
           "-cli-config", "/Users/jacob/Library/Arduino15/arduino-cli.yaml",
         }
-      }))
+      })
 
-      lspconfig.stylelint_lsp.setup(coq.lsp_ensure_capabilities({
+      lspconfig.stylelint_lsp.setup({
         on_attach = on_attach,
+        capabilities = capabilities,
         filetypes = { "css", "less", "scss", "sugarss", "wxss" },
-      }))
+      })
 
-      lspconfig.elixirls.setup(coq.lsp_ensure_capabilities({
+      lspconfig.elixirls.setup({
         on_attach = on_attach,
+        capabilities = capabilities,
         cmd = { "elixir-ls" },
-      }))
+      })
 
-      lspconfig.lua_ls.setup(coq.lsp_ensure_capabilities({
+      lspconfig.lua_ls.setup({
         on_attach = on_attach,
+        capabilities = capabilities,
         settings = {
           Lua = {
             runtime = {
@@ -456,15 +488,17 @@ packer.startup(function(use)
             },
           }
         }
-      }))
+      })
 
-      lspconfig.powershell_es.setup(coq.lsp_ensure_capabilities({
+      lspconfig.powershell_es.setup({
         on_attach = on_attach,
+        capabilities = capabilities,
         bundle_path = '/Users/jacob/.powershell',
-      }))
+      })
 
-      lspconfig.tsserver.setup(coq.lsp_ensure_capabilities({
+      lspconfig.tsserver.setup({
         on_attach = on_attach,
+        capabilities = capabilities,
         cmd = { 'typescript-language-server', '--stdio', '--log-level', '1', '--tsserver-log-verbosity', 'off' },
         init_options = {
           hostInfo = 'neovim',
@@ -476,12 +510,13 @@ packer.startup(function(use)
             ignoreDeprecations = '5.0',
           },
         }
-      }))
+      })
 
-      lspconfig.awk_ls.setup(coq.lsp_ensure_capabilities({
+      lspconfig.awk_ls.setup({
         on_attach = on_attach,
+        capabilities = capabilities,
         cmd = { "/opt/homebrew/opt/node@16/bin/node", '/opt/homebrew/bin/awk-language-server', 'start' },
-      }))
+      })
     end
   }
 
@@ -502,55 +537,15 @@ packer.startup(function(use)
   }
 
   use {
-    'ms-jpq/coq_nvim',
-    branch = 'coq',
-    config = function()
-      vim.g.coq_settings = {
-        auto_start = 'shut-up',
-        xdg = true,
-        clients = {
-          tags = {
-            enabled = false,
-          },
-          tmux = {
-            enabled = false,
-          },
-          paths = {
-            resolution = { "file" },
-          },
-          snippets = {
-            enabled = false,
-            warn = {},
-          },
-        },
-      }
-    end
-  }
-
-  use {
-    'ms-jpq/coq.thirdparty',
-    branch = '3p',
-    after = 'coq_nvim',
-    config = function()
-      require("coq_3p")({
-        { src = "nvimlua", short_name = "nLUA" },
-      })
-    end
-  }
-
-  use {
     'jose-elias-alvarez/null-ls.nvim',
     requires = 'nvim-lua/plenary.nvim',
-    after = {
-      'nvim-lspconfig',
-      'coq_nvim'
-    },
     config = function()
-      local coq = require('coq')
       local null_ls = require("null-ls")
       local diagnostics = null_ls.builtins.diagnostics
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-      null_ls.setup(coq.lsp_ensure_capabilities({
+      null_ls.setup({
+        capabilities = capabilities,
         on_attach = on_attach,
         sources = {
           diagnostics.cppcheck,
@@ -566,7 +561,7 @@ packer.startup(function(use)
           diagnostics.vint,
           diagnostics.zsh,
         },
-      }))
+      })
     end
   }
 
@@ -577,34 +572,30 @@ packer.startup(function(use)
 
   use {
     'simrat39/rust-tools.nvim',
-    requires = 'nvim-lua/plenary.nvim',
-    after = {
-      'nvim-lspconfig',
-      'coq_nvim'
-    },
     config = function()
-      local coq = require('coq')
-      require('rust-tools').setup(coq.lsp_ensure_capabilities({ on_attach = on_attach }))
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+      require('rust-tools').setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+      })
     end
   }
 
   use {
     'mfussenegger/nvim-jdtls',
-    after = {
-      'nvim-lspconfig',
-      'coq_nvim'
-    },
     config = function()
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
       vim.api.nvim_create_autocmd("FileType", { pattern = "java", group = fileTypeDetectId, callback = function()
-        local coq = require('coq')
-        require('jdtls').start_or_attach(coq.lsp_ensure_capabilities({
+        require('jdtls').start_or_attach({
           cmd = {'/opt/homebrew/opt/jdtls/bin/jdtls'},
+          capabilities = capabilities,
           root_dir = vim.fs.dirname(vim.fs.find({'.gradlew', '.git', 'mvnw'}, { upward = true })[1]),
-        }))
+        })
       end})
     end
   }
 
+  use 'Julian/lean.nvim'
   use 'ionide/Ionide-vim'
   use 'Joorem/vim-haproxy'
   use 'IrenejMarc/vim-mint'
@@ -634,11 +625,6 @@ packer.startup(function(use)
   use 'stevearc/vim-arduino'
 
   use {
-    'Julian/lean.nvim',
-    after = 'nvim-lspconfig',
-  }
-
-  use {
     'pearofducks/ansible-vim',
     config = function()
       vim.g.ansible_template_syntaxes = {
@@ -659,7 +645,6 @@ packer.startup(function(use)
 
   use {
     'Mofiqul/dracula.nvim',
-    after = 'nvim-treesitter',
     config = function()
       require('dracula').setup({
         transparent_bg = true,
@@ -669,36 +654,35 @@ packer.startup(function(use)
     end
   }
 
+  vim.filetype.add({
+    extension = {
+      jq = 'jq'
+    }
+  })
+
+  vim.api.nvim_create_autocmd("FileType", {
+    pattern = "cs", group = fileTypeDetectId, command = "setl sw=4 sts=4 ts=4 et"
+  })
+  vim.api.nvim_create_autocmd("FileType", {
+    pattern = "c", group = fileTypeDetectId, command = "setl sw=4 sts=4 ts=4 et"
+  })
+  vim.api.nvim_create_autocmd("FileType", {
+    pattern = "cpp", group = fileTypeDetectId, command = "setl sw=4 sts=4 ts=4 et"
+  })
+  vim.api.nvim_create_autocmd("FileType", {
+    pattern = "make", group = fileTypeDetectId, command = "setl noexpandtab sw=4 sts=0 ts=4"
+  })
+  vim.api.nvim_create_autocmd("FileType", {
+    pattern = "scss", group = fileTypeDetectId, command = "setl iskeyword+=@-@"
+  })
+
+  vim.api.nvim_create_autocmd("TextYankPost", {
+    callback = function()
+      vim.highlight.on_yank({ higroup="IncSearch", timeout=150, on_visual=true })
+    end
+  })
+
   if packer_bootstrap then
-    packer.sync()
+    require('packer').sync()
   end
 end)
-
-vim.filetype.add({
-  extension = {
-    jq = 'jq'
-  }
-})
-
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "cs", group = fileTypeDetectId, command = "setl sw=4 sts=4 ts=4 et"
-})
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "c", group = fileTypeDetectId, command = "setl sw=4 sts=4 ts=4 et"
-})
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "cpp", group = fileTypeDetectId, command = "setl sw=4 sts=4 ts=4 et"
-})
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "make", group = fileTypeDetectId, command = "setl noexpandtab sw=4 sts=0 ts=4"
-})
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "scss", group = fileTypeDetectId, command = "setl iskeyword+=@-@"
-})
-
-vim.api.nvim_create_autocmd("TextYankPost", {
-  callback = function()
-    vim.highlight.on_yank({ higroup="IncSearch", timeout=150, on_visual=true })
-  end
-})
-
