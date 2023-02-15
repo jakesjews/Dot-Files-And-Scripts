@@ -38,5 +38,10 @@
     "cmd": "mongo_translate",
     "act": "Mongo Translate",
     "prompt": "### MongoDB collections, with their properties:\n#\n# Employee(id, name, department_id)\n# Department(id, name, address)\n# Salary_Payments(id, employee_id, amount, date)\n#\n### An aggregation to list the names of the departments which employed more than 10 employees in the last 3 months\n# Reply in a code block"
+  },
+  {
+    "cmd": "time_complexity",
+    "act": "Time Complexity",
+    "prompt": "console.log('hello world')\n\"\"\"\nThe time complexity of this function is"
   }
 ]
