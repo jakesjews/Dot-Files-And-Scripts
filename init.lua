@@ -366,10 +366,10 @@ require("lazy").setup({
         },
       },
     },
-    config = function()
+    opts = function()
       local cmp = require('cmp')
 
-      cmp.setup({
+      return {
         snippet = {
           expand = function(args)
             vim.fn["vsnip#anonymous"](args.body)
@@ -392,7 +392,10 @@ require("lazy").setup({
             { name = 'buffer' },
           }
         )
-      })
+      }
+    end,
+    config = function(_self, opts)
+      require('cmp').setup(opts)
 
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
@@ -568,13 +571,14 @@ require("lazy").setup({
 
   {
     'klen/nvim-test',
-    config = function()
+    opts = {
+      runners = {
+        javascript = "nvim-test.runners.mocha",
+      }
+    },
+    config = function(_self, opts)
       local nvim_test = require('nvim-test')
-      nvim_test.setup({
-        runners = {
-          javascript = "nvim-test.runners.mocha",
-        }
-      })
+      nvim_test.setup(opts)
 
       vim.keymap.set('', '<C-t>', function()
         nvim_test.run('nearest')
@@ -588,13 +592,11 @@ require("lazy").setup({
       'nvim-lua/plenary.nvim',
       'hrsh7th/nvim-cmp',
     },
-    config = function()
-      local null_ls = require("null-ls")
-      local diagnostics = null_ls.builtins.diagnostics
-      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+    opts = function()
+      local diagnostics = require("null-ls").builtins.diagnostics
 
-      null_ls.setup({
-        capabilities = capabilities,
+      return {
+        capabilities = require('cmp_nvim_lsp').default_capabilities(),
         on_attach = on_attach,
         sources = {
           diagnostics.cppcheck,
@@ -610,8 +612,8 @@ require("lazy").setup({
           diagnostics.vint,
           diagnostics.zsh,
         },
-      })
-    end
+      }
+    end,
   },
 
   {
@@ -621,26 +623,23 @@ require("lazy").setup({
 
   {
     'simrat39/rust-tools.nvim',
-    config = function()
-      local capabilities = require('cmp_nvim_lsp').default_capabilities()
-      require('rust-tools').setup({
+    opts = function()
+      return {
         on_attach = on_attach,
-        capabilities = capabilities,
-      })
+        capabilities = require('cmp_nvim_lsp').default_capabilities()
+      }
     end
   },
 
   {
     'mfussenegger/nvim-jdtls',
+    ft = 'java',
     config = function()
-      local capabilities = require('cmp_nvim_lsp').default_capabilities()
-      vim.api.nvim_create_autocmd("FileType", { pattern = "java", group = fileTypeDetectId, callback = function()
-        require('jdtls').start_or_attach({
-          cmd = {'/opt/homebrew/opt/jdtls/bin/jdtls'},
-          capabilities = capabilities,
-          root_dir = vim.fs.dirname(vim.fs.find({'.gradlew', '.git', 'mvnw'}, { upward = true })[1]),
-        })
-      end})
+      require('jdtls').start_or_attach({
+        cmd = {'/opt/homebrew/opt/jdtls/bin/jdtls'},
+        capabilities = require('cmp_nvim_lsp').default_capabilities(),
+        root_dir = vim.fs.dirname(vim.fs.find({'.gradlew', '.git', 'mvnw'}, { upward = true })[1]),
+      })
     end
   },
 
@@ -695,10 +694,11 @@ require("lazy").setup({
   {
     'Mofiqul/dracula.nvim',
     dependencies = { 'nvim-treesitter/nvim-treesitter' },
-    config = function()
-      require('dracula').setup({
-        transparent_bg = true,
-      })
+    opts = {
+      transparent_bg = true,
+    },
+    config = function(_self, opts)
+      require('dracula').setup(opts)
 
       vim.cmd.colorscheme('dracula')
     end
