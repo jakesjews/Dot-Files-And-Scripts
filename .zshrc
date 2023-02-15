@@ -38,12 +38,9 @@ if [[ $platform == 'macos' ]]; then
   BREW_OPT="$HOMEBREW_PREFIX/opt"
   POSTGRES_ROOT="$BREW_OPT/postgresql@15"
 
-  #########################################
-  # these flags can cause issues with rbenv
   export LDFLAGS="-L$POSTGRES_ROOT/lib"
   export CPPFLAGS="-I$POSTGRES_ROOT/include"
   export PKG_CONFIG_PATH="$POSTGRES_ROOT/lib/pkgconfig"
-  #########################################
 
   export HOMEBREW_NO_AUTO_UPDATE=1
   export HOMEBREW_BOOTSNAP=1
@@ -343,9 +340,6 @@ function update() {
   cargo install-update --all
   cargo cache --autoclean
 
-  # echo "update quicklisp"
-  # sbcl --eval "(ql:update-client)" --quit
-
   echo "update pipx packages"
   pipx upgrade-all
 
@@ -408,7 +402,7 @@ function alphabetize_files() {
 }
 
 function quartus_compile() {
-  docker run --platform linux/amd64 -it --rm -v $(pwd):/build mister quartus_sh --flow compile "$1"
+  docker run --platform linux/amd64 -it --rm -v $(pwd):/build jakesjews/quartus-mac-arm quartus_sh --flow compile "$1"
 }
 
 function restore_history() {

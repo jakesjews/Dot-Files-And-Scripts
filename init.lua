@@ -437,7 +437,7 @@ packer.startup(function(use)
         cmd = { "elixir-ls" },
       }))
 
-      lspconfig.sumneko_lua.setup(coq.lsp_ensure_capabilities({
+      lspconfig.lua_ls.setup(coq.lsp_ensure_capabilities({
         on_attach = on_attach,
         settings = {
           Lua = {
