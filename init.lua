@@ -340,12 +340,9 @@ require("lazy").setup({
     config = true,
   },
 
-  'neovim/nvim-lspconfig',
-
   {
     'hrsh7th/nvim-cmp',
     dependencies = {
-      'neovim/nvim-lspconfig',
       'b0o/schemastore.nvim',
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-buffer',
@@ -394,11 +391,15 @@ require("lazy").setup({
         )
       }
     end,
-    config = function(_self, opts)
-      require('cmp').setup(opts)
+  },
 
-      local capabilities = require('cmp_nvim_lsp').default_capabilities()
-
+  {
+    'neovim/nvim-lspconfig',
+    dependencies = {
+      'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/nvim-cmp',
+    },
+    config = function()
       local servers = {
         'bashls',
         'bufls',
@@ -455,6 +456,7 @@ require("lazy").setup({
       }
 
       local lspconfig = require('lspconfig')
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
       for _, lsp in ipairs(servers) do
         lspconfig[lsp].setup({
@@ -566,7 +568,7 @@ require("lazy").setup({
         capabilities = capabilities,
         cmd = { "/opt/homebrew/opt/node@16/bin/node", '/opt/homebrew/bin/awk-language-server', 'start' },
       })
-    end
+    end,
   },
 
   {
