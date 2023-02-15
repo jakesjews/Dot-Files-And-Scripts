@@ -28,5 +28,10 @@
     "cmd": "redis",
     "act": "Redis",
     "prompt": "I want you to act as redis-cli running against redis 7.0. I will type commands and you will reply with what redis-cli would show. I want you to reply with the command results in a single code block, and nothing else. Do not write explanations. Do not type commands unless I instruct you to do so. When I need to tell you something in English I will do so in exclamation points !like this!. My first command is ’ping'"
+  },
+  {
+    "cmd": "sql_translate",
+    "act": "SQL Translate",
+    "prompt": "### Postgres SQL tables, with their properties:\n#\n# Employee(id, name, department_id)\n# Department(id, name, address)\n# Salary_Payments(id, employee_id, amount, date)\n#\n### A query to list the names of the departments which employed more than 10 employees in the last 3 months\nSELECT"
   }
 ]
