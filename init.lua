@@ -114,7 +114,53 @@ require("lazy").setup({
       'nvim-treesitter/nvim-treesitter-context',
       'andymass/vim-matchup',
     },
-    config = function()
+    opts = {
+      auto_install = true,
+      ensure_installed = "all",
+      highlight = {
+        enable = true,
+      },
+      ignore_install = { "norg", "phpdoc" },
+      matchup = {
+        enable = true,
+      },
+      rainbow = {
+        enable = true,
+        extended_mode = true,
+      },
+      incremental_selection = {
+        enable = true,
+        keymaps = {
+          init_selection = "gnn",
+          node_incremental = "grn",
+          scope_incremental = "grc",
+          node_decremental = "grm",
+        },
+      },
+      textsubjects = {
+        enable = true,
+        keymaps = {
+          ['.'] = 'textsubjects-smart',
+          [';'] = 'textsubjects-container-outer',
+          ['i;'] = 'textsubjects-container-inner',
+        },
+      },
+      refactor = {
+        highlight_definitions = {
+          enable = true,
+          clear_on_cursor_move = true,
+        },
+      },
+      playground = {
+        enable = true,
+      },
+      query_linter = {
+        enable = true,
+        use_virtual_text = true,
+        lint_events = { "BufWrite", "CursorHold" },
+      },
+    },
+    config = function(_self, opts)
       local parsers = require('nvim-treesitter.parsers');
       local ft_to_lang_original = parsers.ft_to_lang
 
@@ -125,74 +171,26 @@ require("lazy").setup({
         return ft_to_lang_original(ft)
       end
 
-      require('nvim-treesitter.configs').setup({
-        auto_install = true,
-        ensure_installed = "all",
-        highlight = {
-          enable = true,
-        },
-        ignore_install = { "norg", "phpdoc" },
-        matchup = {
-          enable = true,
-        },
-        rainbow = {
-          enable = true,
-          extended_mode = true,
-        },
-        incremental_selection = {
-          enable = true,
-          keymaps = {
-            init_selection = "gnn",
-            node_incremental = "grn",
-            scope_incremental = "grc",
-            node_decremental = "grm",
-          },
-        },
-        textsubjects = {
-          enable = true,
-          keymaps = {
-            ['.'] = 'textsubjects-smart',
-            [';'] = 'textsubjects-container-outer',
-            ['i;'] = 'textsubjects-container-inner',
-          },
-        },
-        refactor = {
-          highlight_definitions = {
-            enable = true,
-            clear_on_cursor_move = true,
-          },
-        },
-        playground = {
-          enable = true,
-        },
-        query_linter = {
-          enable = true,
-          use_virtual_text = true,
-          lint_events = { "BufWrite", "CursorHold" },
-        },
-      })
-
+      require('nvim-treesitter.configs').setup(opts)
       require('treesitter-context').setup({})
     end
   },
 
   {
     'numToStr/Comment.nvim',
-    config = function()
-      require('Comment').setup({
-        mappings = {
-          basic = true,
-          extra = false,
-          extended = false,
-        },
-        toggler = {
-          line = '<C-c>',
-        },
-        opleader = {
-          line = '<C-c>',
-        },
-      })
-    end
+    opts = {
+      mappings = {
+        basic = true,
+        extra = false,
+        extended = false,
+      },
+      toggler = {
+        line = '<C-c>',
+      },
+      opleader = {
+        line = '<C-c>',
+      },
+    },
   },
 
   {
@@ -207,19 +205,17 @@ require("lazy").setup({
   {
     "kylechui/nvim-surround",
     version = "*",
-    config = function()
-      require('nvim-surround').setup({
-        keymaps = {
-          normal = "sa",
-          visual = "sa",
-          delete = "sd",
-          change = "sc",
-        },
-        aliases = {
-          ["s"] = { "}", "]", ")", ">", '"', "'", "`" },
-        },
-      })
-    end
+    opts = {
+      keymaps = {
+        normal = "sa",
+        visual = "sa",
+        delete = "sd",
+        change = "sc",
+      },
+      aliases = {
+        ["s"] = { "}", "]", ")", ">", '"', "'", "`" },
+      },
+    },
   },
 
   {
@@ -233,8 +229,7 @@ require("lazy").setup({
       },
     },
     branch = '0.1.x',
-    config = function()
-      local telescope = require('telescope')
+    opts = function()
       local telescope_actions = require("telescope.actions")
 
       local function multi_select(prompt_bufnr)
@@ -249,7 +244,7 @@ require("lazy").setup({
         end
       end
 
-      telescope.setup({
+      return {
         defaults = {
           sorting_strategy = 'ascending',
           mappings = {
@@ -265,13 +260,16 @@ require("lazy").setup({
             },
           }
         },
-      })
+      }
+    end,
+    config = function(_self, opts)
+      local telescope = require('telescope')
+
+      telescope.setup(opts)
       telescope.load_extension('fzf')
       telescope.load_extension('live_grep_args')
 
-      local telescope_builtin = require('telescope.builtin')
-
-      vim.keymap.set('', '<C-p>', telescope_builtin.find_files)
+      vim.keymap.set('', '<C-p>', require('telescope.builtin').find_files)
       vim.keymap.set('', '<C-e>', telescope.extensions.live_grep_args.live_grep_args)
     end
   },
@@ -279,35 +277,35 @@ require("lazy").setup({
   {
     'nvim-tree/nvim-tree.lua',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
-    config = function()
-      require('nvim-tree').setup({
-        git = {
+    opts = {
+      git = {
+        enable = true,
+        ignore = true,
+      },
+      renderer = {
+        add_trailing = true,
+        highlight_git = true,
+        highlight_opened_files = 'all',
+        icons = {
+          show = {
+            git = true,
+            folder = true,
+            file = true,
+            folder_arrow = true,
+          },
+        },
+        indent_markers = {
           enable = true,
-          ignore = true,
         },
-        renderer = {
-          add_trailing = true,
-          highlight_git = true,
-          highlight_opened_files = 'all',
-          icons = {
-            show = {
-              git = true,
-              folder = true,
-              file = true,
-              folder_arrow = true,
-            },
-          },
-          indent_markers = {
-            enable = true,
-          },
+      },
+      filters = {
+        custom = {
+          '.git',
         },
-        filters = {
-          custom = {
-            '.git',
-          },
-        },
-      })
-
+      },
+    },
+    config = function(_self, opts)
+      require('nvim-tree').setup(opts)
       vim.keymap.set('n', '<C-n>', vim.cmd.NvimTreeToggle)
       vim.keymap.set('n', '<C-f>', vim.cmd.NvimTreeFindFile)
     end
@@ -331,19 +329,15 @@ require("lazy").setup({
   {
     'michaelb/sniprun',
     build = 'bash install.sh',
-    config = function()
-      require('sniprun').setup({
-        live_mode_toggle='enable',
-        repl_enable = { 'Clojure_fifo' },
-      })
-    end
+    opts = {
+      live_mode_toggle='enable',
+      repl_enable = { 'Clojure_fifo' },
+    },
   },
 
   {
     'NvChad/nvim-colorizer.lua',
-    config = function()
-      require('colorizer').setup({})
-    end
+    config = true,
   },
 
   'neovim/nvim-lspconfig',
@@ -367,11 +361,9 @@ require("lazy").setup({
       },
       {
         'KadoBOT/cmp-plugins',
-        config = function()
-          require("cmp-plugins").setup({
-            files = { 'plugins.lua', '~/.local/share/nvim/lazy' },
-          })
-        end
+        opts = {
+          files = { 'plugins.lua', '~/.local/share/nvim/lazy' },
+        },
       },
       {
         "zbirenbaum/copilot-cmp",
@@ -390,7 +382,6 @@ require("lazy").setup({
           require("copilot_cmp").setup()
         end
       },
-
     },
     config = function()
       local has_words_before = function()
