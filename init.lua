@@ -47,10 +47,10 @@ local on_attach = function(_client, bufferNum)
   vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, lsp_key_opts)
   vim.keymap.set('n', 'K', vim.lsp.buf.hover, lsp_key_opts)
   vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, lsp_key_opts)
-  vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, lsp_key_opts)
-  vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, lsp_key_opts)
-  vim.keymap.set('n', 'gr', vim.lsp.buf.references, lsp_key_opts)
-  vim.keymap.set('n', '<space>f', vim.lsp.buf.formatting, lsp_key_opts)
+  vim.keymap.set('n', 'gr', vim.lsp.buf.rename, lsp_key_opts)
+  vim.keymap.set('n', 'ga', vim.lsp.buf.code_action, lsp_key_opts)
+  vim.keymap.set('n', 'gR', vim.lsp.buf.references, lsp_key_opts)
+  vim.keymap.set('n', 'gf', function() vim.lsp.buf.format({ async = true }) end, lsp_key_opts)
 end
 
 vim.filetype.add({
@@ -738,4 +738,4 @@ require("lazy").setup({
     'lukas-reineke/indent-blankline.nvim',
     dependencies = { 'Mofiqul/dracula.nvim' },
   },
-})
+}, { install = { colorscheme = { 'dracula' } } })
