@@ -8,8 +8,9 @@ export ZSH="$HOME/.oh-my-zsh"
 
 local BREW_OPT="$HOMEBREW_PREFIX/opt"
 local POSTGRES_ROOT="$BREW_OPT/postgresql@15"
-local PERL_ROOT="$HOME/.perl5"
+local PLAN9_HOME=/opt/plan9
 
+export PERL_ROOT="$HOME/.perl5"
 export DISABLE_AUTO_UPDATE=true
 export HYPHEN_INSENSITIVE=true
 export COMPLETION_WAITING_DOTS=true
@@ -44,23 +45,10 @@ export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 export PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=true
 
+export QHOME="$HOME/.q"
 export LOGTALKHOME="$BREW_OPT/logtalk/share/logtalk"
 export GLASSFISH_HOME="$BREW_OPT/glassfish/libexec"
-export CARGO_ROOT="$HOME/.cargo/bin"
 export ANDROID_SDK_ROOT="$HOMEBREW_PREFIX/share/android-sdk"
-export TPM_ROOT="$HOME/.tmux/plugins/tpm"
-export DART_ROOT="$HOME/.pub-cache/bin"
-export CABAL_DIR="$HOME/.cabal/bin"
-export QHOME="$HOME/.q"
-export PLAN9_HOME=/opt/plan9
-export NIM_ROOT="$HOME/.nimble/bin"
-export SML_ROOT=/usr/local/smlnj/bin
-export ESVU_ROOT="$HOME/.esvu/bin"
-export ARC_DIR="$HOME/.arc"
-export LLVM_ROOT="$BREW_OPT/llvm/bin"
-export LOCAL_BIN_ROOT="$HOME/.local/bin"
-export BINGO_ROOT="$HOME/.bingo/bin"
-export ESCRIPTS_ROOT="$HOME/.mix/escripts"
 
 typeset -U path
 
@@ -70,19 +58,19 @@ export path=(
   "$POSTGRES_ROOT/bin"
   $path
   "$GO_ROOT"
-  "$CARGO_ROOT"
-  "$TPM_ROOT"
-  "$DART_ROOT"
+  "$HOME/.cargo/bin"
+  "$HOME/.tmux/plugins/tpm"
+  "$HOME/.pub-cache/bin" #dart
   "$PLAN9_HOME/bin"
-  "$NIM_ROOT"
-  "$SML_ROOT"
-  "$ESVU_ROOT"
+  "$HOME/.nimble/bin"
+  /usr/local/smlnj/bin
+  "$HOME/.esvu/bin"
   "$CARP_DIR/bin"
-  "$LOCAL_BIN_ROOT"
-  "$LLVM_ROOT"
-  "$CABAL_DIR"
-  "$BINGO_ROOT"
-  "$ESCRIPTS_ROOT"
+  "$HOME/.local/bin" #pipx
+  "$BREW_OPT/llvm/bin"
+  "$HOME/.cabal/bin"
+  "$HOME/.bingo/bin"
+  "$HOME/.mix/escripts"
   "$HOME/.deno/bin"
   "$HOME/.foundry/bin"
   "$DOTNET_TOOLS"
@@ -141,7 +129,7 @@ source "$ZSH/oh-my-zsh.sh"
 
 alias stree="$HOMEBREW_PREFIX/bin/stree"
 alias arc="$HOME/.arc/arc.sh"
-alias q='rlwrap --remember $QHOME/m64/q'
+alias q="rlwrap --remember $QHOME/m64/q"
 alias 9="$PLAN9_HOME/bin/9"
 alias jsc=/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/Helpers/jsc
 alias j=z
