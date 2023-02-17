@@ -2,15 +2,7 @@
 
 ulimit -n 64000 unlimited
 
-platform='unknown'
-unamestr=$(uname)
-if [[ "$unamestr" == 'Darwin' ]]; then
-  platform='macos'
-elif [[ "$unamestr" == 'Linux' ]]; then
-  platform='linux'
-fi
-
-export ZSH=$HOME/.oh-my-zsh
+export ZSH="$HOME/.oh-my-zsh"
 export DISABLE_AUTO_UPDATE=true
 export HYPHEN_INSENSITIVE=true
 export COMPLETION_WAITING_DOTS=true
@@ -32,90 +24,81 @@ export CLICOLOR=1
 export MCFLY_KEY_SCHEME=vim
 export MCFLY_FUZZY=2
 
-if [[ $platform == 'macos' ]]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
-  BREW_OPT="$HOMEBREW_PREFIX/opt"
-  POSTGRES_ROOT="$BREW_OPT/postgresql@15"
+BREW_OPT="$HOMEBREW_PREFIX/opt"
+POSTGRES_ROOT="$BREW_OPT/postgresql@15"
 
-  export LDFLAGS="-L$POSTGRES_ROOT/lib"
-  export CPPFLAGS="-I$POSTGRES_ROOT/include"
-  export PKG_CONFIG_PATH="$POSTGRES_ROOT/lib/pkgconfig"
+export LDFLAGS="-L$POSTGRES_ROOT/lib"
+export CPPFLAGS="-I$POSTGRES_ROOT/include"
+export PKG_CONFIG_PATH="$POSTGRES_ROOT/lib/pkgconfig"
 
-  export HOMEBREW_NO_AUTO_UPDATE=1
-  export HOMEBREW_BOOTSNAP=1
-  export HOMEBREW_UPDATE_REPORT_ALL_FORMULAE=1
-  export HOMEBREW_BAT=1
-  export HOMEBREW_NO_INSTALL_CLEANUP=1
-  export HOMEBREW_NO_INSTALL_FROM_API=1
-  export VAGRANT_DEFAULT_PROVIDER='vmware_desktop'
-  export DOTNET_ROLL_FORWARD=Major
-  export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
-  export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
-  export PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=true
+export HOMEBREW_NO_AUTO_UPDATE=1
+export HOMEBREW_BOOTSNAP=1
+export HOMEBREW_UPDATE_REPORT_ALL_FORMULAE=1
+export HOMEBREW_BAT=1
+export HOMEBREW_NO_INSTALL_CLEANUP=1
+export HOMEBREW_NO_INSTALL_FROM_API=1
+export DOTNET_ROLL_FORWARD=Major
+export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+export PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=true
 
-  export LOGTALKHOME=$BREW_OPT/logtalk/share/logtalk
-  export GLASSFISH_HOME=$BREW_OPT/glassfish/libexec
-  export CARGO_ROOT="$HOME/.cargo/bin"
-  export ANDROID_SDK_ROOT="$HOMEBREW_PREFIX/share/android-sdk"
-  export TPM_ROOT="$HOME/.tmux/plugins/tpm"
-  export DART_ROOT="$HOME/.pub-cache/bin"
-  export CABAL_DIR="$HOME/.cabal/bin"
-  export QHOME="$HOME/.q"
-  export PLAN9_HOME=/opt/plan9
-  export NIM_ROOT="$HOME/.nimble/bin"
-  export SML_ROOT=/usr/local/smlnj/bin
-  export ESVU_ROOT="$HOME/.esvu/bin"
-  export ARC_DIR="$HOME/.arc"
-  export LLVM_ROOT="$BREW_OPT/llvm/bin"
-  export LOCAL_BIN_ROOT="$HOME/.local/bin"
-  export BINGO_ROOT="$HOME/.bingo/bin"
-  export ESCRIPTS_ROOT="$HOME/.mix/escripts"
-  export DENO_ROOT="$HOME/.deno/bin"
-  export PORTER_ROOT="$HOME/.porter"
-  DOTNET_TOOLS="$HOME/.dotnet/tools"
-  JENV_ROOT="$HOME/.jenv/bin"
-  CLOJURE_BIN_ROOT="$HOME/.clojure-bin"
-  PERL_ROOT="$HOME/.perl5"
+export LOGTALKHOME="$BREW_OPT/logtalk/share/logtalk"
+export GLASSFISH_HOME="$BREW_OPT/glassfish/libexec"
+export CARGO_ROOT="$HOME/.cargo/bin"
+export ANDROID_SDK_ROOT="$HOMEBREW_PREFIX/share/android-sdk"
+export TPM_ROOT="$HOME/.tmux/plugins/tpm"
+export DART_ROOT="$HOME/.pub-cache/bin"
+export CABAL_DIR="$HOME/.cabal/bin"
+export QHOME="$HOME/.q"
+export PLAN9_HOME=/opt/plan9
+export NIM_ROOT="$HOME/.nimble/bin"
+export SML_ROOT=/usr/local/smlnj/bin
+export ESVU_ROOT="$HOME/.esvu/bin"
+export ARC_DIR="$HOME/.arc"
+export LLVM_ROOT="$BREW_OPT/llvm/bin"
+export LOCAL_BIN_ROOT="$HOME/.local/bin"
+export BINGO_ROOT="$HOME/.bingo/bin"
+export ESCRIPTS_ROOT="$HOME/.mix/escripts"
+export DENO_ROOT="$HOME/.deno/bin"
+export PORTER_ROOT="$HOME/.porter"
+PERL_ROOT="$HOME/.perl5"
 
-  typeset -U path
+typeset -U path
 
-  export path=(
-    $HOMEBREW_PREFIX/sbin
-    $BREW_OPT/python@3.11/libexec/bin
-    $POSTGRES_ROOT/bin
-    $path
-    $GO_ROOT
-    $CARGO_ROOT
-    $TPM_ROOT
-    $DART_ROOT
-    $PLAN9_HOME/bin
-    $NIM_ROOT
-    $SML_ROOT
-    $ESVU_ROOT
-    $CARP_DIR/bin
-    $LOCAL_BIN_ROOT
-    $LLVM_ROOT
-    $CABAL_DIR
-    $BINGO_ROOT
-    $ESCRIPTS_ROOT
-    $DENO_ROOT
-    $HOME/.foundry/bin
-    $DOTNET_TOOLS
-    $JENV_PATH
-    $CLOJURE_BIN_ROOT
-    $HOME/.bin
-  )
+export path=(
+  "$HOMEBREW_PREFIX/sbin"
+  "$BREW_OPT/python@3.11/libexec/bin"
+  "$POSTGRES_ROOT/bin"
+  $path
+  "$GO_ROOT"
+  "$CARGO_ROOT"
+  "$TPM_ROOT"
+  "$DART_ROOT"
+  "$PLAN9_HOME/bin"
+  "$NIM_ROOT"
+  "$SML_ROOT"
+  "$ESVU_ROOT"
+  "$CARP_DIR/bin"
+  "$LOCAL_BIN_ROOT"
+  "$LLVM_ROOT"
+  "$CABAL_DIR"
+  "$BINGO_ROOT"
+  "$ESCRIPTS_ROOT"
+  "$DENO_ROOT"
+  "$HOME/.foundry/bin"
+  "$DOTNET_TOOLS"
+  "$HOME/.dotnet/tools"
+  "$HOME/.jenv/bin"
+  "$HOME/.clojure-bin"
+  "$HOME/.bin"
+)
 
-  export fpath=(
-    "$HOMEBREW_PREFIX/share/zsh-completions"
-    $fpath 
-  )
-
-  chmod -R go-w "$HOMEBREW_PREFIX/share/zsh"
-  autoload -Uz compinit
-  compinit -u
-fi
+export fpath=(
+  "$HOMEBREW_PREFIX/share/zsh-completions"
+  $fpath 
+)
 
 plugins=(
   1password
@@ -159,33 +142,31 @@ setopt inc_append_history
 
 source "$ZSH/oh-my-zsh.sh"
 
-if [[ $platform == 'macos' ]]; then
-  alias stree="$HOMEBREW_PREFIX/bin/stree"
-  alias arc="$HOME/.arc/arc.sh"
-  alias q='rlwrap --remember $QHOME/m64/q'
-  alias 9="$PLAN9_HOME/bin/9"
-  alias jsc=/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/Helpers/jsc
-  alias j=z
-  alias factor=/Applications/factor/factor
-  alias l=ls
-  alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
-  alias git-oops="git reset --soft HEAD~"
-  alias flush-cache="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
-  alias redis-master="redis-cli -h qa-db -p 26379 SENTINEL get-master-addr-by-name eflex-redis"
-  alias vim=nvim
-  alias vi=nvim
-  alias git-graph="git commit-graph write --reachable --changed-paths"
-  alias mongo=mongosh
-  alias bash="$HOMEBREW_PREFIX/bin/bash"
-  alias make="$BREW_OPT/make/libexec/gnubin/make"
-  alias rg-all="rg -uuuu"
-  alias cpanm="cpanm --self-contained --local-lib='$PERL_ROOT' --local-lib-contained='$PERL_ROOT'"
-  alias cargo-binstall='cargo-binstall --no-confirm'
-  alias UVtoolsCmd=/Applications/UVtools.app/Contents/MacOS/UVtoolsCmd
-fi
+alias stree="$HOMEBREW_PREFIX/bin/stree"
+alias arc="$HOME/.arc/arc.sh"
+alias q='rlwrap --remember $QHOME/m64/q'
+alias 9="$PLAN9_HOME/bin/9"
+alias jsc=/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/Helpers/jsc
+alias j=z
+alias factor=/Applications/factor/factor
+alias l=ls
+alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
+alias git-oops="git reset --soft HEAD~"
+alias flush-cache="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
+alias redis-master="redis-cli -h qa-db -p 26379 SENTINEL get-master-addr-by-name eflex-redis"
+alias vim=nvim
+alias vi=nvim
+alias git-graph="git commit-graph write --reachable --changed-paths"
+alias mongo=mongosh
+alias bash="$HOMEBREW_PREFIX/bin/bash"
+alias make="$BREW_OPT/make/libexec/gnubin/make"
+alias rg-all="rg -uuuu"
+alias cpanm="cpanm --self-contained --local-lib='$PERL_ROOT' --local-lib-contained='$PERL_ROOT'"
+alias cargo-binstall='cargo-binstall --no-confirm'
+alias UVtoolsCmd=/Applications/UVtools.app/Contents/MacOS/UVtoolsCmd
 
 function mux() {
-  tmuxinator start $1 --suppress-tmux-version-warning
+  tmuxinator start "$1" --suppress-tmux-version-warning
 }
 
 function clean-eflex() {
@@ -247,7 +228,12 @@ function flac-to-mp3() {
 }
 
 function update-servers() {
-  ansible all --inventory /opt/homebrew/etc/ansible/hosts --forks 8 --module-name "apt" --args "upgrade=dist update_cache=true autoremove=true"
+  ansible \
+    all \
+    --inventory "$HOMEBREW_PREFIX/etc/ansible/hosts" \
+    --forks 8 \
+    --module-name "apt" \
+    --args "upgrade=dist update_cache=true autoremove=true"
 }
 
 function pwdx {
@@ -399,7 +385,7 @@ function alphabetize_files() {
 }
 
 function quartus_compile() {
-  docker run --platform linux/amd64 -it --rm -v $(pwd):/build jakesjews/quartus-mac-arm quartus_sh --flow compile "$1"
+  docker run --platform linux/amd64 -it --rm -v "$(pwd):/build" jakesjews/quartus-mac-arm quartus_sh --flow compile "$1"
 }
 
 function restore_history() {
@@ -440,12 +426,13 @@ function zvm_after_init() {
   }
 }
 
-if [[ $platform == 'macos' ]]; then
-  eval $(perl -I$PERL_ROOT/lib/perl5 -Mlocal::lib=$PERL_ROOT)
-  source "$HOME/.opam/opam-init/init.zsh"
-  source $HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-  source $BREW_OPT/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-  source $BREW_OPT/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
-  source "$HOME/.config/op/plugins.sh"
-  eval "$(jenv init -)"
-fi
+eval $(perl -I$PERL_ROOT/lib/perl5 -Mlocal::lib=$PERL_ROOT)
+source "$HOME/.opam/opam-init/init.zsh"
+source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+source "$BREW_OPT/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
+source "$BREW_OPT/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
+source "$HOME/.config/op/plugins.sh"
+eval "$(jenv init -)"
+
+autoload -Uz compinit
+compinit -u
