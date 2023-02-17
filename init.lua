@@ -96,15 +96,6 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
   {
-    'andymass/vim-matchup',
-    config = function()
-      vim.g.matchup_matchparen_offscreen = { method = 'popup' }
-      vim.g.matchup_matchparen_deferred = 1
-      vim.g.matchup_surround_enabled = 0
-    end
-  },
-
-  {
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
       'mrjones2014/nvim-ts-rainbow',
@@ -112,7 +103,14 @@ require("lazy").setup({
       'RRethy/nvim-treesitter-textsubjects',
       'nvim-treesitter/playground',
       'nvim-treesitter/nvim-treesitter-context',
-      'andymass/vim-matchup',
+      {
+        'andymass/vim-matchup',
+        config = function()
+          vim.g.matchup_matchparen_offscreen = { method = 'popup' }
+          vim.g.matchup_matchparen_deferred = 1
+          vim.g.matchup_surround_enabled = 0
+        end
+      },
       'windwp/nvim-ts-autotag',
     },
     opts = {
@@ -224,7 +222,10 @@ require("lazy").setup({
 
   {
     'nvim-telescope/telescope.nvim',
-    keys = '<C-e>',
+    keys = {
+      '<C-e>',
+      '<C-p>',
+    },
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope-live-grep-args.nvim',
@@ -408,10 +409,6 @@ require("lazy").setup({
 
   {
     'neovim/nvim-lspconfig',
-    dependencies = {
-      'hrsh7th/cmp-nvim-lsp',
-      'hrsh7th/nvim-cmp',
-    },
     config = function()
       local servers = {
         'bashls',
@@ -587,6 +584,7 @@ require("lazy").setup({
 
   {
     'klen/nvim-test',
+    keys = '<C-t>',
     opts = {
       runners = {
         javascript = "nvim-test.runners.mocha",
@@ -604,10 +602,7 @@ require("lazy").setup({
 
   {
     'jose-elias-alvarez/null-ls.nvim',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'hrsh7th/nvim-cmp',
-    },
+    dependencies = { 'nvim-lua/plenary.nvim' },
     opts = function()
       local diagnostics = require("null-ls").builtins.diagnostics
 
@@ -665,6 +660,23 @@ require("lazy").setup({
     ft = { 'fsharp', 'fsharp_project' },
   },
 
+  {
+    'jdonaldson/vaxe',
+    ft = {
+      'flow',
+      'haxe',
+      'hss',
+      'hxml',
+      'lime',
+      'nmml',
+    },
+  },
+
+  {
+    'iloginow/vim-stylus',
+    ft = 'stylus',
+  },
+
   'Joorem/vim-haproxy',
   'IrenejMarc/vim-mint',
   'MTDL9/vim-log-highlighting',
@@ -676,7 +688,6 @@ require("lazy").setup({
   'hellerve/carp-vim',
   'jakesjews/vim-emblem',
   'jakwings/vim-pony',
-  'jdonaldson/vaxe',
   'katusk/vim-qkdb-syntax',
   'kchmck/vim-coffee-script',
   'leafo/moonscript-vim',
@@ -686,7 +697,6 @@ require("lazy").setup({
   'thyrgle/vim-dyon',
   'lifepillar/pgsql.vim',
   'vmchale/ion-vim',
-  'iloginow/vim-stylus',
   'alaviss/nim.nvim',
   'zebradil/hive.vim',
   'reasonml-editor/vim-reason-plus',
@@ -706,6 +716,7 @@ require("lazy").setup({
 
   {
     'vim-crystal/vim-crystal',
+    ft = { 'crystal', 'ecrystal' },
     config = function()
       vim.g.crystal_enable_completion = 0
     end
