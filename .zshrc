@@ -145,8 +145,7 @@ autoload zargs
 autoload zmv
 autoload tcp_open
 
-zmodload zsh/datetime
-zmodload zsh/stat
+zmodload -F zsh/stat b:zstat
 zmodload zsh/mapfile
 zmodload zsh/mathfunc
 zmodload zsh/net/socket
@@ -154,8 +153,6 @@ zmodload zsh/net/tcp
 zmodload zsh/curses
 zmodload zsh/pcre
 zmodload zsh/zftp
-zmodload zsh/regex
-zmodload zsh/system
 
 unsetopt listambiguous
 setopt inc_append_history
@@ -317,7 +314,7 @@ function update() {
   brew upgrade
 
   echo "updating vim plugins"
-  nvim -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
+  nvim --headless "+Lazy! update" +qa
   vim +TSUpdateSync +qa
 
   echo "updating ruby gems"
