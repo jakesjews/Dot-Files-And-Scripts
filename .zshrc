@@ -2,7 +2,14 @@
 
 ulimit -n 64000 unlimited
 
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
 export ZSH="$HOME/.oh-my-zsh"
+
+local BREW_OPT="$HOMEBREW_PREFIX/opt"
+local POSTGRES_ROOT="$BREW_OPT/postgresql@15"
+local PERL_ROOT="$HOME/.perl5"
+
 export DISABLE_AUTO_UPDATE=true
 export HYPHEN_INSENSITIVE=true
 export COMPLETION_WAITING_DOTS=true
@@ -23,16 +30,9 @@ export FZF_DEFAULT_COMMAND='fd --type f'
 export CLICOLOR=1
 export MCFLY_KEY_SCHEME=vim
 export MCFLY_FUZZY=2
-
-eval "$(/opt/homebrew/bin/brew shellenv)"
-
-BREW_OPT="$HOMEBREW_PREFIX/opt"
-POSTGRES_ROOT="$BREW_OPT/postgresql@15"
-
 export LDFLAGS="-L$POSTGRES_ROOT/lib"
 export CPPFLAGS="-I$POSTGRES_ROOT/include"
 export PKG_CONFIG_PATH="$POSTGRES_ROOT/lib/pkgconfig"
-
 export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_BOOTSNAP=1
 export HOMEBREW_UPDATE_REPORT_ALL_FORMULAE=1
@@ -61,9 +61,6 @@ export LLVM_ROOT="$BREW_OPT/llvm/bin"
 export LOCAL_BIN_ROOT="$HOME/.local/bin"
 export BINGO_ROOT="$HOME/.bingo/bin"
 export ESCRIPTS_ROOT="$HOME/.mix/escripts"
-export DENO_ROOT="$HOME/.deno/bin"
-export PORTER_ROOT="$HOME/.porter"
-PERL_ROOT="$HOME/.perl5"
 
 typeset -U path
 
@@ -86,7 +83,7 @@ export path=(
   "$CABAL_DIR"
   "$BINGO_ROOT"
   "$ESCRIPTS_ROOT"
-  "$DENO_ROOT"
+  "$HOME/.deno/bin"
   "$HOME/.foundry/bin"
   "$DOTNET_TOOLS"
   "$HOME/.dotnet/tools"
