@@ -32,7 +32,30 @@ vim.keymap.set('v', '.', ':normal .<CR>')
 vim.keymap.set('n', '[', vim.cmd.bprevious, { silent = true })
 vim.keymap.set('n', ']', vim.cmd.bnext, { silent = true })
 
+vim.filetype.add({
+  extension = {
+    jq = 'jq'
+  }
+})
+
 local fileTypeDetectId = vim.api.nvim_create_augroup("filetypedetect", { clear = true })
+
+local indents = {
+  cs = 'setl sw=4 sts=4 ts=4 et',
+  c = 'setl sw=4 sts=4 ts=4 et',
+  cpp = 'setl sw=4 sts=4 ts=4 et',
+  make = 'setl noexpandtab sw=4 sts=0 ts=4',
+}
+
+for pattern, command in pairs(indents) do
+  vim.api.nvim_create_autocmd("FileType", { pattern = pattern, group = fileTypeDetectId, command = command })
+end
+
+vim.api.nvim_create_autocmd("TextYankPost", {
+  callback = function()
+    vim.highlight.on_yank({ higroup = "IncSearch", timeout = 150, on_visual = true })
+  end
+})
 
 local on_attach = function(_client, bufferNum)
   local lsp_key_opts = {
@@ -52,34 +75,6 @@ local on_attach = function(_client, bufferNum)
   vim.keymap.set('n', 'gR', vim.lsp.buf.references, lsp_key_opts)
   vim.keymap.set('n', 'gf', function() vim.lsp.buf.format({ async = true }) end, lsp_key_opts)
 end
-
-vim.filetype.add({
-  extension = {
-    jq = 'jq'
-  }
-})
-
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "cs", group = fileTypeDetectId, command = "setl sw=4 sts=4 ts=4 et"
-})
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "c", group = fileTypeDetectId, command = "setl sw=4 sts=4 ts=4 et"
-})
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "cpp", group = fileTypeDetectId, command = "setl sw=4 sts=4 ts=4 et"
-})
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "make", group = fileTypeDetectId, command = "setl noexpandtab sw=4 sts=0 ts=4"
-})
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "scss", group = fileTypeDetectId, command = "setl iskeyword+=@-@"
-})
-
-vim.api.nvim_create_autocmd("TextYankPost", {
-  callback = function()
-    vim.highlight.on_yank({ higroup="IncSearch", timeout=150, on_visual=true })
-  end
-})
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -126,15 +121,6 @@ require("lazy").setup({
       rainbow = {
         enable = true,
         extended_mode = true,
-      },
-      incremental_selection = {
-        enable = true,
-        keymaps = {
-          init_selection = "gnn",
-          node_incremental = "grn",
-          scope_incremental = "grc",
-          node_decremental = "grm",
-        },
       },
       textsubjects = {
         enable = true,
@@ -357,6 +343,7 @@ require("lazy").setup({
       'hrsh7th/cmp-path',
       'hrsh7th/cmp-vsnip',
       'hrsh7th/vim-vsnip',
+      'onsails/lspkind.nvim',
       'hrsh7th/cmp-nvim-lsp-document-symbol',
       'hrsh7th/cmp-nvim-lsp-signature-help',
       'hrsh7th/cmp-nvim-lua',
@@ -389,6 +376,18 @@ require("lazy").setup({
         mapping = cmp.mapping.preset.insert({
           ['<CR>'] = cmp.mapping.confirm({ select = false }),
         }),
+        formatting = {
+          format = require('lspkind').cmp_format({
+            mode = "symbol_text",
+            menu = ({
+              buffer = "[Buffer]",
+              nvim_lsp = "[LSP]",
+              nvim_lua = "[Lua]",
+              path = "[Path]",
+              npm = "[NPM]",
+            })
+          })
+        },
         sources = cmp.config.sources(
           {
             { name = 'nvim_lsp' },
@@ -613,7 +612,6 @@ require("lazy").setup({
           diagnostics.cppcheck,
           diagnostics.credo,
           diagnostics.hadolint,
-          diagnostics.luacheck,
           diagnostics.markdownlint,
           diagnostics.mypy,
           diagnostics.phpstan,
@@ -673,7 +671,7 @@ require("lazy").setup({
   },
 
   {
-    'iloginow/vim-stylus',
+    'wavded/vim-stylus',
     ft = 'stylus',
   },
 
@@ -684,7 +682,7 @@ require("lazy").setup({
   'alunny/pegjs-vim',
   'elubow/cql-vim',
   'fladson/vim-kitty',
-  'gkz/vim-ls',
+  'wsdjeg/vim-livescript',
   'hellerve/carp-vim',
   'jakesjews/vim-emblem',
   'jakwings/vim-pony',
@@ -695,7 +693,6 @@ require("lazy").setup({
   'purescript-contrib/purescript-vim',
   'robbles/logstash.vim',
   'thyrgle/vim-dyon',
-  'lifepillar/pgsql.vim',
   'vmchale/ion-vim',
   'alaviss/nim.nvim',
   'zebradil/hive.vim',
@@ -715,11 +712,8 @@ require("lazy").setup({
   },
 
   {
-    'vim-crystal/vim-crystal',
+    'jlcrochet/vim-crystal',
     ft = { 'crystal', 'ecrystal' },
-    config = function()
-      vim.g.crystal_enable_completion = 0
-    end
   },
 
   {
