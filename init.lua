@@ -113,6 +113,7 @@ require("lazy").setup({
       'nvim-treesitter/playground',
       'nvim-treesitter/nvim-treesitter-context',
       'andymass/vim-matchup',
+      'windwp/nvim-ts-autotag',
     },
     opts = {
       auto_install = true,
@@ -159,6 +160,9 @@ require("lazy").setup({
         use_virtual_text = true,
         lint_events = { "BufWrite", "CursorHold" },
       },
+      autotag = {
+        enable = true,
+      }
     },
     config = function(_self, opts)
       local parsers = require('nvim-treesitter.parsers');
@@ -220,6 +224,7 @@ require("lazy").setup({
 
   {
     'nvim-telescope/telescope.nvim',
+    keys = '<C-e>',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope-live-grep-args.nvim',
@@ -277,6 +282,10 @@ require("lazy").setup({
   {
     'nvim-tree/nvim-tree.lua',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
+    keys = {
+      '<C-n>',
+      '<C-f>',
+    },
     opts = {
       git = {
         enable = true,
@@ -335,10 +344,8 @@ require("lazy").setup({
     },
   },
 
-  {
-    'NvChad/nvim-colorizer.lua',
-    config = true,
-  },
+  { 'NvChad/nvim-colorizer.lua', config = true },
+  { 'windwp/nvim-autopairs', config = true },
 
   {
     'hrsh7th/nvim-cmp',
@@ -365,6 +372,12 @@ require("lazy").setup({
     },
     opts = function()
       local cmp = require('cmp')
+      local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+
+      cmp.event:on(
+        'confirm_done',
+        cmp_autopairs.on_confirm_done()
+      )
 
       return {
         snippet = {
@@ -373,7 +386,7 @@ require("lazy").setup({
           end,
         },
         mapping = cmp.mapping.preset.insert({
-          ['<CR>'] = cmp.mapping.confirm({ select = true }),
+          ['<CR>'] = cmp.mapping.confirm({ select = false }),
         }),
         sources = cmp.config.sources(
           {
@@ -410,6 +423,7 @@ require("lazy").setup({
         'csharp_ls',
         'cssls',
         'dartls',
+        'docker_compose_language_service',
         'dockerls',
         'dotls',
         'elmls',
@@ -625,6 +639,7 @@ require("lazy").setup({
 
   {
     'simrat39/rust-tools.nvim',
+    ft = 'rust',
     opts = function()
       return {
         on_attach = on_attach,
@@ -645,8 +660,11 @@ require("lazy").setup({
     end
   },
 
-  'Julian/lean.nvim',
-  'ionide/Ionide-vim',
+  {
+    'ionide/Ionide-vim',
+    ft = { 'fsharp', 'fsharp_project' },
+  },
+
   'Joorem/vim-haproxy',
   'IrenejMarc/vim-mint',
   'MTDL9/vim-log-highlighting',
@@ -695,13 +713,12 @@ require("lazy").setup({
 
   {
     'Mofiqul/dracula.nvim',
-    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    priority = 1000,
     opts = {
       transparent_bg = true,
     },
     config = function(_self, opts)
       require('dracula').setup(opts)
-
       vim.cmd.colorscheme('dracula')
     end
   },
