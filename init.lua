@@ -357,14 +357,27 @@ require("lazy").setup({
           files = { 'plugins.lua', '~/.local/share/nvim/lazy' },
         },
       },
+      {
+        'zbirenbaum/copilot-cmp',
+        dependencies = {
+          {
+            'zbirenbaum/copilot.lua',
+            opts = {
+              suggestion = { enabled = false },
+              panel = { enabled = false },
+            },
+          },
+        },
+        config = true,
+      },
     },
     opts = function()
       local cmp = require('cmp')
-      local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+      local compare = cmp.config.compare
 
       cmp.event:on(
         'confirm_done',
-        cmp_autopairs.on_confirm_done()
+        require('nvim-autopairs.completion.cmp').on_confirm_done()
       )
 
       return {
@@ -374,18 +387,29 @@ require("lazy").setup({
           end,
         },
         mapping = cmp.mapping.preset.insert({
-          ['<CR>'] = cmp.mapping.confirm({ select = false }),
+          ["<CR>"] = function(fallback)
+            local option = { select = false }
+            local e = cmp.core.view:get_selected_entry()
+            if e and e.source and e.source.name == 'copilot' then
+              option.behavior = cmp.ConfirmBehavior.Replace
+            end
+
+            if not cmp.confirm(option) then
+              fallback()
+            end
+          end,
         }),
         formatting = {
           format = require('lspkind').cmp_format({
             mode = "symbol_text",
-            menu = ({
+            menu = {
               buffer = "[Buffer]",
               nvim_lsp = "[LSP]",
               nvim_lua = "[Lua]",
               path = "[Path]",
               npm = "[NPM]",
-            })
+              copilot = "",
+            }
           })
         },
         sources = cmp.config.sources(
@@ -397,11 +421,26 @@ require("lazy").setup({
             { name = 'npm', keyword_length = 4 },
             { name = 'nvim_lua' },
             { name = 'plugins' },
+            { name = 'copilot' },
           },
           {
             { name = 'buffer' },
           }
-        )
+        ),
+        sorting = {
+          priority_weight = 2,
+          comparators = {
+            compare.offset,
+            compare.exact,
+            require("copilot_cmp.comparators").prioritize,
+            compare.score,
+            compare.recently_used,
+            compare.locality,
+            compare.kind,
+            compare.length,
+            compare.order,
+          },
+        },
       }
     end,
   },

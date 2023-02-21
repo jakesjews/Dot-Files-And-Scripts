@@ -49,6 +49,7 @@ export QHOME="$HOME/.q"
 export LOGTALKHOME="$BREW_OPT/logtalk/share/logtalk"
 export GLASSFISH_HOME="$BREW_OPT/glassfish/libexec"
 export ANDROID_SDK_ROOT="$HOMEBREW_PREFIX/share/android-sdk"
+export CARP_DIR="$HOME/.carp"
 
 typeset -U path
 
