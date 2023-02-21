@@ -107,7 +107,6 @@ plugins=(
   react-native
   rust
   terraform
-  zoxide
 )
 
 autoload zargs
@@ -133,7 +132,6 @@ alias arc="$HOME/.arc/arc.sh"
 alias q="rlwrap --remember $QHOME/m64/q"
 alias 9="$PLAN9_HOME/bin/9"
 alias jsc=/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/Helpers/jsc
-alias j=z
 alias factor=/Applications/factor/factor
 alias l=ls
 alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
@@ -419,6 +417,7 @@ source "$BREW_OPT/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
 source "$BREW_OPT/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 source "$HOME/.config/op/plugins.sh"
 eval "$(jenv init -)"
+eval "$(zoxide init --cmd j zsh)"
 
 autoload -Uz compinit
 compinit -u
