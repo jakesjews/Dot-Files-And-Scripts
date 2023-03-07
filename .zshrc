@@ -79,6 +79,7 @@ export path=(
   "$HOME/.jenv/bin"
   "$HOME/.clojure-bin"
   "$HOME/.bin"
+  "$PERL_ROOT/bin"
 )
 
 export fpath=(
@@ -112,6 +113,7 @@ plugins=(
 autoload zargs
 autoload zmv
 autoload tcp_open
+autoload zcalc
 
 zmodload -F zsh/stat b:zstat
 zmodload zsh/mapfile
@@ -148,6 +150,7 @@ alias rg-all="rg -uuuu"
 alias cpanm="cpanm --self-contained --local-lib='$PERL_ROOT' --local-lib-contained='$PERL_ROOT'"
 alias cargo-binstall='cargo-binstall --no-confirm'
 alias UVtoolsCmd=/Applications/UVtools.app/Contents/MacOS/UVtoolsCmd
+alias jenv-start='eval "$(jenv init -)"'
 
 function mux() {
   tmuxinator start "$1" --suppress-tmux-version-warning
@@ -266,13 +269,14 @@ function rust-mode() {
   alias time=hyperfine
   alias tmux=zellij
   alias top=btm
+  alias touch=bonk
   alias tree=broot
   alias uniq=huniq
   alias wait=stare
   alias watch=hwatch
   alias wc=cw
+  alias whoami=whome
   alias xargs=rargs
-  alias touch=bonk
 }
 
 function update() {
@@ -284,7 +288,7 @@ function update() {
   brew upgrade
 
   echo "updating vim plugins"
-  nvim --headless "+Lazy! update" +qa
+  nvim --headless "+Lazy! sync" +qa
   vim +TSUpdateSync +qa
 
   echo "updating ruby gems"
@@ -393,6 +397,10 @@ function node_list_requires() {
     "$1" | sort -u
 }
 
+function zvm_config() {
+  ZVM_VI_SURROUND_BINDKEY=s-prefix
+}
+
 function zvm_before_init() {
   zvm_bindkey viins '^[[A' history-substring-search-up
   zvm_bindkey viins '^[[B' history-substring-search-down
@@ -416,8 +424,9 @@ source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 source "$BREW_OPT/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
 source "$BREW_OPT/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 source "$HOME/.config/op/plugins.sh"
-eval "$(jenv init -)"
 eval "$(zoxide init --cmd j zsh)"
 
+# https://github.com/zdharma-continuum/fast-syntax-highlighting/issues/27
+FAST_HIGHLIGHT[chroma-man]=
 autoload -Uz compinit
 compinit -u
