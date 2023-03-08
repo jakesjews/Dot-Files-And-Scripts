@@ -34,7 +34,8 @@ vim.keymap.set('n', ']', vim.cmd.bnext, { silent = true })
 
 vim.filetype.add({
   extension = {
-    jq = 'jq'
+    jq = 'jq',
+    kdl = 'kdl',
   }
 })
 
@@ -323,6 +324,11 @@ require("lazy").setup({
   'gpanders/editorconfig.nvim',
 
   {
+    '0xStabby/chatgpt-vim',
+    cmd = 'Gpt',
+  },
+
+  {
     'michaelb/sniprun',
     build = 'bash install.sh',
     opts = {
@@ -377,7 +383,7 @@ require("lazy").setup({
 
       cmp.event:on(
         'confirm_done',
-        require('nvim-autopairs.completion.cmp').on_confirm_done()
+        require('nvim-autopairs.completion.cmp').on_confirm_done({ map_char = { tex = "" } })
       )
 
       return {
@@ -501,6 +507,7 @@ require("lazy").setup({
         'vimls',
         'vuels',
         'yamlls',
+        'yls',
         'zls',
       }
 
@@ -596,27 +603,33 @@ require("lazy").setup({
         bundle_path = '/Users/jacob/.powershell',
       })
 
-      lspconfig.tsserver.setup({
-        on_attach = on_attach,
-        capabilities = capabilities,
-        cmd = { 'typescript-language-server', '--stdio', '--log-level', '1', '--tsserver-log-verbosity', 'off' },
-        init_options = {
-          hostInfo = 'neovim',
-          npmLocation = '/opt/homebrew/bin/npm',
-          preferences = {
-            importModuleSpecifierPreference = 'non-relative',
-            disableSuggestions = true,
-            includeCompletionsForModuleExports = false,
-            ignoreDeprecations = '5.0',
-          },
-        }
-      })
-
       lspconfig.awk_ls.setup({
         on_attach = on_attach,
         capabilities = capabilities,
         cmd = { "/opt/homebrew/opt/node@16/bin/node", '/opt/homebrew/bin/awk-language-server', 'start' },
       })
+    end,
+  },
+
+  {
+    'jose-elias-alvarez/typescript.nvim',
+    opts = function()
+      return {
+        server = {
+          cmd = { 'typescript-language-server', '--stdio', '--log-level', '1', '--tsserver-log-verbosity', 'off' },
+          on_attach = on_attach,
+          capabilities = require('cmp_nvim_lsp').default_capabilities(),
+          init_options = {
+            hostInfo = 'neovim',
+            npmLocation = '/opt/homebrew/bin/npm',
+            preferences = {
+              importModuleSpecifierPreference = 'non-relative',
+              disableSuggestions = true,
+              ignoreDeprecations = '5.0',
+            },
+          },
+        }
+      }
     end,
   },
 
@@ -659,6 +672,7 @@ require("lazy").setup({
           diagnostics.statix,
           diagnostics.vint,
           diagnostics.zsh,
+          require("typescript.extensions.null-ls.code-actions"),
         },
       }
     end,
