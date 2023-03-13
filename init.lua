@@ -329,6 +329,26 @@ require("lazy").setup({
   },
 
   {
+    'dpayne/CodeGPT.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'MunifTanjim/nui.nvim',
+    },
+    cmd = 'Chat',
+    config = function()
+      require('codegpt.config')
+
+      vim.g["codegpt_commands"] = {
+        ["tests"] = {
+          language_instructions = {
+            javascript = "Use the mocha framework and the chai.js expect api for assertions.",
+          }
+        },
+      }
+    end,
+  },
+
+  {
     'michaelb/sniprun',
     build = 'bash install.sh',
     opts = {
@@ -506,7 +526,6 @@ require("lazy").setup({
         'veryl_ls',
         'vimls',
         'vuels',
-        'yamlls',
         'yls',
         'zls',
       }
@@ -534,7 +553,7 @@ require("lazy").setup({
         on_attach = on_attach,
         capabilities = capabilities,
         root_dir = lspconfig.util.root_pattern('playbook.yml'),
-        single_file_support = false
+        single_file_support = true
       })
 
       lspconfig.jsonls.setup({
@@ -607,6 +626,17 @@ require("lazy").setup({
         on_attach = on_attach,
         capabilities = capabilities,
         cmd = { "/opt/homebrew/opt/node@16/bin/node", '/opt/homebrew/bin/awk-language-server', 'start' },
+      })
+
+      lspconfig.yamlls.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        settings = {
+          yaml = {
+            keyOrdering = false,
+            schemaStore = { enable = true },
+          },
+        },
       })
     end,
   },
