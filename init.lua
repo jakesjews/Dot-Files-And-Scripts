@@ -303,8 +303,11 @@ require("lazy").setup({
     },
     config = function(_self, opts)
       require('nvim-tree').setup(opts)
-      vim.keymap.set('n', '<C-n>', vim.cmd.NvimTreeToggle)
-      vim.keymap.set('n', '<C-f>', vim.cmd.NvimTreeFindFile)
+      local nvim_tree_api = require('nvim-tree.api')
+      vim.keymap.set("n", "<C-n>", nvim_tree_api.tree.toggle)
+      vim.keymap.set('n', '<C-f>', function()
+        nvim_tree_api.tree.find_file({ open = true, focus = true })
+      end)
     end
   },
 

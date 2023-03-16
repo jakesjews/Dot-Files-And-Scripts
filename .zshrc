@@ -418,6 +418,10 @@ function zvm_after_init() {
   }
 }
 
+function conda-init() {
+  eval "$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+}
+
 eval $(perl -I$PERL_ROOT/lib/perl5 -Mlocal::lib=$PERL_ROOT)
 source "$HOME/.opam/opam-init/init.zsh"
 source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
