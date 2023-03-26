@@ -1,6 +1,6 @@
 #!/opt/homebrew/bin/zsh
 
-ulimit -n 64000 unlimited
+ulimit -n 10240 unlimited
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
@@ -57,6 +57,7 @@ export path=(
   "$HOMEBREW_PREFIX/sbin"
   "$BREW_OPT/python@3.11/libexec/bin"
   "$POSTGRES_ROOT/bin"
+  "$BREW_OPT/curl/bin"
   $path
   "$GO_ROOT"
   "$HOME/.cargo/bin"
@@ -429,6 +430,7 @@ source "$BREW_OPT/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
 source "$BREW_OPT/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 source "$HOME/.config/op/plugins.sh"
 eval "$(zoxide init --cmd j zsh)"
+eval "$(github-copilot-cli alias -- "$0")"
 
 # https://github.com/zdharma-continuum/fast-syntax-highlighting/issues/27
 FAST_HIGHLIGHT[chroma-man]=

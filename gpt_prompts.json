@@ -42,7 +42,7 @@
   {
     "cmd": "time_complexity",
     "act": "Time Complexity",
-    "prompt": "The time complexity of this javascript function is\nconsole.log(1);"
+    "prompt": "You are a time complexity calcuator for code. You will describe the time complexity of code and nothing else.\nconsole.log(1);"
   },
   {
     "cmd": "eldritch",

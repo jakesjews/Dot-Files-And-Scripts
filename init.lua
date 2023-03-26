@@ -2,7 +2,7 @@
 vim.g.loaded_matchit = 1 -- matchup compatibility
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
-vim.g.python3_host_prog="/opt/homebrew/bin/python3.11"
+vim.g.python3_host_prog = "/opt/homebrew/bin/python3.11"
 
 vim.opt.shortmess:append({ c = true })
 vim.opt.number = true
@@ -19,8 +19,8 @@ vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.pastetoggle = '<F2>'
 vim.opt.clipboard = 'unnamed'
-vim.opt.foldlevel = 99
 vim.opt.splitright = true
+vim.opt.foldlevel = 99
 vim.opt.foldmethod = 'indent'
 vim.opt.swapfile = false
 vim.opt.scrolloff = 1
@@ -94,7 +94,7 @@ require("lazy").setup({
   {
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
-      'mrjones2014/nvim-ts-rainbow',
+      'HiPhish/nvim-ts-rainbow2',
       'nvim-treesitter/nvim-treesitter-refactor',
       'RRethy/nvim-treesitter-textsubjects',
       'nvim-treesitter/playground',
@@ -147,7 +147,10 @@ require("lazy").setup({
       },
       autotag = {
         enable = true,
-      }
+      },
+      indent = {
+        enable = true,
+      },
     },
     config = function(_self, opts)
       local parsers = require('nvim-treesitter.parsers');
@@ -314,7 +317,7 @@ require("lazy").setup({
   {
     'jakesjews/vim-ember-imports',
     dependencies = { "sukima/vim-javascript-imports" },
-    ft = {'coffee', 'javascript', 'typescript'},
+    ft = { 'coffee', 'javascript', 'typescript' },
     config = function()
       vim.g.vim_javascript_imports_multiline_max_col = 120
       vim.g.vim_javascript_imports_multiline_max_vars = 100
@@ -355,13 +358,13 @@ require("lazy").setup({
     'michaelb/sniprun',
     build = 'bash install.sh',
     opts = {
-      live_mode_toggle='enable',
+      live_mode_toggle = 'enable',
       repl_enable = { 'Clojure_fifo' },
     },
   },
 
   { 'NvChad/nvim-colorizer.lua', config = true },
-  { 'windwp/nvim-autopairs', config = true },
+  { 'windwp/nvim-autopairs',     config = true },
 
   {
     'hrsh7th/nvim-cmp',
@@ -447,7 +450,7 @@ require("lazy").setup({
             { name = 'nvim_lsp_document_symbol' },
             { name = 'nvim_lsp_signature_help' },
             { name = 'path' },
-            { name = 'npm', keyword_length = 4 },
+            { name = 'npm',                     keyword_length = 4 },
             { name = 'nvim_lua' },
             { name = 'plugins' },
             { name = 'copilot' },
@@ -527,6 +530,7 @@ require("lazy").setup({
         'turtle_ls',
         'vala_ls',
         'veryl_ls',
+        'vhdl_ls',
         'vimls',
         'vuels',
         'yls',
@@ -579,7 +583,7 @@ require("lazy").setup({
       lspconfig.arduino_language_server.setup({
         on_attach = on_attach,
         capabilities = capabilities,
-        cmd =  {
+        cmd = {
           "arduino-language-server",
           "-cli-config", "/Users/jacob/Library/Arduino15/arduino-cli.yaml",
         }
@@ -732,9 +736,9 @@ require("lazy").setup({
     ft = 'java',
     config = function()
       require('jdtls').start_or_attach({
-        cmd = {'/opt/homebrew/opt/jdtls/bin/jdtls'},
+        cmd = { '/opt/homebrew/opt/jdtls/bin/jdtls' },
         capabilities = require('cmp_nvim_lsp').default_capabilities(),
-        root_dir = vim.fs.dirname(vim.fs.find({'.gradlew', '.git', 'mvnw'}, { upward = true })[1]),
+        root_dir = vim.fs.dirname(vim.fs.find({ '.gradlew', '.git', 'mvnw' }, { upward = true })[1]),
       })
     end
   },
