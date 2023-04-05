@@ -481,6 +481,7 @@ require("lazy").setup({
     'neovim/nvim-lspconfig',
     config = function()
       local servers = {
+        'awk_ls',
         'bashls',
         'bufls',
         'clojure_lsp',
@@ -629,12 +630,6 @@ require("lazy").setup({
         bundle_path = '/Users/jacob/.powershell',
       })
 
-      lspconfig.awk_ls.setup({
-        on_attach = on_attach,
-        capabilities = capabilities,
-        cmd = { "/opt/homebrew/opt/node@16/bin/node", '/opt/homebrew/bin/awk-language-server', 'start' },
-      })
-
       lspconfig.yamlls.setup({
         on_attach = on_attach,
         capabilities = capabilities,
@@ -775,7 +770,6 @@ require("lazy").setup({
   'wsdjeg/vim-livescript',
   'hellerve/carp-vim',
   'jakesjews/vim-emblem',
-  'jakwings/vim-pony',
   'katusk/vim-qkdb-syntax',
   'kchmck/vim-coffee-script',
   'leafo/moonscript-vim',
@@ -788,6 +782,7 @@ require("lazy").setup({
   'zebradil/hive.vim',
   'reasonml-editor/vim-reason-plus',
   'stevearc/vim-arduino',
+  'llathasa-veleth/vim-brainfuck',
 
   {
     'pearofducks/ansible-vim',

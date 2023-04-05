@@ -57,7 +57,6 @@ export path=(
   "$HOMEBREW_PREFIX/sbin"
   "$BREW_OPT/python@3.11/libexec/bin"
   "$POSTGRES_ROOT/bin"
-  "$BREW_OPT/curl/bin"
   $path
   "$GO_ROOT"
   "$HOME/.cargo/bin"
