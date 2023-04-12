@@ -40,11 +40,11 @@ export HOMEBREW_UPDATE_REPORT_ALL_FORMULAE=1
 export HOMEBREW_BAT=1
 export HOMEBREW_NO_INSTALL_CLEANUP=1
 export HOMEBREW_NO_INSTALL_FROM_API=1
+export PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=true
 export DOTNET_ROLL_FORWARD=Major
 export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
-export PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=true
-
+export GOPATH="$HOME/.go"
 export QHOME="$HOME/.q"
 export LOGTALKHOME="$BREW_OPT/logtalk/share/logtalk"
 export GLASSFISH_HOME="$BREW_OPT/glassfish/libexec"
@@ -58,7 +58,6 @@ export path=(
   "$BREW_OPT/python@3.11/libexec/bin"
   "$POSTGRES_ROOT/bin"
   $path
-  "$GO_ROOT"
   "$HOME/.cargo/bin"
   "$HOME/.tmux/plugins/tpm"
   "$HOME/.pub-cache/bin" #dart
@@ -70,7 +69,7 @@ export path=(
   "$HOME/.local/bin" #pipx
   "$BREW_OPT/llvm/bin"
   "$HOME/.cabal/bin"
-  "$HOME/.bingo/bin"
+  "$HOME/.go/bin"
   "$HOME/.mix/escripts"
   "$HOME/.deno/bin"
   "$HOME/.foundry/bin"
@@ -292,36 +291,33 @@ function update() {
   vim +TSUpdateSync +qa
 
   echo "updating ruby gems"
-  gem update
-  gem cleanup
+  gem update --quiet --silent
+  gem cleanup --quiet --silent
 
-  echo "updating phoenix and mix"
-  mix local.hex --force
-  mix local.rebar --force
-  mix archive.install hex phx_new --force
-  mix archive.install hex nerves_bootstrap --force
-  mix escript.install hex livebook --force
-  mix escript.install hex credo --force
+  echo "updating elixir packages"
+  mix local.hex --force > /dev/null
+  mix local.rebar --force > /dev/null
+  mix archive.install hex phx_new --force > /dev/null
+  mix archive.install hex nerves_bootstrap --force > /dev/null
+  mix escript.install hex livebook --force > /dev/null
+  mix escript.install hex credo --force > /dev/null
 
   echo "update tex packages"
-  tlmgr update --self --all --reinstall-forcibly-removed
+  tlmgr update --self --all --reinstall-forcibly-removed > /dev/null
 
   echo "update rust packages"
-  rustup update
-  cargo install-update --all
-  cargo cache --autoclean
+  rustup update > /dev/null
+  cargo install-update --all --quiet
+  cargo cache --autoclean > /dev/null
 
   echo "update pipx packages"
   pipx upgrade-all
 
   echo "upgrade dotnet tools"
-  dotnet tool list -g | tail -n +3 | tr -s ' ' | cut -f 1 -d' ' | xargs -n 1 dotnet tool update -g
+  dotnet tool list -g | tail -n +3 | tr -s ' ' | cut -f 1 -d' ' | xargs -n 1 dotnet tool update --global --verbosity quiet
 
   echo "update go packages"
-  for package in $(bingo installed -q)
-  do
-    bingo update "$package" --quiet
-  done
+  gup update
 
   echo "update racket packages"
   raco pkg update --all -j 8 --batch --no-trash --deps search-auto

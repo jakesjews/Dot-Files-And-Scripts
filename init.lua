@@ -17,7 +17,6 @@ vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
-vim.opt.pastetoggle = '<F2>'
 vim.opt.clipboard = 'unnamed'
 vim.opt.splitright = true
 vim.opt.foldlevel = 99
@@ -36,7 +35,7 @@ vim.filetype.add({
   extension = {
     jq = 'jq',
     kdl = 'kdl',
-  }
+  },
 })
 
 local fileTypeDetectId = vim.api.nvim_create_augroup("filetypedetect", { clear = true })
@@ -327,7 +326,6 @@ require("lazy").setup({
   'mfussenegger/nvim-dap',
   'tpope/vim-dadbod',
   'tpope/vim-sleuth',
-  'gpanders/editorconfig.nvim',
 
   {
     '0xStabby/chatgpt-vim',
@@ -364,7 +362,6 @@ require("lazy").setup({
   },
 
   { 'NvChad/nvim-colorizer.lua', config = true },
-  { 'windwp/nvim-autopairs',     config = true },
 
   {
     'hrsh7th/nvim-cmp',
@@ -400,17 +397,18 @@ require("lazy").setup({
             },
           },
         },
-        config = true,
+        opts = function()
+          return {
+            formatters = {
+              insert_text = require("copilot_cmp.format").remove_existing
+            },
+          }
+        end,
       },
     },
     opts = function()
       local cmp = require('cmp')
       local compare = cmp.config.compare
-
-      cmp.event:on(
-        'confirm_done',
-        require('nvim-autopairs.completion.cmp').on_confirm_done({ map_char = { tex = "" } })
-      )
 
       return {
         snippet = {
@@ -420,13 +418,13 @@ require("lazy").setup({
         },
         mapping = cmp.mapping.preset.insert({
           ["<CR>"] = function(fallback)
-            local option = { select = false }
+            local options = { select = false }
             local e = cmp.core.view:get_selected_entry()
             if e and e.source and e.source.name == 'copilot' then
-              option.behavior = cmp.ConfirmBehavior.Replace
+              options.behavior = cmp.ConfirmBehavior.Replace
             end
 
-            if not cmp.confirm(option) then
+            if not cmp.confirm(options) then
               fallback()
             end
           end,
@@ -441,7 +439,7 @@ require("lazy").setup({
               path = "[Path]",
               npm = "[NPM]",
               copilot = "",
-            }
+            },
           })
         },
         sources = cmp.config.sources(
@@ -450,7 +448,7 @@ require("lazy").setup({
             { name = 'nvim_lsp_document_symbol' },
             { name = 'nvim_lsp_signature_help' },
             { name = 'path' },
-            { name = 'npm',                     keyword_length = 4 },
+            { name = 'npm', keyword_length = 4 },
             { name = 'nvim_lua' },
             { name = 'plugins' },
             { name = 'copilot' },
@@ -524,7 +522,7 @@ require("lazy").setup({
         'solargraph',
         'solidity_ls',
         'sourcekit',
-        'sqls',
+        'sqlls',
         'svlangserver',
         'terraformls',
         'texlab',
