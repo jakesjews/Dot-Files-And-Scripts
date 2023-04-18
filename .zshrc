@@ -317,27 +317,27 @@ function update() {
   dotnet tool list -g | tail -n +3 | tr -s ' ' | cut -f 1 -d' ' | xargs -n 1 dotnet tool update --global --verbosity quiet
 
   echo "update go packages"
-  gup update
+  gup update > /dev/null
 
   echo "update racket packages"
-  raco pkg update --all -j 8 --batch --no-trash --deps search-auto
+  raco pkg update --all -j 8 --batch --no-trash --deps search-auto > /dev/null
 
   echo "update perl packages"
-  cpan-outdated -p --exclude-core -l "$PERL_ROOT" -L "$PERL_ROOT" | cpanm --force
+  cpan-outdated -p --exclude-core -l "$PERL_ROOT" -L "$PERL_ROOT" | cpanm --force --quiet
 
   echo "update arduino"
-  arduino-cli update
-  arduino-cli upgrade
+  arduino-cli update > /dev/null
+  arduino-cli upgrade > /dev/null
 
   echo "update zsh plugins"
-  omz update --unattended
+  omz update --unattended > /dev/null
   git -C "$HOME/.oh-my-zsh/custom/themes/dracula" pull
 
   echo "ugrade tmux plugins"
-  "$HOME/.tmux/plugins/tpm/bin/update_plugins" all
+  "$HOME/.tmux/plugins/tpm/bin/update_plugins" all > /dev/null
 
   echo "update ecmascript runtimes"
-  esvu
+  esvu --fast > /dev/null
 
   echo "update anarki"
   git -C "$HOME/.arc" pull
@@ -431,3 +431,4 @@ eval "$(github-copilot-cli alias -- "$0")"
 FAST_HIGHLIGHT[chroma-man]=
 autoload -Uz compinit
 compinit -u
+

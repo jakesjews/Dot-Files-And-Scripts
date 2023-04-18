@@ -98,6 +98,7 @@ require("lazy").setup({
       'RRethy/nvim-treesitter-textsubjects',
       'nvim-treesitter/playground',
       'nvim-treesitter/nvim-treesitter-context',
+      'JoosepAlviste/nvim-ts-context-commentstring',
       {
         'andymass/vim-matchup',
         config = function()
@@ -111,6 +112,10 @@ require("lazy").setup({
     opts = {
       auto_install = true,
       ensure_installed = "all",
+      context_commentstring = {
+        enable = true,
+        enable_autocmd = false,
+      },
       highlight = {
         enable = true,
       },
@@ -169,19 +174,25 @@ require("lazy").setup({
 
   {
     'numToStr/Comment.nvim',
-    opts = {
-      mappings = {
-        basic = true,
-        extra = false,
-        extended = false,
-      },
-      toggler = {
-        line = '<C-c>',
-      },
-      opleader = {
-        line = '<C-c>',
-      },
+    dependendencies = {
+      'JoosepAlviste/nvim-ts-context-commentstring',
     },
+    opts = function()
+      return {
+        pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+        mappings = {
+          basic = true,
+          extra = false,
+          extended = false,
+        },
+        toggler = {
+          line = '<C-c>',
+        },
+        opleader = {
+          line = '<C-c>',
+        },
+      }
+    end
   },
 
   {
@@ -502,6 +513,7 @@ require("lazy").setup({
         'gleam',
         'gopls',
         'graphql',
+        'helm_ls',
         'hls',
         'html',
         'julials',
