@@ -97,7 +97,10 @@ require("lazy").setup({
       'nvim-treesitter/nvim-treesitter-refactor',
       'RRethy/nvim-treesitter-textsubjects',
       'nvim-treesitter/playground',
-      'nvim-treesitter/nvim-treesitter-context',
+      {
+        'nvim-treesitter/nvim-treesitter-context',
+        config = true,
+      },
       'JoosepAlviste/nvim-ts-context-commentstring',
       {
         'andymass/vim-matchup',
@@ -109,55 +112,8 @@ require("lazy").setup({
       },
       'windwp/nvim-ts-autotag',
     },
-    opts = {
-      auto_install = true,
-      ensure_installed = "all",
-      context_commentstring = {
-        enable = true,
-        enable_autocmd = false,
-      },
-      highlight = {
-        enable = true,
-      },
-      ignore_install = { "norg", "phpdoc" },
-      matchup = {
-        enable = true,
-      },
-      rainbow = {
-        enable = true,
-        extended_mode = true,
-      },
-      textsubjects = {
-        enable = true,
-        keymaps = {
-          ['.'] = 'textsubjects-smart',
-          [';'] = 'textsubjects-container-outer',
-          ['i;'] = 'textsubjects-container-inner',
-        },
-      },
-      refactor = {
-        highlight_definitions = {
-          enable = true,
-          clear_on_cursor_move = true,
-        },
-      },
-      playground = {
-        enable = true,
-      },
-      query_linter = {
-        enable = true,
-        use_virtual_text = true,
-        lint_events = { "BufWrite", "CursorHold" },
-      },
-      autotag = {
-        enable = true,
-      },
-      indent = {
-        enable = true,
-      },
-    },
-    config = function(_self, opts)
-      local parsers = require('nvim-treesitter.parsers');
+    config = function()
+      local parsers = require('nvim-treesitter.parsers')
       local ft_to_lang_original = parsers.ft_to_lang
 
       parsers.ft_to_lang = function(ft)
@@ -167,18 +123,63 @@ require("lazy").setup({
         return ft_to_lang_original(ft)
       end
 
-      require('nvim-treesitter.configs').setup(opts)
-      require('treesitter-context').setup({})
+      require('nvim-treesitter.configs').setup({
+        auto_install = true,
+        ensure_installed = "all",
+        context_commentstring = {
+          enable = true,
+          enable_autocmd = false,
+        },
+        highlight = {
+          enable = true,
+        },
+        ignore_install = { "norg", "phpdoc" },
+        matchup = {
+          enable = true,
+        },
+        rainbow = {
+          enable = true,
+          extended_mode = true,
+        },
+        textsubjects = {
+          enable = true,
+          keymaps = {
+            ['.'] = 'textsubjects-smart',
+            [';'] = 'textsubjects-container-outer',
+            ['i;'] = 'textsubjects-container-inner',
+          },
+        },
+        refactor = {
+          highlight_definitions = {
+            enable = true,
+            clear_on_cursor_move = true,
+          },
+        },
+        playground = {
+          enable = true,
+        },
+        query_linter = {
+          enable = true,
+          use_virtual_text = true,
+          lint_events = { "BufWrite", "CursorHold" },
+        },
+        autotag = {
+          enable = true,
+        },
+        indent = {
+          enable = true,
+        },
+      })
     end
   },
 
   {
     'numToStr/Comment.nvim',
-    dependendencies = {
+    dependencies = {
       'JoosepAlviste/nvim-ts-context-commentstring',
     },
-    opts = function()
-      return {
+    config = function()
+      require('Comment').setup({
         pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
         mappings = {
           basic = true,
@@ -191,7 +192,7 @@ require("lazy").setup({
         opleader = {
           line = '<C-c>',
         },
-      }
+      })
     end
   },
 
@@ -235,7 +236,7 @@ require("lazy").setup({
       },
     },
     branch = '0.1.x',
-    opts = function()
+    config = function()
       local telescope_actions = require("telescope.actions")
 
       local function multi_select(prompt_bufnr)
@@ -250,7 +251,9 @@ require("lazy").setup({
         end
       end
 
-      return {
+      local telescope = require('telescope')
+
+      telescope.setup({
         defaults = {
           sorting_strategy = 'ascending',
           mappings = {
@@ -266,12 +269,7 @@ require("lazy").setup({
             },
           }
         },
-      }
-    end,
-    config = function(_self, opts)
-      local telescope = require('telescope')
-
-      telescope.setup(opts)
+      })
       telescope.load_extension('fzf')
       telescope.load_extension('live_grep_args')
 
@@ -287,35 +285,34 @@ require("lazy").setup({
       '<C-n>',
       '<C-f>',
     },
-    opts = {
-      git = {
-        enable = true,
-        ignore = true,
-      },
-      renderer = {
-        add_trailing = true,
-        highlight_git = true,
-        highlight_opened_files = 'all',
-        icons = {
-          show = {
-            git = true,
-            folder = true,
-            file = true,
-            folder_arrow = true,
+    config = function()
+      require('nvim-tree').setup({
+        git = {
+          enable = true,
+          ignore = true,
+        },
+        renderer = {
+          add_trailing = true,
+          highlight_git = true,
+          highlight_opened_files = 'all',
+          icons = {
+            show = {
+              git = true,
+              folder = true,
+              file = true,
+              folder_arrow = true,
+            },
+          },
+          indent_markers = {
+            enable = true,
           },
         },
-        indent_markers = {
-          enable = true,
+        filters = {
+          custom = {
+            '.git',
+          },
         },
-      },
-      filters = {
-        custom = {
-          '.git',
-        },
-      },
-    },
-    config = function(_self, opts)
-      require('nvim-tree').setup(opts)
+      })
       local nvim_tree_api = require('nvim-tree.api')
       vim.keymap.set("n", "<C-n>", nvim_tree_api.tree.toggle)
       vim.keymap.set('n', '<C-f>', function()
@@ -408,20 +405,20 @@ require("lazy").setup({
             },
           },
         },
-        opts = function()
-          return {
+        config = function()
+          require('copilot_cmp').setup({
             formatters = {
               insert_text = require("copilot_cmp.format").remove_existing
             },
-          }
+          })
         end,
       },
     },
-    opts = function()
+    config = function()
       local cmp = require('cmp')
       local compare = cmp.config.compare
 
-      return {
+      cmp.setup({
         snippet = {
           expand = function(args)
             vim.fn["vsnip#anonymous"](args.body)
@@ -482,7 +479,7 @@ require("lazy").setup({
             compare.order,
           },
         },
-      }
+      })
     end,
   },
 
@@ -655,8 +652,8 @@ require("lazy").setup({
 
   {
     'jose-elias-alvarez/typescript.nvim',
-    opts = function()
-      return {
+    config = function()
+      require("typescript").setup({
         server = {
           cmd = { 'typescript-language-server', '--stdio', '--log-level', '1', '--tsserver-log-verbosity', 'off' },
           on_attach = on_attach,
@@ -671,21 +668,20 @@ require("lazy").setup({
             },
           },
         }
-      }
+      })
     end,
   },
 
   {
     'klen/nvim-test',
     keys = '<C-t>',
-    opts = {
-      runners = {
-        javascript = "nvim-test.runners.mocha",
-      }
-    },
-    config = function(_self, opts)
+    config = function()
       local nvim_test = require('nvim-test')
-      nvim_test.setup(opts)
+      nvim_test.setup({
+        runners = {
+          javascript = "nvim-test.runners.mocha",
+        },
+      })
 
       vim.keymap.set('', '<C-t>', function()
         nvim_test.run('nearest')
@@ -696,10 +692,11 @@ require("lazy").setup({
   {
     'jose-elias-alvarez/null-ls.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
-    opts = function()
-      local diagnostics = require("null-ls").builtins.diagnostics
+    config = function()
+      local null_ls = require("null-ls")
+      local diagnostics = null_ls.builtins.diagnostics
 
-      return {
+      null_ls.setup({
         capabilities = require('cmp_nvim_lsp').default_capabilities(),
         on_attach = on_attach,
         sources = {
@@ -716,7 +713,7 @@ require("lazy").setup({
           diagnostics.zsh,
           require("typescript.extensions.null-ls.code-actions"),
         },
-      }
+      })
     end,
   },
 
@@ -728,11 +725,11 @@ require("lazy").setup({
   {
     'simrat39/rust-tools.nvim',
     ft = 'rust',
-    opts = function()
-      return {
+    config = function()
+      require("rust-tools").setup({
         on_attach = on_attach,
         capabilities = require('cmp_nvim_lsp').default_capabilities()
-      }
+      })
     end
   },
 
@@ -814,11 +811,10 @@ require("lazy").setup({
   {
     'Mofiqul/dracula.nvim',
     priority = 1000,
-    opts = {
-      transparent_bg = true,
-    },
-    config = function(_self, opts)
-      require('dracula').setup(opts)
+    config = function()
+      require('dracula').setup({
+        transparent_bg = true,
+      })
       vim.cmd.colorscheme('dracula')
     end
   },
