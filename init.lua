@@ -485,6 +485,7 @@ require("lazy").setup({
     config = function()
       local servers = {
         'awk_ls',
+        'azure_pipelines_ls',
         'bashls',
         'bufls',
         'clojure_lsp',
@@ -700,7 +701,6 @@ require("lazy").setup({
           diagnostics.cppcheck,
           diagnostics.credo,
           diagnostics.hadolint,
-          diagnostics.markdownlint,
           diagnostics.mypy,
           diagnostics.phpstan,
           diagnostics.pylint,
@@ -801,7 +801,7 @@ require("lazy").setup({
   },
 
   {
-    'jlcrochet/vim-crystal',
+    'vim-crystal/vim-crystal',
     ft = { 'crystal', 'ecrystal' },
   },
 

@@ -58,6 +58,7 @@ export path=(
   "$BREW_OPT/python@3.11/libexec/bin"
   "$POSTGRES_ROOT/bin"
   $path
+  "$HOME/.docker/bin"
   "$HOME/.cargo/bin"
   "$HOME/.tmux/plugins/tpm"
   "$HOME/.pub-cache/bin" #dart
@@ -77,6 +78,7 @@ export path=(
   "$HOME/.dotnet/tools"
   "$HOME/.jenv/bin"
   "$HOME/.clojure-bin"
+  "$HOME/.datomic-bin/bin"
   "$HOME/.bin"
   "$PERL_ROOT/bin"
 )
