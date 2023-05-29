@@ -333,6 +333,28 @@ require("lazy").setup({
   'tpope/vim-sleuth',
 
   {
+    'ellisonleao/glow.nvim',
+    cmd = "Glow",
+    config = true,
+  },
+
+  {
+    'samodostal/image.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'm00qek/baleia.nvim',
+    },
+    config = function()
+      require('image').setup {
+        render = {
+          foreground_color = true,
+          background_color = true
+        },
+      }
+    end,
+  },
+
+  {
     '0xStabby/chatgpt-vim',
     cmd = 'Gpt',
   },
@@ -402,13 +424,7 @@ require("lazy").setup({
             },
           },
         },
-        config = function()
-          require('copilot_cmp').setup({
-            formatters = {
-              insert_text = require("copilot_cmp.format").remove_existing
-            },
-          })
-        end,
+        config = true,
       },
     },
     config = function()
@@ -485,7 +501,6 @@ require("lazy").setup({
     config = function()
       local servers = {
         'awk_ls',
-        'azure_pipelines_ls',
         'bashls',
         'bufls',
         'clojure_lsp',
@@ -525,9 +540,10 @@ require("lazy").setup({
         'pyright',
         'r_language_server',
         'racket_langserver',
+        'ruff_lsp',
         'salt_ls',
         'solargraph',
-        'solidity_ls',
+        'solidity_ls_nomicfoundation',
         'sourcekit',
         'sqlls',
         'svlangserver',
@@ -701,9 +717,7 @@ require("lazy").setup({
           diagnostics.cppcheck,
           diagnostics.credo,
           diagnostics.hadolint,
-          diagnostics.mypy,
           diagnostics.phpstan,
-          diagnostics.pylint,
           diagnostics.revive,
           diagnostics.statix,
           diagnostics.vint,
