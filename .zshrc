@@ -23,6 +23,7 @@ export LISTMAX=10000
 export HISTSIZE=1000000000
 export HISTFILESIZE=1000000000
 export REPORTER=spec
+export EMBER_PARALLEL=8
 export ZSH_DISABLE_COMPFIX=true
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
@@ -31,9 +32,6 @@ export FZF_DEFAULT_COMMAND='fd --type f'
 export CLICOLOR=1
 export MCFLY_KEY_SCHEME=vim
 export MCFLY_FUZZY=2
-export LDFLAGS="-L$POSTGRES_ROOT/lib"
-export CPPFLAGS="-I$POSTGRES_ROOT/include"
-export PKG_CONFIG_PATH="$POSTGRES_ROOT/lib/pkgconfig"
 export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_BOOTSNAP=1
 export HOMEBREW_UPDATE_REPORT_ALL_FORMULAE=1
@@ -54,7 +52,6 @@ export CARP_DIR="$HOME/.carp"
 typeset -U path
 
 export path=(
-  "$HOMEBREW_PREFIX/sbin"
   "$BREW_OPT/python@3.11/libexec/bin"
   "$POSTGRES_ROOT/bin"
   $path
@@ -68,19 +65,16 @@ export path=(
   "$HOME/.esvu/bin"
   "$CARP_DIR/bin"
   "$HOME/.local/bin" #pipx
-  "$BREW_OPT/llvm/bin"
   "$HOME/.cabal/bin"
   "$HOME/.go/bin"
   "$HOME/.mix/escripts"
   "$HOME/.deno/bin"
   "$HOME/.foundry/bin"
-  "$DOTNET_TOOLS"
   "$HOME/.dotnet/tools"
   "$HOME/.jenv/bin"
   "$HOME/.clojure-bin"
   "$HOME/.datomic-bin/bin"
   "$HOME/.bin"
-  "$PERL_ROOT/bin"
 )
 
 export fpath=(
@@ -103,9 +97,7 @@ plugins=(
   jsontools
   ng
   npm
-  pip
   pod
-  rbenv
   react-native
   rust
   terraform
@@ -124,6 +116,7 @@ zmodload zsh/net/tcp
 zmodload zsh/curses
 zmodload zsh/pcre
 zmodload zsh/zftp
+zmodload zsh/zpty
 
 unsetopt listambiguous
 setopt inc_append_history
@@ -148,7 +141,6 @@ alias mongo=mongosh
 alias bash="$HOMEBREW_PREFIX/bin/bash"
 alias make="$BREW_OPT/make/libexec/gnubin/make"
 alias rg-all="rg -uuuu"
-alias cpanm="cpanm --self-contained --local-lib='$PERL_ROOT' --local-lib-contained='$PERL_ROOT'"
 alias cargo-binstall='cargo-binstall --no-confirm'
 alias UVtoolsCmd=/Applications/UVtools.app/Contents/MacOS/UVtoolsCmd
 alias jenv-start='eval "$(jenv init -)"'
@@ -324,9 +316,6 @@ function update() {
   echo "update racket packages"
   raco pkg update --all -j 8 --batch --no-trash --deps search-auto > /dev/null
 
-  echo "update perl packages"
-  cpan-outdated -p --exclude-core -l "$PERL_ROOT" -L "$PERL_ROOT" | cpanm --force --quiet
-
   echo "update arduino"
   arduino-cli update > /dev/null
   arduino-cli upgrade > /dev/null
@@ -420,8 +409,16 @@ function conda-init() {
   eval "$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
 }
 
-eval $(perl -I$PERL_ROOT/lib/perl5 -Mlocal::lib=$PERL_ROOT)
-source "$HOME/.opam/opam-init/init.zsh"
+function opam-init() {
+  source "$HOME/.opam/opam-init/init.zsh"
+}
+
+function perl-init() {
+  alias cpanm="cpanm --self-contained --local-lib='$PERL_ROOT' --local-lib-contained='$PERL_ROOT'"
+  eval $(perl -I$PERL_ROOT/lib/perl5 -Mlocal::lib=$PERL_ROOT)
+}
+
+eval "$(rbenv init --no-rehash - zsh)"
 source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 source "$BREW_OPT/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
 source "$BREW_OPT/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
@@ -433,4 +430,3 @@ eval "$(github-copilot-cli alias -- "$0")"
 FAST_HIGHLIGHT[chroma-man]=
 autoload -Uz compinit
 compinit -u
-
