@@ -25,7 +25,6 @@ vim.opt.swapfile = false
 vim.opt.scrolloff = 1
 vim.opt.sidescrolloff = 5
 vim.opt.hidden = false
-vim.opt.showtabline=2
 
 vim.keymap.set('n', 'x', '"_x') -- prevent character delete from writing to the clipboard
 vim.keymap.set('v', '.', ':normal .<CR>')
@@ -419,6 +418,7 @@ require('lazy').setup({
       {
         'David-Kunz/cmp-npm',
         dependencies = { 'nvim-lua/plenary.nvim' },
+        ft = "json",
         opts = {
           only_latest_version = true,
         },
@@ -569,7 +569,7 @@ require('lazy').setup({
         'bufls',
         'clojure_lsp',
         'cmake',
-        'coffeesense',
+        -- 'coffeesense',
         'crystalline',
         'csharp_ls',
         'cssls',
@@ -861,6 +861,7 @@ require('lazy').setup({
     ft = 'stylus',
   },
 
+  'konfekt/vim-office',
   'Joorem/vim-haproxy',
   'IrenejMarc/vim-mint',
   'MTDL9/vim-log-highlighting',
