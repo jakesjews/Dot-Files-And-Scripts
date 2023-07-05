@@ -94,7 +94,6 @@ require('lazy').setup({
   {
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
-      'HiPhish/nvim-ts-rainbow2',
       'nvim-treesitter/nvim-treesitter-refactor',
       'RRethy/nvim-treesitter-textsubjects',
       'nvim-treesitter/playground',
@@ -134,10 +133,6 @@ require('lazy').setup({
         ignore_install = { 'norg', 'phpdoc', 'smali' },
         matchup = {
           enable = true,
-        },
-        rainbow = {
-          enable = true,
-          extended_mode = true,
         },
         textsubjects = {
           enable = true,
@@ -329,6 +324,7 @@ require('lazy').setup({
   'mfussenegger/nvim-dap',
   'tpope/vim-dadbod',
   'tpope/vim-sleuth',
+  'hiphish/rainbow-delimiters.nvim',
 
   {
     'ellisonleao/glow.nvim',
@@ -569,7 +565,7 @@ require('lazy').setup({
         'bufls',
         'clojure_lsp',
         'cmake',
-        -- 'coffeesense',
+        'coffeesense',
         'crystalline',
         'csharp_ls',
         'cssls',
