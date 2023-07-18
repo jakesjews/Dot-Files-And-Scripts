@@ -349,11 +349,6 @@ require('lazy').setup({
   },
 
   {
-    '0xStabby/chatgpt-vim',
-    cmd = 'Gpt',
-  },
-
-  {
     'dpayne/CodeGPT.nvim',
     dependencies = {
       'nvim-lua/plenary.nvim',
@@ -364,7 +359,12 @@ require('lazy').setup({
       require('codegpt.config')
 
       vim.g['codegpt_commands'] = {
-        ['tests'] = {
+        completion = {
+          model = 'gpt-4',
+        },
+
+        tests = {
+          model = 'gpt-4',
           language_instructions = {
             javascript = 'Use the mocha framework and the chai.js expect api for assertions.',
           }
@@ -724,25 +724,18 @@ require('lazy').setup({
   },
 
   {
-    'jose-elias-alvarez/typescript.nvim',
+    'pmizio/typescript-tools.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
     config = function()
-      require('typescript').setup({
-        server = {
-          cmd = { 'typescript-language-server', '--stdio', '--log-level', '1', '--tsserver-log-verbosity', 'off' },
-          on_attach = on_attach,
-          capabilities = require('cmp_nvim_lsp').default_capabilities(),
-          init_options = {
-            hostInfo = 'neovim',
-            npmLocation = '/opt/homebrew/bin/npm',
-            preferences = {
-              importModuleSpecifierPreference = 'non-relative',
-              disableSuggestions = true,
-              ignoreDeprecations = '5.0',
-            },
+      require('typescript-tools').setup({
+        settings = {
+          tsserver_file_preferences = {
+            disableSuggestions = true,
+            importModuleSpecifierPreference = 'non-relative',
           },
-        }
+        },
       })
-    end,
+    end
   },
 
   {
@@ -763,26 +756,23 @@ require('lazy').setup({
   },
 
   {
-    'jose-elias-alvarez/null-ls.nvim',
-    dependencies = { 'nvim-lua/plenary.nvim' },
+    'mfussenegger/nvim-lint',
     config = function()
-      local null_ls = require('null-ls')
-      local diagnostics = null_ls.builtins.diagnostics
+      local lint = require('lint')
 
-      null_ls.setup({
-        capabilities = require('cmp_nvim_lsp').default_capabilities(),
-        on_attach = on_attach,
-        sources = {
-          diagnostics.cppcheck,
-          diagnostics.credo,
-          diagnostics.hadolint,
-          diagnostics.phpstan,
-          diagnostics.revive,
-          diagnostics.statix,
-          diagnostics.vint,
-          diagnostics.zsh,
-          require('typescript.extensions.null-ls.code-actions'),
-        },
+      lint.linters_by_ft = {
+        cpp = { 'cppcheck' },
+        elixir = { 'credo' },
+        dockerfile = { 'hadolint' },
+        php = { 'phpstan' },
+        go = { 'revive' },
+        vim = { 'vint' },
+      }
+
+      vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+        callback = function()
+          lint.try_lint()
+        end,
       })
     end,
   },
@@ -881,6 +871,8 @@ require('lazy').setup({
   'reasonml-editor/vim-reason-plus',
   'stevearc/vim-arduino',
   'llathasa-veleth/vim-brainfuck',
+  'lankavitharana/ballerina-vim',
+  'edwinb/idris2-vim',
 
   {
     'pearofducks/ansible-vim',

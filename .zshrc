@@ -48,6 +48,7 @@ export LOGTALKHOME="$BREW_OPT/logtalk/share/logtalk"
 export GLASSFISH_HOME="$BREW_OPT/glassfish/libexec"
 export ANDROID_SDK_ROOT="$HOMEBREW_PREFIX/share/android-sdk"
 export CARP_DIR="$HOME/.carp"
+export VOLTA_HOME="$HOME/.volta"
 
 typeset -U path
 
@@ -103,20 +104,7 @@ plugins=(
   terraform
 )
 
-autoload zargs
 autoload zmv
-autoload tcp_open
-autoload zcalc
-
-zmodload -F zsh/stat b:zstat
-zmodload zsh/mapfile
-zmodload zsh/mathfunc
-zmodload zsh/net/socket
-zmodload zsh/net/tcp
-zmodload zsh/curses
-zmodload zsh/pcre
-zmodload zsh/zftp
-zmodload zsh/zpty
 
 unsetopt listambiguous
 setopt inc_append_history
@@ -144,6 +132,7 @@ alias rg-all="rg -uuuu"
 alias cargo-binstall='cargo-binstall --no-confirm'
 alias UVtoolsCmd=/Applications/UVtools.app/Contents/MacOS/UVtoolsCmd
 alias jenv-start='eval "$(jenv init -)"'
+alias ocamllsp="$HOME/.opam/default/bin/ocamllsp"
 
 function mux() {
   tmuxinator start "$1" --suppress-tmux-version-warning
