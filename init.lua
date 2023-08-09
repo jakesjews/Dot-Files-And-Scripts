@@ -25,6 +25,7 @@ vim.opt.swapfile = false
 vim.opt.scrolloff = 1
 vim.opt.sidescrolloff = 5
 vim.opt.hidden = false
+vim.opt.formatoptions:remove { "c", "r", "o" }
 
 vim.keymap.set('n', 'x', '"_x') -- prevent character delete from writing to the clipboard
 vim.keymap.set('v', '.', ':normal .<CR>')
@@ -39,7 +40,7 @@ vim.filetype.add({
   },
 })
 
-local fileTypeDetectId = vim.api.nvim_create_augroup('filetypedetect', { clear = true })
+local file_type_detect_id = vim.api.nvim_create_augroup('filetypedetect', { clear = true })
 
 local indents = {
   cs = 'setl sw=4 sts=4 ts=4 et',
@@ -49,10 +50,22 @@ local indents = {
 }
 
 for pattern, command in pairs(indents) do
-  vim.api.nvim_create_autocmd('FileType', { pattern = pattern, group = fileTypeDetectId, command = command })
+  vim.api.nvim_create_autocmd('FileType', { pattern = pattern, group = file_type_detect_id, command = command })
 end
 
+local format_options_id = vim.api.nvim_create_augroup('formatoptions', { clear = true })
+
+vim.api.nvim_create_autocmd('BufEnter', {
+  group = format_options_id,
+  callback = function()
+    vim.opt.formatoptions:remove { "c", "r", "o" }
+  end
+})
+
+local yank_highlight_id = vim.api.nvim_create_augroup('highlightyank', { clear = true })
+
 vim.api.nvim_create_autocmd('TextYankPost', {
+  group = yank_highlight_id,
   callback = function()
     vim.highlight.on_yank({ higroup = 'IncSearch', timeout = 150, on_visual = true })
   end
@@ -454,7 +467,7 @@ require('lazy').setup({
         end
       end
 
-      local config = {
+      cmp.setup({
         snippet = {
           expand = function(args)
             require('luasnip').lsp_expand(args.body)
@@ -537,9 +550,7 @@ require('lazy').setup({
             compare.order,
           },
         },
-      }
-
-      cmp.setup(config)
+      })
 
       cmp.setup.cmdline({ '/', '?' },  {
         sources = {
@@ -609,6 +620,7 @@ require('lazy').setup({
         'terraformls',
         'texlab',
         'turtle_ls',
+        'v_analyzer',
         'vala_ls',
         'veryl_ls',
         'vhdl_ls',

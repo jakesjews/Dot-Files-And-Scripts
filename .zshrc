@@ -261,83 +261,6 @@ function rust-mode() {
   alias xargs=rargs
 }
 
-function update() {
-  setopt localoptions rmstarsilent
-  unsetopt nomatch
-
-  echo "updating homebrew packages"
-  brew update
-  brew upgrade
-
-  echo "updating vim plugins"
-  nvim --headless "+Lazy! sync" +qa
-  vim +TSUpdateSync +qa
-
-  echo "updating ruby gems"
-  gem update --quiet --silent
-  gem cleanup --quiet --silent
-
-  echo "updating elixir packages"
-  mix local.hex --force > /dev/null
-  mix local.rebar --force > /dev/null
-  mix archive.install hex phx_new --force > /dev/null
-  mix archive.install hex nerves_bootstrap --force > /dev/null
-  mix escript.install hex livebook --force > /dev/null
-  mix escript.install hex credo --force > /dev/null
-
-  echo "update tex packages"
-  tlmgr update --self --all --reinstall-forcibly-removed > /dev/null
-
-  echo "update rust packages"
-  rustup update > /dev/null
-  cargo install-update --all --quiet
-  cargo cache --autoclean > /dev/null
-
-  echo "update pipx packages"
-  pipx upgrade-all
-
-  echo "upgrade dotnet tools"
-  dotnet tool list -g | tail -n +3 | tr -s ' ' | cut -f 1 -d' ' | xargs -n 1 dotnet tool update --global --verbosity quiet
-
-  echo "update go packages"
-  gup update > /dev/null
-
-  echo "update racket packages"
-  raco pkg update --all -j 8 --batch --no-trash --deps search-auto > /dev/null
-
-  echo "update arduino"
-  arduino-cli update > /dev/null
-  arduino-cli upgrade > /dev/null
-
-  echo "update zsh plugins"
-  omz update --unattended > /dev/null
-  git -C "$HOME/.oh-my-zsh/custom/themes/dracula" pull
-
-  echo "ugrade tmux plugins"
-  "$HOME/.tmux/plugins/tpm/bin/update_plugins" all > /dev/null
-
-  echo "update ecmascript runtimes"
-  esvu --fast > /dev/null
-
-  echo "update anarki"
-  git -C "$HOME/.arc" pull
-
-  echo "upgrade cask packages"
-  brew cu --all --quiet --yes --no-brew-update
-
-  echo "cleanup homebrew"
-  brew autoremove
-  brew cleanup -s
-  brew tap --repair
-  rm -rf "$(brew --cache)"
-
-  echo "outdated python packages"
-  pip3 list --user --outdated --not-required
-
-  echo "outdated npm packages"
-  npm outdated --location=global
-}
-
 function alphabetize_files() {
   unsetopt CASE_GLOB
 
@@ -360,17 +283,81 @@ function brew_check_new_rust() {
   comm -23 <(brew uses rust --include-build --eval-all) <(brew uses rust --include-build --installed)
 }
 
-function node_list_requires() {
-  rg \
-    --only-matching \
-    --replace '$1' \
-    --engine=auto \
-    --no-fixed-strings \
-    --no-filename \
-    --no-line-number \
-    --no-heading \
-    --regexp "require\('((?!\.)(?!node:)(?!@eflex\/lib).*)'\)" \
-    "$1" | sort -u
+function update() {
+  setopt localoptions rmstarsilent
+  unsetopt nomatch
+
+  echo "updating homebrew packages"
+  brew update
+  brew upgrade
+
+  echo "updating vim plugins"
+  nvim --headless "+Lazy! sync" +qa
+  vim +TSUpdateSync +qa
+
+  echo "updating ruby gems"
+  gem update
+  gem cleanup
+
+  echo "updating elixir packages"
+  mix local.hex --force
+  mix local.rebar --force
+  mix archive.install hex phx_new --force
+  mix archive.install hex nerves_bootstrap --force
+  mix escript.install hex livebook --force
+  mix escript.install hex credo --force
+
+  echo "update tex packages"
+  tlmgr update --self --all --reinstall-forcibly-removed
+
+  echo "update rust packages"
+  rustup update
+  cargo install-update --all
+  cargo cache --autoclean
+
+  echo "update pipx packages"
+  pipx upgrade-all
+
+  echo "upgrade dotnet tools"
+  dotnet tool list -g | tail -n +3 | tr -s ' ' | cut -f 1 -d' ' | xargs -n 1 dotnet tool update --global
+
+  echo "update go packages"
+  gup update
+
+  echo "update racket packages"
+  raco pkg update --all -j 8 --batch --no-trash --deps search-auto
+
+  echo "update arduino"
+  arduino-cli update
+  arduino-cli upgrade
+
+  echo "update zsh plugins"
+  omz update --unattended
+  git -C "$HOME/.oh-my-zsh/custom/themes/dracula" pull
+
+  echo "ugrade tmux plugins"
+  "$HOME/.tmux/plugins/tpm/bin/update_plugins" all
+
+  echo "update ecmascript runtimes"
+  esvu --fast
+
+  echo "update anarki"
+  git -C "$HOME/.arc" pull
+
+  echo "upgrade cask packages"
+  brew cu --all --quiet --yes --no-brew-update
+
+  echo "cleanup homebrew"
+  brew autoremove
+  brew cleanup -s
+  brew tap --repair
+  rm -rf "$(brew --cache)"
+
+  echo "outdated python packages"
+  pip3 list --user --outdated --not-required
+
+  echo "outdated npm packages"
+  npm outdated --location=global
 }
 
 function zvm_config() {
