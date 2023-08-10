@@ -75,7 +75,7 @@ export path=(
   "$HOME/.clojure-bin"
   "$HOME/.datomic-bin/bin"
   "/Applications/Game Porting Toolkit"
-  "$HOME/.bin"
+  "$HOME/.usr/bin"
 )
 
 export fpath=(
@@ -293,7 +293,8 @@ function update() {
 
   echo "updating vim plugins"
   nvim --headless "+Lazy! sync" +qa
-  vim +TSUpdateSync +qa
+  nvim --headless "+TSUpdateSync" +qa
+  nvim --headless "+MasonToolsUpdate" +qa
 
   echo "updating ruby gems"
   gem update

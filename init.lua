@@ -103,7 +103,103 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+local mason_packages = {
+  'als',
+  'erlangls',
+  'fennel_language_server',
+  'fsautocomplete',
+  'helm_ls',
+  'julials',
+  'matlab_ls',
+  'ocamllsp',
+  'omnisharp',
+  'perlnavigator',
+  'psalm',
+  'r_language_server',
+  'raku_navigator',
+  'reason_ls',
+  'rescriptls',
+  'serve_d',
+}
+
+LSP_SERVERS = {
+  'asm_lsp',
+  'awk_ls',
+  'bashls',
+  'bufls',
+  'clojure_lsp',
+  'cmake',
+  'coffeesense',
+  'crystalline',
+  'cssls',
+  'dartls',
+  'docker_compose_language_service',
+  'dockerls',
+  'dotls',
+  'elmls',
+  'ember',
+  'erg_language_server',
+  'fortls',
+  'futhark_lsp',
+  'gdscript',
+  'gleam',
+  'gopls',
+  'graphql',
+  'html',
+  'jqls',
+  'kotlin_language_server',
+  'm68k',
+  'mint',
+  'mlir_lsp_server',
+  'nomad_lsp',
+  'openscad_lsp',
+  'prolog_ls',
+  'purescriptls',
+  'pyright',
+  'racket_langserver',
+  'ruff_lsp',
+  'salt_ls',
+  'solargraph',
+  'solidity_ls_nomicfoundation',
+  'sourcekit',
+  'sqlls',
+  'svlangserver',
+  'terraformls',
+  'texlab',
+  'turtle_ls',
+  'v_analyzer',
+  'vala_ls',
+  'veryl_ls',
+  'vhdl_ls',
+  'vimls',
+  'vuels',
+  'yls',
+  'zls',
+}
+
+vim.list_extend(LSP_SERVERS, mason_packages)
+
 require('lazy').setup({
+  {
+    'williamboman/mason.nvim',
+    config = true,
+  },
+
+  {
+    'williamboman/mason-lspconfig.nvim',
+    opts = {
+      ensure_installed = mason_packages,
+    },
+  },
+
+  {
+    'WhoIsSethDaniel/mason-tool-installer.nvim',
+    opts = {
+      ensure_installed = mason_packages,
+      run_on_start = false,
+    },
+  },
+
   {
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
@@ -570,70 +666,10 @@ require('lazy').setup({
   {
     'neovim/nvim-lspconfig',
     config = function()
-      local servers = {
-        'awk_ls',
-        'bashls',
-        'bufls',
-        'clojure_lsp',
-        'cmake',
-        'coffeesense',
-        'crystalline',
-        'csharp_ls',
-        'cssls',
-        'dartls',
-        'docker_compose_language_service',
-        'dockerls',
-        'dotls',
-        'elmls',
-        'ember',
-        'erg_language_server',
-        'erlangls',
-        'fortls',
-        'futhark_lsp',
-        'gdscript',
-        'gleam',
-        'gopls',
-        'graphql',
-        'helm_ls',
-        'html',
-        'julials',
-        'kotlin_language_server',
-        'm68k',
-        'mint',
-        'mlir_lsp_server',
-        'nomad_lsp',
-        'ocamllsp',
-        'openscad_lsp',
-        'perlpls',
-        'prolog_ls',
-        'purescriptls',
-        'pyright',
-        'r_language_server',
-        'racket_langserver',
-        'ruff_lsp',
-        'salt_ls',
-        'solargraph',
-        'solidity_ls_nomicfoundation',
-        'sourcekit',
-        'sqlls',
-        'svlangserver',
-        'terraformls',
-        'texlab',
-        'turtle_ls',
-        'v_analyzer',
-        'vala_ls',
-        'veryl_ls',
-        'vhdl_ls',
-        'vimls',
-        'vuels',
-        'yls',
-        'zls',
-      }
-
       local lspconfig = require('lspconfig')
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-      for _, lsp in ipairs(servers) do
+      for _, lsp in ipairs(LSP_SERVERS) do
         lspconfig[lsp].setup({
           on_attach = on_attach,
           capabilities = capabilities,
