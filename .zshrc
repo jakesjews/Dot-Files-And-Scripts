@@ -40,6 +40,7 @@ export HOMEBREW_NO_INSTALL_CLEANUP=1
 export HOMEBREW_NO_INSTALL_FROM_API=1
 export PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=true
 export DOTNET_ROLL_FORWARD=Major
+export VAGRANT_DEFAULT_PROVIDER="parallels"
 export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 export GOPATH="$HOME/.go"
@@ -273,6 +274,14 @@ function alphabetize_files() {
 
 function quartus_compile() {
   docker run --platform linux/amd64 -it --rm -v "$(pwd):/build" jakesjews/quartus-mac-arm quartus_sh --flow compile "$1"
+}
+
+function quartus_mister() {
+  docker run --platform linux/amd64 --rm -v "$(pwd):/build" -e DISPLAY=host.docker.internal:0 -v /tmp/.X11-unix:/tmp/.X11-unix jakesjews/quartus-mac-arm quartus
+}
+
+function quartus_pocket() {
+  docker run --platform linux/amd64 --rm -v "$(pwd):/build" -e DISPLAY=host.docker.internal:0 -v /tmp/.X11-unix:/tmp/.X11-unix didiermalenfant/quartus:22.1-apple-silicon quartus
 }
 
 function restore_history() {
