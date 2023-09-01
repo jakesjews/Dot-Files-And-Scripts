@@ -243,6 +243,7 @@ function rust-mode() {
   alias mv=pmv
   alias nano=amp
   alias objdump=bingrep
+  alias parallel=rust-parallel
   alias pigz=crabz
   alias ping=gping
   alias ps=procs
