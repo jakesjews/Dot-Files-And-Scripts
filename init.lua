@@ -158,6 +158,7 @@ LSP_SERVERS = {
   'pyright',
   'racket_langserver',
   'ruff_lsp',
+  'rune_languageserver',
   'salt_ls',
   'solargraph',
   'solidity_ls_nomicfoundation',
@@ -205,7 +206,6 @@ require('lazy').setup({
     dependencies = {
       'nvim-treesitter/nvim-treesitter-refactor',
       'RRethy/nvim-treesitter-textsubjects',
-      'nvim-treesitter/playground',
       'nvim-treesitter/nvim-treesitter-context',
       'JoosepAlviste/nvim-ts-context-commentstring',
       {
@@ -679,6 +679,12 @@ require('lazy').setup({
       lspconfig.eslint.setup({
         on_attach = on_attach,
         capabilities = capabilities,
+        filetypes = {
+          'javascript',
+          'typescript',
+          'typescript.glimmer',
+          'javascript.glimmer',
+        },
         settings = {
           useESLintClass = true,
           packageManager = 'yarn',
@@ -863,18 +869,17 @@ require('lazy').setup({
     dependencies = {
       'nvim-lua/plenary.nvim',
     },
-    branch = '1.x.x',
-    config = function()
-      local ht = require('haskell-tools')
-      ht.setup({
+    branch = '2.x.x',
+    init = function()
+      vim.g.haskell_tools = {
         hls = {
-          on_attach = function(_client, bufnr)
+          on_attach = function(_client, bufnr, ht)
             local opts = vim.tbl_extend('keep', { noremap = true, silent = true }, { buffer = bufnr, })
             vim.keymap.set('n', '<space>ca', vim.lsp.codelens.run, opts)
             vim.keymap.set('n', '<space>ea', ht.lsp.buf_eval_all, opts)
           end,
         },
-      })
+      }
     end,
   },
 
