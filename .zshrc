@@ -7,7 +7,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 export ZSH="$HOME/.oh-my-zsh"
 
 local BREW_OPT="$HOMEBREW_PREFIX/opt"
-local POSTGRES_ROOT="$BREW_OPT/postgresql@15"
+local POSTGRES_ROOT="$BREW_OPT/postgresql@16"
 local PLAN9_HOME=/opt/plan9
 
 export PERL_ROOT="$HOME/.perl5"
@@ -299,7 +299,7 @@ function update() {
 
   echo "updating homebrew packages"
   brew update
-  brew upgrade
+  brew upgrade --greedy-auto-updates
 
   echo "updating vim plugins"
   nvim --headless "+Lazy! sync" +qa
@@ -356,7 +356,7 @@ function update() {
   git -C "$HOME/.arc" pull
 
   echo "upgrade cask packages"
-  brew cu --all --quiet --yes --no-brew-update
+  brew cu --all --yes --quiet
 
   echo "cleanup homebrew"
   brew autoremove

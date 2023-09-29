@@ -211,12 +211,32 @@ require('lazy').setup({
       {
         'andymass/vim-matchup',
         init = function()
-          vim.g.matchup_matchparen_offscreen = { method = 'popup' }
+          vim.g.matchup_matchparen_offscreen = {}
           vim.g.matchup_matchparen_deferred = 1
           vim.g.matchup_surround_enabled = 0
         end,
       },
-      'windwp/nvim-ts-autotag',
+      {
+        'windwp/nvim-ts-autotag',
+        opts = {
+          filetypes = {
+            'html',
+            'javascriptreact',
+            'typescriptreact',
+            'svelte',
+            'vue',
+            'tsx',
+            'jsx',
+            'rescript',
+            'xml',
+            'php',
+            'glimmer',
+            'handlebars',
+            'hbs'
+          },
+        },
+
+      },
     },
     config = function()
       local parsers = require('nvim-treesitter.parsers')
@@ -432,7 +452,12 @@ require('lazy').setup({
 
   'mfussenegger/nvim-dap',
   'tpope/vim-dadbod',
-  'tpope/vim-sleuth',
+
+  {
+    'NMAC427/guess-indent.nvim',
+    setup = true,
+  },
+
   'hiphish/rainbow-delimiters.nvim',
 
   {
@@ -505,7 +530,7 @@ require('lazy').setup({
       'FelipeLema/cmp-async-path',
       {
         'L3MON4D3/LuaSnip',
-        version = "1.*",
+        version = "v2.*",
         build = "make install_jsregexp",
       },
       'L3MON4D3/cmp-luasnip-choice',
@@ -557,7 +582,7 @@ require('lazy').setup({
 
       local confirm_if_active = function(fallback)
         if cmp.visible() and cmp.get_active_entry() then
-          cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+          cmp.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = false })
         else
           fallback()
         end
@@ -780,16 +805,14 @@ require('lazy').setup({
   {
     'pmizio/typescript-tools.nvim',
     dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
-    config = function()
-      require('typescript-tools').setup({
-        settings = {
-          tsserver_file_preferences = {
-            disableSuggestions = true,
-            importModuleSpecifierPreference = 'non-relative',
-          },
+    opts = {
+      settings = {
+        tsserver_file_preferences = {
+          disableSuggestions = true,
+          importModuleSpecifierPreference = 'non-relative',
         },
-      })
-    end
+      },
+    },
   },
 
   {
@@ -958,6 +981,8 @@ require('lazy').setup({
 
   {
     'lukas-reineke/indent-blankline.nvim',
+    main = 'ibl',
+    opts = {},
     dependencies = { 'Mofiqul/dracula.nvim' },
   },
 }, { install = { colorscheme = { 'dracula' } } })
