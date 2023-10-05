@@ -2,7 +2,7 @@
 vim.g.loaded_matchit = 1 -- matchup compatibility
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
-vim.g.python3_host_prog = '/opt/homebrew/bin/python3.11'
+vim.g.python3_host_prog = '/opt/homebrew/bin/python3.12'
 
 vim.opt.shortmess:append({ c = true })
 vim.opt.number = true
@@ -83,10 +83,12 @@ local on_attach = function(_client, bufferNum)
   vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, lsp_key_opts)
   vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, lsp_key_opts)
   vim.keymap.set('n', 'K', vim.lsp.buf.hover, lsp_key_opts)
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, lsp_key_opts)
   vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, lsp_key_opts)
   vim.keymap.set('n', 'gr', vim.lsp.buf.rename, lsp_key_opts)
   vim.keymap.set('n', 'ga', vim.lsp.buf.code_action, lsp_key_opts)
   vim.keymap.set('n', 'gR', vim.lsp.buf.references, lsp_key_opts)
+  vim.keymap.set('n', 'gl', vim.lsp.codelens.run, lsp_key_opts)
   vim.keymap.set('n', 'gf', function() vim.lsp.buf.format({ async = true }) end, lsp_key_opts)
 end
 
@@ -455,7 +457,7 @@ require('lazy').setup({
 
   {
     'NMAC427/guess-indent.nvim',
-    setup = true,
+    config = true,
   },
 
   'hiphish/rainbow-delimiters.nvim',
@@ -712,7 +714,6 @@ require('lazy').setup({
         },
         settings = {
           useESLintClass = true,
-          packageManager = 'yarn',
         },
       })
 
@@ -806,7 +807,19 @@ require('lazy').setup({
     'pmizio/typescript-tools.nvim',
     dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
     opts = {
+      handlers = {
+        ["textDocument/publishDiagnostics"] = vim.lsp.with(
+          vim.lsp.diagnostic.on_publish_diagnostics,
+          {
+            underline = false,
+            virtual_text = false,
+            signs = false,
+            float = false,
+          }
+        ),
+      },
       settings = {
+        expose_as_code_action = 'all',
         tsserver_file_preferences = {
           disableSuggestions = true,
           importModuleSpecifierPreference = 'non-relative',

@@ -54,7 +54,7 @@ export VOLTA_HOME="$HOME/.volta"
 typeset -U path
 
 export path=(
-  "$BREW_OPT/python@3.11/libexec/bin"
+  "$BREW_OPT/python@3.12/libexec/bin"
   "$POSTGRES_ROOT/bin"
   $path
   "$HOME/.cargo/bin"
@@ -356,7 +356,7 @@ function update() {
   git -C "$HOME/.arc" pull
 
   echo "upgrade cask packages"
-  brew cu --all --yes --quiet
+  brew cu --all --yes --quiet --no-brew-update
 
   echo "cleanup homebrew"
   brew autoremove
@@ -417,3 +417,4 @@ eval "$(github-copilot-cli alias -- "$0")"
 FAST_HIGHLIGHT[chroma-man]=
 autoload -Uz compinit
 compinit -u
+
