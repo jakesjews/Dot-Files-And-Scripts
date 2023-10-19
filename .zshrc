@@ -75,7 +75,7 @@ export path=(
   "$HOME/.jenv/bin"
   "$HOME/.clojure-bin"
   "$HOME/.datomic-bin/bin"
-  "/Applications/Game Porting Toolkit"
+  "$HOME/.verible"
   "$HOME/.usr/bin"
 )
 

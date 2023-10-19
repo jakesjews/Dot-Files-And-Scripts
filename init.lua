@@ -153,6 +153,7 @@ LSP_SERVERS = {
   'm68k',
   'mint',
   'mlir_lsp_server',
+  'nginx_language_server',
   'nomad_lsp',
   'openscad_lsp',
   'prolog_ls',
@@ -166,10 +167,10 @@ LSP_SERVERS = {
   'solidity_ls_nomicfoundation',
   'sourcekit',
   'sqlls',
-  'svlangserver',
   'terraformls',
   'texlab',
   'turtle_ls',
+  'uiua',
   'v_analyzer',
   'vala_ls',
   'veryl_ls',
@@ -197,6 +198,11 @@ require('lazy').setup({
 
   {
     'WhoIsSethDaniel/mason-tool-installer.nvim',
+    cmd = {
+      'MasonToolsInstall',
+      'MasonToolsUpdate',
+      'MasonToolsClean',
+    },
     opts = {
       ensure_installed = mason_packages,
       run_on_start = false,
@@ -474,39 +480,23 @@ require('lazy').setup({
       'nvim-lua/plenary.nvim',
       'm00qek/baleia.nvim',
     },
-    config = function()
-      require('image').setup {
-        render = {
-          foreground_color = true,
-          background_color = true
-        },
-      }
-    end,
+    opts = {
+      render = {
+        foreground_color = true,
+        background_color = true,
+      },
+    },
   },
 
   {
-    'dpayne/CodeGPT.nvim',
+    "jackMort/ChatGPT.nvim",
+    event = "VeryLazy",
     dependencies = {
-      'nvim-lua/plenary.nvim',
-      'MunifTanjim/nui.nvim',
+      "MunifTanjim/nui.nvim",
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim"
     },
-    cmd = 'Chat',
-    config = function()
-      require('codegpt.config')
-
-      vim.g['codegpt_commands'] = {
-        completion = {
-          model = 'gpt-4',
-        },
-
-        tests = {
-          model = 'gpt-4',
-          language_instructions = {
-            javascript = 'Use the mocha framework and the chai.js expect api for assertions.',
-          }
-        },
-      }
-    end,
+    config = true,
   },
 
   {
@@ -703,6 +693,12 @@ require('lazy').setup({
         })
       end
 
+      lspconfig.verible.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        cmd = { 'verible-verilog-ls', '--rules_config_search' },
+      })
+
       lspconfig.eslint.setup({
         on_attach = on_attach,
         capabilities = capabilities,
@@ -804,6 +800,12 @@ require('lazy').setup({
   },
 
   {
+    'linrongbin16/lsp-progress.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = true,
+  },
+
+  {
     'pmizio/typescript-tools.nvim',
     dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
     opts = {
@@ -866,6 +868,8 @@ require('lazy').setup({
       })
     end,
   },
+
+  'jrop/mongo.nvim',
 
   {
     'scalameta/nvim-metals',
