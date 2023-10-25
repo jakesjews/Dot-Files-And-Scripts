@@ -76,6 +76,7 @@ export path=(
   "$HOME/.clojure-bin"
   "$HOME/.datomic-bin/bin"
   "$HOME/.verible"
+  "$HOME/.modular"
   "$HOME/.usr/bin"
 )
 
