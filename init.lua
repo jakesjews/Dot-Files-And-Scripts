@@ -244,7 +244,6 @@ require('lazy').setup({
             'hbs'
           },
         },
-
       },
     },
     config = function()
@@ -686,6 +685,7 @@ require('lazy').setup({
     config = function()
       local lspconfig = require('lspconfig')
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
+      capabilities.textDocument.completion.completionItem.snippetSupport = true
 
       for _, lsp in ipairs(LSP_SERVERS) do
         lspconfig[lsp].setup({
@@ -772,7 +772,7 @@ require('lazy').setup({
             },
             workspace = {
               library = vim.api.nvim_get_runtime_file('', true),
-              checkThirdParty = false,
+              checkThirdParty = 'Disable',
             },
             telemetry = {
               enable = false,
