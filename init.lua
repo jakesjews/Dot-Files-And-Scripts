@@ -126,7 +126,8 @@ local mason_packages = {
 
 LSP_SERVERS = {
   'asm_lsp',
-  'awk_ls',
+  'ast_grep',
+  -- 'awk_ls',
   'bashls',
   'bufls',
   'clojure_lsp',
@@ -963,9 +964,15 @@ require('lazy').setup({
   'zebradil/hive.vim',
   'reasonml-editor/vim-reason-plus',
   'stevearc/vim-arduino',
-  'llathasa-veleth/vim-brainfuck',
+  'q60/vim-brainfuck',
   'lankavitharana/ballerina-vim',
-  'edwinb/idris2-vim',
+  { 'LhKipp/nvim-nu', config = true },
+
+  {
+    'ShinKage/idris2-nvim',
+    dependencies = { 'MunifTanjim/nui.nvim' },
+    config = true,
+  },
 
   {
     'pearofducks/ansible-vim',

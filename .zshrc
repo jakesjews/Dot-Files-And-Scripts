@@ -135,6 +135,7 @@ alias cargo-binstall='cargo-binstall --no-confirm'
 alias UVtoolsCmd=/Applications/UVtools.app/Contents/MacOS/UVtoolsCmd
 alias jenv-start='eval "$(jenv init -)"'
 alias ocamllsp="$HOME/.opam/default/bin/ocamllsp"
+alias readme='glow README.md -p'
 
 function mux() {
   tmuxinator start "$1" --suppress-tmux-version-warning
@@ -274,16 +275,28 @@ function alphabetize_files() {
   done
 }
 
-function quartus_compile() {
-  docker run --platform linux/amd64 -it --rm -v "$(pwd):/build" jakesjews/quartus-mac-arm quartus_sh --flow compile "$1"
-}
-
 function quartus_mister() {
   docker run --platform linux/amd64 --rm -v "$(pwd):/build" -e DISPLAY=host.docker.internal:0 -v /tmp/.X11-unix:/tmp/.X11-unix jakesjews/quartus-mac-arm quartus
 }
 
+function quartus_mister_compile() {
+  docker run --platform linux/amd64 -it --rm -v "$(pwd):/build" jakesjews/quartus-mac-arm quartus_sh --flow compile "$1"
+}
+
 function quartus_pocket() {
+  docker run --platform linux/amd64 --rm -v "$(pwd):/build" -e DISPLAY=host.docker.internal:0 -v /tmp/.X11-unix:/tmp/.X11-unix didiermalenfant/quartus:18.1-apple-silicon quartus
+}
+
+function quartus_pocket_compile() {
+  docker run --platform linux/amd64 -it --rm -v "$(pwd):/build" didiermalenfant/quartus:18.1-apple-silicon quartus_sh --flow compile "$1"
+}
+
+function quartus() {
   docker run --platform linux/amd64 --rm -v "$(pwd):/build" -e DISPLAY=host.docker.internal:0 -v /tmp/.X11-unix:/tmp/.X11-unix didiermalenfant/quartus:22.1-apple-silicon quartus
+}
+
+function quartus_compile() {
+  docker run --platform linux/amd64 -it --rm -v "$(pwd):/build" didiermalenfant/quartus:22.1-apple-silicon quartus_sh --flow compile "$1"
 }
 
 function restore_history() {
