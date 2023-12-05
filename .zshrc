@@ -24,7 +24,6 @@ export HISTSIZE=1000000000
 export HISTFILESIZE=1000000000
 export REPORTER=spec
 export EMBER_PARALLEL=8
-export ZSH_DISABLE_COMPFIX=true
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 export SKIM_DEFAULT_COMMAND="fd --type f"
@@ -429,6 +428,10 @@ eval "$(github-copilot-cli alias -- "$0")"
 
 # https://github.com/zdharma-continuum/fast-syntax-highlighting/issues/27
 FAST_HIGHLIGHT[chroma-man]=
-autoload -Uz compinit
-compinit -u
 
+autoload -U compinit
+if [[ ! -f "$HOME/.zcompdump" || ! "$(find "$HOME/.zcompdump" -mtime 0)" ]]; then
+  compinit
+else
+  compinit -C
+fi

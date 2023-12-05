@@ -2,6 +2,7 @@
 vim.g.loaded_matchit = 1 -- matchup compatibility
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+vim.g.skip_ts_context_commentstring_module = true
 vim.g.python3_host_prog = '/opt/homebrew/bin/python3.12'
 
 vim.opt.shortmess:append({ c = true })
@@ -107,6 +108,7 @@ vim.opt.rtp:prepend(lazypath)
 
 local mason_packages = {
   'als',
+  -- 'contextive',
   'erlangls',
   'fennel_language_server',
   'fsautocomplete',
@@ -120,14 +122,14 @@ local mason_packages = {
   'r_language_server',
   'raku_navigator',
   'reason_ls',
-  'rescriptls',
   'serve_d',
 }
 
 LSP_SERVERS = {
+  -- 'awk_ls',
   'asm_lsp',
   'ast_grep',
-  -- 'awk_ls',
+  'autotools_ls',
   'bashls',
   'bufls',
   'clojure_lsp',
@@ -135,6 +137,7 @@ LSP_SERVERS = {
   'coffeesense',
   'crystalline',
   'cssls',
+  'cypher_ls',
   'dartls',
   'docker_compose_language_service',
   'dockerls',
@@ -148,7 +151,6 @@ LSP_SERVERS = {
   'gleam',
   'gopls',
   'graphql',
-  'html',
   'jqls',
   'kotlin_language_server',
   'm68k',
@@ -156,6 +158,7 @@ LSP_SERVERS = {
   'mlir_lsp_server',
   'nginx_language_server',
   'nomad_lsp',
+  'nushell',
   'openscad_lsp',
   'prolog_ls',
   'purescriptls',
@@ -216,7 +219,6 @@ require('lazy').setup({
       'nvim-treesitter/nvim-treesitter-refactor',
       'RRethy/nvim-treesitter-textsubjects',
       'nvim-treesitter/nvim-treesitter-context',
-      'JoosepAlviste/nvim-ts-context-commentstring',
       {
         'andymass/vim-matchup',
         init = function()
@@ -260,10 +262,6 @@ require('lazy').setup({
       require('nvim-treesitter.configs').setup({
         auto_install = true,
         ensure_installed = 'all',
-        context_commentstring = {
-          enable = true,
-          enable_autocmd = false,
-        },
         highlight = {
           enable = true,
         },
@@ -301,6 +299,13 @@ require('lazy').setup({
         },
       })
     end,
+  },
+
+  {
+    'JoosepAlviste/nvim-ts-context-commentstring',
+    opts ={
+      enable_autocmd = false,
+    },
   },
 
   {
@@ -797,6 +802,12 @@ require('lazy').setup({
           },
         },
       })
+
+      lspconfig.html.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        filetypes = { 'html', 'glimmer', 'hbs', 'handlebars' },
+      })
     end,
   },
 
@@ -956,7 +967,6 @@ require('lazy').setup({
   'kchmck/vim-coffee-script',
   'leafo/moonscript-vim',
   'petRUShka/vim-opencl',
-  'purescript-contrib/purescript-vim',
   'robbles/logstash.vim',
   'thyrgle/vim-dyon',
   'vmchale/ion-vim',
