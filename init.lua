@@ -166,7 +166,6 @@ LSP_SERVERS = {
   'racket_langserver',
   'ruff_lsp',
   'rune_languageserver',
-  'salt_ls',
   'solargraph',
   'solidity_ls_nomicfoundation',
   'sourcekit',
