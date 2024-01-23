@@ -117,7 +117,6 @@ alias stree="$HOMEBREW_PREFIX/bin/stree"
 alias arc="$HOME/.arc/arc.sh"
 alias q="rlwrap --remember $QHOME/m64/q"
 alias 9="$PLAN9_HOME/bin/9"
-alias jsc=/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/Helpers/jsc
 alias factor=/Applications/factor/factor
 alias l=ls
 alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
@@ -130,7 +129,7 @@ alias git-graph="git commit-graph write --reachable --changed-paths"
 alias mongo=mongosh
 alias bash="$HOMEBREW_PREFIX/bin/bash"
 alias make="$BREW_OPT/make/libexec/gnubin/make"
-alias rg-all="rg -uuuu"
+alias rg-all="rg -uuu"
 alias cargo-binstall='cargo-binstall --no-confirm'
 alias UVtoolsCmd=/Applications/UVtools.app/Contents/MacOS/UVtoolsCmd
 alias jenv-start='eval "$(jenv init -)"'
@@ -318,7 +317,7 @@ function update() {
   echo "updating vim plugins"
   nvim --headless "+Lazy! sync" +qa
   nvim --headless "+TSUpdateSync" +qa
-  nvim --headless "+MasonToolsUpdate" +qa
+  nvim --headless "+MasonToolsUpdateSync" +qa
 
   echo "updating ruby gems"
   gem update
@@ -436,3 +435,4 @@ if [[ ! -f "$HOME/.zcompdump" || ! "$(find "$HOME/.zcompdump" -mtime 0)" ]]; the
 else
   compinit -C
 fi
+
