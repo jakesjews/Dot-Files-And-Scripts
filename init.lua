@@ -193,9 +193,7 @@ require('lazy').setup({
 
   {
     'williamboman/mason-lspconfig.nvim',
-    opts = {
-      ensure_installed = mason_packages,
-    },
+    config = true,
   },
 
   {

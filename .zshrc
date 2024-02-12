@@ -135,6 +135,7 @@ alias UVtoolsCmd=/Applications/UVtools.app/Contents/MacOS/UVtoolsCmd
 alias jenv-start='eval "$(jenv init -)"'
 alias ocamllsp="$HOME/.opam/default/bin/ocamllsp"
 alias readme='glow README.md -p'
+alias keka="/Applications/Keka.app/Contents/MacOS/Keka --cli"
 
 function mux() {
   tmuxinator start "$1" --suppress-tmux-version-warning
