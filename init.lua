@@ -148,6 +148,7 @@ LSP_SERVERS = {
   'futhark_lsp',
   'gdscript',
   'gleam',
+  'glint',
   'gopls',
   'graphql',
   'jinja_lsp',
@@ -232,6 +233,7 @@ require('lazy').setup({
         opts = {
           filetypes = {
             'html',
+            'javascript.glimmer',
             'javascriptreact',
             'typescriptreact',
             'svelte',
@@ -819,7 +821,7 @@ require('lazy').setup({
       lspconfig.html.setup({
         on_attach = on_attach,
         capabilities = capabilities,
-        filetypes = { 'html', 'glimmer', 'hbs', 'handlebars' },
+        filetypes = { 'html', 'glimmer', 'hbs', 'handlebars', 'javascript.glimmer' },
       })
     end,
   },
@@ -832,27 +834,41 @@ require('lazy').setup({
 
   {
     'pmizio/typescript-tools.nvim',
-    dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
-    opts = {
-      handlers = {
-        ["textDocument/publishDiagnostics"] = vim.lsp.with(
-          vim.lsp.diagnostic.on_publish_diagnostics,
-          {
-            underline = false,
-            virtual_text = false,
-            signs = false,
-            float = false,
-          }
-        ),
-      },
-      settings = {
-        expose_as_code_action = 'all',
-        tsserver_file_preferences = {
-          disableSuggestions = true,
-          importModuleSpecifierPreference = 'non-relative',
+    dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig', 'hrsh7th/cmp-nvim-lsp' },
+    opts = function()
+      return {
+        on_attach = on_attach,
+        capabilities = require('cmp_nvim_lsp').default_capabilities(),
+        handlers = {
+          ["textDocument/publishDiagnostics"] = vim.lsp.with(
+            vim.lsp.diagnostic.on_publish_diagnostics,
+            {
+              underline = false,
+              virtual_text = false,
+              signs = false,
+              float = false,
+            }
+          ),
         },
-      },
-    },
+        filetypes = {
+          "javascript",
+          "javascript.glimmer",
+          "javascriptreact",
+          "javascript.jsx",
+          "typescript",
+          "typescriptreact",
+          "typescript.tsx",
+          "typescript.glimmer",
+        },
+        settings = {
+          expose_as_code_action = 'all',
+          tsserver_file_preferences = {
+            disableSuggestions = true,
+            importModuleSpecifierPreference = 'non-relative',
+          },
+        },
+      }
+    end,
   },
 
   {
@@ -917,7 +933,7 @@ require('lazy').setup({
   {
     'mfussenegger/nvim-jdtls',
     ft = 'java',
-    opts = function()
+    config = function()
       require('jdtls').start_or_attach({
         cmd = { '/opt/homebrew/opt/jdtls/bin/jdtls' },
         capabilities = require('cmp_nvim_lsp').default_capabilities(),
