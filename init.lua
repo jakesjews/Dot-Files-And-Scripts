@@ -148,7 +148,6 @@ LSP_SERVERS = {
   'futhark_lsp',
   'gdscript',
   'gleam',
-  'glint',
   'gopls',
   'graphql',
   'jinja_lsp',
@@ -822,6 +821,20 @@ require('lazy').setup({
         on_attach = on_attach,
         capabilities = capabilities,
         filetypes = { 'html', 'glimmer', 'hbs', 'handlebars', 'javascript.glimmer' },
+      })
+
+      lspconfig.glint.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        root_dir = lspconfig.util.root_pattern(
+          '.glintrc.yml',
+          '.glintrc',
+          '.glintrc.json',
+          '.glintrc.js',
+          'glint.config.js',
+          'ember-cli-build.js',
+          'ember-cli-build.mjs'
+        ),
       })
     end,
   },
