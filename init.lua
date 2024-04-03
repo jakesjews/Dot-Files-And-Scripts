@@ -108,8 +108,6 @@ vim.opt.rtp:prepend(lazypath)
 
 local mason_packages = {
   'als',
-  -- 'contextive',
-  'erlangls',
   'fennel_language_server',
   'fsautocomplete',
   'julials',
@@ -125,16 +123,17 @@ local mason_packages = {
 }
 
 LSP_SERVERS = {
-  -- 'awk_ls',
   'asm_lsp',
   'ast_grep',
   'autotools_ls',
+  'awk_ls',
   'bashls',
   'bufls',
   'clojure_lsp',
   'cmake',
   'coffeesense',
   'crystalline',
+  'css_variables',
   'cssls',
   'cypher_ls',
   'dartls',
@@ -144,12 +143,14 @@ LSP_SERVERS = {
   'elmls',
   'ember',
   'erg_language_server',
+  'erlangls',
   'fortls',
   'futhark_lsp',
   'gdscript',
   'gleam',
   'gopls',
   'graphql',
+  'jinja_lsp',
   'jqls',
   'kotlin_language_server',
   'm68k',
@@ -167,6 +168,7 @@ LSP_SERVERS = {
   'rune_languageserver',
   'solargraph',
   'solidity_ls_nomicfoundation',
+  'somesass_ls',
   'sourcekit',
   'sqlls',
   'terraformls',
@@ -174,6 +176,7 @@ LSP_SERVERS = {
   'turtle_ls',
   'uiua',
   'v_analyzer',
+  'vacuum',
   'vala_ls',
   'veryl_ls',
   'vhdl_ls',
@@ -288,6 +291,13 @@ require('lazy').setup({
   },
 
   {
+    'Wansmer/treesj',
+    keys = { '<space>m', '<space>j', '<space>s' },
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    config = true,
+  },
+
+  {
     'numToStr/Comment.nvim',
     dependencies = {
       {
@@ -358,6 +368,12 @@ require('lazy').setup({
     },
     branch = '0.1.x',
     opts = function()
+      require('plenary.filetype').add_table({
+        extension = {
+          ['gjs'] = 'javascript.glimmer',
+        },
+      })
+
       local telescope_actions = require('telescope.actions')
 
       local function multi_select(prompt_bufnr)
@@ -517,7 +533,7 @@ require('lazy').setup({
       'b0o/schemastore.nvim',
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-buffer',
-      'FelipeLema/cmp-async-path',
+      'https://codeberg.org/FelipeLema/cmp-async-path.git',
       {
         'L3MON4D3/LuaSnip',
         version = "v2.*",
@@ -737,7 +753,7 @@ require('lazy').setup({
       lspconfig.ember.setup({
         on_attach = on_attach,
         capabilities = capabilities,
-        root_dir = lspconfig.util.root_pattern('ember-cli-build.js'),
+        root_dir = lspconfig.util.root_pattern('ember-cli-build.js', 'ember-cli-build.mjs'),
       })
 
       lspconfig.arduino_language_server.setup({

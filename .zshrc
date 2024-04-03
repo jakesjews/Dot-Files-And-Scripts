@@ -4,6 +4,7 @@ ulimit -n 10240 unlimited
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+export ZSH_COMPDUMP="$HOME/.zcompdump-jacob"
 export ZSH="$HOME/.oh-my-zsh"
 
 local BREW_OPT="$HOMEBREW_PREFIX/opt"
@@ -126,7 +127,7 @@ alias redis-master="redis-cli -h qa-db -p 26379 SENTINEL get-master-addr-by-name
 alias vim=nvim
 alias vi=nvim
 alias git-graph="git commit-graph write --reachable --changed-paths"
-alias mongo=mongosh
+alias mongo="mongosh --quiet"
 alias bash="$HOMEBREW_PREFIX/bin/bash"
 alias make="$BREW_OPT/make/libexec/gnubin/make"
 alias rg-all="rg -uuu"
@@ -284,18 +285,10 @@ function quartus_mister_compile() {
 }
 
 function quartus_pocket() {
-  docker run --platform linux/amd64 --rm -v "$(pwd):/build" -e DISPLAY=host.docker.internal:0 -v /tmp/.X11-unix:/tmp/.X11-unix didiermalenfant/quartus:18.1-apple-silicon quartus
-}
-
-function quartus_pocket_compile() {
-  docker run --platform linux/amd64 -it --rm -v "$(pwd):/build" didiermalenfant/quartus:18.1-apple-silicon quartus_sh --flow compile "$1"
-}
-
-function quartus() {
   docker run --platform linux/amd64 --rm -v "$(pwd):/build" -e DISPLAY=host.docker.internal:0 -v /tmp/.X11-unix:/tmp/.X11-unix didiermalenfant/quartus:22.1-apple-silicon quartus
 }
 
-function quartus_compile() {
+function quartus_pocket_compile() {
   docker run --platform linux/amd64 -it --rm -v "$(pwd):/build" didiermalenfant/quartus:22.1-apple-silicon quartus_sh --flow compile "$1"
 }
 
@@ -431,9 +424,8 @@ eval "$(github-copilot-cli alias -- "$0")"
 FAST_HIGHLIGHT[chroma-man]=
 
 autoload -U compinit
-if [[ ! -f "$HOME/.zcompdump" || ! "$(find "$HOME/.zcompdump" -mtime 0)" ]]; then
-  compinit
+if [[ ! -f "$ZSH_COMPDUMP" || ! "$(find "$ZSH_COMPDUMP" -mtime 0)" ]]; then
+  compinit -d "$ZSH_COMPDUMP"
 else
-  compinit -C
+  compinit -d "$ZSH_COMPDUMP" -C
 fi
-
