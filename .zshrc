@@ -292,6 +292,10 @@ function quartus_pocket_compile() {
   docker run --platform linux/amd64 -it --rm -v "$(pwd):/build" didiermalenfant/quartus:22.1-apple-silicon quartus_sh --flow compile "$1"
 }
 
+function reverse_bitstream() {
+  perl -p -0777 -e '$_=~s/(.)/chr(((ord($1)*8623620610) & 1136090292240)%1023)/egs' "$1" > bitstream.rbf_r
+}
+
 function restore_history() {
   sqlite3 "$HOME/Library/Application Support/McFly/history.db" 'select ": " || id || ":0;" || cmd from commands order by id;' > "$HOME/.zsh_history"
 }
@@ -348,6 +352,9 @@ function update() {
   echo "update arduino"
   arduino-cli update
   arduino-cli upgrade
+
+  echo "update gh-copilot"
+  gh extension upgrade gh-copilot
 
   echo "update zsh plugins"
   omz update --unattended
@@ -418,7 +425,7 @@ source "$BREW_OPT/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
 source "$BREW_OPT/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 source "$HOME/.config/op/plugins.sh"
 eval "$(zoxide init --cmd j zsh)"
-eval "$(github-copilot-cli alias -- "$0")"
+eval "$(gh copilot alias -- zsh)"
 
 # https://github.com/zdharma-continuum/fast-syntax-highlighting/issues/27
 FAST_HIGHLIGHT[chroma-man]=
@@ -429,3 +436,4 @@ if [[ ! -f "$ZSH_COMPDUMP" || ! "$(find "$ZSH_COMPDUMP" -mtime 0)" ]]; then
 else
   compinit -d "$ZSH_COMPDUMP" -C
 fi
+

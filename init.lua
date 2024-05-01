@@ -42,6 +42,8 @@ vim.filetype.add({
   },
 })
 
+vim.lsp.set_log_level('error')
+
 local file_type_detect_id = vim.api.nvim_create_augroup('filetypedetect', { clear = true })
 
 local indents = {
@@ -73,26 +75,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end
 })
 
-local on_attach = function(_client, bufferNum)
-  local lsp_key_opts = {
-    noremap = true,
-    silent = true,
-    buffer = bufferNum,
-  }
-
-  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, lsp_key_opts)
-  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, lsp_key_opts)
-  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, lsp_key_opts)
-  vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, lsp_key_opts)
-  vim.keymap.set('n', 'K', vim.lsp.buf.hover, lsp_key_opts)
-  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, lsp_key_opts)
-  vim.keymap.set('n', 'gr', vim.lsp.buf.rename, lsp_key_opts)
-  vim.keymap.set('n', 'ga', vim.lsp.buf.code_action, lsp_key_opts)
-  vim.keymap.set('n', 'gR', vim.lsp.buf.references, lsp_key_opts)
-  vim.keymap.set('n', 'gl', vim.lsp.codelens.run, lsp_key_opts)
-  vim.keymap.set('n', 'gf', function() vim.lsp.buf.format({ async = true }) end, lsp_key_opts)
-end
-
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -115,7 +97,6 @@ local mason_packages = {
   'ocamllsp',
   'omnisharp',
   'perlnavigator',
-  'psalm',
   'r_language_server',
   'raku_navigator',
   'reason_ls',
@@ -124,7 +105,6 @@ local mason_packages = {
 
 LSP_SERVERS = {
   'asm_lsp',
-  'ast_grep',
   'autotools_ls',
   'awk_ls',
   'bashls',
@@ -161,6 +141,7 @@ LSP_SERVERS = {
   'nushell',
   'openscad_lsp',
   'prolog_ls',
+  'psalm',
   'purescriptls',
   'pyright',
   'racket_langserver',
@@ -187,6 +168,26 @@ LSP_SERVERS = {
 }
 
 vim.list_extend(LSP_SERVERS, mason_packages)
+
+local on_attach = function(_client, bufferNum)
+  local lsp_key_opts = {
+    noremap = true,
+    silent = true,
+    buffer = bufferNum,
+  }
+
+  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, lsp_key_opts)
+  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, lsp_key_opts)
+  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, lsp_key_opts)
+  vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, lsp_key_opts)
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, lsp_key_opts)
+  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, lsp_key_opts)
+  vim.keymap.set('n', 'gr', vim.lsp.buf.rename, lsp_key_opts)
+  vim.keymap.set('n', 'ga', vim.lsp.buf.code_action, lsp_key_opts)
+  vim.keymap.set('n', 'gR', vim.lsp.buf.references, lsp_key_opts)
+  vim.keymap.set('n', 'gl', vim.lsp.codelens.run, lsp_key_opts)
+  vim.keymap.set('n', 'gf', function() vim.lsp.buf.format({ async = true }) end, lsp_key_opts)
+end
 
 require('lazy').setup({
   {
@@ -700,6 +701,35 @@ require('lazy').setup({
   },
 
   {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    branch = "canary",
+    cmd = {
+      'CopilotChat',
+      'CopilotChatOpen',
+      'CopilotChatClose',
+      'CopilotChatToggle',
+      'CopilotChatReset',
+      'CopilotChatSave',
+      'CopilotChatLoad',
+      'CopilotChatDebugInfo',
+      'CopilotChatExplain',
+      'CopilotChatReview',
+      'CopilotChatFix',
+      'CopilotChatOptimize',
+      'CopilotChatDocs',
+      'CopilotChatTests',
+      'CopilotChatFixDiagnostic',
+      'CopilotChatCommit',
+      'CopilotChatCommitStaged',
+    },
+    dependencies = {
+      { "zbirenbaum/copilot.lua" },
+      { "nvim-lua/plenary.nvim" },
+    },
+    config = true,
+  },
+
+  {
     'neovim/nvim-lspconfig',
     config = function()
       local lspconfig = require('lspconfig')
@@ -826,6 +856,17 @@ require('lazy').setup({
       lspconfig.glint.setup({
         on_attach = on_attach,
         capabilities = capabilities,
+        handlers = {
+          ["textDocument/publishDiagnostics"] = vim.lsp.with(
+            vim.lsp.diagnostic.on_publish_diagnostics,
+            {
+              underline = false,
+              virtual_text = false,
+              signs = false,
+              float = false,
+            }
+          ),
+        },
         root_dir = lspconfig.util.root_pattern(
           '.glintrc.yml',
           '.glintrc',
@@ -1041,6 +1082,21 @@ require('lazy').setup({
   {
     'vim-crystal/vim-crystal',
     ft = { 'crystal', 'ecrystal' },
+  },
+
+  {
+    'vuki656/package-info.nvim',
+    dependencies = { 'MunifTanjim/nui.nvim' },
+    cmd = 'Npm',
+    config = function()
+      local packageInfo = require('package-info')
+
+      packageInfo.setup({
+        autostart = false,
+      })
+
+      vim.api.nvim_create_user_command('Npm', packageInfo.show, {})
+    end
   },
 
   {
