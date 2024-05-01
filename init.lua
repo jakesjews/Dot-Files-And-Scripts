@@ -26,14 +26,14 @@ vim.opt.swapfile = false
 vim.opt.scrolloff = 1
 vim.opt.sidescrolloff = 5
 vim.opt.hidden = false
-vim.opt.formatoptions:remove { "c", "r", "o" }
+vim.opt.formatoptions:remove { 'c', 'r', 'o' }
 
 vim.keymap.set('n', 'x', '"_x') -- prevent character delete from writing to the clipboard
 vim.keymap.set('v', '.', ':normal .<CR>')
 vim.keymap.set('n', '[', vim.cmd.tabprevious, { silent = true })
 vim.keymap.set('n', ']', vim.cmd.tabnext, { silent = true })
 vim.api.nvim_create_user_command('Nt', function() vim.cmd.tabnew() end, {})
-vim.treesitter.language.register("bash", "zsh")
+vim.treesitter.language.register('bash', 'zsh')
 
 vim.filetype.add({
   extension = {
@@ -62,7 +62,7 @@ local format_options_id = vim.api.nvim_create_augroup('formatoptions', { clear =
 vim.api.nvim_create_autocmd('BufEnter', {
   group = format_options_id,
   callback = function()
-    vim.opt.formatoptions:remove { "c", "r", "o" }
+    vim.opt.formatoptions:remove { 'c', 'r', 'o' }
   end
 })
 
@@ -103,7 +103,7 @@ local mason_packages = {
   'serve_d',
 }
 
-LSP_SERVERS = {
+local LSP_SERVERS = {
   'asm_lsp',
   'autotools_ls',
   'awk_ls',
@@ -329,7 +329,7 @@ require('lazy').setup({
 
   {
     'folke/which-key.nvim',
-    event = "VeryLazy",
+    event = 'VeryLazy',
     init = function()
       vim.o.timeout = true
       vim.o.timeoutlen = 500
@@ -340,7 +340,7 @@ require('lazy').setup({
   {
     'kylechui/nvim-surround',
     version = '*',
-    event = "VeryLazy",
+    event = 'VeryLazy',
     opts = {
       keymaps = {
         normal = 'sa',
@@ -349,7 +349,7 @@ require('lazy').setup({
         change = 'sc',
       },
       aliases = {
-        ["s"] = { '}', ']', ')', '>', '"', "'", '`' },
+        ['s'] = { '}', ']', ')', '>', '"', "'", '`' },
       },
     },
   },
@@ -505,12 +505,12 @@ require('lazy').setup({
   },
 
   {
-    "jackMort/ChatGPT.nvim",
-    event = "VeryLazy",
+    'jackMort/ChatGPT.nvim',
+    event = 'VeryLazy',
     dependencies = {
-      "MunifTanjim/nui.nvim",
-      "nvim-lua/plenary.nvim",
-      "nvim-telescope/telescope.nvim"
+      'MunifTanjim/nui.nvim',
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope.nvim'
     },
     config = true,
   },
@@ -538,8 +538,8 @@ require('lazy').setup({
       'https://codeberg.org/FelipeLema/cmp-async-path.git',
       {
         'L3MON4D3/LuaSnip',
-        version = "v2.*",
-        build = "make install_jsregexp",
+        version = 'v2.*',
+        build = 'make install_jsregexp',
       },
       'L3MON4D3/cmp-luasnip-choice',
       'onsails/lspkind.nvim',
@@ -550,13 +550,13 @@ require('lazy').setup({
       {
         'tamago324/cmp-zsh',
         opts = {
-          filetypes = { "zsh" },
+          filetypes = { 'zsh' },
         },
       },
       {
         'David-Kunz/cmp-npm',
         dependencies = { 'nvim-lua/plenary.nvim' },
-        ft = "json",
+        ft = 'json',
         opts = {
           only_latest_version = true,
         },
@@ -701,8 +701,8 @@ require('lazy').setup({
   },
 
   {
-    "CopilotC-Nvim/CopilotChat.nvim",
-    branch = "canary",
+    'CopilotC-Nvim/CopilotChat.nvim',
+    branch = 'canary',
     cmd = {
       'CopilotChat',
       'CopilotChatOpen',
@@ -723,14 +723,17 @@ require('lazy').setup({
       'CopilotChatCommitStaged',
     },
     dependencies = {
-      { "zbirenbaum/copilot.lua" },
-      { "nvim-lua/plenary.nvim" },
+      { 'zbirenbaum/copilot.lua' },
+      { 'nvim-lua/plenary.nvim' },
     },
     config = true,
   },
 
   {
     'neovim/nvim-lspconfig',
+    dependencies = {
+      'yioneko/nvim-vtsls',
+    },
     config = function()
       local lspconfig = require('lspconfig')
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
@@ -754,8 +757,12 @@ require('lazy').setup({
         capabilities = capabilities,
         filetypes = {
           'javascript',
+          'javascriptreact',
+          'javascript.jsx',
           'typescript',
-          'typescript.glimmer',
+          'typescriptreact',
+          'typescript.tsx',
+          'glimmer',
           'javascript.glimmer',
         },
         settings = {
@@ -850,14 +857,27 @@ require('lazy').setup({
       lspconfig.html.setup({
         on_attach = on_attach,
         capabilities = capabilities,
-        filetypes = { 'html', 'glimmer', 'hbs', 'handlebars', 'javascript.glimmer' },
+        filetypes = {
+          'html',
+          'javascript.glimmer',
+          'javascriptreact',
+          'typescriptreact',
+          'svelte',
+          'vue',
+          'tsx',
+          'jsx',
+          'rescript',
+          'glimmer',
+          'handlebars',
+          'hbs'
+        },
       })
 
       lspconfig.glint.setup({
         on_attach = on_attach,
         capabilities = capabilities,
         handlers = {
-          ["textDocument/publishDiagnostics"] = vim.lsp.with(
+          ['textDocument/publishDiagnostics'] = vim.lsp.with(
             vim.lsp.diagnostic.on_publish_diagnostics,
             {
               underline = false,
@@ -877,6 +897,51 @@ require('lazy').setup({
           'ember-cli-build.mjs'
         ),
       })
+
+      require('lspconfig.configs').vtsls = require('vtsls').lspconfig
+
+      lspconfig.vtsls.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        filetypes = {
+          'javascript',
+          'javascriptreact',
+          'javascript.jsx',
+          'typescript',
+          'typescriptreact',
+          'typescript.tsx',
+          'glimmer',
+          'javascript.glimmer',
+        },
+        settings = {
+          javascript = {
+            preferGoToSourceDefinition = true,
+            inlayHints = {
+              parameterNames = {
+                enabled = 'all',
+                propertyDeclarationTypes = {
+                  enabled = true,
+                },
+                enumMemberValues = {
+                  enabled = true,
+                },
+                functionLikeReturnTypes = {
+                  enabled = true,
+                },
+              },
+            },
+            suggest = {
+              completeFunctionCalls = true,
+            },
+            preferences = {
+              importModuleSpecifier = 'non-relative',
+            },
+            validate = {
+              enable = false,
+            },
+          },
+        },
+      })
     end,
   },
 
@@ -884,45 +949,6 @@ require('lazy').setup({
     'linrongbin16/lsp-progress.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = true,
-  },
-
-  {
-    'pmizio/typescript-tools.nvim',
-    dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig', 'hrsh7th/cmp-nvim-lsp' },
-    opts = function()
-      return {
-        on_attach = on_attach,
-        capabilities = require('cmp_nvim_lsp').default_capabilities(),
-        handlers = {
-          ["textDocument/publishDiagnostics"] = vim.lsp.with(
-            vim.lsp.diagnostic.on_publish_diagnostics,
-            {
-              underline = false,
-              virtual_text = false,
-              signs = false,
-              float = false,
-            }
-          ),
-        },
-        filetypes = {
-          "javascript",
-          "javascript.glimmer",
-          "javascriptreact",
-          "javascript.jsx",
-          "typescript",
-          "typescriptreact",
-          "typescript.tsx",
-          "typescript.glimmer",
-        },
-        settings = {
-          expose_as_code_action = 'all',
-          tsserver_file_preferences = {
-            disableSuggestions = true,
-            importModuleSpecifierPreference = 'non-relative',
-          },
-        },
-      }
-    end,
   },
 
   {
@@ -957,7 +983,7 @@ require('lazy').setup({
         vim = { 'vint' },
       }
 
-      vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+      vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
         callback = function()
           lint.try_lint()
         end,
