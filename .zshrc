@@ -176,6 +176,7 @@ function clean-eflex-dir() {
   rm -rf "${TMPDIR}"jacob/if-you-need-to-delete-this-open-an-issue-async-disk-cache
   rm -rf "${TMPDIR}"*Before*
   rm -rf "${TMPDIR}"*After*
+  rm -rf /tmp/node-cache
   watchman watch-del-all
   cd "${HOME}"/dev/eflexsystems/eflex
   git remote prune origin
@@ -318,6 +319,7 @@ function update() {
   nvim --headless "+MasonToolsUpdateSync" +qa
 
   echo "updating ruby gems"
+  gem update --system
   gem update
   gem cleanup
 
@@ -368,6 +370,9 @@ function update() {
 
   echo "update anarki"
   git -C "$HOME/.arc" pull
+
+  echo "vscode extensions"
+  code --update-extensions
 
   echo "upgrade cask packages"
   brew cu --all --yes --quiet --no-brew-update
@@ -436,4 +441,5 @@ if [[ ! -f "$ZSH_COMPDUMP" || ! "$(find "$ZSH_COMPDUMP" -mtime 0)" ]]; then
 else
   compinit -d "$ZSH_COMPDUMP" -C
 fi
+
 

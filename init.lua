@@ -538,7 +538,7 @@ require('lazy').setup({
       'https://codeberg.org/FelipeLema/cmp-async-path.git',
       {
         'L3MON4D3/LuaSnip',
-        version = 'v2.*',
+        version = '*',
         build = 'make install_jsregexp',
       },
       'L3MON4D3/cmp-luasnip-choice',
@@ -913,6 +913,25 @@ require('lazy').setup({
           'glimmer',
           'javascript.glimmer',
         },
+        handlers = {
+          ["textDocument/publishDiagnostics"] = vim.lsp.with(
+            vim.lsp.diagnostic.on_publish_diagnostics,
+            {
+              underline = {
+                severity = vim.diagnostic.severity.ERROR,
+              },
+              virtual_text = {
+                severity = vim.diagnostic.severity.ERROR,
+              },
+              signs = {
+                severity = vim.diagnostic.severity.ERROR,
+              },
+              float = {
+                severity = vim.diagnostic.severity.ERROR,
+              },
+            }
+          ),
+        },
         settings = {
           javascript = {
             preferGoToSourceDefinition = true,
@@ -1000,7 +1019,7 @@ require('lazy').setup({
 
   {
     'mrcjkb/rustaceanvim',
-    version = '^3',
+    version = '*',
     ft = 'rust',
     init = function()
       vim.g.rustaceanvim = {
@@ -1029,7 +1048,7 @@ require('lazy').setup({
 
   {
     'mrcjkb/haskell-tools.nvim',
-    version = '^3',
+    version = '*',
     ft = { 'haskell', 'lhaskell', 'cabal', 'cabalproject' },
     init = function()
       vim.g.haskell_tools = {
