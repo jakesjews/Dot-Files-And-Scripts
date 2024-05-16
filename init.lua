@@ -43,6 +43,8 @@ vim.filetype.add({
 })
 
 vim.lsp.set_log_level('error')
+-- vim.lsp.set_log_level('debug')
+-- require('vim.lsp.log').set_format_func(vim.inspect)
 
 local file_type_detect_id = vim.api.nvim_create_augroup('filetypedetect', { clear = true })
 
@@ -180,7 +182,6 @@ local on_attach = function(_client, bufferNum)
   vim.keymap.set('n', 'gd', vim.lsp.buf.definition, lsp_key_opts)
   vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, lsp_key_opts)
   vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, lsp_key_opts)
-  vim.keymap.set('n', 'K', vim.lsp.buf.hover, lsp_key_opts)
   vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, lsp_key_opts)
   vim.keymap.set('n', 'gr', vim.lsp.buf.rename, lsp_key_opts)
   vim.keymap.set('n', 'ga', vim.lsp.buf.code_action, lsp_key_opts)
@@ -296,7 +297,21 @@ require('lazy').setup({
     'Wansmer/treesj',
     keys = { '<space>m', '<space>j', '<space>s' },
     dependencies = { 'nvim-treesitter/nvim-treesitter' },
-    config = true,
+    config = function()
+      local tsj = require('treesj')
+      local lang_utils = require('treesj.langs.utils')
+      tsj.setup({
+        langs = {
+          glimmer = {
+            element_node_start = lang_utils.set_default_preset({
+              both = {
+                omit = { 'tag_name' },
+              },
+            }),
+          },
+        },
+      })
+    end,
   },
 
   {
@@ -368,7 +383,6 @@ require('lazy').setup({
         build = 'make',
       },
     },
-    branch = '0.1.x',
     opts = function()
       require('plenary.filetype').add_table({
         extension = {
@@ -502,17 +516,6 @@ require('lazy').setup({
         background_color = true,
       },
     },
-  },
-
-  {
-    'jackMort/ChatGPT.nvim',
-    event = 'VeryLazy',
-    dependencies = {
-      'MunifTanjim/nui.nvim',
-      'nvim-lua/plenary.nvim',
-      'nvim-telescope/telescope.nvim'
-    },
-    config = true,
   },
 
   {
@@ -791,6 +794,9 @@ require('lazy').setup({
       lspconfig.ember.setup({
         on_attach = on_attach,
         capabilities = capabilities,
+        init_options = {
+          editor = 'vscode',
+        },
         root_dir = lspconfig.util.root_pattern('ember-cli-build.js', 'ember-cli-build.mjs'),
       })
 
