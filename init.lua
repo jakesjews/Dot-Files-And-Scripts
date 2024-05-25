@@ -101,7 +101,6 @@ local mason_packages = {
   'perlnavigator',
   'r_language_server',
   'raku_navigator',
-  'reason_ls',
   'serve_d',
 }
 
@@ -147,6 +146,7 @@ local LSP_SERVERS = {
   'purescriptls',
   'pyright',
   'racket_langserver',
+  'rescriptls',
   'ruff_lsp',
   'rune_languageserver',
   'solargraph',
@@ -218,9 +218,7 @@ require('lazy').setup({
   {
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
-      'nvim-treesitter/nvim-treesitter-refactor',
       'RRethy/nvim-treesitter-textsubjects',
-      'nvim-treesitter/nvim-treesitter-context',
       {
         'andymass/vim-matchup',
         init = function()
@@ -228,27 +226,6 @@ require('lazy').setup({
           vim.g.matchup_matchparen_deferred = 1
           vim.g.matchup_surround_enabled = 0
         end,
-      },
-      {
-        'windwp/nvim-ts-autotag',
-        opts = {
-          filetypes = {
-            'html',
-            'javascript.glimmer',
-            'javascriptreact',
-            'typescriptreact',
-            'svelte',
-            'vue',
-            'tsx',
-            'jsx',
-            'rescript',
-            'xml',
-            'php',
-            'glimmer',
-            'handlebars',
-            'hbs'
-          },
-        },
       },
     },
     main = 'nvim-treesitter.configs',
@@ -270,12 +247,6 @@ require('lazy').setup({
           ['i;'] = 'textsubjects-container-inner',
         },
       },
-      refactor = {
-        highlight_definitions = {
-          enable = true,
-          clear_on_cursor_move = true,
-        },
-      },
       playground = {
         enable = true,
       },
@@ -284,11 +255,34 @@ require('lazy').setup({
         use_virtual_text = true,
         lint_events = { 'BufWrite', 'CursorHold' },
       },
-      autotag = {
-        enable = true,
-      },
       indent = {
         enable = true,
+      },
+    },
+  },
+
+  { 'RRethy/vim-illuminate' },
+
+  { 'nvim-treesitter/nvim-treesitter-context' },
+
+  {
+    'windwp/nvim-ts-autotag',
+    opts = {
+      filetypes = {
+        'html',
+        'javascript.glimmer',
+        'javascriptreact',
+        'typescriptreact',
+        'svelte',
+        'vue',
+        'tsx',
+        'jsx',
+        'rescript',
+        'xml',
+        'php',
+        'glimmer',
+        'handlebars',
+        'hbs'
       },
     },
   },
@@ -296,7 +290,6 @@ require('lazy').setup({
   {
     'Wansmer/treesj',
     keys = { '<space>m', '<space>j', '<space>s' },
-    dependencies = { 'nvim-treesitter/nvim-treesitter' },
     config = function()
       local tsj = require('treesj')
       local lang_utils = require('treesj.langs.utils')
@@ -371,6 +364,7 @@ require('lazy').setup({
 
   {
     'nvim-telescope/telescope.nvim',
+    version = '0.1.x',
     keys = {
       '<C-e>',
       '<C-p>',
@@ -502,20 +496,6 @@ require('lazy').setup({
     'ellisonleao/glow.nvim',
     cmd = 'Glow',
     config = true,
-  },
-
-  {
-    'samodostal/image.nvim',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'm00qek/baleia.nvim',
-    },
-    opts = {
-      render = {
-        foreground_color = true,
-        background_color = true,
-      },
-    },
   },
 
   {
@@ -1070,46 +1050,21 @@ require('lazy').setup({
   },
 
   {
-    'jdonaldson/vaxe',
-    ft = {
-      'flow',
-      'haxe',
-      'hss',
-      'hxml',
-      'lime',
-      'nmml',
-    },
-  },
-
-  {
     'wavded/vim-stylus',
     ft = 'stylus',
   },
 
   'konfekt/vim-office',
-  'Joorem/vim-haproxy',
-  'IrenejMarc/vim-mint',
   'MTDL9/vim-log-highlighting',
   'jlcrochet/vim-razor',
-  'alunny/pegjs-vim',
-  'elubow/cql-vim',
   'fladson/vim-kitty',
-  'wsdjeg/vim-livescript',
-  'hellerve/carp-vim',
   'jakesjews/vim-emblem',
   'katusk/vim-qkdb-syntax',
   'kchmck/vim-coffee-script',
-  'leafo/moonscript-vim',
-  'petRUShka/vim-opencl',
   'robbles/logstash.vim',
-  'thyrgle/vim-dyon',
-  'vmchale/ion-vim',
   'alaviss/nim.nvim',
-  'zebradil/hive.vim',
-  'reasonml-editor/vim-reason-plus',
   'stevearc/vim-arduino',
   'q60/vim-brainfuck',
-  'lankavitharana/ballerina-vim',
 
   {
     'ShinKage/idris2-nvim',
