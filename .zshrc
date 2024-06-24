@@ -99,6 +99,7 @@ plugins=(
   ipfs
   jira
   jsontools
+  kitty
   ng
   npm
   pod
@@ -354,6 +355,9 @@ function update() {
   echo "update arduino"
   arduino-cli update
   arduino-cli upgrade
+
+  echo "update vagrant plugins"
+  vagrant plugin update
 
   echo "update gh-copilot"
   gh extension upgrade gh-copilot
