@@ -77,7 +77,7 @@ export path=(
   "$HOME/.clojure-bin"
   "$HOME/.datomic-bin/bin"
   "$HOME/.verible"
-  "$HOME/.modular"
+  "$HOME/.nimble/bin"
   "$HOME/.usr/bin"
 )
 
@@ -122,6 +122,7 @@ alias 9="$PLAN9_HOME/bin/9"
 alias factor=/Applications/factor/factor
 alias l=ls
 alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
+alias vps="ssh root@192.81.212.121"
 alias git-oops="git reset --soft HEAD~"
 alias flush-cache="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
 alias redis-master="redis-cli -h qa-db -p 26379 SENTINEL get-master-addr-by-name eflex-redis"
@@ -135,7 +136,6 @@ alias rg-all="rg -uuu"
 alias cargo-binstall='cargo-binstall --no-confirm'
 alias UVtoolsCmd=/Applications/UVtools.app/Contents/MacOS/UVtoolsCmd
 alias jenv-start='eval "$(jenv init -)"'
-alias ocamllsp="$HOME/.opam/default/bin/ocamllsp"
 alias readme='glow README.md -p'
 alias keka="/Applications/Keka.app/Contents/MacOS/Keka --cli"
 
@@ -445,5 +445,4 @@ if [[ ! -f "$ZSH_COMPDUMP" || ! "$(find "$ZSH_COMPDUMP" -mtime 0)" ]]; then
 else
   compinit -d "$ZSH_COMPDUMP" -C
 fi
-
 

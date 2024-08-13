@@ -77,25 +77,13 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end
 })
 
-local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    'git',
-    'clone',
-    '--filter=blob:none',
-    'https://github.com/folke/lazy.nvim.git',
-    '--branch=stable', -- latest stable release
-    lazypath,
-  })
-end
-vim.opt.rtp:prepend(lazypath)
-
 local mason_packages = {
   'als',
   'fennel_language_server',
   'fsautocomplete',
   'julials',
   'matlab_ls',
+  'nim_langserver',
   'ocamllsp',
   'omnisharp',
   'perlnavigator',
@@ -143,6 +131,7 @@ local LSP_SERVERS = {
   'openscad_lsp',
   'prolog_ls',
   'psalm',
+  'pug',
   'purescriptls',
   'pyright',
   'racket_langserver',
@@ -190,15 +179,29 @@ local on_attach = function(_client, bufferNum)
   vim.keymap.set('n', 'gf', function() vim.lsp.buf.format({ async = true }) end, lsp_key_opts)
 end
 
+local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+if not vim.uv.fs_stat(lazypath) then
+  vim.fn.system({
+    'git',
+    'clone',
+    '--filter=blob:none',
+    '--branch=stable', -- latest stable release
+    'https://github.com/folke/lazy.nvim.git',
+    lazypath,
+  })
+end
+
+vim.opt.rtp:prepend(lazypath)
+
 require('lazy').setup({
   {
     'williamboman/mason.nvim',
-    config = true,
+    opts = {},
   },
 
   {
     'williamboman/mason-lspconfig.nvim',
-    config = true,
+    opts = {},
   },
 
   {
@@ -330,11 +333,15 @@ require('lazy').setup({
   {
     'folke/which-key.nvim',
     event = 'VeryLazy',
+    dependencies = {
+      'nvim-tree/nvim-web-devicons',
+      { 'echasnovski/mini.nvim', version = false },
+    },
     init = function()
       vim.o.timeout = true
       vim.o.timeoutlen = 500
     end,
-    config = true,
+    opts = {},
   },
 
   {
@@ -479,7 +486,7 @@ require('lazy').setup({
 
   {
     'NMAC427/guess-indent.nvim',
-    config = true,
+    opts = {},
   },
 
   'hiphish/rainbow-delimiters.nvim',
@@ -487,7 +494,7 @@ require('lazy').setup({
   {
     'ellisonleao/glow.nvim',
     cmd = 'Glow',
-    config = true,
+    opts = {},
   },
 
   {
@@ -501,7 +508,7 @@ require('lazy').setup({
 
   {
     'NvChad/nvim-colorizer.lua',
-    config = true,
+    opts = {},
   },
 
   {
@@ -547,7 +554,7 @@ require('lazy').setup({
             },
           },
         },
-        config = true,
+        opts = {},
       },
     },
     opts = function()
@@ -701,7 +708,7 @@ require('lazy').setup({
       { 'zbirenbaum/copilot.lua' },
       { 'nvim-lua/plenary.nvim' },
     },
-    config = true,
+    opts = {},
   },
 
   {
@@ -946,7 +953,7 @@ require('lazy').setup({
   {
     'linrongbin16/lsp-progress.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
-    config = true,
+    opts = {},
   },
 
   {
@@ -1055,7 +1062,6 @@ require('lazy').setup({
   'katusk/vim-qkdb-syntax',
   'kchmck/vim-coffee-script',
   'robbles/logstash.vim',
-  'alaviss/nim.nvim',
   'stevearc/vim-arduino',
   'q60/vim-brainfuck',
 
@@ -1063,7 +1069,7 @@ require('lazy').setup({
     'ShinKage/idris2-nvim',
     ft = { 'idris2', 'ipkg', 'lidris2' },
     dependencies = { 'MunifTanjim/nui.nvim' },
-    config = true,
+    opts = {},
   },
 
   {
@@ -1114,7 +1120,11 @@ require('lazy').setup({
   {
     'lukas-reineke/indent-blankline.nvim',
     main = 'ibl',
-    config = true,
+    opts = {},
     dependencies = { 'Mofiqul/dracula.nvim' },
   },
-}, { install = { colorscheme = { 'dracula' } } })
+},
+{
+  install = { colorscheme = { 'dracula' } },
+})
+
