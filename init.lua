@@ -3,7 +3,7 @@ vim.g.loaded_matchit = 1 -- matchup compatibility
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 vim.g.skip_ts_context_commentstring_module = true
-vim.g.python3_host_prog = '/opt/homebrew/bin/python3.12'
+vim.g.python3_host_prog = '/opt/homebrew/bin/python3.13'
 
 vim.opt.shortmess:append({ c = true })
 vim.opt.number = true
@@ -78,7 +78,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 local mason_packages = {
-  'als',
   'fennel_language_server',
   'fsautocomplete',
   'julials',
@@ -509,6 +508,38 @@ require('lazy').setup({
   {
     'NvChad/nvim-colorizer.lua',
     opts = {},
+  },
+
+  {
+    "ThePrimeagen/refactoring.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+    opts = {},
+  },
+
+  {
+    "andrewferrier/debugprint.nvim",
+    opts = function()
+      local js_like = {
+        left = "console.warn('",
+        right = "');",
+        mid_var = "', ",
+        right_var = ');',
+      }
+
+      return {
+        display_counter = false,
+        filetypes = {
+          javascript = js_like,
+          javascriptreact = js_like,
+          typescript = js_like,
+          typescriptreact = js_like,
+          glimmer = js_like,
+          ['javascript.glimmer'] = js_like,
+        },
+      }
+    end,
   },
 
   {
@@ -1050,6 +1081,11 @@ require('lazy').setup({
   },
 
   {
+    "TamaMcGlinn/nvim-lspconfig-ada",
+    ft = 'ada',
+  },
+
+  {
     'wavded/vim-stylus',
     ft = 'stylus',
   },
@@ -1064,6 +1100,7 @@ require('lazy').setup({
   'robbles/logstash.vim',
   'stevearc/vim-arduino',
   'q60/vim-brainfuck',
+  'modularml/mojo.vim',
 
   {
     'ShinKage/idris2-nvim',

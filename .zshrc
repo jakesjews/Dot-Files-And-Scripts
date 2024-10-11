@@ -51,11 +51,12 @@ export GLASSFISH_HOME="$BREW_OPT/glassfish/libexec"
 export ANDROID_SDK_ROOT="$HOMEBREW_PREFIX/share/android-sdk"
 export CARP_DIR="$HOME/.carp"
 export VOLTA_HOME="$HOME/.volta"
+export GR_PREFIX="$HOME/dev/sdr/gnuradio_modules"
 
 typeset -U path
 
 export path=(
-  "$BREW_OPT/python@3.12/libexec/bin"
+  "$BREW_OPT/python@3.13/libexec/bin"
   "$POSTGRES_ROOT/bin"
   $path
   "$HOME/.cargo/bin"
@@ -79,6 +80,7 @@ export path=(
   "$HOME/.verible"
   "$HOME/.nimble/bin"
   "$HOME/.usr/bin"
+  "$HOME/.modular/bin"
 )
 
 export fpath=(
@@ -178,6 +180,7 @@ function clean-eflex-dir() {
   rm -rf "${TMPDIR}"*Before*
   rm -rf "${TMPDIR}"*After*
   rm -rf /tmp/node-cache
+  rm -rf "${HOME}/Library/Preferences/node-opcua-default-nodejs"
   watchman watch-del-all
   cd "${HOME}"/dev/eflexsystems/eflex
   git remote prune origin
@@ -219,6 +222,13 @@ function docker-clean {
   docker-sync-stack clean
   docker-compose down --volumes
   docker system prune --volumes --force
+}
+
+function gnuradio-companion {
+  export PYTHONPATH="$GR_PREFIX/lib/python3.13/site-packages:$PYTHONPATH"
+  export DYLD_LIBRARY_PATH="$GR_PREFIX/lib:$DYLD_LIBRARY_PATH"
+  export PATH="$GR_PREFIX/bin:$PATH"
+  /opt/homebrew/bin/gnuradio-companion
 }
 
 function rust-mode() {
@@ -378,6 +388,9 @@ function update() {
   echo "vscode extensions"
   code --update-extensions
 
+  echo 'mojo language'
+  magic self-update
+
   echo "upgrade cask packages"
   brew cu --all --yes --quiet --no-brew-update
 
@@ -445,4 +458,5 @@ if [[ ! -f "$ZSH_COMPDUMP" || ! "$(find "$ZSH_COMPDUMP" -mtime 0)" ]]; then
 else
   compinit -d "$ZSH_COMPDUMP" -C
 fi
+
 
