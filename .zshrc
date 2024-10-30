@@ -14,7 +14,7 @@ setopt inc_append_history
   export ZSH="$HOME/.oh-my-zsh"
 
   local BREW_OPT="$HOMEBREW_PREFIX/opt"
-  local POSTGRES_ROOT="$BREW_OPT/postgresql@16"
+  local POSTGRES_ROOT="$BREW_OPT/postgresql@17"
   local PLAN9_HOME=/opt/plan9
 
   export PERL_ROOT="$HOME/.perl5"
@@ -178,7 +178,7 @@ setopt inc_append_history
 
   function flac-to-mp3() {
     for a in ./*.flac; do
-      < /dev/null ffmpeg -i "$a" -qscale:a 0 "${a[@]/%flac/mp3}"
+      < /dev/null ffmpeg -i "$a" -qscale:a 0 "${a%.flac}.mp3"
     done;
     rm ./*.flac
   }
@@ -383,7 +383,7 @@ setopt inc_append_history
     eval $(perl -I$PERL_ROOT/lib/perl5 -Mlocal::lib=$PERL_ROOT)
   }
 
-  typeset -g -f mux clean-eflex clean-eflex-dir count-instances flac-to-mp3 update-servers pwdx docker-clean gnuradio-companion alphabetize_files quartus_mister quartus_mister_compile quartus_pocket quartus_pocket_compile reverse_bitstream restore_history update zvm_config zvm_before_init zvm_after_init conda-init opan-init perl-init > /dev/null
+  typeset -g -f mux clean-eflex clean-eflex-dir count-instances flac-to-mp3 update-servers pwdx docker-clean gnuradio-companion alphabetize_files quartus_mister quartus_mister_compile quartus_pocket quartus_pocket_compile reverse_bitstream restore_history update zvm_config zvm_before_init zvm_after_init conda-init opan-init perl-init &> /dev/null
 }
 
 eval "$(rbenv init --no-rehash - zsh)"
