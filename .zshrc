@@ -7,10 +7,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 export ZSH_COMPDUMP="$HOME/.zcompdump-jacob"
 export ZSH="$HOME/.oh-my-zsh"
 
-local BREW_OPT="$HOMEBREW_PREFIX/opt"
-local POSTGRES_ROOT="$BREW_OPT/postgresql@16"
-local PLAN9_HOME=/opt/plan9
-
+export PLAN9=/opt/plan9
 export PERL_ROOT="$HOME/.perl5"
 export DISABLE_AUTO_UPDATE=true
 export HYPHEN_INSENSITIVE=true
@@ -46,8 +43,8 @@ export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 export GOPATH="$HOME/.go"
 export QHOME="$HOME/.q"
-export LOGTALKHOME="$BREW_OPT/logtalk/share/logtalk"
-export GLASSFISH_HOME="$BREW_OPT/glassfish/libexec"
+export LOGTALKHOME="$HOMEBREW_PREFIX/opt/logtalk/share/logtalk"
+export GLASSFISH_HOME="$HOMEBREW_PREFIX/opt/glassfish/libexec"
 export ANDROID_SDK_ROOT="$HOMEBREW_PREFIX/share/android-sdk"
 export CARP_DIR="$HOME/.carp"
 export VOLTA_HOME="$HOME/.volta"
@@ -56,13 +53,13 @@ export GR_PREFIX="$HOME/dev/sdr/gnuradio_modules"
 typeset -U path
 
 export path=(
-  "$BREW_OPT/python@3.13/libexec/bin"
-  "$POSTGRES_ROOT/bin"
+  "$HOMEBREW_PREFIX/opt/python@3.13/libexec/bin"
+  "$HOMEBREW_PREFIX/opt/postgresql@17/bin"
   $path
   "$HOME/.cargo/bin"
   "$HOME/.tmux/plugins/tpm"
   "$HOME/.pub-cache/bin" #dart
-  "$PLAN9_HOME/bin"
+  "$PLAN9/bin"
   "$HOME/.nimble/bin"
   /usr/local/smlnj/bin
   "$HOME/.esvu/bin"
@@ -120,7 +117,7 @@ source "$ZSH/oh-my-zsh.sh"
 alias stree="$HOMEBREW_PREFIX/bin/stree"
 alias arc="$HOME/.arc/arc.sh"
 alias q="rlwrap --remember $QHOME/m64/q"
-alias 9="$PLAN9_HOME/bin/9"
+alias 9="$PLAN9/bin/9"
 alias factor=/Applications/factor/factor
 alias l=ls
 alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
@@ -133,7 +130,7 @@ alias vi=nvim
 alias git-graph="git commit-graph write --reachable --changed-paths"
 alias mongo="mongosh --quiet"
 alias bash="$HOMEBREW_PREFIX/bin/bash"
-alias make="$BREW_OPT/make/libexec/gnubin/make"
+alias make="$HOMEBREW_PREFIX/opt/make/libexec/gnubin/make"
 alias rg-all="rg -uuu"
 alias cargo-binstall='cargo-binstall --no-confirm'
 alias UVtoolsCmd=/Applications/UVtools.app/Contents/MacOS/UVtoolsCmd
@@ -147,29 +144,6 @@ function mux() {
 
 function clean-eflex() {
   tmux kill-server
-}
-
-function zellij-eflex() {
-  layout="eflex"
-  if [[ $1 != "" ]]
-  then
-    layout="$1"
-  fi
-  session=$(zellij list-sessions)
-  if [[ $session == *'eflex' ]]
-  then
-    zellij attach eflex
-  else
-    zellij --layout="$layout" --session=eflex
-  fi
-}
-
-function zellij-eflex2() {
-  eflex 'eflex2'
-}
-
-function zellij-clean-eflex() {
-  zellij kill-session eflex
 }
 
 function clean-eflex-dir() {
@@ -200,7 +174,7 @@ function count-instances() {
 
 function flac-to-mp3() {
   for a in ./*.flac; do
-    < /dev/null ffmpeg -i "$a" -qscale:a 0 "${a[@]/%flac/mp3}"
+    < /dev/null ffmpeg -i "$a" -qscale:a 0 "${a%.flac}.mp3"
   done;
   rm ./*.flac
 }
@@ -229,53 +203,6 @@ function gnuradio-companion {
   export DYLD_LIBRARY_PATH="$GR_PREFIX/lib:$DYLD_LIBRARY_PATH"
   export PATH="$GR_PREFIX/bin:$PATH"
   /opt/homebrew/bin/gnuradio-companion
-}
-
-function rust-mode() {
-  alias ascii=chars
-  alias awk=frawk
-  alias bc=eva
-  alias cat=bat
-  alias cd=z
-  alias cksum=checkasum
-  alias cloc=tokei
-  alias col=xcol
-  alias cp=fcp
-  alias cut=tuc
-  alias dd=bcp
-  alias dig=doggo
-  alias du=dua
-  alias find=fd
-  alias git=gix
-  alias grep=rg
-  alias hexdump=hexyl
-  alias http-server=miniserve
-  alias license=licensor
-  alias locate=lolcate
-  alias ls=exa
-  alias markdown=comrak
-  alias mutt=meli
-  alias mv=pmv
-  alias nano=amp
-  alias objdump=bingrep
-  alias parallel=rust-parallel
-  alias pigz=crabz
-  alias ping=gping
-  alias ps=procs
-  alias rm=rip
-  alias sed=sd
-  alias sleep=snore
-  alias time=hyperfine
-  alias tmux=zellij
-  alias top=btm
-  alias touch=bonk
-  alias tree=broot
-  alias uniq=huniq
-  alias wait=stare
-  alias watch=hwatch
-  alias wc=cw
-  alias whoami=whome
-  alias xargs=rargs
 }
 
 function alphabetize_files() {
@@ -312,99 +239,110 @@ function restore_history() {
   sqlite3 "$HOME/Library/Application Support/McFly/history.db" 'select ": " || id || ":0;" || cmd from commands order by id;' > "$HOME/.zsh_history"
 }
 
-function brew_check_new_rust() {
-  comm -23 <(brew uses rust --include-build --eval-all) <(brew uses rust --include-build --installed)
-}
-
 function update() {
-  setopt localoptions rmstarsilent
-  unsetopt nomatch
+  () {
+    function print_section() {
+      local total_length=${COLUMNS:-80}
+      local dash_count=$(( (total_length - ${#1} - 2) / 2 ))
+      local dashes=$(printf -- '-%.0s' {1..$dash_count})
+      local bold_start="\e[1m"
+      local bold_end="\e[0m"
 
-  echo "updating homebrew packages"
-  brew update
-  brew upgrade --greedy-auto-updates
+      print -- "${bold_start}${dashes} ${1} ${dashes}${bold_end}"
+    }
 
-  echo "updating vim plugins"
-  nvim --headless "+Lazy! sync" +qa
-  nvim --headless "+TSUpdateSync" +qa
-  nvim --headless "+MasonToolsUpdateSync" +qa
+    setopt localoptions rmstarsilent
+    unsetopt nomatch
 
-  echo "updating ruby gems"
-  gem update --system
-  gem update
-  gem cleanup
+    print_section "updating homebrew packages"
+    brew update
+    brew upgrade --greedy-auto-updates
 
-  echo "updating elixir packages"
-  mix local.hex --force
-  mix local.rebar --force
-  mix archive.install hex phx_new --force
-  mix archive.install hex nerves_bootstrap --force
-  mix escript.install hex livebook --force
-  mix escript.install hex credo --force
+    print_section "updating vim plugins"
+    nvim --headless "+Lazy! sync" +qa
+    nvim --headless "+TSUpdateSync" +qa
+    nvim --headless "+MasonToolsUpdateSync" +qa
 
-  echo "update tex packages"
-  tlmgr update --self --all --reinstall-forcibly-removed
+    print_section "updating ruby gems"
+    gem update --system
+    gem update
+    gem cleanup
 
-  echo "update rust packages"
-  rustup update
-  cargo install-update --all
-  cargo cache --autoclean
+    print_section "updating elixir packages"
+    mix local.hex --force
+    mix local.rebar --force
+    mix archive.install hex phx_new --force
+    mix archive.install hex nerves_bootstrap --force
+    mix escript.install hex livebook --force
+    mix escript.install hex credo --force
 
-  echo "update pipx packages"
-  pipx upgrade-all
+    print_section "update tex packages"
+    tlmgr update --self --all --reinstall-forcibly-removed
 
-  echo "upgrade dotnet tools"
-  dotnet tool list -g | tail -n +3 | tr -s ' ' | cut -f 1 -d' ' | xargs -n 1 dotnet tool update --global
+    print_section "update rust packages"
+    rustup update
+    cargo install-update --all
+    cargo cache --autoclean
 
-  echo "update go packages"
-  gup update
+    print_section "update pipx packages"
+    pipx upgrade-all
 
-  echo "update racket packages"
-  raco pkg update --all -j 8 --batch --no-trash --deps search-auto
+    print_section "upgrade dotnet tools"
+    dotnet tool list -g | tail -n +3 | tr -s ' ' | cut -f 1 -d' ' | xargs -n 1 dotnet tool update --global
 
-  echo "update arduino"
-  arduino-cli update
-  arduino-cli upgrade
+    print_section "update go packages"
+    gup update
 
-  echo "update vagrant plugins"
-  vagrant plugin update
+    print_section "update racket packages"
+    raco pkg update --all -j 8 --batch --no-trash --deps search-auto
 
-  echo "update gh-copilot"
-  gh extension upgrade gh-copilot
+    print_section "update arduino"
+    arduino-cli update
+    arduino-cli upgrade
 
-  echo "update zsh plugins"
-  omz update --unattended
-  git -C "$HOME/.oh-my-zsh/custom/themes/dracula" pull
+    print_section "update vagrant plugins"
+    vagrant plugin update
 
-  echo "ugrade tmux plugins"
-  "$HOME/.tmux/plugins/tpm/bin/update_plugins" all
+    print_section "update gh-copilot"
+    gh extension upgrade gh-copilot
 
-  echo "update ecmascript runtimes"
-  esvu --fast
+    print_section "update zsh plugins"
+    omz update --unattended
+    git -C "$HOME/.oh-my-zsh/custom/themes/dracula" pull
 
-  echo "update anarki"
-  git -C "$HOME/.arc" pull
+    print_section "ugrade tmux plugins"
+    "$HOME/.tmux/plugins/tpm/bin/update_plugins" all
 
-  echo "vscode extensions"
-  code --update-extensions
+    print_section "update ecmascript runtimes"
+    esvu --fast
 
-  echo 'mojo language'
-  magic self-update
+    print_section "update anarki"
+    git -C "$HOME/.arc" pull
 
-  echo "upgrade cask packages"
-  brew cu --all --yes --quiet --no-brew-update
+    print_section "vscode extensions"
+    code --update-extensions
 
-  echo "cleanup homebrew"
-  brew autoremove
-  brew cleanup -s
-  brew tap --repair
-  rm -rf "$(brew --cache)"
+    print_section 'mojo language'
+    magic self-update
 
-  echo "outdated python packages"
-  pip3 list --user --outdated --not-required
+    print_section 'google cloud cli'
+    gcloud components update
 
-  echo "outdated npm packages"
-  npm outdated --location=global
+    print_section "upgrade cask packages"
+    brew cu --all --yes --quiet --no-brew-update
+
+    print_section "cleanup homebrew"
+    brew autoremove
+    brew cleanup -s
+    brew tap --repair
+    rm -rf "$(brew --cache)"
+
+    print_section "outdated python packages"
+    pip3 list --user --outdated --not-required
+
+    print_section "outdated npm packages"
+    npm outdated --location=global
+  }
 }
 
 function zvm_config() {
@@ -433,7 +371,7 @@ function conda-init() {
 }
 
 function opam-init() {
-  source "$HOME/.opam/opam-init/init.zsh"
+  eval $(opam env)
 }
 
 function perl-init() {
@@ -443,8 +381,8 @@ function perl-init() {
 
 eval "$(rbenv init --no-rehash - zsh)"
 source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-source "$BREW_OPT/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
-source "$BREW_OPT/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
+source "$HOMEBREW_PREFIX/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
+source "$HOMEBREW_PREFIX/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 source "$HOME/.config/op/plugins.sh"
 eval "$(zoxide init --cmd j zsh)"
 eval "$(gh copilot alias -- zsh)"
@@ -458,5 +396,4 @@ if [[ ! -f "$ZSH_COMPDUMP" || ! "$(find "$ZSH_COMPDUMP" -mtime 0)" ]]; then
 else
   compinit -d "$ZSH_COMPDUMP" -C
 fi
-
 
