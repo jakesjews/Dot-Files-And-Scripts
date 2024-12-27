@@ -49,6 +49,7 @@ export ANDROID_SDK_ROOT="$HOMEBREW_PREFIX/share/android-sdk"
 export CARP_DIR="$HOME/.carp"
 export VOLTA_HOME="$HOME/.volta"
 export GR_PREFIX="$HOME/dev/sdr/gnuradio_modules"
+export AIDER_DARK_MODE=true
 
 typeset -U path
 
@@ -124,7 +125,6 @@ alias ssh-tunnel="ssh -D 8080 -C -N immersiveapplications.com"
 alias vps="ssh root@192.81.212.121"
 alias git-oops="git reset --soft HEAD~"
 alias flush-cache="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
-alias redis-master="redis-cli -h qa-db -p 26379 SENTINEL get-master-addr-by-name eflex-redis"
 alias vim=nvim
 alias vi=nvim
 alias git-graph="git commit-graph write --reachable --changed-paths"
@@ -142,32 +142,6 @@ function mux() {
   tmuxinator start "$1" --suppress-tmux-version-warning
 }
 
-function clean-eflex() {
-  tmux kill-server
-}
-
-function clean-eflex-dir() {
-  rm -rf "${TMPDIR}"v8-compile-cache*
-  rm -rf "${TMPDIR}"broccoli-*
-  rm -rf "${TMPDIR}"embroider
-  rm -rf "${TMPDIR}"jacob/if-you-need-to-delete-this-open-an-issue-async-disk-cache
-  rm -rf "${TMPDIR}"*Before*
-  rm -rf "${TMPDIR}"*After*
-  rm -rf /tmp/node-cache
-  rm -rf "${HOME}/Library/Preferences/node-opcua-default-nodejs"
-  watchman watch-del-all
-  cd "${HOME}"/dev/eflexsystems/eflex
-  git remote prune origin
-  git gc --force
-  git lfs prune
-  make clean
-  cd "${HOME}"/dev/eflexsystems/eflex2
-  git remote prune origin
-  git gc --force
-  git lfs prune
-  make clean
-}
-
 function count-instances() {
   rg "$1" --count | sort --key=2 --field-separator=":" --numeric-sort
 }
@@ -177,15 +151,6 @@ function flac-to-mp3() {
     < /dev/null ffmpeg -i "$a" -qscale:a 0 "${a%.flac}.mp3"
   done;
   rm ./*.flac
-}
-
-function update-servers() {
-  ansible \
-    all \
-    --inventory "$HOMEBREW_PREFIX/etc/ansible/hosts" \
-    --forks 8 \
-    --module-name "apt" \
-    --args "upgrade=dist update_cache=true autoremove=true"
 }
 
 function pwdx {
@@ -238,6 +203,17 @@ function reverse_bitstream() {
 function restore_history() {
   sqlite3 "$HOME/Library/Application Support/McFly/history.db" 'select ": " || id || ":0;" || cmd from commands order by id;' > "$HOME/.zsh_history"
 }
+
+function print_section() {
+  local total_length=${COLUMNS:-80}
+  local dash_count=$(( (total_length - ${#1} - 2) / 2 ))
+  local dashes=$(printf -- '-%.0s' {1..$dash_count})
+  local bold_start="\e[1m"
+  local bold_end="\e[0m"
+
+  print -- "${bold_start}${dashes} ${1} ${dashes}${bold_end}"
+}
+
 
 function update() {
   () {
@@ -301,7 +277,7 @@ function update() {
     arduino-cli upgrade
 
     print_section "update vagrant plugins"
-    vagrant plugin update
+    VAGRANT_DISABLE_STRICT_DEPENDENCY_ENFORCEMENT=1 vagrant plugin update
 
     print_section "update gh-copilot"
     gh extension upgrade gh-copilot
@@ -396,4 +372,3 @@ if [[ ! -f "$ZSH_COMPDUMP" || ! "$(find "$ZSH_COMPDUMP" -mtime 0)" ]]; then
 else
   compinit -d "$ZSH_COMPDUMP" -C
 fi
-
