@@ -137,6 +137,7 @@ alias UVtoolsCmd=/Applications/UVtools.app/Contents/MacOS/UVtoolsCmd
 alias jenv-start='eval "$(jenv init -)"'
 alias readme='glow README.md -p'
 alias keka="/Applications/Keka.app/Contents/MacOS/Keka --cli"
+alias smithery="npx @smithery/cli"
 
 function mux() {
   tmuxinator start "$1" --suppress-tmux-version-warning
@@ -294,6 +295,9 @@ function update() {
 
     print_section "update anarki"
     git -C "$HOME/.arc" pull
+
+    print_section "update neovim lua references"
+    git -C "$HOME/.config/nvim/src/luv" pull
 
     print_section "vscode extensions"
     code --update-extensions

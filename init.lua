@@ -668,10 +668,10 @@ require('lazy').setup({
           })
         },
         sources = {
+          { name = 'nvim_lua', group_index = 1 },
           { name = 'nvim_lsp', group_index = 1 },
           { name = 'nvim_lsp_signature_help', group_index = 1 },
           { name = 'luasnip_choice', group_index = 1 },
-          { name = 'nvim_lua', group_index = 1 },
           { name = 'npm', keyword_length = 4, group_index = 1 },
           { name = 'async_path', group_index = 1 },
           { name = 'zsh', group_index = 1 },
@@ -832,27 +832,43 @@ require('lazy').setup({
         cmd = { 'elixir-ls' },
       })
 
-      lspconfig.lua_ls.setup({
+      lspconfig.lua_ls.setup {
         on_attach = on_attach,
         capabilities = capabilities,
-        settings = {
-          Lua = {
+        on_init = function(client)
+          if client.workspace_folders then
+            local path = client.workspace_folders[1].name
+            if vim.uv.fs_stat(path..'/.luarc.json') or vim.uv.fs_stat(path..'/.luarc.jsonc') then
+              return
+            end
+          end
+
+          client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
             runtime = {
-              version = 'LuaJIT',
-            },
-            diagnostics = {
-              globals = { 'vim' }
+              version = 'LuaJIT'
             },
             workspace = {
-              library = vim.api.nvim_get_runtime_file('', true),
-              checkThirdParty = 'Disable',
-            },
-            telemetry = {
-              enable = false,
-            },
-          }
+              checkThirdParty = false,
+              telemetry = {
+                enable = false,
+              },
+              library = vim.tbl_extend(
+                'force',
+                vim.tbl_filter(
+                  function(path) return vim.fn.isdirectory(path) == 1 end,
+                  {
+                    vim.fn.expand('$HOME/github/lua-language-server'),
+                  }
+                ),
+                { vim.env.VIMRUNTIME }
+              )
+            }
+          })
+        end,
+        settings = {
+          Lua = {}
         }
-      })
+      }
 
       lspconfig.powershell_es.setup({
         on_attach = on_attach,

@@ -1,0 +1,33 @@
+font-family = Monaspace Neon Var
+font-family-bold  = Monaspace Neon Var
+font-family-italic = Monaspace Neon Var
+font-family-bold-italic  = Monaspace Neon Var
+window-title-font-family = Monaspace Neon Var
+
+font-feature = calt
+font-feature = ss01
+font-feature = ss02
+font-feature = ss03
+font-feature = ss04
+font-feature = ss05
+font-feature = ss06
+font-feature = ss07
+font-feature = ss08
+font-feature = ss08
+font-feature = liga
+
+font-size = 14
+
+adjust-cell-height = 15
+
+scrollback-limit = 10_000_000
+
+theme = dracula+
+background = black
+background-opacity = 0.85
+
+copy-on-select = clipboard
+
+confirm-close-surface = false
+
+shell-integration-features = no-cursor,sudo
