@@ -152,6 +152,7 @@ local LSP_SERVERS = {
   'veryl_ls',
   'vhdl_ls',
   'vimls',
+  'vls',
   'vuels',
   'yls',
   'zls',
@@ -715,7 +716,6 @@ require('lazy').setup({
 
   {
     'CopilotC-Nvim/CopilotChat.nvim',
-    branch = 'canary',
     cmd = {
       'CopilotChat',
       'CopilotChatOpen',
@@ -725,6 +725,8 @@ require('lazy').setup({
       'CopilotChatSave',
       'CopilotChatLoad',
       'CopilotChatDebugInfo',
+      'CopilotChatModels',
+      'CopilotChatAgents',
       'CopilotChatExplain',
       'CopilotChatReview',
       'CopilotChatFix',
@@ -739,6 +741,7 @@ require('lazy').setup({
       { 'zbirenbaum/copilot.lua' },
       { 'nvim-lua/plenary.nvim' },
     },
+    build = "make tiktoken",
     opts = {},
   },
 

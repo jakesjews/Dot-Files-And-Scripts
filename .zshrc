@@ -79,6 +79,7 @@ export path=(
   "$HOME/.nimble/bin"
   "$HOME/.usr/bin"
   "$HOME/.modular/bin"
+  "$HOME/.simh-tools"
 )
 
 export fpath=(
@@ -136,7 +137,6 @@ alias cargo-binstall='cargo-binstall --no-confirm'
 alias UVtoolsCmd=/Applications/UVtools.app/Contents/MacOS/UVtoolsCmd
 alias jenv-start='eval "$(jenv init -)"'
 alias readme='glow README.md -p'
-alias keka="/Applications/Keka.app/Contents/MacOS/Keka --cli"
 alias smithery="npx @smithery/cli"
 
 function mux() {
@@ -357,6 +357,12 @@ function opam-init() {
 function perl-init() {
   alias cpanm="cpanm --self-contained --local-lib='$PERL_ROOT' --local-lib-contained='$PERL_ROOT'"
   eval $(perl -I$PERL_ROOT/lib/perl5 -Mlocal::lib=$PERL_ROOT)
+}
+
+function update-pg-modeler() {
+  qmake -r pgmodeler.pro -early QMAKE_DEFAULT_LIBDIRS=$(xcrun -show-sdk-path)/usr/lib
+  make -j8
+  make install
 }
 
 eval "$(rbenv init --no-rehash - zsh)"
