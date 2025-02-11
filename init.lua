@@ -32,7 +32,9 @@ vim.keymap.set('n', 'x', '"_x') -- prevent character delete from writing to the 
 vim.keymap.set('v', '.', ':normal .<CR>')
 vim.keymap.set('n', '[', vim.cmd.tabprevious, { silent = true })
 vim.keymap.set('n', ']', vim.cmd.tabnext, { silent = true })
+
 vim.api.nvim_create_user_command('Nt', function() vim.cmd.tabnew() end, {})
+
 vim.treesitter.language.register('bash', 'zsh')
 
 vim.filetype.add({
@@ -153,7 +155,7 @@ local LSP_SERVERS = {
   'vhdl_ls',
   'vimls',
   'vls',
-  'vuels',
+  'volar',
   'yls',
   'zls',
 }
