@@ -205,17 +205,6 @@ function restore_history() {
   sqlite3 "$HOME/Library/Application Support/McFly/history.db" 'select ": " || id || ":0;" || cmd from commands order by id;' > "$HOME/.zsh_history"
 }
 
-function print_section() {
-  local total_length=${COLUMNS:-80}
-  local dash_count=$(( (total_length - ${#1} - 2) / 2 ))
-  local dashes=$(printf -- '-%.0s' {1..$dash_count})
-  local bold_start="\e[1m"
-  local bold_end="\e[0m"
-
-  print -- "${bold_start}${dashes} ${1} ${dashes}${bold_end}"
-}
-
-
 function update() {
   () {
     function print_section() {
@@ -284,7 +273,7 @@ function update() {
     gh extension upgrade gh-copilot
 
     print_section "update zsh plugins"
-    omz update --unattended
+    "$ZSH/tools/upgrade.sh"
     git -C "$HOME/.oh-my-zsh/custom/themes/dracula" pull
 
     print_section "ugrade tmux plugins"
@@ -382,3 +371,11 @@ if [[ ! -f "$ZSH_COMPDUMP" || ! "$(find "$ZSH_COMPDUMP" -mtime 0)" ]]; then
 else
   compinit -d "$ZSH_COMPDUMP" -C
 fi
+# The following lines have been added by Docker Desktop to enable Docker CLI completions.
+fpath=(/Users/jacob/.docker/completions $fpath)
+autoload -Uz compinit
+compinit
+# End of Docker CLI completions
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/jacob/.cache/lm-studio/bin"

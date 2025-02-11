@@ -5,7 +5,6 @@ vim.g.loaded_netrwPlugin = 1
 vim.g.skip_ts_context_commentstring_module = true
 vim.g.python3_host_prog = '/opt/homebrew/bin/python3.13'
 
-vim.opt.shortmess:append({ c = true })
 vim.opt.number = true
 vim.opt.autowrite = true
 vim.opt.backup = false
@@ -303,7 +302,6 @@ require('lazy').setup({
       })
     end,
   },
-
   {
     'numToStr/Comment.nvim',
     dependencies = {
