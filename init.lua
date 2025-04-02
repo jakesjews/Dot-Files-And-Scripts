@@ -43,6 +43,8 @@ vim.filetype.add({
   },
 })
 
+vim.diagnostic.config({ virtual_text = true })
+
 vim.lsp.set_log_level('error')
 -- vim.lsp.set_log_level('debug')
 -- require('vim.lsp.log').set_format_func(vim.inspect)
@@ -512,7 +514,7 @@ require('lazy').setup({
   },
 
   {
-    "ThePrimeagen/refactoring.nvim",
+    'ThePrimeagen/refactoring.nvim',
     dependencies = {
       "nvim-lua/plenary.nvim",
     },
@@ -520,7 +522,7 @@ require('lazy').setup({
   },
 
   {
-    "andrewferrier/debugprint.nvim",
+    'andrewferrier/debugprint.nvim',
     opts = function()
       local js_like = {
         left = "console.warn('",
@@ -912,17 +914,6 @@ require('lazy').setup({
       lspconfig.glint.setup({
         on_attach = on_attach,
         capabilities = capabilities,
-        handlers = {
-          ['textDocument/publishDiagnostics'] = vim.lsp.with(
-            vim.lsp.diagnostic.on_publish_diagnostics,
-            {
-              underline = false,
-              virtual_text = false,
-              signs = false,
-              float = false,
-            }
-          ),
-        },
         root_dir = lspconfig.util.root_pattern(
           '.glintrc.yml',
           '.glintrc',
@@ -948,25 +939,6 @@ require('lazy').setup({
           'typescript.tsx',
           'glimmer',
           'javascript.glimmer',
-        },
-        handlers = {
-          ["textDocument/publishDiagnostics"] = vim.lsp.with(
-            vim.lsp.diagnostic.on_publish_diagnostics,
-            {
-              underline = {
-                severity = vim.diagnostic.severity.ERROR,
-              },
-              virtual_text = {
-                severity = vim.diagnostic.severity.ERROR,
-              },
-              signs = {
-                severity = vim.diagnostic.severity.ERROR,
-              },
-              float = {
-                severity = vim.diagnostic.severity.ERROR,
-              },
-            }
-          ),
         },
         settings = {
           javascript = {
