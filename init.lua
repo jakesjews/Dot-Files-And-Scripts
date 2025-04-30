@@ -40,10 +40,11 @@ vim.filetype.add({
   extension = {
     jq = 'jq',
     kdl = 'kdl',
+    re = 'reason',
+    rei = 'reason',
+    merlin = 'merlin',
   },
 })
-
-vim.diagnostic.config({ virtual_text = true })
 
 vim.lsp.set_log_level('error')
 -- vim.lsp.set_log_level('debug')
@@ -59,7 +60,11 @@ local indents = {
 }
 
 for pattern, command in pairs(indents) do
-  vim.api.nvim_create_autocmd('FileType', { pattern = pattern, group = file_type_detect_id, command = command })
+  vim.api.nvim_create_autocmd('FileType', {
+    pattern = pattern,
+    group = file_type_detect_id,
+    command = command,
+  })
 end
 
 local format_options_id = vim.api.nvim_create_augroup('formatoptions', { clear = true })
@@ -76,7 +81,27 @@ local yank_highlight_id = vim.api.nvim_create_augroup('highlightyank', { clear =
 vim.api.nvim_create_autocmd('TextYankPost', {
   group = yank_highlight_id,
   callback = function()
-    vim.highlight.on_yank({ higroup = 'IncSearch', timeout = 150, on_visual = true })
+    vim.highlight.on_yank({
+      higroup = 'IncSearch',
+      timeout = 150,
+      on_visual = true,
+    })
+  end
+})
+
+local cursor_hold_id = vim.api.nvim_create_augroup('CursorHold', { clear = true })
+
+vim.api.nvim_create_autocmd("CursorHold", {
+  group = cursor_hold_id,
+  callback = function()
+    vim.diagnostic.open_float(nil, {
+      focusable = false,
+      close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+      border = 'rounded',
+      source = 'always',
+      prefix = ' ',
+      scope = 'cursor',
+    })
   end
 })
 
@@ -86,7 +111,6 @@ local mason_packages = {
   'julials',
   'matlab_ls',
   'nim_langserver',
-  'ocamllsp',
   'omnisharp',
   'perlnavigator',
   'r_language_server',
@@ -130,6 +154,7 @@ local LSP_SERVERS = {
   'nginx_language_server',
   'nomad_lsp',
   'nushell',
+  'ocamllsp',
   'openscad_lsp',
   'prolog_ls',
   'psalm',
@@ -145,6 +170,8 @@ local LSP_SERVERS = {
   'somesass_ls',
   'sourcekit',
   'sqlls',
+  'svelte',
+  'tailwindcss',
   'terraformls',
   'texlab',
   'turtle_ls',
@@ -459,7 +486,7 @@ require('lazy').setup({
       },
       filters = {
         custom = {
-          '.git',
+          '^\\.git$',
         },
       },
     },
@@ -774,14 +801,15 @@ require('lazy').setup({
         on_attach = on_attach,
         capabilities = capabilities,
         filetypes = {
-          'javascript',
-          'javascriptreact',
-          'javascript.jsx',
-          'typescript',
-          'typescriptreact',
-          'typescript.tsx',
           'glimmer',
+          'javascript',
           'javascript.glimmer',
+          'javascript.jsx',
+          'javascriptreact',
+          'svelte',
+          'typescript',
+          'typescript.tsx',
+          'typescriptreact',
         },
         settings = {
           experimental = {},
@@ -1057,7 +1085,7 @@ require('lazy').setup({
   {
     'mrcjkb/haskell-tools.nvim',
     version = '*',
-    ft = { 'haskell', 'lhaskell', 'cabal', 'cabalproject' },
+    lazy = false,
     init = function()
       vim.g.haskell_tools = {
         hls = {

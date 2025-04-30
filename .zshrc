@@ -76,7 +76,6 @@ export path=(
   "$HOME/.clojure-bin"
   "$HOME/.datomic-bin/bin"
   "$HOME/.verible"
-  "$HOME/.nimble/bin"
   "$HOME/.usr/bin"
   "$HOME/.modular/bin"
   "$HOME/.simh-tools"
@@ -138,10 +137,7 @@ alias UVtoolsCmd=/Applications/UVtools.app/Contents/MacOS/UVtoolsCmd
 alias jenv-start='eval "$(jenv init -)"'
 alias readme='glow README.md -p'
 alias smithery="npx @smithery/cli"
-
-function mux() {
-  tmuxinator start "$1" --suppress-tmux-version-warning
-}
+alias mux=tmuxinator
 
 function count-instances() {
   rg "$1" --count | sort --key=2 --field-separator=":" --numeric-sort
@@ -262,9 +258,19 @@ function update() {
     print_section "update racket packages"
     raco pkg update --all -j 8 --batch --no-trash --deps search-auto
 
+    print_section "update nim packages"
+    nimble refresh --accept
+    nimble list --installed --silent | while read -r line; do
+      nim_pkg_name="${line%% *}"
+      if [[ -n "$nim_pkg_name" ]]; then
+        nimble install --accept "$nim_pkg_name"
+      fi
+    done
+
     print_section "update arduino"
     arduino-cli update
     arduino-cli upgrade
+    arduino-cli cache clean
 
     print_section "update vagrant plugins"
     VAGRANT_DISABLE_STRICT_DEPENDENCY_ENFORCEMENT=1 vagrant plugin update
@@ -371,11 +377,3 @@ if [[ ! -f "$ZSH_COMPDUMP" || ! "$(find "$ZSH_COMPDUMP" -mtime 0)" ]]; then
 else
   compinit -d "$ZSH_COMPDUMP" -C
 fi
-# The following lines have been added by Docker Desktop to enable Docker CLI completions.
-fpath=(/Users/jacob/.docker/completions $fpath)
-autoload -Uz compinit
-compinit
-# End of Docker CLI completions
-
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/jacob/.cache/lm-studio/bin"
