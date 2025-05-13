@@ -790,19 +790,21 @@ require('lazy').setup({
       capabilities.textDocument.completion.completionItem.snippetSupport = true
 
       for _, lsp in ipairs(LSP_SERVERS) do
-        lspconfig[lsp].setup({
+        vim.lsp.config(lsp, {
           on_attach = on_attach,
           capabilities = capabilities,
         })
+        vim.lsp.enable(lsp)
       end
 
-      lspconfig.verible.setup({
+      vim.lsp.config('verible', {
         on_attach = on_attach,
         capabilities = capabilities,
         cmd = { 'verible-verilog-ls', '--rules_config_search' },
       })
+      vim.lsp.enable('verible')
 
-      lspconfig.eslint.setup({
+      vim.lsp.config('eslint', {
         on_attach = on_attach,
         capabilities = capabilities,
         filetypes = {
@@ -821,15 +823,17 @@ require('lazy').setup({
           useESLintClass = true,
         },
       })
+      vim.lsp.enable('eslint')
 
-      lspconfig.ansiblels.setup({
+      vim.lsp.config('ansiblels', {
         on_attach = on_attach,
         capabilities = capabilities,
         root_dir = lspconfig.util.root_pattern('playbook.yml'),
         single_file_support = true
       })
+      vim.lsp.enable('ansiblels')
 
-      lspconfig.jsonls.setup({
+      vim.lsp.config('jsonls', {
         on_attach = on_attach,
         capabilities = capabilities,
         settings = {
@@ -839,8 +843,9 @@ require('lazy').setup({
           },
         },
       })
+      vim.lsp.enable('jsonls')
 
-      lspconfig.ember.setup({
+      vim.lsp.config('ember', {
         on_attach = on_attach,
         capabilities = capabilities,
         init_options = {
@@ -848,8 +853,9 @@ require('lazy').setup({
         },
         root_dir = lspconfig.util.root_pattern('ember-cli-build.js', 'ember-cli-build.mjs'),
       })
+      vim.lsp.enable('ember')
 
-      lspconfig.arduino_language_server.setup({
+      vim.lsp.config('arduino_language_server', {
         on_attach = on_attach,
         capabilities = capabilities,
         cmd = {
@@ -857,20 +863,23 @@ require('lazy').setup({
           '-cli-config', '/Users/jacob/Library/Arduino15/arduino-cli.yaml',
         }
       })
+      vim.lsp.enable('arduino_language_server')
 
-      lspconfig.stylelint_lsp.setup({
+      vim.lsp.config('stylelint_lsp', {
         on_attach = on_attach,
         capabilities = capabilities,
         filetypes = { 'css', 'less', 'scss', 'sugarss', 'wxss' },
       })
+      vim.lsp.enable('stylelint_lsp')
 
-      lspconfig.elixirls.setup({
+      vim.lsp.config('elixirls', {
         on_attach = on_attach,
         capabilities = capabilities,
         cmd = { 'elixir-ls' },
       })
+      vim.lsp.enable('elixirls')
 
-      lspconfig.lua_ls.setup {
+      vim.lsp.config('lua_ls', {
         on_attach = on_attach,
         capabilities = capabilities,
         on_init = function(client)
@@ -906,15 +915,17 @@ require('lazy').setup({
         settings = {
           Lua = {}
         }
-      }
+      })
+      vim.lsp.enable('lua_ls')
 
-      lspconfig.powershell_es.setup({
+      vim.lsp.config('powershell_es', {
         on_attach = on_attach,
         capabilities = capabilities,
         bundle_path = '/Users/jacob/.powershell',
       })
+      vim.lsp.enable('powershell_es')
 
-      lspconfig.yamlls.setup({
+      vim.lsp.config('yamlls', {
         on_attach = on_attach,
         capabilities = capabilities,
         settings = {
@@ -924,8 +935,9 @@ require('lazy').setup({
           },
         },
       })
+      vim.lsp.enable('yamlls')
 
-      lspconfig.html.setup({
+      vim.lsp.config('html', {
         on_attach = on_attach,
         capabilities = capabilities,
         filetypes = {
@@ -943,8 +955,9 @@ require('lazy').setup({
           'hbs'
         },
       })
+      vim.lsp.enable('html')
 
-      lspconfig.glint.setup({
+      vim.lsp.config('glint', {
         on_attach = on_attach,
         capabilities = capabilities,
         root_dir = lspconfig.util.root_pattern(
@@ -957,18 +970,20 @@ require('lazy').setup({
           'ember-cli-build.mjs'
         ),
       })
+      vim.lsp.enable('glint')
 
-      lspconfig.cssls.setup({
+      vim.lsp.config('cssls', {
         settings = {
           css = {
             validate = false,
           },
         },
       })
+      vim.lsp.enable('cssls')
 
       require('lspconfig.configs').vtsls = require('vtsls').lspconfig
 
-      lspconfig.vtsls.setup({
+      vim.lsp.config('vtsls', {
         on_attach = on_attach,
         capabilities = capabilities,
         filetypes = {
@@ -1010,6 +1025,7 @@ require('lazy').setup({
           },
         },
       })
+      vim.lsp.enable('vtsls')
     end,
   },
 
