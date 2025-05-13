@@ -190,25 +190,6 @@ local LSP_SERVERS = {
 
 vim.list_extend(LSP_SERVERS, mason_packages)
 
-local on_attach = function(_client, bufferNum)
-  local lsp_key_opts = {
-    noremap = true,
-    silent = true,
-    buffer = bufferNum,
-  }
-
-  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, lsp_key_opts)
-  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, lsp_key_opts)
-  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, lsp_key_opts)
-  vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, lsp_key_opts)
-  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, lsp_key_opts)
-  vim.keymap.set('n', 'gr', vim.lsp.buf.rename, lsp_key_opts)
-  vim.keymap.set('n', 'ga', vim.lsp.buf.code_action, lsp_key_opts)
-  vim.keymap.set('n', 'gR', vim.lsp.buf.references, lsp_key_opts)
-  vim.keymap.set('n', 'gl', vim.lsp.codelens.run, lsp_key_opts)
-  vim.keymap.set('n', 'gf', function() vim.lsp.buf.format({ async = true }) end, lsp_key_opts)
-end
-
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.uv.fs_stat(lazypath) then
   vim.fn.system({
@@ -789,24 +770,38 @@ require('lazy').setup({
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
       capabilities.textDocument.completion.completionItem.snippetSupport = true
 
+      vim.lsp.config('*', {
+        on_attach = function(_client, bufferNum)
+          local lsp_key_opts = {
+            noremap = true,
+            silent = true,
+            buffer = bufferNum,
+          }
+
+          vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, lsp_key_opts)
+          vim.keymap.set('n', 'gd', vim.lsp.buf.definition, lsp_key_opts)
+          vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, lsp_key_opts)
+          vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, lsp_key_opts)
+          vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, lsp_key_opts)
+          vim.keymap.set('n', 'gr', vim.lsp.buf.rename, lsp_key_opts)
+          vim.keymap.set('n', 'ga', vim.lsp.buf.code_action, lsp_key_opts)
+          vim.keymap.set('n', 'gR', vim.lsp.buf.references, lsp_key_opts)
+          vim.keymap.set('n', 'gl', vim.lsp.codelens.run, lsp_key_opts)
+          vim.keymap.set('n', 'gf', function() vim.lsp.buf.format({ async = true }) end, lsp_key_opts)
+        end,
+        capabilities = capabilities,
+      })
+
       for _, lsp in ipairs(LSP_SERVERS) do
-        vim.lsp.config(lsp, {
-          on_attach = on_attach,
-          capabilities = capabilities,
-        })
         vim.lsp.enable(lsp)
       end
 
       vim.lsp.config('verible', {
-        on_attach = on_attach,
-        capabilities = capabilities,
         cmd = { 'verible-verilog-ls', '--rules_config_search' },
       })
       vim.lsp.enable('verible')
 
       vim.lsp.config('eslint', {
-        on_attach = on_attach,
-        capabilities = capabilities,
         filetypes = {
           'glimmer',
           'javascript',
@@ -826,16 +821,12 @@ require('lazy').setup({
       vim.lsp.enable('eslint')
 
       vim.lsp.config('ansiblels', {
-        on_attach = on_attach,
-        capabilities = capabilities,
         root_dir = lspconfig.util.root_pattern('playbook.yml'),
         single_file_support = true
       })
       vim.lsp.enable('ansiblels')
 
       vim.lsp.config('jsonls', {
-        on_attach = on_attach,
-        capabilities = capabilities,
         settings = {
           json = {
             schemas = require('schemastore').json.schemas(),
@@ -846,8 +837,6 @@ require('lazy').setup({
       vim.lsp.enable('jsonls')
 
       vim.lsp.config('ember', {
-        on_attach = on_attach,
-        capabilities = capabilities,
         init_options = {
           editor = 'vscode',
         },
@@ -856,8 +845,6 @@ require('lazy').setup({
       vim.lsp.enable('ember')
 
       vim.lsp.config('arduino_language_server', {
-        on_attach = on_attach,
-        capabilities = capabilities,
         cmd = {
           'arduino-language-server',
           '-cli-config', '/Users/jacob/Library/Arduino15/arduino-cli.yaml',
@@ -866,22 +853,16 @@ require('lazy').setup({
       vim.lsp.enable('arduino_language_server')
 
       vim.lsp.config('stylelint_lsp', {
-        on_attach = on_attach,
-        capabilities = capabilities,
         filetypes = { 'css', 'less', 'scss', 'sugarss', 'wxss' },
       })
       vim.lsp.enable('stylelint_lsp')
 
       vim.lsp.config('elixirls', {
-        on_attach = on_attach,
-        capabilities = capabilities,
         cmd = { 'elixir-ls' },
       })
       vim.lsp.enable('elixirls')
 
       vim.lsp.config('lua_ls', {
-        on_attach = on_attach,
-        capabilities = capabilities,
         on_init = function(client)
           if client.workspace_folders then
             local path = client.workspace_folders[1].name
@@ -919,15 +900,11 @@ require('lazy').setup({
       vim.lsp.enable('lua_ls')
 
       vim.lsp.config('powershell_es', {
-        on_attach = on_attach,
-        capabilities = capabilities,
         bundle_path = '/Users/jacob/.powershell',
       })
       vim.lsp.enable('powershell_es')
 
       vim.lsp.config('yamlls', {
-        on_attach = on_attach,
-        capabilities = capabilities,
         settings = {
           yaml = {
             keyOrdering = false,
@@ -938,8 +915,6 @@ require('lazy').setup({
       vim.lsp.enable('yamlls')
 
       vim.lsp.config('html', {
-        on_attach = on_attach,
-        capabilities = capabilities,
         filetypes = {
           'html',
           'javascript.glimmer',
@@ -958,8 +933,6 @@ require('lazy').setup({
       vim.lsp.enable('html')
 
       vim.lsp.config('glint', {
-        on_attach = on_attach,
-        capabilities = capabilities,
         root_dir = lspconfig.util.root_pattern(
           '.glintrc.yml',
           '.glintrc',
@@ -984,8 +957,6 @@ require('lazy').setup({
       require('lspconfig.configs').vtsls = require('vtsls').lspconfig
 
       vim.lsp.config('vtsls', {
-        on_attach = on_attach,
-        capabilities = capabilities,
         filetypes = {
           'javascript',
           'javascriptreact',
@@ -1086,12 +1057,7 @@ require('lazy').setup({
     'mrcjkb/rustaceanvim',
     version = '*',
     ft = 'rust',
-    init = function()
-      vim.g.rustaceanvim = {
-        on_attach = on_attach,
-        capabilities = require('cmp_nvim_lsp').default_capabilities()
-      }
-    end,
+    opts = {},
   },
 
   {
@@ -1100,7 +1066,6 @@ require('lazy').setup({
     config = function()
       require('jdtls').start_or_attach({
         cmd = { '/opt/homebrew/opt/jdtls/bin/jdtls' },
-        capabilities = require('cmp_nvim_lsp').default_capabilities(),
         root_dir = vim.fs.dirname(vim.fs.find({ '.gradlew', '.git', 'mvnw' }, { upward = true })[1]),
       })
     end,
