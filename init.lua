@@ -129,7 +129,7 @@ local LSP_SERVERS = {
   'coffeesense',
   'crystalline',
   'css_variables',
-  'cssls',
+  'cssmodules_ls',
   'cypher_ls',
   'dartls',
   'docker_compose_language_service',
@@ -243,7 +243,12 @@ require('lazy').setup({
       'MasonToolsClean',
     },
     opts = {
-      ensure_installed = mason_packages,
+      ensure_installed = vim.list_extend(
+        {
+          'haskell-debug-adapter',
+        },
+        mason_packages
+      ),
       run_on_start = false,
     },
   },
@@ -951,6 +956,14 @@ require('lazy').setup({
           'ember-cli-build.js',
           'ember-cli-build.mjs'
         ),
+      })
+
+      lspconfig.cssls.setup({
+        settings = {
+          css = {
+            validate = false,
+          },
+        },
       })
 
       require('lspconfig.configs').vtsls = require('vtsls').lspconfig
