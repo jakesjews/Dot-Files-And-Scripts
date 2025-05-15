@@ -678,11 +678,12 @@ require('lazy').setup({
     'neovim/nvim-lspconfig',
     dependencies = {
       'yioneko/nvim-vtsls',
-      'b0o/schemastore.nvim',
+      {
+        'b0o/schemastore.nvim',
+        lazy = true,
+      },
     },
     config = function()
-      local lspconfig = require('lspconfig')
-
       vim.lsp.config('*', {
         on_attach = function(_client, bufferNum)
           local lsp_key_opts = {
@@ -725,6 +726,8 @@ require('lazy').setup({
           useESLintClass = true,
         },
       })
+
+      local lspconfig = require('lspconfig')
 
       vim.lsp.config('ansiblels', {
         root_dir = lspconfig.util.root_pattern('playbook.yml'),
