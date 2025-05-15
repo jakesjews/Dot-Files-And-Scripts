@@ -119,6 +119,8 @@ local mason_packages = {
 }
 
 local LSP_SERVERS = {
+  'ansiblels',
+  'arduino_language_server',
   'asm_lsp',
   'autotools_ls',
   'awk_ls',
@@ -129,25 +131,33 @@ local LSP_SERVERS = {
   'coffeesense',
   'crystalline',
   'css_variables',
+  'cssls',
   'cssmodules_ls',
   'cypher_ls',
   'dartls',
   'docker_compose_language_service',
   'dockerls',
   'dotls',
+  'elixirls',
   'elmls',
+  'ember',
   'ember',
   'erg_language_server',
   'erlangls',
+  'eslint',
   'fortls',
   'futhark_lsp',
   'gdscript',
   'gleam',
+  'glint',
   'gopls',
   'graphql',
+  'html',
   'jinja_lsp',
   'jqls',
+  'jsonls',
   'kotlin_language_server',
+  'lua_ls',
   'm68k',
   'mint',
   'mlir_lsp_server',
@@ -156,6 +166,7 @@ local LSP_SERVERS = {
   'nushell',
   'ocamllsp',
   'openscad_lsp',
+  'powershell_es',
   'prolog_ls',
   'psalm',
   'pug',
@@ -170,6 +181,7 @@ local LSP_SERVERS = {
   'somesass_ls',
   'sourcekit',
   'sqlls',
+  'stylelint_lsp',
   'svelte',
   'tailwindcss',
   'terraformls',
@@ -179,11 +191,14 @@ local LSP_SERVERS = {
   'v_analyzer',
   'vacuum',
   'vala_ls',
+  'verible',
   'veryl_ls',
   'vhdl_ls',
   'vimls',
   'vls',
   'volar',
+  'vtsls',
+  'yamlls',
   'yls',
   'zls',
 }
@@ -792,14 +807,9 @@ require('lazy').setup({
         capabilities = capabilities,
       })
 
-      for _, lsp in ipairs(LSP_SERVERS) do
-        vim.lsp.enable(lsp)
-      end
-
       vim.lsp.config('verible', {
         cmd = { 'verible-verilog-ls', '--rules_config_search' },
       })
-      vim.lsp.enable('verible')
 
       vim.lsp.config('eslint', {
         filetypes = {
@@ -818,13 +828,11 @@ require('lazy').setup({
           useESLintClass = true,
         },
       })
-      vim.lsp.enable('eslint')
 
       vim.lsp.config('ansiblels', {
         root_dir = lspconfig.util.root_pattern('playbook.yml'),
         single_file_support = true
       })
-      vim.lsp.enable('ansiblels')
 
       vim.lsp.config('jsonls', {
         settings = {
@@ -834,7 +842,6 @@ require('lazy').setup({
           },
         },
       })
-      vim.lsp.enable('jsonls')
 
       vim.lsp.config('ember', {
         init_options = {
@@ -842,7 +849,6 @@ require('lazy').setup({
         },
         root_dir = lspconfig.util.root_pattern('ember-cli-build.js', 'ember-cli-build.mjs'),
       })
-      vim.lsp.enable('ember')
 
       vim.lsp.config('arduino_language_server', {
         cmd = {
@@ -850,17 +856,14 @@ require('lazy').setup({
           '-cli-config', '/Users/jacob/Library/Arduino15/arduino-cli.yaml',
         }
       })
-      vim.lsp.enable('arduino_language_server')
 
       vim.lsp.config('stylelint_lsp', {
         filetypes = { 'css', 'less', 'scss', 'sugarss', 'wxss' },
       })
-      vim.lsp.enable('stylelint_lsp')
 
       vim.lsp.config('elixirls', {
         cmd = { 'elixir-ls' },
       })
-      vim.lsp.enable('elixirls')
 
       vim.lsp.config('lua_ls', {
         on_init = function(client)
@@ -897,12 +900,10 @@ require('lazy').setup({
           Lua = {}
         }
       })
-      vim.lsp.enable('lua_ls')
 
       vim.lsp.config('powershell_es', {
         bundle_path = '/Users/jacob/.powershell',
       })
-      vim.lsp.enable('powershell_es')
 
       vim.lsp.config('yamlls', {
         settings = {
@@ -912,7 +913,6 @@ require('lazy').setup({
           },
         },
       })
-      vim.lsp.enable('yamlls')
 
       vim.lsp.config('html', {
         filetypes = {
@@ -930,7 +930,6 @@ require('lazy').setup({
           'hbs'
         },
       })
-      vim.lsp.enable('html')
 
       vim.lsp.config('glint', {
         root_dir = lspconfig.util.root_pattern(
@@ -943,7 +942,6 @@ require('lazy').setup({
           'ember-cli-build.mjs'
         ),
       })
-      vim.lsp.enable('glint')
 
       vim.lsp.config('cssls', {
         settings = {
@@ -952,7 +950,6 @@ require('lazy').setup({
           },
         },
       })
-      vim.lsp.enable('cssls')
 
       require('lspconfig.configs').vtsls = require('vtsls').lspconfig
 
@@ -996,7 +993,10 @@ require('lazy').setup({
           },
         },
       })
-      vim.lsp.enable('vtsls')
+
+      for _, lsp in ipairs(LSP_SERVERS) do
+        vim.lsp.enable(lsp)
+      end
     end,
   },
 
