@@ -574,174 +574,73 @@ require('lazy').setup({
   },
 
   {
-    'hrsh7th/nvim-cmp',
+    'saghen/blink.cmp',
+    version = '1.*',
     dependencies = {
-      'b0o/schemastore.nvim',
-      'hrsh7th/cmp-nvim-lsp',
-      'hrsh7th/cmp-buffer',
-      'https://codeberg.org/FelipeLema/cmp-async-path.git',
-      {
-        'L3MON4D3/LuaSnip',
-        version = '*',
-        build = 'make install_jsregexp',
-      },
-      'L3MON4D3/cmp-luasnip-choice',
-      'onsails/lspkind.nvim',
-      'hrsh7th/cmp-cmdline',
-      'hrsh7th/cmp-nvim-lsp-document-symbol',
-      'hrsh7th/cmp-nvim-lsp-signature-help',
-      'hrsh7th/cmp-nvim-lua',
+      'alexandre-abrioux/blink-cmp-npm.nvim',
       {
         'tamago324/cmp-zsh',
-        opts = {
-          filetypes = { 'zsh' },
+        dependencies = {
+          {
+            'saghen/blink.compat',
+            version = '*',
+            lazy = true,
+            opts = {},
+          },
         },
       },
       {
-        'David-Kunz/cmp-npm',
-        dependencies = { 'nvim-lua/plenary.nvim' },
-        ft = 'json',
-        opts = {
-          only_latest_version = true,
-        },
-      },
-      {
-        'zbirenbaum/copilot-cmp',
+        'fang2hou/blink-copilot',
         dependencies = {
           {
             'zbirenbaum/copilot.lua',
+            cmd = 'Copilot',
+            event = "InsertEnter",
             opts = {
               suggestion = { enabled = false },
               panel = { enabled = false },
             },
           },
         },
-        opts = {},
       },
     },
-    opts = function()
-      local cmp = require('cmp')
-      local types = require('cmp.types')
-      local compare = cmp.config.compare
-
-      local select_if_active = function(direction, fallback)
-        if cmp.visible() and cmp.get_active_entry() then
-          cmp['select_' .. direction .. '_item']({ behavior = types.cmp.SelectBehavior.Select })
-        else
-          fallback()
-        end
-      end
-
-      local confirm_if_active = function(fallback)
-        if cmp.visible() and cmp.get_active_entry() then
-          cmp.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = false })
-        else
-          fallback()
-        end
-      end
-
-      return {
-        snippet = {
-          expand = function(args)
-            require('luasnip').lsp_expand(args.body)
-          end,
+    opts = {
+      keymap = {
+        preset = 'enter',
+        ['<Tab>'] = { 'select_next', 'fallback' },
+        ['<S-Tab>'] = { 'select_prev', 'fallback' },
+      },
+      signature = { enabled = true },
+      completion = { documentation = { auto_show = true } },
+      cmdline = {
+        completion = { menu = { auto_show = true } },
+      },
+      sources = {
+        default = { 'copilot', 'lsp',  'buffer', 'snippets', 'path' },
+        per_filetype = {
+          zsh = { inherit_defaults = true, 'zsh' },
+          json = { inherit_defaults = true, 'npm' },
         },
-        mapping = {
-          ['<Down>'] = {
-            i = cmp.mapping.select_next_item({ behavior = types.cmp.SelectBehavior.Select }),
-            c = function(fallback)
-              select_if_active('next', fallback)
-            end,
+        providers = {
+          copilot = {
+            module = 'blink-copilot',
+            score_offset = 100,
+            async = true,
           },
-          ['<Up>'] = {
-            i = cmp.mapping.select_prev_item({ behavior = types.cmp.SelectBehavior.Select }),
-            c = function(fallback)
-              select_if_active('prev', fallback)
-            end,
+          zsh = {
+            name = 'zsh',
+            module = 'blink.compat.source',
           },
-          ['<Tab>'] = {
-            i = function(fallback)
-              select_if_active('next', fallback)
-            end,
-            c = cmp.mapping.select_next_item({ behavior = types.cmp.SelectBehavior.Select }),
-          },
-          ['<S-Tab>'] = {
-            i = function(fallback)
-              select_if_active('prev', fallback)
-            end,
-            c = cmp.mapping.select_prev_item({ behavior = types.cmp.SelectBehavior.Select }),
-          },
-          ['<CR>'] = cmp.mapping({
-            i = function(fallback)
-              confirm_if_active(fallback)
-            end,
-            s = cmp.mapping.confirm({ select = true }),
-            c = function(fallback)
-              confirm_if_active(fallback)
-            end,
-          }),
-        },
-        formatting = {
-          format = require('lspkind').cmp_format({
-            mode = 'symbol_text',
-            menu = {
-              buffer = '[Buffer]',
-              nvim_lsp = '[LSP]',
-              nvim_lua = '[Lua]',
-              async_path = '[Path]',
-              nvim_lsp_document_symbol = '[Symbol]',
-              npm = '[NPM]',
-              luasnip_choice = '[LuaSnip]',
-              zsh = '[Zsh]',
-              cmdline = '[Cmd]',
-              copilot = '',
-            },
-          })
-        },
-        sources = {
-          { name = 'nvim_lua', group_index = 1 },
-          { name = 'nvim_lsp', group_index = 1 },
-          { name = 'nvim_lsp_signature_help', group_index = 1 },
-          { name = 'luasnip_choice', group_index = 1 },
-          { name = 'npm', keyword_length = 4, group_index = 1 },
-          { name = 'async_path', group_index = 1 },
-          { name = 'zsh', group_index = 1 },
-          { name = 'copilot', group_index = 1 },
-          { name = 'buffer', group_index = 2 },
-        },
-        sorting = {
-          priority_weight = 2,
-          comparators = {
-            compare.offset,
-            compare.exact,
-            require('copilot_cmp.comparators').prioritize,
-            compare.score,
-            compare.recently_used,
-            compare.locality,
-            compare.kind,
-            compare.length,
-            compare.order,
+          npm = {
+            module = "blink-cmp-npm",
+            async = true,
+            opts = {
+              only_latest_version = true,
+            }
           },
         },
-      }
-    end,
-    config = function(_plugin, opts)
-      local cmp = require('cmp')
-      cmp.setup(opts)
-
-      cmp.setup.cmdline({ '/', '?' },  {
-        sources = {
-          { name = 'nvim_lsp_document_symbol', group_index = 1 },
-        },
-      })
-
-      cmp.setup.cmdline(':', {
-        sources = {
-          { name = 'async_path', group_index = 1 },
-          { name = 'cmdline', group_index = 1 },
-        }
-      })
-    end,
+      },
+    },
   },
 
   {
@@ -779,6 +678,7 @@ require('lazy').setup({
     'neovim/nvim-lspconfig',
     dependencies = {
       'yioneko/nvim-vtsls',
+      'b0o/schemastore.nvim',
     },
     config = function()
       local lspconfig = require('lspconfig')
