@@ -574,6 +574,16 @@ require('lazy').setup({
   },
 
   {
+    'zbirenbaum/copilot.lua',
+    cmd = 'Copilot',
+    event = "InsertEnter",
+    opts = {
+      suggestion = { enabled = false },
+      panel = { enabled = false },
+    },
+  },
+
+  {
     'saghen/blink.cmp',
     version = '1.*',
     dependencies = {
@@ -591,17 +601,7 @@ require('lazy').setup({
       },
       {
         'fang2hou/blink-copilot',
-        dependencies = {
-          {
-            'zbirenbaum/copilot.lua',
-            cmd = 'Copilot',
-            event = "InsertEnter",
-            opts = {
-              suggestion = { enabled = false },
-              panel = { enabled = false },
-            },
-          },
-        },
+        dependencies = { 'zbirenbaum/copilot.lua' },
       },
     },
     opts = {
