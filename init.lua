@@ -782,8 +782,6 @@ require('lazy').setup({
     },
     config = function()
       local lspconfig = require('lspconfig')
-      local capabilities = require('cmp_nvim_lsp').default_capabilities()
-      capabilities.textDocument.completion.completionItem.snippetSupport = true
 
       vim.lsp.config('*', {
         on_attach = function(_client, bufferNum)
@@ -804,7 +802,6 @@ require('lazy').setup({
           vim.keymap.set('n', 'gl', vim.lsp.codelens.run, lsp_key_opts)
           vim.keymap.set('n', 'gf', function() vim.lsp.buf.format({ async = true }) end, lsp_key_opts)
         end,
-        capabilities = capabilities,
       })
 
       vim.lsp.config('verible', {
