@@ -27,10 +27,12 @@ vim.opt.sidescrolloff = 5
 vim.opt.hidden = false
 vim.opt.formatoptions:remove { 'c', 'r', 'o' }
 
-vim.keymap.set('n', 'x', '"_x') -- prevent character delete from writing to the clipboard
-vim.keymap.set('v', '.', ':normal .<CR>')
-vim.keymap.set('n', '[', vim.cmd.tabprevious, { silent = true })
-vim.keymap.set('n', ']', vim.cmd.tabnext, { silent = true })
+local setKey = vim.keymap.set
+
+setKey('n', 'x', '"_x') -- prevent character delete from writing to the clipboard
+setKey('v', '.', ':normal .<CR>')
+setKey('n', '[', vim.cmd.tabprevious, { silent = true })
+setKey('n', ']', vim.cmd.tabnext, { silent = true })
 
 vim.api.nvim_create_user_command('Nt', function() vim.cmd.tabnew() end, {})
 
@@ -452,8 +454,8 @@ require('lazy').setup({
       telescope.load_extension('fzf')
       telescope.load_extension('live_grep_args')
 
-      vim.keymap.set('', '<C-p>', require('telescope.builtin').find_files)
-      vim.keymap.set('', '<C-e>', telescope.extensions.live_grep_args.live_grep_args)
+      setKey('', '<C-p>', require('telescope.builtin').find_files)
+      setKey('', '<C-e>', telescope.extensions.live_grep_args.live_grep_args)
     end,
   },
 
@@ -494,21 +496,11 @@ require('lazy').setup({
     config = function(_plugin, opts)
       require('nvim-tree').setup(opts)
       local nvim_tree_api = require('nvim-tree.api')
-      vim.keymap.set('n', '<C-n>', nvim_tree_api.tree.toggle)
-      vim.keymap.set('n', '<C-f>', function()
+      setKey('n', '<C-n>', nvim_tree_api.tree.toggle)
+      setKey('n', '<C-f>', function()
         nvim_tree_api.tree.find_file({ open = true, focus = true })
       end)
     end,
-  },
-
-  {
-    'jakesjews/vim-ember-imports',
-    dependencies = { 'sukima/vim-javascript-imports' },
-    ft = { 'coffee', 'javascript', 'typescript' },
-    init = function()
-      vim.g.vim_javascript_imports_multiline_max_col = 120
-      vim.g.vim_javascript_imports_multiline_max_vars = 100
-    end
   },
 
   'mfussenegger/nvim-dap',
@@ -692,16 +684,16 @@ require('lazy').setup({
             buffer = bufferNum,
           }
 
-          vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, lsp_key_opts)
-          vim.keymap.set('n', 'gd', vim.lsp.buf.definition, lsp_key_opts)
-          vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, lsp_key_opts)
-          vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, lsp_key_opts)
-          vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, lsp_key_opts)
-          vim.keymap.set('n', 'gr', vim.lsp.buf.rename, lsp_key_opts)
-          vim.keymap.set('n', 'ga', vim.lsp.buf.code_action, lsp_key_opts)
-          vim.keymap.set('n', 'gR', vim.lsp.buf.references, lsp_key_opts)
-          vim.keymap.set('n', 'gl', vim.lsp.codelens.run, lsp_key_opts)
-          vim.keymap.set('n', 'gf', function() vim.lsp.buf.format({ async = true }) end, lsp_key_opts)
+          setKey('n', 'gD', vim.lsp.buf.declaration, lsp_key_opts)
+          setKey('n', 'gd', vim.lsp.buf.definition, lsp_key_opts)
+          setKey('n', 'gi', vim.lsp.buf.implementation, lsp_key_opts)
+          setKey('n', '<space>D', vim.lsp.buf.type_definition, lsp_key_opts)
+          setKey('n', '<C-k>', vim.lsp.buf.signature_help, lsp_key_opts)
+          setKey('n', 'gr', vim.lsp.buf.rename, lsp_key_opts)
+          setKey('n', 'ga', vim.lsp.buf.code_action, lsp_key_opts)
+          setKey('n', 'gR', vim.lsp.buf.references, lsp_key_opts)
+          setKey('n', 'gl', vim.lsp.codelens.run, lsp_key_opts)
+          setKey('n', 'gf', function() vim.lsp.buf.format({ async = true }) end, lsp_key_opts)
         end,
       })
 
@@ -918,7 +910,7 @@ require('lazy').setup({
       local nvim_test = require('nvim-test')
       nvim_test.setup(opts)
 
-      vim.keymap.set('', '<C-t>', function()
+      setKey('', '<C-t>', function()
         nvim_test.run('nearest')
       end)
     end,
@@ -985,8 +977,8 @@ require('lazy').setup({
         hls = {
           on_attach = function(_client, bufnr, ht)
             local opts = vim.tbl_extend('keep', { noremap = true, silent = true }, { buffer = bufnr, })
-            vim.keymap.set('n', '<space>ca', vim.lsp.codelens.run, opts)
-            vim.keymap.set('n', '<space>ea', ht.lsp.buf_eval_all, opts)
+            setKey('n', '<space>ca', vim.lsp.codelens.run, opts)
+            setKey('n', '<space>ea', ht.lsp.buf_eval_all, opts)
           end,
         },
       }
@@ -1037,21 +1029,6 @@ require('lazy').setup({
   {
     'vim-crystal/vim-crystal',
     ft = { 'crystal', 'ecrystal' },
-  },
-
-  {
-    'vuki656/package-info.nvim',
-    dependencies = { 'MunifTanjim/nui.nvim' },
-    cmd = 'Npm',
-    config = function()
-      local packageInfo = require('package-info')
-
-      packageInfo.setup({
-        autostart = false,
-      })
-
-      vim.api.nvim_create_user_command('Npm', packageInfo.show, {})
-    end
   },
 
   {
