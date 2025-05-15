@@ -293,47 +293,14 @@ require('lazy').setup({
 
   { 'nvim-treesitter/nvim-treesitter-context' },
 
-  {
-    'windwp/nvim-ts-autotag',
-    opts = {
-      filetypes = {
-        'html',
-        'javascript.glimmer',
-        'javascriptreact',
-        'typescriptreact',
-        'svelte',
-        'vue',
-        'tsx',
-        'jsx',
-        'rescript',
-        'xml',
-        'php',
-        'glimmer',
-        'handlebars',
-        'hbs'
-      },
-    },
-  },
+  { 'windwp/nvim-ts-autotag', opts = {} },
 
   {
     'Wansmer/treesj',
     keys = { '<space>m', '<space>j', '<space>s' },
-    config = function()
-      local tsj = require('treesj')
-      local lang_utils = require('treesj.langs.utils')
-      tsj.setup({
-        langs = {
-          glimmer = {
-            element_node_start = lang_utils.set_default_preset({
-              both = {
-                omit = { 'tag_name' },
-              },
-            }),
-          },
-        },
-      })
-    end,
+    opts = {},
   },
+
   {
     'numToStr/Comment.nvim',
     dependencies = {
@@ -409,12 +376,6 @@ require('lazy').setup({
       },
     },
     opts = function()
-      require('plenary.filetype').add_table({
-        extension = {
-          ['gjs'] = 'javascript.glimmer',
-        },
-      })
-
       local telescope_actions = require('telescope.actions')
 
       local function multi_select(prompt_bufnr)
@@ -560,6 +521,7 @@ require('lazy').setup({
           typescriptreact = js_like,
           glimmer = js_like,
           ['javascript.glimmer'] = js_like,
+          svelte = js_like,
         },
       }
     end,
@@ -702,17 +664,6 @@ require('lazy').setup({
       })
 
       vim.lsp.config('eslint', {
-        filetypes = {
-          'glimmer',
-          'javascript',
-          'javascript.glimmer',
-          'javascript.jsx',
-          'javascriptreact',
-          'svelte',
-          'typescript',
-          'typescript.tsx',
-          'typescriptreact',
-        },
         settings = {
           experimental = {},
           useESLintClass = true,
@@ -808,31 +759,21 @@ require('lazy').setup({
 
       vim.lsp.config('html', {
         filetypes = {
-          'html',
-          'javascript.glimmer',
-          'javascriptreact',
-          'typescriptreact',
-          'svelte',
-          'vue',
-          'tsx',
-          'jsx',
-          'rescript',
           'glimmer',
           'handlebars',
-          'hbs'
+          'hbs',
+          'html',
+          'javascript.glimmer',
+          'javascript.jsx',
+          'javascriptreact',
+          'jsx',
+          'rescript',
+          'svelte',
+          'tsx',
+          'typescript.tsx',
+          'typescriptreact',
+          'vue',
         },
-      })
-
-      vim.lsp.config('glint', {
-        root_dir = lspconfig.util.root_pattern(
-          '.glintrc.yml',
-          '.glintrc',
-          '.glintrc.json',
-          '.glintrc.js',
-          'glint.config.js',
-          'ember-cli-build.js',
-          'ember-cli-build.mjs'
-        ),
       })
 
       vim.lsp.config('cssls', {
@@ -855,6 +796,7 @@ require('lazy').setup({
           'typescript.tsx',
           'glimmer',
           'javascript.glimmer',
+          'svelte',
         },
         settings = {
           javascript = {
