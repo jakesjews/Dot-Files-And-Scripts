@@ -16,9 +16,9 @@ export ZSH_THEME="dracula"
 export EDITOR='nvim'
 export DISABLE_AUTO_TITLE=true
 export ANSIBLE_HOST_KEY_CHECKING=false
-export KEYTIMEOUT=1
 export LISTMAX=10000
 export HISTSIZE=1000000000
+export SAVEHIST=1000000000
 export HISTFILESIZE=1000000000
 export REPORTER=spec
 export EMBER_PARALLEL=8
@@ -71,7 +71,6 @@ export path=(
   "$HOME/.mix/escripts"
   "$HOME/.deno/bin"
   "$HOME/.foundry/bin"
-  "$HOME/.dotnet/tools"
   "$HOME/.jenv/bin"
   "$HOME/.clojure-bin"
   "$HOME/.datomic-bin/bin"
@@ -110,10 +109,15 @@ plugins=(
 
 autoload zmv
 
-unsetopt listambiguous
+setopt listambiguous
+setopt extendedglob numericglobsort no_nomatch
 setopt inc_append_history
 
 source "$ZSH/oh-my-zsh.sh"
+
+setopt hist_ignore_all_dups hist_reduce_blanks hist_verify
+setopt auto_pushd pushd_silent pushd_ignore_dups
+setopt no_clobber no_beep    
 
 alias stree="$HOMEBREW_PREFIX/bin/stree"
 alias arc="$HOME/.arc/arc.sh"
@@ -156,7 +160,7 @@ function pwdx {
 
 function docker-clean {
   docker-sync-stack clean
-  docker-compose down --volumes
+  docker compose down --volumes
   docker system prune --volumes --force
 }
 
@@ -168,6 +172,7 @@ function gnuradio-companion {
 }
 
 function alphabetize_files() {
+  emulate -L zsh
   unsetopt CASE_GLOB
 
   for i in {0..9} {a..z}
@@ -214,7 +219,6 @@ function update() {
     }
 
     setopt localoptions rmstarsilent
-    unsetopt nomatch
 
     print_section "updating homebrew packages"
     brew update
@@ -322,6 +326,7 @@ function update() {
 
 function zvm_config() {
   ZVM_VI_SURROUND_BINDKEY=s-prefix
+  ZVM_READKEY_ENGINE=$ZVM_READKEY_ENGINE_NEX
 }
 
 function zvm_before_init() {
@@ -371,9 +376,3 @@ eval "$(gh copilot alias -- zsh)"
 # https://github.com/zdharma-continuum/fast-syntax-highlighting/issues/27
 FAST_HIGHLIGHT[chroma-man]=
 
-autoload -U compinit
-if [[ ! -f "$ZSH_COMPDUMP" || ! "$(find "$ZSH_COMPDUMP" -mtime 0)" ]]; then
-  compinit -d "$ZSH_COMPDUMP"
-else
-  compinit -d "$ZSH_COMPDUMP" -C
-fi
