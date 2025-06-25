@@ -48,7 +48,6 @@ export GLASSFISH_HOME="$HOMEBREW_PREFIX/opt/glassfish/libexec"
 export ANDROID_SDK_ROOT="$HOMEBREW_PREFIX/share/android-sdk"
 export CARP_DIR="$HOME/.carp"
 export VOLTA_HOME="$HOME/.volta"
-export GR_PREFIX="$HOME/dev/sdr/gnuradio_modules"
 export AIDER_DARK_MODE=true
 
 typeset -U path
@@ -162,13 +161,6 @@ function docker-clean {
   docker-sync-stack clean
   docker compose down --volumes
   docker system prune --volumes --force
-}
-
-function gnuradio-companion {
-  export PYTHONPATH="$GR_PREFIX/lib/python3.13/site-packages:$PYTHONPATH"
-  export DYLD_LIBRARY_PATH="$GR_PREFIX/lib:$DYLD_LIBRARY_PATH"
-  export PATH="$GR_PREFIX/bin:$PATH"
-  /opt/homebrew/bin/gnuradio-companion
 }
 
 function alphabetize_files() {
@@ -348,6 +340,19 @@ function zvm_after_init() {
 
 function conda-init() {
   eval "$('/opt/homebrew/Caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+}
+
+function radioconda-init() {
+  conda-init
+  conda activate radioconda
+}
+
+function gnuradio-cmake() {
+  cmake -G Ninja -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DCMAKE_PREFIX_PATH=$CONDA_PREFIX -DLIB_SUFFIX="" ../
+}
+
+function gnuradio-compile() {
+  cmake --build . --target install
 }
 
 function opam-init() {

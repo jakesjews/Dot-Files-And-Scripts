@@ -115,6 +115,7 @@ local mason_packages = {
   'nim_langserver',
   'omnisharp',
   'perlnavigator',
+  'phpactor',
   'r_language_server',
   'raku_navigator',
   'serve_d',
@@ -151,7 +152,6 @@ local LSP_SERVERS = {
   'futhark_lsp',
   'gdscript',
   'gleam',
-  'glint',
   'gopls',
   'graphql',
   'html',
@@ -172,7 +172,6 @@ local LSP_SERVERS = {
   'powershell_es',
   'prismals',
   'prolog_ls',
-  'psalm',
   'pug',
   'purescriptls',
   'pyright',
@@ -785,6 +784,13 @@ require('lazy').setup({
         },
       })
 
+      vim.lsp.config('gopls', {
+        settings = {
+          staticcheck = true,
+          gofumpt = true,
+        },
+      })
+
       require('lspconfig.configs').vtsls = require('vtsls').lspconfig
 
       vim.lsp.config('vtsls', {
@@ -866,10 +872,10 @@ require('lazy').setup({
 
       lint.linters_by_ft = {
         cpp = { 'cppcheck' },
-        elixir = { 'credo' },
         dockerfile = { 'hadolint' },
+        elixir = { 'credo' },
+        make = { 'checkmake' },
         php = { 'phpstan' },
-        go = { 'revive' },
         vim = { 'vint' },
       }
 
@@ -931,6 +937,18 @@ require('lazy').setup({
   {
     "TamaMcGlinn/nvim-lspconfig-ada",
     ft = 'ada',
+  },
+
+  {
+    'apple/pkl-neovim',
+    lazy = true,
+    ft = "pkl",
+    config = function()
+      vim.g.pkl_neovim = {
+        start_command = { "pkl-lsp" },
+        pkl_cli_path = "/opt/homebrew/bin/pkl"
+      }
+    end,
   },
 
   {
