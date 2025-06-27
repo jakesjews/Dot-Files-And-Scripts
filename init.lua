@@ -49,6 +49,7 @@ vim.filetype.add({
 })
 
 vim.lsp.set_log_level('error')
+vim.lsp.inlay_hint.enable()
 -- vim.lsp.set_log_level('debug')
 -- require('vim.lsp.log').set_format_func(vim.inspect)
 
@@ -107,12 +108,39 @@ vim.api.nvim_create_autocmd("CursorHold", {
   end
 })
 
+local jsInlayHints = {
+  parameterNames = { enabled = 'literals' },
+  parameterTypes = { enabled = true },
+  variableTypes = { enabled = true },
+  propertyDeclarationTypes = { enabled = true },
+  functionLikeReturnTypes = { enabled = true },
+  enumMemberValues = { enabled = true },
+}
+
+local jsOptions = {
+  preferGoToSourceDefinition = true,
+  inlayHints = jsInlayHints,
+  suggest = {
+    completeFunctionCalls = true,
+  },
+  preferences = {
+    importModuleSpecifier = 'non-relative',
+  },
+  diagnostics = { enable = true },
+}
+
+local jsLikeOptions = {
+  typescript = jsOptions,
+  javascript = jsOptions,
+}
+
 local mason_packages = {
   'fennel_language_server',
   'fsautocomplete',
   'julials',
   'matlab_ls',
   'nim_langserver',
+  'ocamllsp',
   'omnisharp',
   'perlnavigator',
   'phpactor',
@@ -162,11 +190,9 @@ local LSP_SERVERS = {
   'lua_ls',
   'm68k',
   'mint',
-  'mlir_lsp_server',
   'nginx_language_server',
   'nomad_lsp',
   'nushell',
-  'ocamllsp',
   'openscad_lsp',
   'postgres_lsp',
   'powershell_es',
@@ -749,12 +775,18 @@ require('lazy').setup({
       })
 
       vim.lsp.config('yamlls', {
-        settings = {
-          yaml = {
-            keyOrdering = false,
-            schemaStore = { enable = true },
-          },
-        },
+        opts = function()
+          return {
+            yaml = {
+              schemaStore = {
+                enable = false,
+                url = "",
+              },
+              keyOrdering = false,
+              schemas = require('schemastore').yaml.schemas(),
+            },
+          }
+        end,
       })
 
       vim.lsp.config('html', {
@@ -792,6 +824,13 @@ require('lazy').setup({
       })
 
       require('lspconfig.configs').vtsls = require('vtsls').lspconfig
+      require('lspconfig.configs').svelte = require('vtsls').lspconfig
+
+      vim.lsp.config('svelte', {
+        init_options = {
+          configuration = jsLikeOptions,
+        }
+      })
 
       vim.lsp.config('vtsls', {
         filetypes = {
@@ -803,36 +842,8 @@ require('lazy').setup({
           'typescript.tsx',
           'glimmer',
           'javascript.glimmer',
-          'svelte',
         },
-        settings = {
-          javascript = {
-            preferGoToSourceDefinition = true,
-            inlayHints = {
-              parameterNames = {
-                enabled = 'all',
-                propertyDeclarationTypes = {
-                  enabled = true,
-                },
-                enumMemberValues = {
-                  enabled = true,
-                },
-                functionLikeReturnTypes = {
-                  enabled = true,
-                },
-              },
-            },
-            suggest = {
-              completeFunctionCalls = true,
-            },
-            preferences = {
-              importModuleSpecifier = 'non-relative',
-            },
-            validate = {
-              enable = false,
-            },
-          },
-        },
+        settings = jsLikeOptions,
       })
 
       for _, lsp in ipairs(LSP_SERVERS) do
@@ -885,6 +896,11 @@ require('lazy').setup({
         end,
       })
     end,
+  },
+
+  {
+    'dmmulroy/ts-error-translator.nvim',
+    opts = {},
   },
 
   'jrop/mongo.nvim',
