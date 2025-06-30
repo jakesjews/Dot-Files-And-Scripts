@@ -100,6 +100,7 @@ plugins=(
   kitty
   ng
   npm
+  pnpm-shell-completion
   pod
   react-native
   rust
