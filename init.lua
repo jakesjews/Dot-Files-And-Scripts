@@ -24,6 +24,8 @@ vim.opt.foldmethod = 'indent'
 vim.opt.swapfile = false
 vim.opt.scrolloff = 1
 vim.opt.sidescrolloff = 5
+vim.opt.hidden = false
+vim.opt.formatoptions:remove { 'c', 'r', 'o' }
 
 local setKey = vim.keymap.set
 
@@ -51,32 +53,33 @@ vim.lsp.inlay_hint.enable()
 -- vim.lsp.set_log_level('debug')
 -- require('vim.lsp.log').set_format_func(vim.inspect)
 
-local indent_grp = vim.api.nvim_create_augroup('UserIndent', { clear = true })
+local file_type_detect_id = vim.api.nvim_create_augroup('filetypedetect', { clear = true })
 
-local indent_cmds = {
-  cs = function() vim.bo.shiftwidth = 4  vim.bo.tabstop = 4  vim.bo.expandtab = true  end,
-  c = function() vim.bo.shiftwidth = 4  vim.bo.tabstop = 4  vim.bo.expandtab = true  end,
-  cpp = function() vim.bo.shiftwidth = 4  vim.bo.tabstop = 4  vim.bo.expandtab = true  end,
-  make = function() vim.bo.expandtab  = false vim.bo.tabstop = 4 end,
+local indents = {
+  cs = 'setl sw=4 sts=4 ts=4 et',
+  c = 'setl sw=4 sts=4 ts=4 et',
+  cpp = 'setl sw=4 sts=4 ts=4 et',
+  make = 'setl noexpandtab sw=4 sts=0 ts=4',
 }
 
-for ft, fn in pairs(indent_cmds) do
+for pattern, command in pairs(indents) do
   vim.api.nvim_create_autocmd('FileType', {
-    group = indent_grp,
-    pattern = ft,
-    callback = fn,
-    desc = ('Set %s indentation'):format(ft),
+    pattern = pattern,
+    group = file_type_detect_id,
+    command = command,
   })
 end
 
-local format_options_id = vim.api.nvim_create_augroup('UserFormatOptions', { clear = true })
+local format_options_id = vim.api.nvim_create_augroup('formatoptions', { clear = true })
 
-vim.api.nvim_create_autocmd('BufWinEnter', {
+vim.api.nvim_create_autocmd('BufEnter', {
   group = format_options_id,
-  callback = function() vim.opt.formatoptions:remove { 'c', 'r', 'o' } end
+  callback = function()
+    vim.opt.formatoptions:remove { 'c', 'r', 'o' }
+  end
 })
 
-local yank_highlight_id = vim.api.nvim_create_augroup('UserHighlightYank', { clear = true })
+local yank_highlight_id = vim.api.nvim_create_augroup('highlightyank', { clear = true })
 
 vim.api.nvim_create_autocmd('TextYankPost', {
   group = yank_highlight_id,
@@ -133,6 +136,7 @@ local jsLikeOptions = {
 
 local mason_packages = {
   'fennel_language_server',
+  'fsautocomplete',
   'julials',
   'matlab_ls',
   'nim_langserver',
@@ -167,6 +171,7 @@ local LSP_SERVERS = {
   'dotls',
   'elixirls',
   'elmls',
+  'ember',
   'ember',
   'erg_language_server',
   'erlangls',
@@ -383,7 +388,7 @@ require('lazy').setup({
 
   {
     'nvim-telescope/telescope.nvim',
-    version = '^0.1.8',
+    version = '0.1.x',
     keys = {
       '<C-e>',
       '<C-p>',
@@ -485,41 +490,25 @@ require('lazy').setup({
     end,
   },
 
-  {
-    'mfussenegger/nvim-dap',
-    keys = { "<F5>", "<F10>", "<F12>" },
-    module = "dap",
-    opts = {},
-  },
-
-  {
-    'tpope/vim-dadbod',
-    cmd = { "DB", "DBUI", "DBExecute" },
-  },
+  'mfussenegger/nvim-dap',
+  'tpope/vim-dadbod',
 
   {
     'NMAC427/guess-indent.nvim',
-    event = { "BufReadPost", "BufNewFile" },
     opts = {},
   },
 
-  { 
-    'hiphish/rainbow-delimiters.nvim',
-    event = { "BufReadPost", "BufNewFile" },
-    opts = {},
-  },
+  'hiphish/rainbow-delimiters.nvim',
 
   {
-    'MeanderingProgrammer/render-markdown.nvim',
-    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
+    'ellisonleao/glow.nvim',
     cmd = 'Glow',
-    opts = { completions = { blink = { enabled = true } } },
+    opts = {},
   },
 
   {
     'michaelb/sniprun',
     build = 'bash install.sh',
-    cmd = { "SnipRun", "SnipInfo", "SnipReset" },
     opts = {
       live_mode_toggle = 'enable',
       repl_enable = { 'Clojure_fifo' },
@@ -528,6 +517,14 @@ require('lazy').setup({
 
   {
     'NvChad/nvim-colorizer.lua',
+    opts = {},
+  },
+
+  {
+    'ThePrimeagen/refactoring.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+    },
     opts = {},
   },
 
@@ -568,8 +565,7 @@ require('lazy').setup({
 
   {
     'saghen/blink.cmp',
-    version = '^1.4.1',
-    event = { "InsertEnter", "CmdlineEnter" },
+    version = '1.*',
     dependencies = {
       'rafamadriz/friendly-snippets',
       'alexandre-abrioux/blink-cmp-npm.nvim',
@@ -897,9 +893,7 @@ require('lazy').setup({
         vim = { 'vint' },
       }
 
-      local link_group = vim.api.nvim_create_augroup('UserIndent', { clear = true })
       vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
-        group = link_group,
         callback = function()
           lint.try_lint()
         end,
@@ -912,9 +906,10 @@ require('lazy').setup({
     opts = {},
   },
 
+  'jrop/mongo.nvim',
+
   {
     'scalameta/nvim-metals',
-    ft = { "scala", "sbt" },
     dependencies = { 'nvim-lua/plenary.nvim' },
   },
 
@@ -944,6 +939,7 @@ require('lazy').setup({
   {
     'mrcjkb/haskell-tools.nvim',
     version = '*',
+    lazy = false,
     init = function()
       vim.g.haskell_tools = {
         hls = {
