@@ -49,6 +49,7 @@ export ANDROID_SDK_ROOT="$HOMEBREW_PREFIX/share/android-sdk"
 export CARP_DIR="$HOME/.carp"
 export VOLTA_HOME="$HOME/.volta"
 export AIDER_DARK_MODE=true
+export PGRX_HOME="$HOME/.pgrx"
 
 typeset -U path
 
@@ -77,6 +78,7 @@ export path=(
   "$HOME/.usr/bin"
   "$HOME/.modular/bin"
   "$HOME/.simh-tools"
+  "$HOME/.dotnet/tools"
 )
 
 export fpath=(
@@ -247,13 +249,13 @@ function update() {
     pipx upgrade-all
 
     print_section "upgrade dotnet tools"
-    dotnet tool list -g | tail -n +3 | tr -s ' ' | cut -f 1 -d' ' | xargs -n 1 dotnet tool update --global
+    dotnet tool update --global --all
 
     print_section "update go packages"
     gup update
 
     print_section "update racket packages"
-    raco pkg update --all -j 8 --batch --no-trash --deps search-auto
+    raco pkg update --all --jobs 8 --batch --no-trash --deps search-auto
 
     print_section "update nim packages"
     nimble refresh --accept

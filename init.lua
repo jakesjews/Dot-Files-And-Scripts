@@ -94,12 +94,12 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 local cursor_hold_id = vim.api.nvim_create_augroup('CursorHold', { clear = true })
 
-vim.api.nvim_create_autocmd("CursorHold", {
+vim.api.nvim_create_autocmd('CursorHold', {
   group = cursor_hold_id,
   callback = function()
     vim.diagnostic.open_float(nil, {
       focusable = false,
-      close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+      close_events = { 'BufLeave', 'CursorMoved', 'InsertEnter', 'FocusLost' },
       border = 'rounded',
       source = 'always',
       prefix = ' ',
@@ -523,7 +523,7 @@ require('lazy').setup({
   {
     'ThePrimeagen/refactoring.nvim',
     dependencies = {
-      "nvim-lua/plenary.nvim",
+      'nvim-lua/plenary.nvim',
     },
     opts = {},
   },
@@ -556,7 +556,7 @@ require('lazy').setup({
   {
     'zbirenbaum/copilot.lua',
     cmd = 'Copilot',
-    event = "InsertEnter",
+    event = 'InsertEnter',
     opts = {
       suggestion = { enabled = false },
       panel = { enabled = false },
@@ -567,6 +567,7 @@ require('lazy').setup({
     'saghen/blink.cmp',
     version = '1.*',
     dependencies = {
+      'rafamadriz/friendly-snippets',
       'alexandre-abrioux/blink-cmp-npm.nvim',
       {
         'tamago324/cmp-zsh',
@@ -590,6 +591,7 @@ require('lazy').setup({
         ['<Tab>'] = { 'select_next', 'fallback' },
         ['<S-Tab>'] = { 'select_prev', 'fallback' },
       },
+      fuzzy = { implementation = 'prefer_rust_with_warning' },
       signature = { enabled = true },
       completion = { documentation = { auto_show = true } },
       cmdline = {
@@ -612,7 +614,7 @@ require('lazy').setup({
             module = 'blink.compat.source',
           },
           npm = {
-            module = "blink-cmp-npm",
+            module = 'blink-cmp-npm',
             async = true,
             opts = {
               only_latest_version = true,
@@ -621,6 +623,7 @@ require('lazy').setup({
         },
       },
     },
+    opts_extend = { 'sources.default' }
   },
 
   {
@@ -650,7 +653,7 @@ require('lazy').setup({
       { 'zbirenbaum/copilot.lua' },
       { 'nvim-lua/plenary.nvim' },
     },
-    build = "make tiktoken",
+    build = 'make tiktoken',
     opts = {},
   },
 
@@ -780,7 +783,7 @@ require('lazy').setup({
             yaml = {
               schemaStore = {
                 enable = false,
-                url = "",
+                url = '',
               },
               keyOrdering = false,
               schemas = require('schemastore').yaml.schemas(),
@@ -951,18 +954,18 @@ require('lazy').setup({
   },
 
   {
-    "TamaMcGlinn/nvim-lspconfig-ada",
+    'TamaMcGlinn/nvim-lspconfig-ada',
     ft = 'ada',
   },
 
   {
     'apple/pkl-neovim',
     lazy = true,
-    ft = "pkl",
+    ft = 'pkl',
     config = function()
       vim.g.pkl_neovim = {
-        start_command = { "pkl-lsp" },
-        pkl_cli_path = "/opt/homebrew/bin/pkl"
+        start_command = { 'pkl-lsp' },
+        pkl_cli_path = '/opt/homebrew/bin/pkl',
       }
     end,
   },
