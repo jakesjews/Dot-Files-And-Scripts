@@ -292,7 +292,7 @@ require('lazy').setup({
       highlight = {
         enable = true,
       },
-      ignore_install = { 'norg', 'phpdoc', 'smali' },
+      ignore_install = { 'norg', 'phpdoc', 'smali', 'ipkg' },
       matchup = {
         enable = true,
       },
@@ -506,7 +506,6 @@ require('lazy').setup({
   { 
     'hiphish/rainbow-delimiters.nvim',
     event = { "BufReadPost", "BufNewFile" },
-    opts = {},
   },
 
   {
