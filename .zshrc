@@ -31,12 +31,12 @@ export CLICOLOR=1
 export MCFLY_KEY_SCHEME=vim
 export MCFLY_FUZZY=2
 export HOMEBREW_NO_AUTO_UPDATE=1
-export HOMEBREW_BOOTSNAP=1
 export HOMEBREW_UPDATE_REPORT_ALL_FORMULAE=1
 export HOMEBREW_BAT=1
 export HOMEBREW_NO_INSTALL_CLEANUP=1
 export HOMEBREW_NO_INSTALL_FROM_API=1
-export PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=true
+export HOMEBREW_PRY=1
+export HOMEBREW_UPGRADE_GREEDY=1
 export DOTNET_ROLL_FORWARD=Major
 export VAGRANT_DEFAULT_PROVIDER="parallels"
 export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
@@ -268,7 +268,7 @@ function update() {
 
     print_section "update arduino"
     arduino-cli update
-    arduino-cli upgrade
+    arduino-cli upgrade --run-post-install --run-pre-uninstall
     arduino-cli cache clean
 
     print_section "update vagrant plugins"

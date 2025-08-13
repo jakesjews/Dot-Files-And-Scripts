@@ -46,6 +46,9 @@ vim.filetype.add({
   },
 })
 
+vim.diagnostic.config({
+  virtual_lines = { current_line = true },
+})
 vim.lsp.set_log_level('error')
 vim.lsp.inlay_hint.enable()
 -- vim.lsp.set_log_level('debug')
@@ -116,7 +119,7 @@ local jsInlayHints = {
 
 local jsOptions = {
   preferGoToSourceDefinition = true,
-  inlayHints = jsInlayHints,
+  -- inlayHints = jsInlayHints,
   suggest = {
     completeFunctionCalls = true,
   },
@@ -143,6 +146,7 @@ local mason_packages = {
   'r_language_server',
   'raku_navigator',
   'serve_d',
+  'vhdl_ls',
 }
 
 local LSP_SERVERS = {
@@ -216,7 +220,6 @@ local LSP_SERVERS = {
   'vala_ls',
   'verible',
   'veryl_ls',
-  'vhdl_ls',
   'vimls',
   'vls',
   'vtsls',
@@ -697,7 +700,6 @@ require('lazy').setup({
 
       vim.lsp.config('eslint', {
         settings = {
-          experimental = {},
           useESLintClass = true,
         },
       })
@@ -772,7 +774,11 @@ require('lazy').setup({
           })
         end,
         settings = {
-          Lua = {}
+          Lua = {
+            diagnostics = {
+              unusedLocalExclude = {'_client'},
+            },
+          }
         }
       })
 
