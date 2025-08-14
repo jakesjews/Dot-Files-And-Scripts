@@ -1,36 +1,57 @@
 -- luacheck: globals vim
-vim.g.loaded_matchit = 1 -- matchup compatibility
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
-vim.g.skip_ts_context_commentstring_module = true
-vim.g.python3_host_prog = '/opt/homebrew/bin/python3.13'
 
-vim.opt.number = true
-vim.opt.autowrite = true
-vim.opt.backup = false
-vim.opt.writebackup = false
-vim.opt.updatetime = 300
-vim.opt.signcolumn = 'number'
-vim.opt.completeopt = 'menu,menuone,noselect'
-vim.opt.tabstop = 2
-vim.opt.shiftwidth = 2
-vim.opt.expandtab = true
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
-vim.opt.clipboard = 'unnamed'
-vim.opt.splitright = true
-vim.opt.foldlevel = 99
-vim.opt.foldmethod = 'indent'
-vim.opt.swapfile = false
-vim.opt.scrolloff = 1
-vim.opt.sidescrolloff = 5
+local function assign(root, opts)
+  for name, value in pairs(opts) do
+    root[name] = value
+  end
+end
 
-local setKey = vim.keymap.set
+assign(vim.g, {
+  loaded_matchit = 1, -- matchup compatibility
+  loaded_netrw = 1,
+  loaded_netrwPlugin = 1,
+  skip_ts_context_commentstring_module = true,
+  python3_host_prog = '/opt/homebrew/bin/python3.13',
+})
 
-setKey('n', 'x', '"_x') -- prevent character delete from writing to the clipboard
-setKey('v', '.', ':normal .<CR>')
-setKey('n', '[', vim.cmd.tabprevious, { silent = true })
-setKey('n', ']', vim.cmd.tabnext, { silent = true })
+assign(vim.opt, {
+  number = true,
+  autowrite = true,
+  backup = false,
+  writebackup = false,
+  updatetime = 300,
+  signcolumn = 'number',
+  completeopt = 'menu,menuone,noselect',
+  tabstop = 2,
+  shiftwidth = 2,
+  expandtab = true,
+  ignorecase = true,
+  smartcase = true,
+  clipboard = 'unnamed',
+  splitright = true,
+  foldlevel = 99,
+  foldmethod = 'indent',
+  swapfile = false,
+  scrolloff = 1,
+  sidescrolloff = 5,
+})
+
+local set_key = vim.keymap.set
+
+local set_keys = function(mappings)
+  for _, mapping in ipairs(mappings) do
+    set_key(unpack(mapping))
+  end
+end
+
+local augroup = vim.api.nvim_create_augroup
+
+set_keys({
+  { 'n', 'x', '"_x' }, -- prevent character delete from writing to the clipboard
+  { 'v', '.', ':normal .<CR>' },
+  { 'n', '[', vim.cmd.tabprevious, { silent = true } },
+  { 'n', ']', vim.cmd.tabnext, { silent = true } },
+})
 
 vim.api.nvim_create_user_command('Nt', function() vim.cmd.tabnew() end, {})
 
@@ -54,12 +75,18 @@ vim.lsp.inlay_hint.enable()
 -- vim.lsp.set_log_level('debug')
 -- require('vim.lsp.log').set_format_func(vim.inspect)
 
-local indent_grp = vim.api.nvim_create_augroup('UserIndent', { clear = true })
+local indent_grp = augroup('UserIndent', { clear = true })
+
+local setIndentFour = function()
+  vim.bo.shiftwidth = 4
+  vim.bo.tabstop = 4
+  vim.bo.expandtab = true
+end
 
 local indent_cmds = {
-  cs = function() vim.bo.shiftwidth = 4  vim.bo.tabstop = 4  vim.bo.expandtab = true  end,
-  c = function() vim.bo.shiftwidth = 4  vim.bo.tabstop = 4  vim.bo.expandtab = true  end,
-  cpp = function() vim.bo.shiftwidth = 4  vim.bo.tabstop = 4  vim.bo.expandtab = true  end,
+  cs = setIndentFour,
+  c = setIndentFour,
+  cpp = setIndentFour,
   make = function() vim.bo.expandtab  = false vim.bo.tabstop = 4 end,
 }
 
@@ -72,14 +99,14 @@ for ft, fn in pairs(indent_cmds) do
   })
 end
 
-local format_options_id = vim.api.nvim_create_augroup('UserFormatOptions', { clear = true })
+local format_options_id = augroup('UserFormatOptions', { clear = true })
 
 vim.api.nvim_create_autocmd('BufWinEnter', {
   group = format_options_id,
   callback = function() vim.opt.formatoptions:remove { 'c', 'r', 'o' } end
 })
 
-local yank_highlight_id = vim.api.nvim_create_augroup('UserHighlightYank', { clear = true })
+local yank_highlight_id = augroup('UserHighlightYank', { clear = true })
 
 vim.api.nvim_create_autocmd('TextYankPost', {
   group = yank_highlight_id,
@@ -92,7 +119,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end
 })
 
-local cursor_hold_id = vim.api.nvim_create_augroup('CursorHold', { clear = true })
+local cursor_hold_id = augroup('CursorHold', { clear = true })
 
 vim.api.nvim_create_autocmd('CursorHold', {
   group = cursor_hold_id,
@@ -430,15 +457,17 @@ require('lazy').setup({
         },
       }
     end,
-    config = function(_plugin, opts)
+    config = function(_, opts)
       local telescope = require('telescope')
 
       telescope.setup(opts)
       telescope.load_extension('fzf')
       telescope.load_extension('live_grep_args')
 
-      setKey('', '<C-p>', require('telescope.builtin').find_files)
-      setKey('', '<C-e>', telescope.extensions.live_grep_args.live_grep_args)
+      set_keys({
+        { '', '<C-p>', require('telescope.builtin').find_files },
+        { '', '<C-e>', telescope.extensions.live_grep_args.live_grep_args },
+      })
     end,
   },
 
@@ -476,11 +505,11 @@ require('lazy').setup({
         },
       },
     },
-    config = function(_plugin, opts)
+    config = function(_, opts)
       require('nvim-tree').setup(opts)
       local nvim_tree_api = require('nvim-tree.api')
-      setKey('n', '<C-n>', nvim_tree_api.tree.toggle)
-      setKey('n', '<C-f>', function()
+      set_key('n', '<C-n>', nvim_tree_api.tree.toggle)
+      set_key('n', '<C-f>', function()
         nvim_tree_api.tree.find_file({ open = true, focus = true })
       end)
     end,
@@ -672,23 +701,23 @@ require('lazy').setup({
     },
     config = function()
       vim.lsp.config('*', {
-        on_attach = function(_client, bufferNum)
+        on_attach = function(_, bufferNum)
           local lsp_key_opts = {
             noremap = true,
             silent = true,
             buffer = bufferNum,
           }
 
-          setKey('n', 'gD', vim.lsp.buf.declaration, lsp_key_opts)
-          setKey('n', 'gd', vim.lsp.buf.definition, lsp_key_opts)
-          setKey('n', 'gi', vim.lsp.buf.implementation, lsp_key_opts)
-          setKey('n', '<space>D', vim.lsp.buf.type_definition, lsp_key_opts)
-          setKey('n', '<C-k>', vim.lsp.buf.signature_help, lsp_key_opts)
-          setKey('n', 'gr', vim.lsp.buf.rename, lsp_key_opts)
-          setKey('n', 'ga', vim.lsp.buf.code_action, lsp_key_opts)
-          setKey('n', 'gR', vim.lsp.buf.references, lsp_key_opts)
-          setKey('n', 'gl', vim.lsp.codelens.run, lsp_key_opts)
-          setKey('n', 'gf', function() vim.lsp.buf.format({ async = true }) end, lsp_key_opts)
+          set_key('n', 'gD', vim.lsp.buf.declaration, lsp_key_opts)
+          set_key('n', 'gd', vim.lsp.buf.definition, lsp_key_opts)
+          set_key('n', 'gi', vim.lsp.buf.implementation, lsp_key_opts)
+          set_key('n', '<space>D', vim.lsp.buf.type_definition, lsp_key_opts)
+          set_key('n', '<C-k>', vim.lsp.buf.signature_help, lsp_key_opts)
+          set_key('n', 'gr', vim.lsp.buf.rename, lsp_key_opts)
+          set_key('n', 'ga', vim.lsp.buf.code_action, lsp_key_opts)
+          set_key('n', 'gR', vim.lsp.buf.references, lsp_key_opts)
+          set_key('n', 'gl', vim.lsp.codelens.run, lsp_key_opts)
+          set_key('n', 'gf', function() vim.lsp.buf.format({ async = true }) end, lsp_key_opts)
         end,
       })
 
@@ -772,11 +801,7 @@ require('lazy').setup({
           })
         end,
         settings = {
-          Lua = {
-            diagnostics = {
-              unusedLocalExclude = {'_client'},
-            },
-          }
+          Lua = {}
         }
       })
 
@@ -876,11 +901,11 @@ require('lazy').setup({
         javascript = 'nvim-test.runners.mocha',
       },
     },
-    config = function(_plugin, opts)
+    config = function(_, opts)
       local nvim_test = require('nvim-test')
       nvim_test.setup(opts)
 
-      setKey('', '<C-t>', function()
+      set_key('', '<C-t>', function()
         nvim_test.run('nearest')
       end)
     end,
@@ -900,7 +925,7 @@ require('lazy').setup({
         vim = { 'vint' },
       }
 
-      local link_group = vim.api.nvim_create_augroup('UserIndent', { clear = true })
+      local link_group = augroup('UserIndent', { clear = true })
       vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
         group = link_group,
         callback = function()
@@ -950,10 +975,10 @@ require('lazy').setup({
     init = function()
       vim.g.haskell_tools = {
         hls = {
-          on_attach = function(_client, bufnr, ht)
+          on_attach = function(_, bufnr, ht)
             local opts = vim.tbl_extend('keep', { noremap = true, silent = true }, { buffer = bufnr, })
-            setKey('n', '<space>ca', vim.lsp.codelens.run, opts)
-            setKey('n', '<space>ea', ht.lsp.buf_eval_all, opts)
+            set_key('n', '<space>ca', vim.lsp.codelens.run, opts)
+            set_key('n', '<space>ea', ht.lsp.buf_eval_all, opts)
           end,
         },
       }
@@ -1025,7 +1050,7 @@ require('lazy').setup({
     opts = {
       transparent_bg = true,
     },
-    config = function(_plugin, opts)
+    config = function(_, opts)
       require('dracula').setup(opts)
       vim.cmd.colorscheme('dracula')
     end,
