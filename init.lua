@@ -1,6 +1,6 @@
 -- luacheck: globals vim
 
-local function assign(root, opts)
+local assign = function (root, opts)
   for name, value in pairs(opts) do
     root[name] = value
   end
@@ -427,7 +427,7 @@ require('lazy').setup({
     opts = function()
       local telescope_actions = require('telescope.actions')
 
-      local function multi_select(prompt_bufnr)
+      local multi_select = function (prompt_bufnr)
         local telescope_state = require('telescope.actions.state')
         local picker = telescope_state.get_current_picker(prompt_bufnr)
         local multi = picker:get_multi_selection()
@@ -508,10 +508,10 @@ require('lazy').setup({
     config = function(_, opts)
       require('nvim-tree').setup(opts)
       local nvim_tree_api = require('nvim-tree.api')
-      set_key('n', '<C-n>', nvim_tree_api.tree.toggle)
-      set_key('n', '<C-f>', function()
-        nvim_tree_api.tree.find_file({ open = true, focus = true })
-      end)
+      set_keys({
+        { 'n', '<C-n>', nvim_tree_api.tree.toggle },
+        { 'n', '<C-f>', function() nvim_tree_api.tree.find_file({ open = true, focus = true }) end }
+      })
     end,
   },
 
@@ -708,16 +708,18 @@ require('lazy').setup({
             buffer = bufferNum,
           }
 
-          set_key('n', 'gD', vim.lsp.buf.declaration, lsp_key_opts)
-          set_key('n', 'gd', vim.lsp.buf.definition, lsp_key_opts)
-          set_key('n', 'gi', vim.lsp.buf.implementation, lsp_key_opts)
-          set_key('n', '<space>D', vim.lsp.buf.type_definition, lsp_key_opts)
-          set_key('n', '<C-k>', vim.lsp.buf.signature_help, lsp_key_opts)
-          set_key('n', 'gr', vim.lsp.buf.rename, lsp_key_opts)
-          set_key('n', 'ga', vim.lsp.buf.code_action, lsp_key_opts)
-          set_key('n', 'gR', vim.lsp.buf.references, lsp_key_opts)
-          set_key('n', 'gl', vim.lsp.codelens.run, lsp_key_opts)
-          set_key('n', 'gf', function() vim.lsp.buf.format({ async = true }) end, lsp_key_opts)
+          set_keys({
+            {'n', 'gD', vim.lsp.buf.declaration, lsp_key_opts},
+            {'n', 'gd', vim.lsp.buf.definition, lsp_key_opts},
+            {'n', 'gi', vim.lsp.buf.implementation, lsp_key_opts},
+            {'n', '<space>D', vim.lsp.buf.type_definition, lsp_key_opts},
+            {'n', '<C-k>', vim.lsp.buf.signature_help, lsp_key_opts},
+            {'n', 'gr', vim.lsp.buf.rename, lsp_key_opts},
+            {'n', 'ga', vim.lsp.buf.code_action, lsp_key_opts},
+            {'n', 'gR', vim.lsp.buf.references, lsp_key_opts},
+            {'n', 'gl', vim.lsp.codelens.run, lsp_key_opts},
+            {'n', 'gf', function() vim.lsp.buf.format({ async = true }) end, lsp_key_opts},
+          })
         end,
       })
 
@@ -905,9 +907,7 @@ require('lazy').setup({
       local nvim_test = require('nvim-test')
       nvim_test.setup(opts)
 
-      set_key('', '<C-t>', function()
-        nvim_test.run('nearest')
-      end)
+      set_key('', '<C-t>', function() nvim_test.run('nearest') end)
     end,
   },
 
@@ -977,8 +977,10 @@ require('lazy').setup({
         hls = {
           on_attach = function(_, bufnr, ht)
             local opts = vim.tbl_extend('keep', { noremap = true, silent = true }, { buffer = bufnr, })
-            set_key('n', '<space>ca', vim.lsp.codelens.run, opts)
-            set_key('n', '<space>ea', ht.lsp.buf_eval_all, opts)
+            set_keys({
+              { 'n', '<space>ca', vim.lsp.codelens.run, opts },
+              { 'n', '<space>ea', ht.lsp.buf_eval_all, opts },
+            })
           end,
         },
       }
