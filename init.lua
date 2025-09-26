@@ -6,6 +6,11 @@ local function assign(root, opts)
   end
 end
 
+local function bind(func, ...)
+  local args = {...}
+  return function() return func(unpack(args)) end
+end
+
 assign(vim.g, {
   loaded_matchit = 1, -- matchup compatibility
   loaded_netrw = 1,
@@ -51,7 +56,7 @@ set_keys({
   { 'n', ']', vim.cmd.tabnext, { silent = true } },
 })
 
-vim.api.nvim_create_user_command('Nt', function() vim.cmd.tabnew() end, {})
+vim.api.nvim_create_user_command('Nt', bind(vim.cmd.tabnew), {})
 
 vim.treesitter.language.register('bash', 'zsh')
 
@@ -96,7 +101,7 @@ for ft, fn in pairs(indent_cmds) do
     group = indent_grp,
     pattern = ft,
     callback = fn,
-    desc = ('Set %s indentation'):format(ft),
+    desc = ('Set %s indentation').format(ft),
   })
 end
 
@@ -111,29 +116,28 @@ local yank_highlight_id = augroup('UserHighlightYank', { clear = true })
 
 vim.api.nvim_create_autocmd('TextYankPost', {
   group = yank_highlight_id,
-  callback = function()
-    vim.highlight.on_yank({
-      higroup = 'IncSearch',
-      timeout = 150,
-      on_visual = true,
-    })
-  end
+  callback = bind(vim.highlight.on_yank, {
+    higroup = 'IncSearch',
+    timeout = 150,
+    on_visual = true,
+  })
 })
 
 local cursor_hold_id = augroup('CursorHold', { clear = true })
 
 vim.api.nvim_create_autocmd('CursorHold', {
   group = cursor_hold_id,
-  callback = function()
-    vim.diagnostic.open_float(nil, {
+  callback = bind(vim.diagnostic.open_float,
+    nil,
+    {
       focusable = false,
       close_events = { 'BufLeave', 'CursorMoved', 'InsertEnter', 'FocusLost' },
       border = 'rounded',
       source = 'always',
       prefix = ' ',
       scope = 'cursor',
-    })
-  end
+    }
+  ),
 })
 
 local jsOptions = {
@@ -371,18 +375,6 @@ require('lazy').setup({
     end,
   },
   {
-    'folke/which-key.nvim',
-    event = 'VeryLazy',
-    dependencies = {
-      'nvim-tree/nvim-web-devicons',
-    },
-    init = function()
-      vim.o.timeout = true
-      vim.o.timeoutlen = 500
-    end,
-    opts = {},
-  },
-  {
     'kylechui/nvim-surround',
     version = '*',
     event = 'VeryLazy',
@@ -399,63 +391,55 @@ require('lazy').setup({
     },
   },
   {
-    'nvim-telescope/telescope.nvim',
-    version = '^0.1.8',
-    keys = {
-      '<C-e>',
-      '<C-p>',
-    },
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'nvim-telescope/telescope-live-grep-args.nvim',
-      {
-        'nvim-telescope/telescope-fzf-native.nvim',
-        build = 'make',
-      },
-    },
+    "ibhagwan/fzf-lua",
+    keys = { "<C-e>", "<C-p>" },
+    dependencies = { "nvim-tree/nvim-web-devicons" },
     opts = function()
-      local telescope_actions = require('telescope.actions')
+      local fzf = require("fzf-lua")
+      local actions = fzf.actions
 
-      local function multi_select(prompt_bufnr)
-        local telescope_state = require('telescope.actions.state')
-        local picker = telescope_state.get_current_picker(prompt_bufnr)
-        local multi = picker:get_multi_selection()
-        if #multi > 1 then
-          telescope_actions.send_selected_to_qflist(prompt_bufnr)
-          telescope_actions.open_qflist(prompt_bufnr)
+      local function enter_or_qf(selected, opts)
+        if #selected > 1 then
+          actions.file_sel_to_qf(selected, opts)
+          vim.cmd("copen")
         else
-          telescope_actions.select_default(prompt_bufnr)
+          actions.file_edit(selected, opts)
         end
       end
 
       return {
-        defaults = {
-          sorting_strategy = 'ascending',
-          mappings = {
-            i = {
-              ['<esc>'] = telescope_actions.close,
-              ['<C-a>'] = telescope_actions.toggle_all,
-              ['<CR>'] = multi_select
-            },
-            n = {
-              ['<esc>'] = telescope_actions.close,
-              ['<C-a>'] = telescope_actions.toggle_all,
-              ['<CR>'] = multi_select
-            },
-          }
+        keymap = {
+          builtin = {
+            ["<Esc>"] = "hide",
+          },
+          fzf = {
+            ["ctrl-a"] = "toggle-all",
+            ["ctrl-q"] = "select-all+accept",
+          },
+        },
+
+        actions = {
+          files = {
+            ["enter"] = enter_or_qf,
+            ["ctrl-s"] = actions.file_split,
+            ["ctrl-v"] = actions.file_vsplit,
+            ["ctrl-t"] = actions.file_tabedit,
+          },
+        },
+
+        fzf_opts = {
+          ["--layout"] = "reverse",
+          ["--height"] = "100%",
         },
       }
     end,
     config = function(_, opts)
-      local telescope = require('telescope')
-
-      telescope.setup(opts)
-      telescope.load_extension('fzf')
-      telescope.load_extension('live_grep_args')
+      local fzf = require("fzf-lua")
+      fzf.setup(opts)
 
       set_keys({
-        { '', '<C-p>', require('telescope.builtin').find_files },
-        { '', '<C-e>', telescope.extensions.live_grep_args.live_grep_args },
+        { "", "<C-p>", bind(fzf.files) },
+        { "", "<C-e>", bind(fzf.live_grep_native) },
       })
     end,
   },
@@ -496,16 +480,17 @@ require('lazy').setup({
     config = function(_, opts)
       require('nvim-tree').setup(opts)
       local nvim_tree_api = require('nvim-tree.api')
+
       set_keys({
+        { 'n', '<esc>', nvim_tree_api.tree.close },
         { 'n', '<C-n>', nvim_tree_api.tree.toggle },
-        { 'n', '<C-f>', function() nvim_tree_api.tree.find_file({ open = true, focus = true }) end }
+        { 'n', '<C-f>', bind(nvim_tree_api.tree.find_file, { open = true, focus = true }) }
       })
     end,
   },
   {
     'mfussenegger/nvim-dap',
     keys = { "<F5>", "<F10>", "<F12>" },
-    module = "dap",
     opts = {},
   },
   {
@@ -542,6 +527,9 @@ require('lazy').setup({
   },
   {
     'andrewferrier/debugprint.nvim',
+    dependencies = {
+      'nvim-mini/mini.hipatterns',
+    },
     opts = function()
       local js_like = {
         left = "console.warn('",
@@ -571,6 +559,19 @@ require('lazy').setup({
     opts = {
       suggestion = { enabled = false },
       panel = { enabled = false },
+    },
+  },
+  {
+    'folke/lazydev.nvim',
+    ft = 'lua',
+    opts = {
+      library = {
+        'lazy.nvim',
+        { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+      },
+      enabled = function(root_dir)
+        return not vim.uv.fs_stat(root_dir .. "/.luarc.json")
+      end,
     },
   },
   {
@@ -609,7 +610,7 @@ require('lazy').setup({
         completion = { menu = { auto_show = true } },
       },
       sources = {
-        default = { 'copilot', 'lsp',  'buffer', 'snippets', 'path' },
+        default = { 'lazydev', 'copilot', 'lsp',  'buffer', 'snippets', 'path' },
         per_filetype = {
           zsh = { inherit_defaults = true, 'zsh' },
           json = { inherit_defaults = true, 'npm' },
@@ -630,6 +631,11 @@ require('lazy').setup({
             opts = {
               only_latest_version = true,
             }
+          },
+          lazydev = {
+            name = 'LazyDev',
+            module = 'lazydev.integrations.blink',
+            score_offset = 100,
           },
         },
       },
@@ -694,7 +700,7 @@ require('lazy').setup({
             {'n', 'ga', vim.lsp.buf.code_action, lsp_key_opts},
             {'n', 'gR', vim.lsp.buf.references, lsp_key_opts},
             {'n', 'gl', vim.lsp.codelens.run, lsp_key_opts},
-            {'n', 'gf', function() vim.lsp.buf.format({ async = true }) end, lsp_key_opts},
+            {'n', 'gf', bind(vim.lsp.buf.format, { async = true }), lsp_key_opts},
           })
         end,
       })
@@ -745,42 +751,6 @@ require('lazy').setup({
 
       vim.lsp.config('elixirls', {
         cmd = { 'elixir-ls' },
-      })
-
-      vim.lsp.config('lua_ls', {
-        on_init = function(client)
-          if client.workspace_folders then
-            local path = client.workspace_folders[1].name
-            if vim.uv.fs_stat(path..'/.luarc.json') or vim.uv.fs_stat(path..'/.luarc.jsonc') then
-              return
-            end
-          end
-
-          client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-            runtime = {
-              version = 'LuaJIT'
-            },
-            workspace = {
-              checkThirdParty = false,
-              telemetry = {
-                enable = false,
-              },
-              library = vim.tbl_extend(
-                'force',
-                vim.tbl_filter(
-                  function(path) return vim.fn.isdirectory(path) == 1 end,
-                  {
-                    vim.fn.expand('$HOME/github/lua-language-server'),
-                  }
-                ),
-                { vim.env.VIMRUNTIME }
-              )
-            }
-          })
-        end,
-        settings = {
-          Lua = {}
-        }
       })
 
       vim.lsp.config('powershell_es', {
@@ -882,7 +852,7 @@ require('lazy').setup({
       nvim_test.setup(opts)
 
       set_keys({
-        { '', '<C-t>', function() nvim_test.run('nearest') end },
+        { '', '<C-t>', bind(nvim_test.run, 'nearest') },
       })
     end,
   },
@@ -903,9 +873,7 @@ require('lazy').setup({
       local link_group = augroup('UserIndent', { clear = true })
       vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
         group = link_group,
-        callback = function()
-          lint.try_lint()
-        end,
+        callback = bind(lint.try_lint),
       })
     end,
   },
