@@ -1,6 +1,6 @@
 -- luacheck: globals vim
 
-local assign = function (root, opts)
+local function assign(root, opts)
   for name, value in pairs(opts) do
     root[name] = value
   end
@@ -36,11 +36,9 @@ assign(vim.opt, {
   sidescrolloff = 5,
 })
 
-local set_key = vim.keymap.set
-
-local set_keys = function(mappings)
+local function set_keys(mappings)
   for _, mapping in ipairs(mappings) do
-    set_key(unpack(mapping))
+    vim.keymap.set(unpack(mapping))
   end
 end
 
@@ -77,7 +75,7 @@ vim.lsp.inlay_hint.enable()
 
 local indent_grp = augroup('UserIndent', { clear = true })
 
-local setIndentFour = function()
+local function setIndentFour()
   vim.bo.shiftwidth = 4
   vim.bo.tabstop = 4
   vim.bo.expandtab = true
@@ -87,7 +85,10 @@ local indent_cmds = {
   cs = setIndentFour,
   c = setIndentFour,
   cpp = setIndentFour,
-  make = function() vim.bo.expandtab  = false vim.bo.tabstop = 4 end,
+  make = function()
+    vim.bo.expandtab = false
+    vim.bo.tabstop = 4
+  end,
 }
 
 for ft, fn in pairs(indent_cmds) do
@@ -103,7 +104,7 @@ local format_options_id = augroup('UserFormatOptions', { clear = true })
 
 vim.api.nvim_create_autocmd('BufWinEnter', {
   group = format_options_id,
-  callback = function() vim.opt.formatoptions:remove { 'c', 'r', 'o' } end
+  callback = function() vim.opt.formatoptions:remove({ 'c', 'r', 'o' }) end
 })
 
 local yank_highlight_id = augroup('UserHighlightYank', { clear = true })
@@ -275,12 +276,10 @@ require('lazy').setup({
     'williamboman/mason.nvim',
     opts = {},
   },
-
   {
     'williamboman/mason-lspconfig.nvim',
     opts = {},
   },
-
   {
     'WhoIsSethDaniel/mason-tool-installer.nvim',
     cmd = {
@@ -299,7 +298,6 @@ require('lazy').setup({
       run_on_start = false,
     },
   },
-
   {
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
@@ -337,19 +335,14 @@ require('lazy').setup({
       },
     },
   },
-
   { 'RRethy/vim-illuminate' },
-
   { 'nvim-treesitter/nvim-treesitter-context' },
-
   { 'windwp/nvim-ts-autotag', opts = {} },
-
   {
     'Wansmer/treesj',
     keys = { '<space>m', '<space>j', '<space>s' },
     opts = {},
   },
-
   {
     'numToStr/Comment.nvim',
     dependencies = {
@@ -377,13 +370,11 @@ require('lazy').setup({
       }
     end,
   },
-
   {
     'folke/which-key.nvim',
     event = 'VeryLazy',
     dependencies = {
       'nvim-tree/nvim-web-devicons',
-      { 'echasnovski/mini.nvim', version = false },
     },
     init = function()
       vim.o.timeout = true
@@ -391,7 +382,6 @@ require('lazy').setup({
     end,
     opts = {},
   },
-
   {
     'kylechui/nvim-surround',
     version = '*',
@@ -408,7 +398,6 @@ require('lazy').setup({
       },
     },
   },
-
   {
     'nvim-telescope/telescope.nvim',
     version = '^0.1.8',
@@ -427,7 +416,7 @@ require('lazy').setup({
     opts = function()
       local telescope_actions = require('telescope.actions')
 
-      local multi_select = function (prompt_bufnr)
+      local function multi_select(prompt_bufnr)
         local telescope_state = require('telescope.actions.state')
         local picker = telescope_state.get_current_picker(prompt_bufnr)
         local multi = picker:get_multi_selection()
@@ -470,7 +459,6 @@ require('lazy').setup({
       })
     end,
   },
-
   {
     'nvim-tree/nvim-tree.lua',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
@@ -514,37 +502,31 @@ require('lazy').setup({
       })
     end,
   },
-
   {
     'mfussenegger/nvim-dap',
     keys = { "<F5>", "<F10>", "<F12>" },
     module = "dap",
     opts = {},
   },
-
   {
     'tpope/vim-dadbod',
     cmd = { "DB", "DBUI", "DBExecute" },
   },
-
   {
     'NMAC427/guess-indent.nvim',
     event = { "BufReadPost", "BufNewFile" },
     opts = {},
   },
-
-  { 
+  {
     'hiphish/rainbow-delimiters.nvim',
     event = { "BufReadPost", "BufNewFile" },
   },
-
   {
     'MeanderingProgrammer/render-markdown.nvim',
     dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
     cmd = 'Glow',
     opts = { completions = { blink = { enabled = true } } },
   },
-
   {
     'michaelb/sniprun',
     build = 'bash install.sh',
@@ -554,12 +536,10 @@ require('lazy').setup({
       repl_enable = { 'Clojure_fifo' },
     },
   },
-
   {
     'NvChad/nvim-colorizer.lua',
     opts = {},
   },
-
   {
     'andrewferrier/debugprint.nvim',
     opts = function()
@@ -584,7 +564,6 @@ require('lazy').setup({
       }
     end,
   },
-
   {
     'zbirenbaum/copilot.lua',
     cmd = 'Copilot',
@@ -594,10 +573,9 @@ require('lazy').setup({
       panel = { enabled = false },
     },
   },
-
   {
     'saghen/blink.cmp',
-    version = '^1.4.1',
+    version = '^1.7.0',
     event = { "InsertEnter", "CmdlineEnter" },
     dependencies = {
       'rafamadriz/friendly-snippets',
@@ -658,7 +636,6 @@ require('lazy').setup({
     },
     opts_extend = { 'sources.default' }
   },
-
   {
     'CopilotC-Nvim/CopilotChat.nvim',
     cmd = {
@@ -689,7 +666,6 @@ require('lazy').setup({
     build = 'make tiktoken',
     opts = {},
   },
-
   {
     'neovim/nvim-lspconfig',
     dependencies = {
@@ -888,13 +864,11 @@ require('lazy').setup({
       end
     end,
   },
-
   {
     'linrongbin16/lsp-progress.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     opts = {},
   },
-
   {
     'klen/nvim-test',
     keys = '<C-t>',
@@ -907,10 +881,11 @@ require('lazy').setup({
       local nvim_test = require('nvim-test')
       nvim_test.setup(opts)
 
-      set_key('', '<C-t>', function() nvim_test.run('nearest') end)
+      set_keys({
+        { '', '<C-t>', function() nvim_test.run('nearest') end },
+      })
     end,
   },
-
   {
     'mfussenegger/nvim-lint',
     config = function()
@@ -934,25 +909,21 @@ require('lazy').setup({
       })
     end,
   },
-
   {
     'dmmulroy/ts-error-translator.nvim',
     opts = {},
   },
-
   {
     'scalameta/nvim-metals',
     ft = { "scala", "sbt" },
     dependencies = { 'nvim-lua/plenary.nvim' },
   },
-
   {
     'mrcjkb/rustaceanvim',
     version = '*',
     ft = 'rust',
     opts = {},
   },
-
   {
     'mfussenegger/nvim-jdtls',
     ft = 'java',
@@ -963,12 +934,10 @@ require('lazy').setup({
       })
     end,
   },
-
   {
     'ionide/Ionide-vim',
     ft = { 'fsharp', 'fsharp_project' },
   },
-
   {
     'mrcjkb/haskell-tools.nvim',
     version = '*',
@@ -986,12 +955,10 @@ require('lazy').setup({
       }
     end,
   },
-
   {
     'TamaMcGlinn/nvim-lspconfig-ada',
     ft = 'ada',
   },
-
   {
     'apple/pkl-neovim',
     lazy = true,
@@ -1003,12 +970,10 @@ require('lazy').setup({
       }
     end,
   },
-
   {
     'wavded/vim-stylus',
     ft = 'stylus',
   },
-
   'konfekt/vim-office',
   'MTDL9/vim-log-highlighting',
   'jlcrochet/vim-razor',
@@ -1020,14 +985,12 @@ require('lazy').setup({
   'stevearc/vim-arduino',
   'q60/vim-brainfuck',
   'modularml/mojo.vim',
-
   {
     'ShinKage/idris2-nvim',
     ft = { 'idris2', 'ipkg', 'lidris2' },
     dependencies = { 'MunifTanjim/nui.nvim' },
     opts = {},
   },
-
   {
     'pearofducks/ansible-vim',
     init = function()
@@ -1039,12 +1002,10 @@ require('lazy').setup({
       }
     end,
   },
-
   {
     'vim-crystal/vim-crystal',
     ft = { 'crystal', 'ecrystal' },
   },
-
   {
     'Mofiqul/dracula.nvim',
     lazy = false,
@@ -1057,7 +1018,6 @@ require('lazy').setup({
       vim.cmd.colorscheme('dracula')
     end,
   },
-
   {
     'lukas-reineke/indent-blankline.nvim',
     main = 'ibl',
