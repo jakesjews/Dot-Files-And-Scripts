@@ -48,6 +48,7 @@ local function set_keys(mappings)
 end
 
 local augroup = vim.api.nvim_create_augroup
+local create_autocmd = vim.api.nvim_create_autocmd
 
 set_keys({
   { 'n', 'x', '"_x' }, -- prevent character delete from writing to the clipboard
@@ -81,9 +82,11 @@ vim.lsp.inlay_hint.enable()
 local indent_grp = augroup('UserIndent', { clear = true })
 
 local function setIndentFour()
-  vim.bo.shiftwidth = 4
-  vim.bo.tabstop = 4
-  vim.bo.expandtab = true
+  assign(vim.bo, {
+    shiftwidth = 4,
+    tabstop = 4,
+    expandtab = true,
+  })
 end
 
 local indent_cmds = {
@@ -91,19 +94,33 @@ local indent_cmds = {
   c = setIndentFour,
   cpp = setIndentFour,
   make = function()
-    vim.bo.expandtab = false
-    vim.bo.tabstop = 4
+    assign(vim.bo, {
+      expandtab = false,
+      tabstop = 4,
+    })
   end,
 }
 
 for ft, fn in pairs(indent_cmds) do
-  vim.api.nvim_create_autocmd('FileType', {
+  create_autocmd('FileType', {
     group = indent_grp,
     pattern = ft,
     callback = fn,
     desc = ('Set %s indentation').format(ft),
   })
 end
+
+create_autocmd('FileType', {
+  callback = function()
+    if not vim.treesitter.get_parser(nil, nil, { error = false }) then
+      return
+    end
+
+    vim.treesitter.start()
+    vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+    vim.bo.indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
+  end,
+})
 
 local format_options_id = augroup('UserFormatOptions', { clear = true })
 
@@ -305,20 +322,11 @@ require('lazy').setup({
   {
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
-      'nvim-treesitter/nvim-treesitter-textobjects',
+      { 'nvim-treesitter/nvim-treesitter-textobjects', branch = 'main' },
     },
-    main = 'nvim-treesitter.configs',
-    opts = {
-      auto_install = true,
-      ensure_installed = 'all',
-      highlight = {
-        enable = true,
-      },
-      ignore_install = { 'norg', 'phpdoc', 'smali', 'ipkg' },
-      indent = {
-        enable = true,
-      },
-    },
+    lazy = false,
+    branch = 'main',
+    opts = {},
   },
   {
     'andymass/vim-matchup',
@@ -498,8 +506,14 @@ require('lazy').setup({
   {
     'MeanderingProgrammer/render-markdown.nvim',
     dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
-    cmd = 'Glow',
-    opts = { completions = { blink = { enabled = true } } },
+    ft = { 'markdown', 'quarto' },
+    opts = {
+      completions = {
+        lsp = {
+          enabled = true,
+        },
+      },
+    },
   },
   {
     'michaelb/sniprun',

@@ -222,7 +222,8 @@ function update() {
 
     print_section "updating vim plugins"
     nvim --headless "+Lazy! sync" +qa
-    nvim --headless "+TSUpdateSync" +qa
+    nvim --headless "lua require('nvim-treesitter').install('all', { summary = true }):wait()" +qa
+    nvim --headless "lua require('nvim-treesitter').update('all', { summary = true }):wait()" +qa
     nvim --headless "+MasonToolsUpdateSync" +qa
 
     print_section "updating ruby gems"
