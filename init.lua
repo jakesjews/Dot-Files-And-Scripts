@@ -305,15 +305,7 @@ require('lazy').setup({
   {
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
-      'RRethy/nvim-treesitter-textsubjects',
-      {
-        'andymass/vim-matchup',
-        init = function()
-          vim.g.matchup_matchparen_offscreen = {}
-          vim.g.matchup_matchparen_deferred = 1
-          vim.g.matchup_surround_enabled = 0
-        end,
-      },
+      'nvim-treesitter/nvim-treesitter-textobjects',
     },
     main = 'nvim-treesitter.configs',
     opts = {
@@ -323,20 +315,17 @@ require('lazy').setup({
         enable = true,
       },
       ignore_install = { 'norg', 'phpdoc', 'smali', 'ipkg' },
-      matchup = {
-        enable = true,
-      },
-      textsubjects = {
-        enable = true,
-        keymaps = {
-          ['.'] = 'textsubjects-smart',
-          [';'] = 'textsubjects-container-outer',
-          ['i;'] = 'textsubjects-container-inner',
-        },
-      },
       indent = {
         enable = true,
       },
+    },
+  },
+  {
+    'andymass/vim-matchup',
+    opts = {
+      treesitter = {
+        stopline = 500,
+      }
     },
   },
   { 'RRethy/vim-illuminate' },

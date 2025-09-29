@@ -50,12 +50,13 @@ export CARP_DIR="$HOME/.carp"
 export VOLTA_HOME="$HOME/.volta"
 export AIDER_DARK_MODE=true
 export PGRX_HOME="$HOME/.pgrx"
+export POSTGRES_VERSION=18
 
 typeset -U path
 
 export path=(
   "$HOMEBREW_PREFIX/opt/python@3.13/libexec/bin"
-  "$HOMEBREW_PREFIX/opt/postgresql@17/bin"
+  "$HOMEBREW_PREFIX/opt/postgresql@$POSTGRES_VERSION/bin"
   $path
   "$HOME/.cargo/bin"
   "$HOME/.tmux/plugins/tpm"
@@ -368,7 +369,13 @@ function perl-init() {
 }
 
 function update-pg-modeler() {
-  qmake -r pgmodeler.pro -early QMAKE_DEFAULT_LIBDIRS=$(xcrun -show-sdk-path)/usr/lib
+  qmake \
+    -r pgmodeler.pro \
+    -early \
+      QMAKE_DEFAULT_LIBDIRS=$(xcrun -show-sdk-path)/usr/lib \
+      PGSQL_INC=/opt/homebrew/include/postgresql@$POSTGRES_VERSION \
+      PGSQL_LIB=/opt/homebrew/lib/postgresql@$POSTGRES_VERSION/libpq.dylib
+
   make -j8
   make install
 }
