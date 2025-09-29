@@ -321,12 +321,14 @@ require('lazy').setup({
   },
   {
     'nvim-treesitter/nvim-treesitter',
-    dependencies = {
-      { 'nvim-treesitter/nvim-treesitter-textobjects', branch = 'main' },
-    },
     lazy = false,
     branch = 'main',
     opts = {},
+  },
+  {
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    branch = 'main',
   },
   {
     'andymass/vim-matchup',
@@ -496,12 +498,12 @@ require('lazy').setup({
   },
   {
     'NMAC427/guess-indent.nvim',
-    event = { "BufReadPost", "BufNewFile" },
+    event = { 'BufReadPost', 'BufNewFile' },
     opts = {},
   },
   {
     'hiphish/rainbow-delimiters.nvim',
-    event = { "BufReadPost", "BufNewFile" },
+    event = { 'BufReadPost', 'BufNewFile' },
   },
   {
     'MeanderingProgrammer/render-markdown.nvim',
