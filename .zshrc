@@ -55,7 +55,7 @@ export POSTGRES_VERSION=18
 typeset -U path
 
 export path=(
-  "$HOMEBREW_PREFIX/opt/python@3.13/libexec/bin"
+  "$HOMEBREW_PREFIX/opt/python@3.14/libexec/bin"
   "$HOMEBREW_PREFIX/opt/postgresql@$POSTGRES_VERSION/bin"
   $path
   "$HOME/.cargo/bin"
@@ -222,8 +222,8 @@ function update() {
 
     print_section "updating vim plugins"
     nvim --headless "+Lazy! sync" +qa
-    nvim --headless "lua require('nvim-treesitter').install('all', { summary = true }):wait()" +qa
-    nvim --headless "lua require('nvim-treesitter').update('all', { summary = true }):wait()" +qa
+    nvim --headless "+lua require('nvim-treesitter').install('all', { summary = true }):wait(300000)" +qa
+    nvim --headless "+lua require('nvim-treesitter').update('all', { summary = true }):wait(300000)" +qa
     nvim --headless "+MasonToolsUpdateSync" +qa
 
     print_section "updating ruby gems"
