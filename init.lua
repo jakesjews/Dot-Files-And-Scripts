@@ -7,9 +7,9 @@ local function assign(root, opts)
 end
 
 local function bind(func, ...)
-  local args = {...}
+  local args = { ... }
   return function() return func(unpack(args)) end
-end
+  end
 
 assign(vim.g, {
   loaded_matchit = 1, -- matchup compatibility
@@ -81,7 +81,7 @@ vim.lsp.inlay_hint.enable()
 
 local indent_grp = augroup('UserIndent', { clear = true })
 
-local function setIndentFour()
+local function set_indent_four()
   assign(vim.bo, {
     shiftwidth = 4,
     tabstop = 4,
@@ -90,9 +90,9 @@ local function setIndentFour()
 end
 
 local indent_cmds = {
-  cs = setIndentFour,
-  c = setIndentFour,
-  cpp = setIndentFour,
+  cs = set_indent_four,
+  c = set_indent_four,
+  cpp = set_indent_four,
   make = function()
     assign(vim.bo, {
       expandtab = false,
@@ -106,7 +106,7 @@ for ft, fn in pairs(indent_cmds) do
     group = indent_grp,
     pattern = ft,
     callback = fn,
-    desc = ('Set %s indentation').format(ft),
+    desc = ('Set %s indentation'):format(ft),
   })
 end
 
@@ -116,8 +116,8 @@ create_autocmd('FileType', {
       return
     end
 
-
     vim.treesitter.start()
+    vim.wo.foldmethod = 'expr'
     vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
     vim.bo.indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
   end,
@@ -125,37 +125,34 @@ create_autocmd('FileType', {
 
 local format_options_id = augroup('UserFormatOptions', { clear = true })
 
-vim.api.nvim_create_autocmd('BufWinEnter', {
+create_autocmd('BufWinEnter', {
   group = format_options_id,
-  callback = function() vim.opt.formatoptions:remove({ 'c', 'r', 'o' }) end
+  callback = function() vim.opt.formatoptions:remove({ 'c', 'r', 'o' }) end,
 })
 
 local yank_highlight_id = augroup('UserHighlightYank', { clear = true })
 
-vim.api.nvim_create_autocmd('TextYankPost', {
+create_autocmd('TextYankPost', {
   group = yank_highlight_id,
   callback = bind(vim.highlight.on_yank, {
     higroup = 'IncSearch',
     timeout = 150,
     on_visual = true,
-  })
+  }),
 })
 
-local cursor_hold_id = augroup('CursorHold', { clear = true })
+local cursor_hold_id = augroup('UserCursorHoldDiagnostics', { clear = true })
 
-vim.api.nvim_create_autocmd('CursorHold', {
+create_autocmd('CursorHold', {
   group = cursor_hold_id,
-  callback = bind(vim.diagnostic.open_float,
-    nil,
-    {
-      focusable = false,
-      close_events = { 'BufLeave', 'CursorMoved', 'InsertEnter', 'FocusLost' },
-      border = 'rounded',
-      source = 'always',
-      prefix = ' ',
-      scope = 'cursor',
-    }
-  ),
+  callback = bind(vim.diagnostic.open_float, nil, {
+    focusable = false,
+    close_events = { 'BufLeave', 'CursorMoved', 'InsertEnter', 'FocusLost' },
+    border = 'rounded',
+    source = 'always',
+    prefix = ' ',
+    scope = 'cursor',
+  }),
 })
 
 local jsOptions = {
@@ -284,7 +281,7 @@ if not vim.uv.fs_stat(lazypath) then
     'git',
     'clone',
     '--filter=blob:none',
-    '--branch=stable', -- latest stable release
+    '--branch=stable',
     'https://github.com/folke/lazy.nvim.git',
     lazypath,
   })
@@ -299,10 +296,12 @@ require('lazy').setup({
   },
   {
     'williamboman/mason-lspconfig.nvim',
+    dependencies = { 'williamboman/mason.nvim' },
     opts = {},
   },
   {
     'WhoIsSethDaniel/mason-tool-installer.nvim',
+    dependencies = { 'williamboman/mason.nvim' },
     cmd = {
       'MasonToolsInstall',
       'MasonToolsUpdate',
@@ -310,12 +309,7 @@ require('lazy').setup({
       'MasonToolsClean',
     },
     opts = {
-      ensure_installed = vim.list_extend(
-        {
-          'haskell-debug-adapter',
-        },
-        mason_packages
-      ),
+      ensure_installed = vim.list_extend({ 'haskell-debug-adapter' }, mason_packages),
       run_on_start = false,
     },
   },
@@ -335,7 +329,7 @@ require('lazy').setup({
     opts = {
       treesitter = {
         stopline = 500,
-      }
+      },
     },
   },
   { 'RRethy/vim-illuminate' },
@@ -343,7 +337,12 @@ require('lazy').setup({
   { 'windwp/nvim-ts-autotag', opts = {} },
   {
     'Wansmer/treesj',
-    keys = { '<space>m', '<space>j', '<space>s' },
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    keys = {
+      { '<space>m', '<cmd>TSJToggle<CR>', desc = 'Treesj toggle split/join' },
+      { '<space>j', '<cmd>TSJJoin<CR>',   desc = 'Treesj join' },
+      { '<space>s', '<cmd>TSJSplit<CR>',  desc = 'Treesj split' },
+    },
     opts = {},
   },
   {
@@ -390,17 +389,34 @@ require('lazy').setup({
     },
   },
   {
-    "ibhagwan/fzf-lua",
-    keys = { "<C-e>", "<C-p>" },
-    dependencies = { "nvim-tree/nvim-web-devicons" },
+    'ibhagwan/fzf-lua',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    keys = {
+      {
+        '<C-p>',
+        function()
+          require('fzf-lua').files()
+        end,
+        mode = 'n',
+        desc = 'FZF files',
+      },
+      {
+        '<C-e>',
+        function()
+          require('fzf-lua').live_grep_native()
+        end,
+        mode = 'n',
+        desc = 'FZF live grep',
+      },
+    },
     opts = function()
-      local fzf = require("fzf-lua")
+      local fzf = require('fzf-lua')
       local actions = fzf.actions
 
       local function enter_or_qf(selected, opts)
         if #selected > 1 then
           actions.file_sel_to_qf(selected, opts)
-          vim.cmd("copen")
+          vim.cmd('copen')
         else
           actions.file_edit(selected, opts)
         end
@@ -409,45 +425,48 @@ require('lazy').setup({
       return {
         keymap = {
           builtin = {
-            ["<Esc>"] = "hide",
+            ['<Esc>'] = 'hide',
           },
           fzf = {
-            ["ctrl-a"] = "toggle-all",
-            ["ctrl-q"] = "select-all+accept",
+            ['ctrl-a'] = 'toggle-all',
+            ['ctrl-q'] = 'select-all+accept',
           },
         },
 
         actions = {
           files = {
-            ["enter"] = enter_or_qf,
-            ["ctrl-s"] = actions.file_split,
-            ["ctrl-v"] = actions.file_vsplit,
-            ["ctrl-t"] = actions.file_tabedit,
+            ['enter'] = enter_or_qf,
+            ['ctrl-s'] = actions.file_split,
+            ['ctrl-v'] = actions.file_vsplit,
+            ['ctrl-t'] = actions.file_tabedit,
           },
         },
 
         fzf_opts = {
-          ["--layout"] = "reverse",
-          ["--height"] = "100%",
+          ['--layout'] = 'reverse',
+          ['--height'] = '100%',
         },
       }
-    end,
-    config = function(_, opts)
-      local fzf = require("fzf-lua")
-      fzf.setup(opts)
-
-      set_keys({
-        { "", "<C-p>", bind(fzf.files) },
-        { "", "<C-e>", bind(fzf.live_grep_native) },
-      })
     end,
   },
   {
     'nvim-tree/nvim-tree.lua',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     keys = {
-      '<C-n>',
-      '<C-f>',
+      {
+        '<C-n>',
+        function()
+          require('nvim-tree.api').tree.toggle()
+        end,
+        desc = 'Toggle file tree',
+      },
+      {
+        '<C-f>',
+        function()
+          require('nvim-tree.api').tree.find_file({ open = true, focus = true })
+        end,
+        desc = 'Locate file in tree',
+      },
     },
     opts = {
       git = {
@@ -476,25 +495,37 @@ require('lazy').setup({
         },
       },
     },
-    config = function(_, opts)
-      require('nvim-tree').setup(opts)
-      local nvim_tree_api = require('nvim-tree.api')
-
-      set_keys({
-        { 'n', '<esc>', nvim_tree_api.tree.close },
-        { 'n', '<C-n>', nvim_tree_api.tree.toggle },
-        { 'n', '<C-f>', bind(nvim_tree_api.tree.find_file, { open = true, focus = true }) }
-      })
-    end,
   },
   {
     'mfussenegger/nvim-dap',
-    keys = { "<F5>", "<F10>", "<F12>" },
     opts = {},
+    keys = {
+      {
+        '<F5>',
+        function()
+          require('dap').continue()
+        end,
+        desc = 'DAP continue',
+      },
+      {
+        '<F10>',
+        function()
+          require('dap').step_over()
+        end,
+        desc = 'DAP step over',
+      },
+      {
+        '<F12>',
+        function()
+          require('dap').step_out()
+        end,
+        desc = 'DAP step out',
+      },
+    },
   },
   {
     'tpope/vim-dadbod',
-    cmd = { "DB", "DBUI", "DBExecute" },
+    cmd = { 'DB', 'DBUI', 'DBExecute' },
   },
   {
     'NMAC427/guess-indent.nvim',
@@ -520,7 +551,7 @@ require('lazy').setup({
   {
     'michaelb/sniprun',
     build = 'bash install.sh',
-    cmd = { "SnipRun", "SnipInfo", "SnipReset" },
+    cmd = { 'SnipRun', 'SnipInfo', 'SnipReset' },
     opts = {
       live_mode_toggle = 'enable',
       repl_enable = { 'Clojure_fifo' },
@@ -575,14 +606,14 @@ require('lazy').setup({
         { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
       },
       enabled = function(root_dir)
-        return not vim.uv.fs_stat(root_dir .. "/.luarc.json")
+        return not vim.uv.fs_stat(root_dir .. '/.luarc.json')
       end,
     },
   },
   {
     'saghen/blink.cmp',
     version = '^1.7.0',
-    event = { "InsertEnter", "CmdlineEnter" },
+    event = { 'InsertEnter', 'CmdlineEnter' },
     dependencies = {
       'rafamadriz/friendly-snippets',
       'alexandre-abrioux/blink-cmp-npm.nvim',
@@ -615,7 +646,7 @@ require('lazy').setup({
         completion = { menu = { auto_show = true } },
       },
       sources = {
-        default = { 'lazydev', 'copilot', 'lsp',  'buffer', 'snippets', 'path' },
+        default = { 'lazydev', 'copilot', 'lsp', 'buffer', 'snippets', 'path' },
         per_filetype = {
           zsh = { inherit_defaults = true, 'zsh' },
           json = { inherit_defaults = true, 'npm' },
@@ -635,7 +666,7 @@ require('lazy').setup({
             async = true,
             opts = {
               only_latest_version = true,
-            }
+            },
           },
           lazydev = {
             name = 'LazyDev',
@@ -645,7 +676,7 @@ require('lazy').setup({
         },
       },
     },
-    opts_extend = { 'sources.default' }
+    opts_extend = { 'sources.default' },
   },
   {
     'CopilotC-Nvim/CopilotChat.nvim',
@@ -696,16 +727,16 @@ require('lazy').setup({
           }
 
           set_keys({
-            {'n', 'gD', vim.lsp.buf.declaration, lsp_key_opts},
-            {'n', 'gd', vim.lsp.buf.definition, lsp_key_opts},
-            {'n', 'gi', vim.lsp.buf.implementation, lsp_key_opts},
-            {'n', '<space>D', vim.lsp.buf.type_definition, lsp_key_opts},
-            {'n', '<C-k>', vim.lsp.buf.signature_help, lsp_key_opts},
-            {'n', 'gr', vim.lsp.buf.rename, lsp_key_opts},
-            {'n', 'ga', vim.lsp.buf.code_action, lsp_key_opts},
-            {'n', 'gR', vim.lsp.buf.references, lsp_key_opts},
-            {'n', 'gl', vim.lsp.codelens.run, lsp_key_opts},
-            {'n', 'gf', bind(vim.lsp.buf.format, { async = true }), lsp_key_opts},
+            { 'n', 'gD', vim.lsp.buf.declaration, lsp_key_opts },
+            { 'n', 'gd', vim.lsp.buf.definition, lsp_key_opts },
+            { 'n', 'gi', vim.lsp.buf.implementation, lsp_key_opts },
+            { 'n', '<space>D', vim.lsp.buf.type_definition, lsp_key_opts },
+            { 'n', '<C-k>', vim.lsp.buf.signature_help, lsp_key_opts },
+            { 'n', 'gr', vim.lsp.buf.rename, lsp_key_opts },
+            { 'n', 'ga', vim.lsp.buf.code_action, lsp_key_opts },
+            { 'n', 'gR', vim.lsp.buf.references, lsp_key_opts },
+            { 'n', 'gl', vim.lsp.codelens.run, lsp_key_opts },
+            { 'n', 'gf', bind(vim.lsp.buf.format, { async = true }), lsp_key_opts },
           })
         end,
       })
@@ -724,7 +755,7 @@ require('lazy').setup({
 
       vim.lsp.config('ansiblels', {
         root_dir = lspconfig.util.root_pattern('playbook.yml'),
-        single_file_support = true
+        single_file_support = true,
       })
 
       vim.lsp.config('jsonls', {
@@ -763,18 +794,16 @@ require('lazy').setup({
       })
 
       vim.lsp.config('yamlls', {
-        opts = function()
-          return {
-            yaml = {
-              schemaStore = {
-                enable = false,
-                url = '',
-              },
-              keyOrdering = false,
-              schemas = require('schemastore').yaml.schemas(),
+        settings = {
+          yaml = {
+            schemaStore = {
+              enable = false,
+              url = '',
             },
-          }
-        end,
+            keyOrdering = false,
+            schemas = require('schemastore').yaml.schemas(),
+          },
+        },
       })
 
       vim.lsp.config('html', {
@@ -817,7 +846,7 @@ require('lazy').setup({
       vim.lsp.config('svelte', {
         init_options = {
           configuration = jsLikeOptions,
-        }
+        },
       })
 
       vim.lsp.config('vtsls', {
@@ -834,11 +863,12 @@ require('lazy').setup({
         settings = jsLikeOptions,
       })
 
-      for _, lsp in ipairs(LSP_SERVERS) do
-        vim.lsp.enable(lsp)
+      for _, name in ipairs(LSP_SERVERS) do
+        vim.lsp.enable(name)
       end
     end,
   },
+
   {
     'linrongbin16/lsp-progress.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
@@ -857,7 +887,7 @@ require('lazy').setup({
       nvim_test.setup(opts)
 
       set_keys({
-        { '', '<C-t>', bind(nvim_test.run, 'nearest') },
+        { 'n', '<C-t>', bind(nvim_test.run, 'nearest') },
       })
     end,
   },
@@ -875,9 +905,10 @@ require('lazy').setup({
         vim = { 'vint' },
       }
 
-      local link_group = augroup('UserIndent', { clear = true })
-      vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
-        group = link_group,
+      local lint_group = augroup('UserLintOnSave', { clear = true })
+
+      vim.api.nvim_create_autocmd('BufWritePost', {
+        group = lint_group,
         callback = bind(lint.try_lint),
       })
     end,
@@ -888,7 +919,7 @@ require('lazy').setup({
   },
   {
     'scalameta/nvim-metals',
-    ft = { "scala", "sbt" },
+    ft = { 'scala', 'sbt' },
     dependencies = { 'nvim-lua/plenary.nvim' },
   },
   {
@@ -918,7 +949,7 @@ require('lazy').setup({
       vim.g.haskell_tools = {
         hls = {
           on_attach = function(_, bufnr, ht)
-            local opts = vim.tbl_extend('keep', { noremap = true, silent = true }, { buffer = bufnr, })
+            local opts = vim.tbl_extend('keep', { noremap = true, silent = true }, { buffer = bufnr })
             set_keys({
               { 'n', '<space>ca', vim.lsp.codelens.run, opts },
               { 'n', '<space>ea', ht.lsp.buf_eval_all, opts },
@@ -928,10 +959,7 @@ require('lazy').setup({
       }
     end,
   },
-  {
-    'TamaMcGlinn/nvim-lspconfig-ada',
-    ft = 'ada',
-  },
+  { 'TamaMcGlinn/nvim-lspconfig-ada', ft = 'ada' },
   {
     'apple/pkl-neovim',
     lazy = true,
@@ -943,10 +971,7 @@ require('lazy').setup({
       }
     end,
   },
-  {
-    'wavded/vim-stylus',
-    ft = 'stylus',
-  },
+  { 'wavded/vim-stylus', ft = 'stylus' },
   'konfekt/vim-office',
   'MTDL9/vim-log-highlighting',
   'jlcrochet/vim-razor',
@@ -997,8 +1022,7 @@ require('lazy').setup({
     opts = {},
     dependencies = { 'Mofiqul/dracula.nvim' },
   },
-},
-{
+}, {
   install = { colorscheme = { 'dracula' } },
 })
 
