@@ -54,8 +54,6 @@ set_keys({
 
 vim.api.nvim_create_user_command('Nt', function() vim.cmd.tabnew() end, {})
 
-vim.treesitter.language.register('bash', 'zsh')
-
 vim.filetype.add({
   extension = {
     jq = 'jq',
@@ -271,8 +269,6 @@ local LSP_SERVERS = {
   'yamlls',
   'zls',
 }
-
-vim.list_extend(LSP_SERVERS, mason_packages)
 
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.uv.fs_stat(lazypath) then
