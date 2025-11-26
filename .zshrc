@@ -77,7 +77,6 @@ export path=(
   "$HOME/.datomic-bin/bin"
   "$HOME/.verible"
   "$HOME/.usr/bin"
-  "$HOME/.modular/bin"
   "$HOME/.simh-tools"
   "$HOME/.dotnet/tools"
 )
@@ -232,12 +231,11 @@ function update() {
     gem cleanup
 
     print_section "updating elixir packages"
+    rebar3 update
     mix local.hex --force
-    mix local.rebar --force
     mix archive.install hex phx_new --force
     mix archive.install hex nerves_bootstrap --force
     mix escript.install hex livebook --force
-    mix escript.install hex credo --force
 
     print_section "update tex packages"
     tlmgr update --self --all --reinstall-forcibly-removed
@@ -247,8 +245,8 @@ function update() {
     cargo install-update --all
     cargo cache --autoclean
 
-    print_section "update pipx packages"
-    pipx upgrade-all
+    print_section "update uv packages"
+    uv tool upgrade --all
 
     print_section "upgrade dotnet tools"
     dotnet tool update --global --all
@@ -297,9 +295,6 @@ function update() {
 
     print_section "vscode extensions"
     code --update-extensions
-
-    print_section 'mojo language'
-    magic self-update
 
     print_section 'google cloud cli'
     gcloud components update
@@ -379,6 +374,12 @@ function update-pg-modeler() {
 
   make -j8
   make install
+}
+
+function update-repos() {
+  git for-each-repo --keep-going --config=maintenance.repo remote prune origin
+  git for-each-repo --keep-going --config=maintenance.repo pull
+  git for-each-repo --keep-going --config=maintenance.repo gc --aggressive --prune=now --force
 }
 
 eval "$(rbenv init --no-rehash - zsh)"

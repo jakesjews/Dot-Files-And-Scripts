@@ -16,7 +16,7 @@ assign(vim.g, {
   loaded_netrw = 1,
   loaded_netrwPlugin = 1,
   skip_ts_context_commentstring_module = true,
-  python3_host_prog = '/opt/homebrew/bin/python3.13',
+  python3_host_prog = '/opt/homebrew/bin/python3.14',
 })
 
 assign(vim.opt, {
@@ -116,6 +116,7 @@ create_autocmd('FileType', {
       return
     end
 
+
     vim.treesitter.start()
     vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
     vim.bo.indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
@@ -182,7 +183,6 @@ local jsLikeOptions = {
 }
 
 local mason_packages = {
-  'fennel_language_server',
   'julials',
   'matlab_ls',
   'nim_langserver',
@@ -222,6 +222,7 @@ local LSP_SERVERS = {
   'erg_language_server',
   'erlangls',
   'eslint',
+  'fennel_ls',
   'fortls',
   'futhark_lsp',
   'gdscript',
@@ -272,7 +273,6 @@ local LSP_SERVERS = {
   'vtsls',
   'vue_ls',
   'yamlls',
-  'yls',
   'zls',
 }
 
