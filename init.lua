@@ -6,11 +6,6 @@ local function assign(root, opts)
   end
 end
 
-local function bind(func, ...)
-  local args = { ... }
-  return function() return func(unpack(args)) end
-  end
-
 assign(vim.g, {
   loaded_matchit = 1, -- matchup compatibility
   loaded_netrw = 1,
@@ -57,7 +52,7 @@ set_keys({
   { 'n', ']', vim.cmd.tabnext, { silent = true } },
 })
 
-vim.api.nvim_create_user_command('Nt', bind(vim.cmd.tabnew), {})
+vim.api.nvim_create_user_command('Nt', function() vim.cmd.tabnew() end, {})
 
 vim.treesitter.language.register('bash', 'zsh')
 
@@ -134,25 +129,29 @@ local yank_highlight_id = augroup('UserHighlightYank', { clear = true })
 
 create_autocmd('TextYankPost', {
   group = yank_highlight_id,
-  callback = bind(vim.highlight.on_yank, {
-    higroup = 'IncSearch',
-    timeout = 150,
-    on_visual = true,
-  }),
+  callback = function()
+    vim.highlight.on_yank({
+      higroup = 'IncSearch',
+      timeout = 150,
+      on_visual = true,
+    })
+  end,
 })
 
 local cursor_hold_id = augroup('UserCursorHoldDiagnostics', { clear = true })
 
 create_autocmd('CursorHold', {
   group = cursor_hold_id,
-  callback = bind(vim.diagnostic.open_float, nil, {
-    focusable = false,
-    close_events = { 'BufLeave', 'CursorMoved', 'InsertEnter', 'FocusLost' },
-    border = 'rounded',
-    source = 'always',
-    prefix = ' ',
-    scope = 'cursor',
-  }),
+  callback = function()
+    vim.diagnostic.open_float(nil, {
+      focusable = false,
+      close_events = { 'BufLeave', 'CursorMoved', 'InsertEnter', 'FocusLost' },
+      border = 'rounded',
+      source = 'always',
+      prefix = ' ',
+      scope = 'cursor',
+    })
+  end,
 })
 
 local jsOptions = {
@@ -736,7 +735,7 @@ require('lazy').setup({
             { 'n', 'ga', vim.lsp.buf.code_action, lsp_key_opts },
             { 'n', 'gR', vim.lsp.buf.references, lsp_key_opts },
             { 'n', 'gl', vim.lsp.codelens.run, lsp_key_opts },
-            { 'n', 'gf', bind(vim.lsp.buf.format, { async = true }), lsp_key_opts },
+            { 'n', 'gf', function() vim.lsp.buf.format({ async = true }) end, lsp_key_opts },
           })
         end,
       })
@@ -875,23 +874,6 @@ require('lazy').setup({
     opts = {},
   },
   {
-    'klen/nvim-test',
-    keys = '<C-t>',
-    opts = {
-      runners = {
-        javascript = 'nvim-test.runners.mocha',
-      },
-    },
-    config = function(_, opts)
-      local nvim_test = require('nvim-test')
-      nvim_test.setup(opts)
-
-      set_keys({
-        { 'n', '<C-t>', bind(nvim_test.run, 'nearest') },
-      })
-    end,
-  },
-  {
     'mfussenegger/nvim-lint',
     config = function()
       local lint = require('lint')
@@ -909,7 +891,7 @@ require('lazy').setup({
 
       vim.api.nvim_create_autocmd('BufWritePost', {
         group = lint_group,
-        callback = bind(lint.try_lint),
+        callback = function() lint.try_lint() end,
       })
     end,
   },
