@@ -335,9 +335,9 @@ require('lazy').setup({
     'Wansmer/treesj',
     dependencies = { 'nvim-treesitter/nvim-treesitter' },
     keys = {
-      { '<space>m', '<cmd>TSJToggle<CR>', desc = 'Treesj toggle split/join' },
-      { '<space>j', '<cmd>TSJJoin<CR>',   desc = 'Treesj join' },
-      { '<space>s', '<cmd>TSJSplit<CR>',  desc = 'Treesj split' },
+      { '<space>m', '<cmd>TSJToggle<CR>' },
+      { '<space>j', '<cmd>TSJJoin<CR>' },
+      { '<space>s', '<cmd>TSJSplit<CR>' },
     },
     opts = {},
   },
@@ -388,22 +388,8 @@ require('lazy').setup({
     'ibhagwan/fzf-lua',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     keys = {
-      {
-        '<C-p>',
-        function()
-          require('fzf-lua').files()
-        end,
-        mode = 'n',
-        desc = 'FZF files',
-      },
-      {
-        '<C-e>',
-        function()
-          require('fzf-lua').live_grep_native()
-        end,
-        mode = 'n',
-        desc = 'FZF live grep',
-      },
+      { '<C-p>', function() require('fzf-lua').files() end },
+      { '<C-e>', function() require('fzf-lua').live_grep_native() end },
     },
     opts = function()
       local fzf = require('fzf-lua')
@@ -449,20 +435,8 @@ require('lazy').setup({
     'nvim-tree/nvim-tree.lua',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     keys = {
-      {
-        '<C-n>',
-        function()
-          require('nvim-tree.api').tree.toggle()
-        end,
-        desc = 'Toggle file tree',
-      },
-      {
-        '<C-f>',
-        function()
-          require('nvim-tree.api').tree.find_file({ open = true, focus = true })
-        end,
-        desc = 'Locate file in tree',
-      },
+      { '<C-n>', function() require('nvim-tree.api').tree.toggle() end },
+      { '<C-f>', function() require('nvim-tree.api').tree.find_file({ open = true, focus = true }) end },
     },
     opts = {
       git = {
@@ -495,27 +469,9 @@ require('lazy').setup({
   {
     'mfussenegger/nvim-dap',
     keys = {
-      {
-        '<F5>',
-        function()
-          require('dap').continue()
-        end,
-        desc = 'DAP continue',
-      },
-      {
-        '<F10>',
-        function()
-          require('dap').step_over()
-        end,
-        desc = 'DAP step over',
-      },
-      {
-        '<F12>',
-        function()
-          require('dap').step_out()
-        end,
-        desc = 'DAP step out',
-      },
+      { '<F5>', function() require('dap').continue() end },
+      { '<F10>', function() require('dap').step_over() end },
+      { '<F12>', function() require('dap').step_out() end },
     },
   },
   {
@@ -733,6 +689,14 @@ require('lazy').setup({
             { 'n', 'gf', function() vim.lsp.buf.format({ async = true }) end, lsp_key_opts },
           })
         end,
+      })
+
+      vim.lsp.config('lua_ls', {
+        settings = {
+          Lua = {
+            hint = { enable = false },
+          },
+        },
       })
 
       vim.lsp.config('verible', {
