@@ -671,7 +671,6 @@ require('lazy').setup({
         },
       },
     },
-    opts_extend = { 'sources.default' },
   },
   {
     'CopilotC-Nvim/CopilotChat.nvim',
