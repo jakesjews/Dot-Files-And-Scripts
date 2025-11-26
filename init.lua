@@ -927,19 +927,7 @@ require('lazy').setup({
   {
     'mrcjkb/haskell-tools.nvim',
     version = '*',
-    init = function()
-      vim.g.haskell_tools = {
-        hls = {
-          on_attach = function(_, bufnr, ht)
-            local opts = vim.tbl_extend('keep', { noremap = true, silent = true }, { buffer = bufnr })
-            set_keys({
-              { 'n', '<space>ca', vim.lsp.codelens.run, opts },
-              { 'n', '<space>ea', ht.lsp.buf_eval_all, opts },
-            })
-          end,
-        },
-      }
-    end,
+    ft = { 'cabal', 'cabalproject', 'lhaskell', 'haskell' },
   },
   { 'TamaMcGlinn/nvim-lspconfig-ada', ft = 'ada' },
   {
