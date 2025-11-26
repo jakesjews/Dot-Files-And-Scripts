@@ -253,6 +253,7 @@ local LSP_SERVERS = {
   'stylelint_lsp',
   'svelte',
   'tailwindcss',
+  'tclsp',
   'terraformls',
   'texlab',
   'turtle_ls',
@@ -493,7 +494,6 @@ require('lazy').setup({
   },
   {
     'mfussenegger/nvim-dap',
-    opts = {},
     keys = {
       {
         '<F5>',
