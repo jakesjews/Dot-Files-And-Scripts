@@ -16,7 +16,7 @@ copy-on-select = clipboard
 
 confirm-close-surface = false
 
-shell-integration-features = no-cursor,sudo,ssh-terminfo
+shell-integration-features = no-cursor,sudo,ssh-env
 
 keybind = global:cmd+grave_accent=toggle_quick_terminal
 
