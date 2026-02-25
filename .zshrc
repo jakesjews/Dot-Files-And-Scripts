@@ -51,6 +51,7 @@ export VOLTA_HOME="$HOME/.volta"
 export AIDER_DARK_MODE=true
 export PGRX_HOME="$HOME/.pgrx"
 export POSTGRES_VERSION=18
+export ARDUINO_CONFIG_FILE="$HOME/.arduinoIDE/arduino-cli.yaml"
 
 typeset -U path
 
@@ -178,19 +179,19 @@ function alphabetize_files() {
 }
 
 function quartus_mister() {
-  docker run --platform linux/amd64 --rm -v "$(pwd):/build" -e DISPLAY=host.docker.internal:0 -v /tmp/.X11-unix:/tmp/.X11-unix jakesjews/quartus-mac-arm quartus
+  docker run --platform linux/amd64 -it --rm -v "$(pwd):/build" raetro/quartus:mister quartus_sh "$@"
 }
 
 function quartus_mister_compile() {
-  docker run --platform linux/amd64 -it --rm -v "$(pwd):/build" jakesjews/quartus-mac-arm quartus_sh --flow compile "$1"
+  quartus_mister --flow compile "$1"
 }
 
 function quartus_pocket() {
-  docker run --platform linux/amd64 --rm -v "$(pwd):/build" -e DISPLAY=host.docker.internal:0 -v /tmp/.X11-unix:/tmp/.X11-unix didiermalenfant/quartus:22.1-apple-silicon quartus
+  docker run --platform linux/amd64 -it --rm -v "$(pwd):/build" raetro/quartus:pocket quartus_sh "$@"
 }
 
 function quartus_pocket_compile() {
-  docker run --platform linux/amd64 -it --rm -v "$(pwd):/build" didiermalenfant/quartus:22.1-apple-silicon quartus_sh --flow compile "$1"
+  quartus_pocket --flow compile "$1"
 }
 
 function reverse_bitstream() {
@@ -247,6 +248,7 @@ function update() {
 
     print_section "update uv packages"
     uv tool upgrade --all
+    uv cache clean
 
     print_section "upgrade dotnet tools"
     dotnet tool update --global --all
@@ -273,9 +275,6 @@ function update() {
 
     print_section "update vagrant plugins"
     VAGRANT_DISABLE_STRICT_DEPENDENCY_ENFORCEMENT=1 vagrant plugin update
-
-    print_section "update gh-copilot"
-    gh extension upgrade gh-copilot
 
     print_section "update zsh plugins"
     "$ZSH/tools/upgrade.sh"
@@ -388,7 +387,7 @@ source "$HOMEBREW_PREFIX/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zs
 source "$HOMEBREW_PREFIX/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 source "$HOME/.config/op/plugins.sh"
 eval "$(zoxide init --cmd j zsh)"
-eval "$(gh copilot alias -- zsh)"
+eval "$(codex completion zsh)"
 
 # https://github.com/zdharma-continuum/fast-syntax-highlighting/issues/27
 FAST_HIGHLIGHT[chroma-man]=

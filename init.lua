@@ -261,7 +261,7 @@ local LSP_SERVERS = {
   'v_analyzer',
   'vacuum',
   'vala_ls',
-  'verible',
+  'veridian',
   'veryl_ls',
   'vimls',
   'vls',
@@ -372,17 +372,15 @@ require('lazy').setup({
     'kylechui/nvim-surround',
     version = '*',
     event = 'VeryLazy',
-    opts = {
-      keymaps = {
-        normal = 'sa',
-        visual = 'sa',
-        delete = 'sd',
-        change = 'sc',
-      },
-      aliases = {
-        ['s'] = { '}', ']', ')', '>', '"', "'", '`' },
-      },
-    },
+    config = function(_, opts)
+      vim.g.nvim_surround_no_normal_mappings = true
+      require('nvim-surround').setup(opts)
+      set_keys({
+        { 'n', 'sa', '<Plug>(nvim-surround-normal)' },
+        { 'n', 'sd', '<Plug>(nvim-surround-delete)' },
+        { 'n', 'sc', '<Plug>(nvim-surround-change)' },
+      })
+    end,
   },
   {
     'ibhagwan/fzf-lua',
@@ -699,10 +697,6 @@ require('lazy').setup({
         },
       })
 
-      vim.lsp.config('verible', {
-        cmd = { 'verible-verilog-ls', '--rules_config_search' },
-      })
-
       vim.lsp.config('eslint', {
         settings = {
           useESLintClass = true,
@@ -807,6 +801,10 @@ require('lazy').setup({
         },
       })
 
+      vim.lsp.config('veridian', {
+        root_markers = { '.git', 'veridian.yml' },
+      })
+
       vim.lsp.config('vtsls', {
         filetypes = {
           'javascript',
@@ -867,7 +865,7 @@ require('lazy').setup({
     'mrcjkb/rustaceanvim',
     version = '*',
     ft = 'rust',
-    opts = {},
+    lazy = false,
   },
   {
     'mfussenegger/nvim-jdtls',
