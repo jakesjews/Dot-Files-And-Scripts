@@ -181,7 +181,6 @@ local mason_packages = {
   'matlab_ls',
   'nim_langserver',
   'ocamllsp',
-  'omnisharp',
   'perlnavigator',
   'phpactor',
   'r_language_server',
