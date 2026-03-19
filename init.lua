@@ -214,7 +214,7 @@ local LSP_SERVERS = {
   'elmls',
   'ember',
   'erg_language_server',
-  'erlangls',
+  'elp',
   'eslint',
   'fennel_ls',
   'fortls',
@@ -252,6 +252,7 @@ local LSP_SERVERS = {
   'sourcekit',
   'stylelint_lsp',
   'svelte',
+  'systemd_lsp',
   'tailwindcss',
   'tclsp',
   'terraformls',
@@ -507,8 +508,13 @@ require('lazy').setup({
     },
   },
   {
-    'NvChad/nvim-colorizer.lua',
-    opts = {},
+    "catgoose/nvim-colorizer.lua",
+    event = "BufReadPre",
+    opts = {
+      user_default_options = {
+        suppress_deprecation = true,
+      },
+    },
   },
   {
     'andrewferrier/debugprint.nvim',
@@ -705,11 +711,6 @@ require('lazy').setup({
 
       local lspconfig = require('lspconfig')
 
-      vim.lsp.config('ansiblels', {
-        root_dir = lspconfig.util.root_pattern('playbook.yml'),
-        single_file_support = true,
-      })
-
       vim.lsp.config('jsonls', {
         settings = {
           json = {
@@ -717,13 +718,6 @@ require('lazy').setup({
             validate = { enable = true },
           },
         },
-      })
-
-      vim.lsp.config('ember', {
-        init_options = {
-          editor = 'vscode',
-        },
-        root_dir = lspconfig.util.root_pattern('ember-cli-build.js', 'ember-cli-build.mjs'),
       })
 
       vim.lsp.config('arduino_language_server', {
@@ -872,8 +866,8 @@ require('lazy').setup({
     ft = 'java',
     config = function()
       require('jdtls').start_or_attach({
-        cmd = { '/opt/homebrew/opt/jdtls/bin/jdtls' },
-        root_dir = vim.fs.dirname(vim.fs.find({ '.gradlew', '.git', 'mvnw' }, { upward = true })[1]),
+        cmd = { 'jdtls' },
+        root_dir = vim.fs.root(0, { 'gradlew', '.git', 'mvnw' }),
       })
     end,
   },
