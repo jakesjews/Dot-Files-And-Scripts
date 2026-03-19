@@ -235,6 +235,7 @@ local LSP_SERVERS = {
   'nomad_lsp',
   'nushell',
   'openscad_lsp',
+  'pony_lsp',
   'postgres_lsp',
   'powershell_es',
   'prismals',
@@ -904,6 +905,7 @@ require('lazy').setup({
   'stevearc/vim-arduino',
   'q60/vim-brainfuck',
   'modularml/mojo.vim',
+  'seblyng/roslyn.nvim',
   {
     'ShinKage/idris2-nvim',
     ft = { 'idris2', 'ipkg', 'lidris2' },
