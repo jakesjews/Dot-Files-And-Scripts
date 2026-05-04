@@ -64,10 +64,7 @@ vim.filetype.add({
   },
 })
 
-vim.diagnostic.config({
-  virtual_lines = { current_line = true },
-})
-vim.lsp.set_log_level('error')
+vim.lsp.log.set_level('error')
 vim.lsp.inlay_hint.enable()
 -- vim.lsp.set_log_level('debug')
 -- require('vim.lsp.log').set_format_func(vim.inspect)
@@ -105,7 +102,8 @@ end
 
 create_autocmd('FileType', {
   callback = function()
-    if not vim.treesitter.get_parser(nil, nil, { error = false }) then
+    local parser = vim.treesitter.get_parser(0)
+    if not parser then
       return
     end
 
@@ -128,7 +126,7 @@ local yank_highlight_id = augroup('UserHighlightYank', { clear = true })
 create_autocmd('TextYankPost', {
   group = yank_highlight_id,
   callback = function()
-    vim.highlight.on_yank({
+    vim.hl.on_yank({
       higroup = 'IncSearch',
       timeout = 150,
       on_visual = true,
@@ -330,7 +328,12 @@ require('lazy').setup({
     },
   },
   { 'RRethy/vim-illuminate' },
-  { 'nvim-treesitter/nvim-treesitter-context' },
+  {
+    'nvim-treesitter/nvim-treesitter-context',
+    opts = {
+      max_lines = 2,
+    },
+  },
   { 'windwp/nvim-ts-autotag', opts = {} },
   {
     'Wansmer/treesj',
@@ -413,7 +416,6 @@ require('lazy').setup({
             ['ctrl-q'] = 'select-all+accept',
           },
         },
-
         actions = {
           files = {
             ['enter'] = enter_or_qf,
@@ -422,7 +424,6 @@ require('lazy').setup({
             ['ctrl-t'] = actions.file_tabedit,
           },
         },
-
         fzf_opts = {
           ['--layout'] = 'reverse',
           ['--height'] = '100%',
@@ -673,11 +674,11 @@ require('lazy').setup({
     },
     config = function()
       vim.lsp.config('*', {
-        on_attach = function(_, bufferNum)
+        on_attach = function(_, bufnr)
           local lsp_key_opts = {
             noremap = true,
             silent = true,
-            buffer = bufferNum,
+            buf = bufnr,
           }
 
           set_keys({
@@ -708,8 +709,6 @@ require('lazy').setup({
           useESLintClass = true,
         },
       })
-
-      local lspconfig = require('lspconfig')
 
       vim.lsp.config('jsonls', {
         settings = {
@@ -785,9 +784,6 @@ require('lazy').setup({
           gofumpt = true,
         },
       })
-
-      require('lspconfig.configs').vtsls = require('vtsls').lspconfig
-      require('lspconfig.configs').svelte = require('vtsls').lspconfig
 
       vim.lsp.config('svelte', {
         init_options = {

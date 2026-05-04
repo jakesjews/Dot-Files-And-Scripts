@@ -53,8 +53,8 @@ export PGRX_HOME="$HOME/.pgrx"
 export POSTGRES_VERSION=18
 export ARDUINO_CONFIG_FILE="$HOME/.arduinoIDE/arduino-cli.yaml"
 export CLOUDSDK_PYTHON="$HOMEBREW_PREFIX/opt/python@3.14/libexec/bin/python"
-export OLLAMA_MODELS="/Volumes/External/models/ollama/"
-export LLAMA_CACHE="/Volumes/External/models/llamacpp/"
+#export OLLAMA_MODELS="/Volumes/External/models/ollama/"
+#export LLAMA_CACHE="/Volumes/External/models/llamacpp/"
 
 typeset -U path
 
@@ -85,6 +85,8 @@ export path=(
   "$HOME/.usr/bin"
   "$HOME/.simh-tools"
   "$HOME/.dotnet/tools"
+  "$HOME/.antigravity/antigravity/bin"
+  "$HOME/.coast/bin"
 )
 
 export fpath=(
@@ -93,7 +95,6 @@ export fpath=(
 )
 
 plugins=(
-  1password
   colored-man-pages
   copyfile
   cpanm
@@ -152,7 +153,6 @@ alias smithery="npx @smithery/cli"
 alias mux=tmuxinator
 alias increase-vram="sudo sysctl iogpu.wired_limit_mb=88000"
 alias gpt-oss='llama-server -hf ggml-org/gpt-oss-120b-GGUF -c 0 --jinja'
-alias qwen='llama-server -hf unsloth/Qwen3.5-122B-A10B-GGUF:Q4_K_M -c 0 --jinja'
 
 function count-instances() {
   rg "$1" --count | sort --key=2 --field-separator=":" --numeric-sort
@@ -256,7 +256,7 @@ function update() {
 
     print_section "update uv packages"
     uv tool upgrade --all
-    uv cache clean
+    uv cache clean --force
 
     print_section "upgrade dotnet tools"
     dotnet tool update --global --all
@@ -305,6 +305,9 @@ function update() {
 
     print_section 'google cloud cli'
     gcloud components update
+
+    print_section "update coast"
+    coast update apply
 
     print_section "upgrade cask packages"
     brew cu --all --yes --quiet --no-brew-update
@@ -393,19 +396,9 @@ eval "$(rbenv init --no-rehash - zsh)"
 source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 source "$HOMEBREW_PREFIX/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
 source "$HOMEBREW_PREFIX/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
-source "$HOME/.config/op/plugins.sh"
 eval "$(zoxide init --cmd j zsh)"
 eval "$(codex completion zsh)"
 
 # https://github.com/zdharma-continuum/fast-syntax-highlighting/issues/27
 FAST_HIGHLIGHT[chroma-man]=
 
-
-# --WCGW_ENVIRONMENT_START--
-if [ -n "$IN_WCGW_ENVIRONMENT" ]; then
- PROMPT_COMMAND='printf "◉ $(pwd)──➤ \r\e[2K"'
- prmptcmdwcgw() { eval "$PROMPT_COMMAND" }
- add-zsh-hook -d precmd prmptcmdwcgw
- precmd_functions+=prmptcmdwcgw
-fi
-# --WCGW_ENVIRONMENT_END--
