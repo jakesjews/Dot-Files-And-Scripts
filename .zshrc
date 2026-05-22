@@ -64,6 +64,7 @@ export path=(
   "$HOMEBREW_PREFIX/opt/imagemagick-full/bin"
   "$HOMEBREW_PREFIX/opt/ffmpeg-full/bin"
   $path
+  "$HOMEBREW_PREFIX/opt/rustup/bin"
   "$HOME/.cargo/bin"
   "$HOME/.tmux/plugins/tpm"
   "$HOME/.pub-cache/bin" #dart
@@ -116,7 +117,7 @@ plugins=(
   terraform
 )
 
-autoload zmv
+autoload -Uz zmv
 
 setopt listambiguous
 setopt extendedglob numericglobsort no_nomatch
@@ -269,8 +270,7 @@ function update() {
 
     print_section "update nim packages"
     nimble refresh --accept
-    nimble list --installed --silent | while read -r line; do
-      nim_pkg_name="${line%% *}"
+    nimble list --installed --silent | grep -E '^[a-zA-Z][a-zA-Z0-9_-]*$' | while read -r nim_pkg_name; do
       if [[ -n "$nim_pkg_name" ]]; then
         nimble install --accept "$nim_pkg_name"
       fi
@@ -308,6 +308,9 @@ function update() {
 
     print_section "update coast"
     coast update apply
+
+    print_section "update pnpm"
+    corepack install -g pnpm
 
     print_section "upgrade cask packages"
     brew cu --all --yes --quiet --no-brew-update
@@ -401,4 +404,3 @@ eval "$(codex completion zsh)"
 
 # https://github.com/zdharma-continuum/fast-syntax-highlighting/issues/27
 FAST_HIGHLIGHT[chroma-man]=
-

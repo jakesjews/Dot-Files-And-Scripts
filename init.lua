@@ -62,7 +62,11 @@ vim.filetype.add({
     rei = 'reason',
     merlin = 'merlin',
   },
+  filename = {
+    ["docker-compose.yml"] = "yaml.docker-compose",
+  },
 })
+
 
 vim.lsp.log.set_level('error')
 vim.lsp.inlay_hint.enable()
@@ -204,8 +208,7 @@ local LSP_SERVERS = {
   'cssmodules_ls',
   'cypher_ls',
   'dartls',
-  'docker_compose_language_service',
-  'dockerls',
+  'docker_language_server',
   'dotls',
   'elixirls',
   'elmls',
