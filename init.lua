@@ -112,9 +112,6 @@ create_autocmd('FileType', {
     end
 
     vim.treesitter.start()
-    vim.wo.foldmethod = 'expr'
-    vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-    vim.bo.indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
   end,
 })
 
@@ -153,30 +150,6 @@ create_autocmd('CursorHold', {
     })
   end,
 })
-
-local jsOptions = {
-  preferGoToSourceDefinition = true,
-  -- inlayHints = {
-  --   parameterNames = { enabled = 'literals' },
-  --   parameterTypes = { enabled = true },
-  --   variableTypes = { enabled = true },
-  --   propertyDeclarationTypes = { enabled = true },
-  --   functionLikeReturnTypes = { enabled = true },
-  --   enumMemberValues = { enabled = true },
-  -- },
-  suggest = {
-    completeFunctionCalls = true,
-  },
-  preferences = {
-    importModuleSpecifier = 'non-relative',
-  },
-  diagnostics = { enable = true },
-}
-
-local jsLikeOptions = {
-  typescript = jsOptions,
-  javascript = jsOptions,
-}
 
 local mason_packages = {
   'julials',
@@ -258,6 +231,7 @@ local LSP_SERVERS = {
   'tclsp',
   'terraformls',
   'texlab',
+  'tsgo',
   'turtle_ls',
   'uiua',
   'v_analyzer',
@@ -267,7 +241,6 @@ local LSP_SERVERS = {
   'veryl_ls',
   'vimls',
   'vls',
-  'vtsls',
   'vue_ls',
   'yamlls',
   'zls',
@@ -669,7 +642,6 @@ require('lazy').setup({
   {
     'neovim/nvim-lspconfig',
     dependencies = {
-      'yioneko/nvim-vtsls',
       {
         'b0o/schemastore.nvim',
         lazy = true,
@@ -788,28 +760,28 @@ require('lazy').setup({
         },
       })
 
-      vim.lsp.config('svelte', {
-        init_options = {
-          configuration = jsLikeOptions,
-        },
-      })
-
       vim.lsp.config('veridian', {
         root_markers = { '.git', 'veridian.yml' },
       })
 
-      vim.lsp.config('vtsls', {
-        filetypes = {
-          'javascript',
-          'javascriptreact',
-          'javascript.jsx',
-          'typescript',
-          'typescriptreact',
-          'typescript.tsx',
-          'glimmer',
-          'javascript.glimmer',
+      local jsOptions = {
+        preferGoToSourceDefinition = true,
+        inlayHints = false,
+        -- inlayHints = {
+        --   parameterNames = { enabled = 'literals' },
+        --   parameterTypes = { enabled = true },
+        --   variableTypes = { enabled = true },
+        --   propertyDeclarationTypes = { enabled = true },
+        --   functionLikeReturnTypes = { enabled = true },
+        --   enumMemberValues = { enabled = true },
+        -- },
+      }
+
+      vim.lsp.config('tsgo', {
+        settings = {
+          typescript = jsOptions,
+          javascript = jsOptions,
         },
-        settings = jsLikeOptions,
       })
 
       for _, name in ipairs(LSP_SERVERS) do
@@ -846,8 +818,12 @@ require('lazy').setup({
     end,
   },
   {
-    'dmmulroy/ts-error-translator.nvim',
-    opts = {},
+    'youyoumu/pretty-ts-errors.nvim',
+    opts = {
+      float_opts = {
+        max_width = 120,
+      },
+    },
   },
   {
     'scalameta/nvim-metals',

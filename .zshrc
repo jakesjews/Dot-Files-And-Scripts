@@ -37,6 +37,7 @@ export HOMEBREW_NO_INSTALL_CLEANUP=1
 export HOMEBREW_NO_INSTALL_FROM_API=1
 export HOMEBREW_PRY=1
 export HOMEBREW_UPGRADE_GREEDY=1
+# export HOMEBREW_REQUIRE_TAP_TRUST=1
 export DOTNET_ROLL_FORWARD=Major
 export VAGRANT_DEFAULT_PROVIDER="parallels"
 export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
@@ -87,7 +88,6 @@ export path=(
   "$HOME/.simh-tools"
   "$HOME/.dotnet/tools"
   "$HOME/.antigravity/antigravity/bin"
-  "$HOME/.coast/bin"
 )
 
 export fpath=(
@@ -306,14 +306,11 @@ function update() {
     print_section 'google cloud cli'
     gcloud components update
 
-    print_section "update coast"
-    coast update apply
+    print_section "update skills"
+    skills update -g
 
     print_section "update pnpm"
     corepack install -g pnpm
-
-    print_section "upgrade cask packages"
-    brew cu --all --yes --quiet --no-brew-update
 
     print_section "cleanup homebrew"
     brew autoremove
