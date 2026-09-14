@@ -149,13 +149,7 @@ alias jenv-start='eval "$(jenv init -)"'
 alias readme='glow README.md -p'
 alias smithery="npx @smithery/cli"
 alias increase-vram="sudo sysctl iogpu.wired_limit_mb=88000"
-alias gpt-oss='llama-server -hf ggml-org/gpt-oss-120b-GGUF -c 0 --jinja'
-
-function mux() {
-  local c=$1
-  shift
-  command tmuxinator "$c" --suppress-tmux-version-warning=1 "$@"
-}
+alias mux=tmuxinator
 
 function count-instances() {
   rg "$1" --count | sort --key=2 --field-separator=":" --numeric-sort
