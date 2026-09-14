@@ -4,7 +4,6 @@ ulimit -n 10240 unlimited
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-export ZSH_COMPDUMP="$HOME/.zcompdump-jacob"
 export ZSH="$HOME/.oh-my-zsh"
 
 export PLAN9=/opt/plan9
@@ -34,10 +33,7 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_UPDATE_REPORT_ALL_FORMULAE=1
 export HOMEBREW_BAT=1
 export HOMEBREW_NO_INSTALL_CLEANUP=1
-export HOMEBREW_NO_INSTALL_FROM_API=1
-export HOMEBREW_PRY=1
 export HOMEBREW_UPGRADE_GREEDY=1
-# export HOMEBREW_REQUIRE_TAP_TRUST=1
 export DOTNET_ROLL_FORWARD=Major
 export VAGRANT_DEFAULT_PROVIDER="parallels"
 export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
@@ -88,6 +84,8 @@ export path=(
   "$HOME/.simh-tools"
   "$HOME/.dotnet/tools"
   "$HOME/.antigravity/antigravity/bin"
+  "/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/Helpers"
+  "/Applications/Wolfram.app/Contents/MacOS"
 )
 
 export fpath=(
@@ -107,7 +105,6 @@ plugins=(
   ipfs
   jira
   jsontools
-  kitty
   ng
   npm
   pnpm-shell-completion
@@ -127,7 +124,7 @@ source "$ZSH/oh-my-zsh.sh"
 
 setopt hist_ignore_all_dups hist_reduce_blanks hist_verify
 setopt auto_pushd pushd_silent pushd_ignore_dups
-setopt no_clobber no_beep    
+setopt no_beep    
 
 alias stree="$HOMEBREW_PREFIX/bin/stree"
 alias arc="$HOME/.arc/arc.sh"
@@ -151,19 +148,25 @@ alias UVtoolsCmd=/Applications/UVtools.app/Contents/MacOS/UVtoolsCmd
 alias jenv-start='eval "$(jenv init -)"'
 alias readme='glow README.md -p'
 alias smithery="npx @smithery/cli"
-alias mux=tmuxinator
 alias increase-vram="sudo sysctl iogpu.wired_limit_mb=88000"
 alias gpt-oss='llama-server -hf ggml-org/gpt-oss-120b-GGUF -c 0 --jinja'
+
+function mux() {
+  local c=$1
+  shift
+  command tmuxinator "$c" --suppress-tmux-version-warning=1 "$@"
+}
 
 function count-instances() {
   rg "$1" --count | sort --key=2 --field-separator=":" --numeric-sort
 }
 
-function flac-to-mp3() {
-  for a in ./*.flac; do
-    < /dev/null ffmpeg -i "$a" -qscale:a 0 "${a%.flac}.mp3"
-  done;
-  rm ./*.flac
+function flac-to-alac() {
+  setopt local_options null_glob
+  parallel --bar '
+    ffmpeg -nostdin -i {} -map 0 -c:a alac -c:v copy -map_metadata 0 {.}.m4a \
+      && rm -- {} || echo "failed: {} (kept)"
+  ' ::: ./*.flac
 }
 
 function pwdx {
@@ -188,19 +191,19 @@ function alphabetize_files() {
 }
 
 function quartus_mister() {
-  docker run --platform linux/amd64 -it --rm -v "$(pwd):/build" raetro/quartus:mister quartus_sh "$@"
-}
-
-function quartus_mister_compile() {
-  quartus_mister --flow compile "$1"
+  CX_BOTTLE=Quartus \
+  "/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/bin/wine" \
+    --bottle Quartus \
+    "C:\intelFPGA_lite\17.0\quartus\bin64\quartus_sh.exe" \
+    --flow compile "$@"
 }
 
 function quartus_pocket() {
-  docker run --platform linux/amd64 -it --rm -v "$(pwd):/build" raetro/quartus:pocket quartus_sh "$@"
-}
-
-function quartus_pocket_compile() {
-  quartus_pocket --flow compile "$1"
+  CX_BOTTLE=Quartus \
+  "/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/bin/wine" \
+    --bottle Quartus \
+    "C:\intelFPGA_lite\18.1\quartus\bin64\quartus_sh.exe" \
+    --flow compile "$@"
 }
 
 function reverse_bitstream() {
@@ -227,7 +230,7 @@ function update() {
 
     print_section "updating homebrew packages"
     brew update
-    brew upgrade --greedy-auto-updates
+    brew upgrade --greedy-auto-updates --yes
 
     print_section "updating vim plugins"
     nvim --headless "+Lazy! sync" +qa
@@ -239,13 +242,6 @@ function update() {
     gem update --system
     gem update
     gem cleanup
-
-    print_section "updating elixir packages"
-    rebar3 update
-    mix local.hex --force
-    mix archive.install hex phx_new --force
-    mix archive.install hex nerves_bootstrap --force
-    mix escript.install hex livebook --force
 
     print_section "update tex packages"
     tlmgr update --self --all --reinstall-forcibly-removed
@@ -299,9 +295,6 @@ function update() {
 
     print_section "update neovim lua references"
     git -C "$HOME/.config/nvim/src/luv" pull
-
-    print_section "vscode extensions"
-    code --update-extensions
 
     print_section 'google cloud cli'
     gcloud components update
@@ -387,8 +380,8 @@ function update-pg-modeler() {
 }
 
 function update-repos() {
-  git for-each-repo --keep-going --config=maintenance.repo remote prune origin
   git for-each-repo --keep-going --config=maintenance.repo pull
+  git for-each-repo --keep-going --config=maintenance.repo remote prune origin
   git for-each-repo --keep-going --config=maintenance.repo gc --aggressive --prune=now --force
 }
 

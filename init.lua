@@ -203,7 +203,6 @@ local LSP_SERVERS = {
   'kotlin_language_server',
   'lua_ls',
   'm68k',
-  'mint',
   'nginx_language_server',
   'nomad_lsp',
   'nushell',
@@ -231,7 +230,7 @@ local LSP_SERVERS = {
   'tclsp',
   'terraformls',
   'texlab',
-  'tsgo',
+  'tsc',
   'turtle_ls',
   'uiua',
   'v_analyzer',
@@ -242,6 +241,7 @@ local LSP_SERVERS = {
   'vimls',
   'vls',
   'vue_ls',
+  'wolfram_lsp',
   'yamlls',
   'zls',
 }
@@ -367,7 +367,7 @@ require('lazy').setup({
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     keys = {
       { '<C-p>', function() require('fzf-lua').files() end },
-      { '<C-e>', function() require('fzf-lua').live_grep_native() end },
+      { '<C-e>', function() require('fzf-lua').live_grep() end },
     },
     opts = function()
       local fzf = require('fzf-lua')
@@ -610,36 +610,6 @@ require('lazy').setup({
     },
   },
   {
-    'CopilotC-Nvim/CopilotChat.nvim',
-    cmd = {
-      'CopilotChat',
-      'CopilotChatOpen',
-      'CopilotChatClose',
-      'CopilotChatToggle',
-      'CopilotChatReset',
-      'CopilotChatSave',
-      'CopilotChatLoad',
-      'CopilotChatDebugInfo',
-      'CopilotChatModels',
-      'CopilotChatAgents',
-      'CopilotChatExplain',
-      'CopilotChatReview',
-      'CopilotChatFix',
-      'CopilotChatOptimize',
-      'CopilotChatDocs',
-      'CopilotChatTests',
-      'CopilotChatFixDiagnostic',
-      'CopilotChatCommit',
-      'CopilotChatCommitStaged',
-    },
-    dependencies = {
-      { 'zbirenbaum/copilot.lua' },
-      { 'nvim-lua/plenary.nvim' },
-    },
-    build = 'make tiktoken',
-    opts = {},
-  },
-  {
     'neovim/nvim-lspconfig',
     dependencies = {
       {
@@ -764,23 +734,23 @@ require('lazy').setup({
         root_markers = { '.git', 'veridian.yml' },
       })
 
-      local jsOptions = {
-        preferGoToSourceDefinition = true,
-        inlayHints = false,
-        -- inlayHints = {
-        --   parameterNames = { enabled = 'literals' },
-        --   parameterTypes = { enabled = true },
-        --   variableTypes = { enabled = true },
-        --   propertyDeclarationTypes = { enabled = true },
-        --   functionLikeReturnTypes = { enabled = true },
-        --   enumMemberValues = { enabled = true },
-        -- },
-      }
-
-      vim.lsp.config('tsgo', {
+      vim.lsp.config('tsc', {
         settings = {
-          typescript = jsOptions,
-          javascript = jsOptions,
+          ["js/ts"] = {
+            preferGoToSourceDefinition = true,
+            inlayHints = false,
+          },
+        },
+      })
+
+      vim.lsp.config('bashls', {
+        filetypes = { 'bash', 'sh', 'zsh' },
+        settings = {
+          bashIde = {
+            -- non-recursive on purpose: you edit ~/.zshrc in $HOME, and a
+            -- recursive '**/' glob would scan your whole home directory.
+            globPattern = vim.env.GLOB_PATTERN or '*@(.sh|.inc|.bash|.command|.zsh)',
+          },
         },
       })
 
@@ -816,14 +786,6 @@ require('lazy').setup({
         callback = function() lint.try_lint() end,
       })
     end,
-  },
-  {
-    'youyoumu/pretty-ts-errors.nvim',
-    opts = {
-      float_opts = {
-        max_width = 120,
-      },
-    },
   },
   {
     'scalameta/nvim-metals',
@@ -871,7 +833,6 @@ require('lazy').setup({
   'konfekt/vim-office',
   'MTDL9/vim-log-highlighting',
   'jlcrochet/vim-razor',
-  'fladson/vim-kitty',
   'jakesjews/vim-emblem',
   'katusk/vim-qkdb-syntax',
   'kchmck/vim-coffee-script',
