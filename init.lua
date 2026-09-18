@@ -151,7 +151,7 @@ create_autocmd('CursorHold', {
   end,
 })
 
-local mason_packages = {
+local MASON_PACKAGES = {
   'julials',
   'matlab_ls',
   'nim_langserver',
@@ -161,6 +161,7 @@ local mason_packages = {
   'r_language_server',
   'raku_navigator',
   'serve_d',
+  'slang_server',
   'vhdl_ls',
 }
 
@@ -236,7 +237,6 @@ local LSP_SERVERS = {
   'v_analyzer',
   'vacuum',
   'vala_ls',
-  'veridian',
   'veryl_ls',
   'vimls',
   'vls',
@@ -280,7 +280,7 @@ require('lazy').setup({
       'MasonToolsClean',
     },
     opts = {
-      ensure_installed = vim.list_extend({ 'haskell-debug-adapter' }, mason_packages),
+      ensure_installed = vim.list_extend({ 'haskell-debug-adapter' }, MASON_PACKAGES),
       run_on_start = false,
     },
   },
@@ -754,9 +754,8 @@ require('lazy').setup({
         },
       })
 
-      for _, name in ipairs(LSP_SERVERS) do
-        vim.lsp.enable(name)
-      end
+      vim.lsp.enable(LSP_SERVERS)
+      vim.lsp.enable(MASON_PACKAGES)
     end,
   },
 
@@ -830,6 +829,7 @@ require('lazy').setup({
     end,
   },
   { 'wavded/vim-stylus', ft = 'stylus' },
+  'hudson-trading/slang-server.nvim',
   'konfekt/vim-office',
   'MTDL9/vim-log-highlighting',
   'jlcrochet/vim-razor',
