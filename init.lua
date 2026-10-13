@@ -173,6 +173,7 @@ local LSP_SERVERS = {
   'awk_ls',
   'bashls',
   'buf_ls',
+  'clangd',
   'clojure_lsp',
   'cmake',
   'coffeesense',
@@ -620,12 +621,13 @@ require('lazy').setup({
       },
     },
     config = function()
-      vim.lsp.config('*', {
-        on_attach = function(_, bufnr)
+      create_autocmd('LspAttach', {
+        group = augroup('UserLspKeymaps', { clear = true }),
+        callback = function(event)
           local lsp_key_opts = {
             noremap = true,
             silent = true,
-            buf = bufnr,
+            buffer = event.buf,
           }
 
           set_keys({
@@ -640,6 +642,25 @@ require('lazy').setup({
             { 'n', 'gl', vim.lsp.codelens.run, lsp_key_opts },
             { 'n', 'gf', function() vim.lsp.buf.format({ async = true }) end, lsp_key_opts },
           })
+        end,
+      })
+
+      local swift_root = require('lspconfig.util').root_pattern('*.xcodeproj', '*.xcworkspace', 'Package.swift')
+
+      vim.lsp.config('sourcekit', {
+        root_dir = function(bufnr, on_dir)
+          local root = swift_root(vim.api.nvim_buf_get_name(bufnr))
+          if root then
+            on_dir(root)
+          end
+        end,
+      })
+
+      vim.lsp.config('clangd', {
+        root_dir = function(bufnr, on_dir)
+          if not swift_root(vim.api.nvim_buf_get_name(bufnr)) then
+            on_dir(vim.fs.root(bufnr, vim.lsp.config.clangd.root_markers))
+          end
         end,
       })
 
