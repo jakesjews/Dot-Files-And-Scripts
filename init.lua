@@ -11,7 +11,7 @@ assign(vim.g, {
   loaded_netrw = 1,
   loaded_netrwPlugin = 1,
   skip_ts_context_commentstring_module = true,
-  python3_host_prog = '/opt/homebrew/bin/python3.14',
+  python3_host_prog = '/opt/homebrew/bin/python3.15',
 })
 
 assign(vim.opt, {
@@ -53,6 +53,14 @@ set_keys({
 })
 
 vim.api.nvim_create_user_command('Nt', function() vim.cmd.tabnew() end, {})
+
+vim.api.nvim_create_user_command('LspInfo', function()
+  vim.print(vim.tbl_map(function(client) return client.name end, vim.lsp.get_clients()))
+end, { desc = 'List active language servers' })
+
+vim.api.nvim_create_user_command('LspLog', function()
+  vim.cmd.tabnew(vim.lsp.log.get_filename())
+end, { desc = 'Open the LSP log in a new tab' })
 
 vim.filetype.add({
   extension = {
@@ -156,7 +164,6 @@ local MASON_PACKAGES = {
   'matlab_ls',
   'nim_langserver',
   'ocamllsp',
-  'perlnavigator',
   'phpactor',
   'r_language_server',
   'raku_navigator',
@@ -187,9 +194,9 @@ local LSP_SERVERS = {
   'dotls',
   'elixirls',
   'elmls',
+  'elp',
   'ember',
   'erg_language_server',
-  'elp',
   'eslint',
   'fennel_ls',
   'fortls',
@@ -210,6 +217,7 @@ local LSP_SERVERS = {
   'nomad_lsp',
   'nushell',
   'openscad_lsp',
+  'perlnavigator',
   'pony_lsp',
   'postgres_lsp',
   'powershell_es',
@@ -235,6 +243,7 @@ local LSP_SERVERS = {
   'texlab',
   'tombi',
   'tsc',
+  'tsqueryls',
   'turtle_ls',
   'uiua',
   'v_analyzer',
@@ -673,6 +682,7 @@ require('lazy').setup({
       })
 
       vim.lsp.config('eslint', {
+        filetypes = vim.list_extend({ 'css' }, vim.lsp.config.eslint.filetypes),
         settings = {
           useESLintClass = true,
         },
