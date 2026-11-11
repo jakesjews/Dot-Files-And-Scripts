@@ -49,19 +49,17 @@ export AIDER_DARK_MODE=true
 export PGRX_HOME="$HOME/.pgrx"
 export POSTGRES_VERSION=18
 export ARDUINO_CONFIG_FILE="$HOME/.arduinoIDE/arduino-cli.yaml"
-export CLOUDSDK_PYTHON="$HOMEBREW_PREFIX/opt/python@3.14/libexec/bin/python"
+export CLOUDSDK_PYTHON="$HOMEBREW_PREFIX/opt/python@3.15/libexec/bin/python"
 #export OLLAMA_MODELS="/Volumes/External/models/ollama/"
 #export LLAMA_CACHE="/Volumes/External/models/llamacpp/"
 
 typeset -U path
 
 export path=(
-  "$HOMEBREW_PREFIX/opt/python@3.14/libexec/bin"
+  "$HOMEBREW_PREFIX/opt/python@3.15/libexec/bin"
   "$HOMEBREW_PREFIX/opt/postgresql@$POSTGRES_VERSION/bin"
-  "$HOMEBREW_PREFIX/opt/imagemagick-full/bin"
-  "$HOMEBREW_PREFIX/opt/ffmpeg-full/bin"
-  $path
   "$HOMEBREW_PREFIX/opt/rustup/bin"
+  $path
   "$HOME/.cargo/bin"
   "$HOME/.tmux/plugins/tpm"
   "$HOME/.pub-cache/bin" #dart
@@ -112,6 +110,7 @@ plugins=(
   react-native
   rust
   terraform
+  uv
 )
 
 autoload -Uz zmv
@@ -142,6 +141,7 @@ alias git-graph="git commit-graph write --reachable --changed-paths"
 alias mongo="mongosh --quiet"
 alias bash="$HOMEBREW_PREFIX/bin/bash"
 alias make="$HOMEBREW_PREFIX/opt/make/libexec/gnubin/make"
+alias rsync=/usr/bin/rsync
 alias rg-all="rg -uuu"
 alias cargo-binstall='cargo-binstall --no-confirm'
 alias UVtoolsCmd=/Applications/UVtools.app/Contents/MacOS/UVtoolsCmd

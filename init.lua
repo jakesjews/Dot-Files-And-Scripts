@@ -178,6 +178,7 @@ local LSP_SERVERS = {
   'asm_lsp',
   'autotools_ls',
   'awk_ls',
+  'badness',
   'bashls',
   'buf_ls',
   'clangd',
@@ -212,7 +213,6 @@ local LSP_SERVERS = {
   'kotlin_language_server',
   'lua_ls',
   'm68k',
-  'marksman',
   'nginx_language_server',
   'nomad_lsp',
   'nushell',
@@ -230,6 +230,7 @@ local LSP_SERVERS = {
   'rescriptls',
   'ruby_lsp',
   'ruff',
+  'rumdl',
   'rune_languageserver',
   'solidity_ls_nomicfoundation',
   'somesass_ls',
@@ -240,7 +241,6 @@ local LSP_SERVERS = {
   'tailwindcss',
   'tclsp',
   'terraformls',
-  'texlab',
   'tombi',
   'tsc',
   'tsqueryls',
@@ -763,10 +763,6 @@ require('lazy').setup({
         },
       })
 
-      vim.lsp.config('veridian', {
-        root_markers = { '.git', 'veridian.yml' },
-      })
-
       vim.lsp.config('tsc', {
         settings = {
           ["js/ts"] = {
@@ -783,6 +779,14 @@ require('lazy').setup({
             -- non-recursive on purpose: you edit ~/.zshrc in $HOME, and a
             -- recursive '**/' glob would scan your whole home directory.
             globPattern = vim.env.GLOB_PATTERN or '*@(.sh|.inc|.bash|.command|.zsh)',
+          },
+        },
+      })
+
+      vim.lsp.config('rumdl', {
+        settings = {
+          rumdl = {
+            lineLength = 0,
           },
         },
       })
